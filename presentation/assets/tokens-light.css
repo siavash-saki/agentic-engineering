@@ -1,0 +1,151 @@
+/* Deutsche Bahn — Light mode design tokens
+ * DB uses light mode only. There is no official dark theme.
+ * Source of truth: .claude/skills/db-frontend/brand-guide.md
+ * Tokens aligned with DB UX Design System v2/v3 (db-ui base).
+ */
+
+:root {
+  /* ===== Brand ===== */
+  --db-red: #EC0016;          /* canonical DB Red (Red 500) */
+  --db-red-100: #FEE6E6;
+  --db-red-200: #FCC8C3;
+  --db-red-300: #FA9090;
+  --db-red-400: #F75056;
+  --db-red-500: #EC0016;
+  --db-red-600: #C50014;      /* hover */
+  --db-red-700: #9B000E;      /* active */
+  --db-red-800: #740009;
+
+  /* ===== Cool Gray (primary neutral) ===== */
+  --db-cool-gray-100: #F0F3F5;
+  --db-cool-gray-200: #D7DCE1;
+  --db-cool-gray-300: #AFB4BB;
+  --db-cool-gray-400: #878C96;
+  --db-cool-gray-500: #646973;
+  --db-cool-gray-600: #3C414B;
+  --db-cool-gray-700: #282D37;  /* body text */
+  --db-cool-gray-800: #131821;  /* headlines */
+
+  /* ===== Warm Gray (editorial, corporate pages) ===== */
+  --db-warm-gray-100: #F5F4F1;
+  --db-warm-gray-200: #DDDED6;
+  --db-warm-gray-300: #BCBBB2;
+  --db-warm-gray-400: #9C9A8E;
+  --db-warm-gray-500: #858379;
+  --db-warm-gray-600: #747067;
+  --db-warm-gray-700: #4F4B41;
+  --db-warm-gray-800: #38342F;
+
+  /* ===== Secondary scales ===== */
+  --db-yellow-100: #FFFFDC;
+  --db-yellow-500: #FFD800;
+  --db-yellow-700: #FF9B00;
+  --db-orange-100: #FFF4D8;
+  --db-orange-500: #F39200;
+  --db-orange-700: #C05E00;
+  --db-orange-accent: #FEA200;  /* signature BahnBonus promo hue */
+  --db-green-100: #E2F3E5;
+  --db-green-500: #408335;
+  --db-green-700: #165C27;
+  --db-blue-100: #E0EFFB;
+  --db-blue-500: #1455C0;
+  --db-blue-700: #0A1E6E;
+
+  --db-white: #FFFFFF;
+  --db-black: #000000;
+
+  /* ===== Semantic / feedback ===== */
+  --db-success: #508B1B;
+  --db-error:   #EC0016;
+  --db-warning: #FF5F00;
+  --db-info:    #0087B9;
+
+  /* ===== Surfaces (LIGHT MODE, the default & only DB theme) ===== */
+  --db-bg:         #FFFFFF;
+  --db-bg-subtle:  #F0F3F5;
+  --db-bg-muted:   #D7DCE1;
+  --db-surface:    #FFFFFF;
+  --db-border:     #D7DCE1;
+  --db-border-strong: #AFB4BB;
+
+  /* ===== Text ===== */
+  --db-text:          #282D37;  /* body */
+  --db-text-strong:   #131821;  /* headlines */
+  --db-text-muted:    #646973;
+  --db-text-subtle:   #878C96;
+  --db-text-disabled: #AFB4BB;
+  --db-text-inverse:  #FFFFFF;
+  --db-text-link:     #282D37;
+  --db-text-link-hover: #EC0016;
+
+  /* ===== Typography ===== */
+  --db-font:      "DB Screen Sans", "Fira Sans", Helvetica, Arial, sans-serif;
+  --db-font-head: "DB Screen Head", "Fira Sans", Helvetica, Arial, sans-serif;
+
+  --db-fs-display: 56px;
+  --db-lh-display: 64px;
+  --db-fs-h1: 56px;
+  --db-lh-h1: 64px;
+  --db-fs-h2: 40px;
+  --db-lh-h2: 48px;
+  --db-fs-h3: 28px;
+  --db-lh-h3: 36px;
+  --db-fs-h4: 22px;
+  --db-lh-h4: 30px;
+  --db-fs-h5: 18px;
+  --db-lh-h5: 26px;
+  --db-fs-lead: 20px;
+  --db-lh-lead: 32px;
+  --db-fs-body: 16px;
+  --db-lh-body: 26px;
+  --db-fs-small: 14px;
+  --db-lh-small: 20px;
+  --db-fs-caption: 12px;
+  --db-lh-caption: 16px;
+
+  /* ===== Spacing (4px base) ===== */
+  --db-space-1: 4px;
+  --db-space-2: 8px;
+  --db-space-3: 12px;
+  --db-space-4: 16px;
+  --db-space-5: 24px;
+  --db-space-6: 32px;
+  --db-space-7: 48px;
+  --db-space-8: 64px;
+  --db-space-9: 96px;
+
+  /* ===== Layout ===== */
+  --db-container: 1296px;
+  --db-gutter: 24px;
+
+  /* ===== Radii (small, never pill) ===== */
+  --db-radius-sm: 2px;
+  --db-radius:    4px;
+  --db-radius-md: 8px;
+  --db-radius-lg: 12px;
+
+  /* ===== Elevation ===== */
+  --db-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --db-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --db-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+  /* ===== Motion ===== */
+  --db-ease: cubic-bezier(0.2, 0, 0, 1);
+  --db-dur-fast: 160ms;
+  --db-dur: 240ms;
+}
+
+/* Mobile type scale */
+@media (max-width: 768px) {
+  :root {
+    --db-fs-display: 36px;
+    --db-lh-display: 42px;
+    --db-fs-h1: 36px;
+    --db-lh-h1: 42px;
+    --db-fs-h2: 28px;
+    --db-lh-h2: 34px;
+    --db-fs-h3: 22px;
+    --db-lh-h3: 28px;
+    --db-gutter: 16px;
+  }
+}
