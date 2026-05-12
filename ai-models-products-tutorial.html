@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Tools: What's What</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ───── Reset ───── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ───── Theme tokens ───── */
+:root{
+  --bg:#0A0A0A;--surface:#141414;--surface-el:#1C1C1C;
+  --text:#F2F2F2;--text-muted:#A4A4A4;--text-subtle:#636363;
+  --border:#262626;--accent:#F07E26;--accent-hover:#FF9A41;
+  --font:'Lato',Arial,sans-serif;
+  --c-openai:#10A37F;--c-anthropic:#D97757;--c-google:#4285F4;
+  --c-openrouter:#7C3AED;--c-db:#EC0016;
+  --line-default-opacity:0.35;
+  --diagram-fade:1;
+}
+html.light{
+  --bg:#FFFFFF;--surface:#F5F5F5;--surface-el:#EDEDED;
+  --text:#282727;--text-muted:#595959;--text-subtle:#8E8E8D;
+  --border:#E0E0E0;--accent:#F07E26;--accent-hover:#D86C1A;
+}
+
+/* ───── Base ───── */
+html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow:hidden}
+body{display:flex;flex-direction:column}
+
+/* ───── Header ───── */
+#header{flex-shrink:0;padding:12px 32px;border-bottom:1px solid var(--border);background:var(--bg);z-index:50}
+.header-inner{display:flex;align-items:center;justify-content:space-between;max-width:1440px;margin:0 auto}
+.wm{font-weight:700;font-size:24px;color:var(--accent);letter-spacing:-.02em;text-decoration:none}
+.wm em{font-style:normal;color:var(--text)}
+.page-title{font-size:16px;font-weight:700;letter-spacing:.01em;color:var(--text-muted)}
+#theme-toggle{background:none;border:1px solid var(--border);color:var(--text-muted);width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color 160ms,color 160ms}
+#theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
+#theme-toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:square}
+
+/* ───── Diagram wrapper ───── */
+#diagram-wrap{flex:1;position:relative;overflow:hidden;min-height:0}
+#diagram{position:relative;width:100%;height:100%;transition:opacity 500ms ease}
+
+/* ───── SVG connections layer ───── */
+#conn-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.cline{fill:none;stroke-width:2;transition:opacity 400ms ease,stroke 300ms ease}
+
+/* ───── Nodes (shared) ───── */
+.node{position:absolute;transform:translate(-50%,-50%) translateY(12px);z-index:2;opacity:0;pointer-events:none;
+  transition:opacity 400ms ease,transform 400ms ease,box-shadow 300ms ease}
+.node.vis{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) translateY(0)}
+.node.dim{opacity:.2!important;pointer-events:none}
+.node.blocked{opacity:.2!important;pointer-events:none}
+.node.blocked::after{content:'';position:absolute;top:-7px;right:-7px;width:20px;height:20px;z-index:4;
+  background:#DC2626 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Crect x='5' y='11' width='14' height='11'/%3E%3Cpath d='M8 11V7a4 4 0 018 0v4' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E") center/13px no-repeat}
+.node.hl{opacity:1!important;pointer-events:auto}
+
+/* ───── Generic nodes (Scene 1-2) ───── */
+.node.generic{width:150px;text-align:center}
+.node-icon{width:100px;height:100px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--accent);background:var(--surface);transition:border-color 300ms}
+.node-icon svg{width:56px;height:56px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter}
+.node-label{font-size:20px;font-weight:700;white-space:nowrap;transition:opacity 250ms}
+.node-label.fade{opacity:0}
+
+/* Generic connection label */
+#label-conn{position:absolute;transform:translate(-50%,-50%);font-size:17px;font-weight:700;color:var(--accent);
+  white-space:nowrap;z-index:3;opacity:0;pointer-events:none;transition:opacity 400ms}
+#label-conn.vis{opacity:1}
+#label-conn .lbl{transition:opacity 250ms}
+#label-conn .lbl.fade{opacity:0}
+
+/* ───── Model nodes ───── */
+.node.model{padding:14px 22px;border-left:4px solid var(--node-color,var(--accent));
+  background:var(--surface);border-right:1px solid var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border);min-width:140px;cursor:default}
+.node.model .nn{font-size:18px;font-weight:700}.node.model .nm{font-size:12px;color:var(--text-muted);margin-top:2px}
+.node.model.hl{box-shadow:0 0 0 2px var(--node-color,var(--accent)),0 0 20px color-mix(in srgb,var(--node-color) 30%,transparent)}
+
+/* ───── API nodes ───── */
+.node.api{padding:12px 18px;border:2px solid var(--node-color,var(--accent));background:var(--bg);
+  min-width:148px;text-align:center;cursor:default}
+.node.api .nn{font-size:15px;font-weight:700}.node.api .nm{font-size:11px;color:var(--text-muted);margin-top:2px}
+.node.api.hl{box-shadow:0 0 16px color-mix(in srgb,var(--node-color) 35%,transparent)}
+
+/* ───── Product nodes ───── */
+.node.product{padding:13px 18px;background:var(--surface);border:1px solid var(--border);min-width:150px;cursor:default}
+.node.product.fp{border-right:4px solid var(--maker-color,var(--border))}
+.node.product .nn{font-size:15px;font-weight:700}.node.product .nm{font-size:11px;color:var(--text-muted);margin-top:2px}
+.node.product.hl{box-shadow:0 0 0 2px var(--accent),0 0 16px color-mix(in srgb,var(--accent) 25%,transparent)}
+
+/* Interactive cursor */
+.node.clickable{cursor:pointer}
+.node.clickable:hover{box-shadow:0 0 0 1px var(--accent)}
+.node.hover-hl{opacity:1!important;pointer-events:auto}
+.node.hover-dim{opacity:.2!important}
+
+/* ───── Column labels ───── */
+.col-lbl{position:absolute;transform:translateX(-50%);font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--text-subtle);opacity:0;transition:opacity 400ms;z-index:3;pointer-events:none}
+.col-lbl.vis{opacity:1}
+
+/* ───── Group labels ───── */
+.grp-lbl{position:absolute;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--text-subtle);opacity:0;transition:opacity 400ms;z-index:3;pointer-events:none;transform:translateX(-50%)}
+.grp-lbl.vis{opacity:.7}
+
+/* ───── Caption area ───── */
+#caption-area{flex-shrink:0;padding:12px 32px 6px;text-align:center;height:120px;overflow-y:auto}
+#caption{font-size:17px;line-height:1.65;color:var(--text-muted);max-width:760px;margin:0 auto;min-height:28px;transition:opacity 300ms}
+#caption.fade{opacity:0}
+#co-note{font-size:14px;line-height:1.65;color:var(--text-subtle);max-width:680px;margin:6px auto 0;transition:opacity 300ms}
+#co-note:empty{display:none}
+
+/* ───── Company filter ───── */
+#co-filter{position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;border:1px solid var(--border);
+  z-index:10;opacity:0;pointer-events:none;transition:opacity 400ms}
+#co-filter.vis{opacity:1;pointer-events:auto}
+.fbtn{padding:9px 18px;font-family:var(--font);font-size:13px;font-weight:700;border:none;
+  background:var(--surface);color:var(--text-muted);cursor:pointer;transition:all 160ms;white-space:nowrap}
+.fbtn+.fbtn{border-left:1px solid var(--border)}
+.fbtn:hover{color:var(--text);background:var(--surface-el)}
+.fbtn.act{background:var(--accent);color:#fff}
+
+/* ───── Interact hint ───── */
+#hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);font-size:14px;font-weight:700;
+  color:var(--accent);text-transform:uppercase;letter-spacing:.06em;opacity:0;transition:opacity 400ms;z-index:10;pointer-events:none}
+#hint.vis{opacity:1}
+
+/* ───── Recap (Scene 8) ───── */
+#recap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;
+  z-index:20;opacity:0;pointer-events:none;transition:opacity 500ms}
+#recap.vis{opacity:1}
+.rl{font-size:26px;font-weight:700;line-height:1.5;text-align:center;max-width:680px;
+  opacity:0;transform:translateY(16px);transition:opacity 600ms ease calc(var(--d)*550ms),transform 600ms ease calc(var(--d)*550ms)}
+#recap.vis .rl{opacity:1;transform:translateY(0)}
+
+/* ───── Navigation ───── */
+#nav{flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:24px;padding:10px 32px 16px;border-top:1px solid var(--border)}
+.nbtn{padding:9px 22px;font-family:var(--font);font-size:15px;font-weight:700;border:2px solid var(--border);
+  background:transparent;color:var(--text);cursor:pointer;transition:all 160ms}
+.nbtn:hover{border-color:var(--accent);color:var(--accent)}
+.nbtn:disabled{opacity:.3;cursor:not-allowed}.nbtn:disabled:hover{border-color:var(--border);color:var(--text)}
+#counter{font-size:13px;font-weight:700;color:var(--text-muted);min-width:44px;text-align:center}
+
+/* ───── Glow animation ───── */
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:.85}}
+.cline.pulse{animation:pulse 2.4s ease-in-out infinite}
+
+/* ───── Generic line ───── */
+#gen-line{stroke:var(--accent);stroke-width:3;fill:none;opacity:0;transition:opacity 500ms}
+#gen-line.vis{opacity:1}
+#gen-glow{stroke:var(--accent);stroke-width:8;fill:none;opacity:0;filter:url(#glow);transition:opacity 500ms}
+#gen-glow.vis{opacity:.35;animation:pulse 2.4s ease-in-out infinite}
+
+/* ───── Responsive ───── */
+@media(max-width:900px){
+  .node.model,.node.api,.node.product{padding:10px 14px;min-width:110px}
+  .node.model .nn,.node.api .nn,.node.product .nn{font-size:13px}
+  .node.model .nm,.node.api .nm,.node.product .nm{font-size:10px}
+  .node.generic{width:120px}.node-icon{width:76px;height:76px}
+  .node-label{font-size:16px}#caption{font-size:15px}
+  .rl{font-size:20px}.page-title{font-size:14px}
+}
+@media(max-width:600px){
+  #header{padding:10px 16px}#caption-area{padding:12px 16px 6px}#nav{padding:8px 16px 12px}
+  .fbtn{padding:7px 10px;font-size:11px}.nbtn{padding:7px 16px;font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<!-- ───── Header ───── -->
+<header id="header">
+  <div class="header-inner">
+    <span class="wm">[<em>at</em>]</span>
+    <span class="page-title">AI Tools: What's What</span>
+    <button id="theme-toggle" aria-label="Toggle light/dark mode">
+      <svg id="icon-sun" viewBox="0 0 24 24" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ───── Diagram ───── -->
+<div id="diagram-wrap">
+<div id="diagram">
+
+  <!-- SVG layer -->
+  <svg id="conn-svg" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="glow-sm"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <!-- Generic connection line -->
+    <path id="gen-glow" d=""/>
+    <path id="gen-line" d=""/>
+    <!-- Dynamic connections rendered here -->
+  </svg>
+
+  <!-- Column labels -->
+  <div class="col-lbl" id="cl-model" style="left:12%;top:6%">MODEL</div>
+  <div class="col-lbl" id="cl-api" style="left:48%;top:6%">API</div>
+  <div class="col-lbl" id="cl-product" style="left:86%;top:6%;display:none">PRODUCT</div>
+
+  <!-- ── Generic brain (Scene 1-2) ── -->
+  <div class="node generic" id="gen-brain" style="left:22%;top:50%">
+    <div class="node-icon">
+      <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="7" stroke-width="2.5"/><circle cx="14" cy="14" r="4"/><circle cx="42" cy="14" r="4"/><circle cx="14" cy="42" r="4"/><circle cx="42" cy="42" r="4"/><circle cx="28" cy="10" r="3.5"/><circle cx="28" cy="46" r="3.5"/><line x1="28" y1="21" x2="14" y2="14"/><line x1="28" y1="21" x2="42" y2="14"/><line x1="28" y1="35" x2="14" y2="42"/><line x1="28" y1="35" x2="42" y2="42"/><line x1="28" y1="21" x2="28" y2="13.5"/><line x1="28" y1="35" x2="28" y2="42.5"/><line x1="14" y1="14" x2="14" y2="42" stroke-dasharray="3 4"/><line x1="42" y1="14" x2="42" y2="42" stroke-dasharray="3 4"/></svg>
+    </div>
+    <div class="node-label" id="lbl-brain">brain</div>
+  </div>
+
+  <!-- ── Generic body (Scene 1-3) ── -->
+  <div class="node generic" id="gen-body" style="left:78%;top:50%">
+    <div class="node-icon">
+      <svg viewBox="0 0 56 70"><rect x="4" y="4" width="48" height="62" rx="0"/><line x1="4" y1="16" x2="52" y2="16"/><rect x="10" y="23" width="16" height="12" opacity=".35" fill="currentColor" stroke="none"/><rect x="30" y="23" width="16" height="12" opacity=".35" fill="currentColor" stroke="none"/><rect x="10" y="40" width="16" height="12" opacity=".35" fill="currentColor" stroke="none"/><rect x="30" y="40" width="16" height="12" opacity=".35" fill="currentColor" stroke="none"/><circle cx="10" cy="10" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="10" r="2" fill="currentColor" stroke="none"/><circle cx="22" cy="10" r="2" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="node-label" id="lbl-body">body</div>
+  </div>
+
+  <!-- Connection label (Scene 1-2) -->
+  <div id="label-conn" style="left:50%;top:56%"><span class="lbl" id="lbl-conn-txt">connection</span></div>
+
+  <!-- ── Models ── -->
+  <div class="node model" id="model-gpt" style="left:12%;top:22%;--node-color:var(--c-openai)"><div class="nn">GPT</div><div class="nm">OpenAI</div></div>
+  <div class="node model" id="model-claude" style="left:12%;top:50%;--node-color:var(--c-anthropic)"><div class="nn">Claude</div><div class="nm">Anthropic</div></div>
+  <div class="node model" id="model-gemini" style="left:12%;top:78%;--node-color:var(--c-google)"><div class="nn">Gemini</div><div class="nm">Google</div></div>
+
+  <!-- ── APIs ── -->
+  <div class="node api" id="api-openai" style="left:48%;top:16%;--node-color:var(--c-openai)"><div class="nn">OpenAI API</div></div>
+  <div class="node api" id="api-anthropic" style="left:48%;top:38%;--node-color:var(--c-anthropic)"><div class="nn">Anthropic API</div></div>
+  <div class="node api" id="api-google" style="left:48%;top:60%;--node-color:var(--c-google)"><div class="nn">Google API</div></div>
+  <div class="node api" id="api-openrouter" style="left:48%;top:82%;--node-color:var(--c-openrouter)"><div class="nn">OpenRouter</div></div>
+  <div class="node api" id="api-db-hub" style="left:48%;top:50%;--node-color:var(--c-db)"><div class="nn">DB GenAI Hub</div><div class="nm">DB InfraGO</div></div>
+
+  <!-- ── Products ── -->
+  <div class="node product fp" id="prod-claude-app" style="left:86%;top:16%;--maker-color:var(--c-anthropic)"><div class="nn">Claude App</div><div class="nm">Anthropic</div></div>
+  <div class="node product fp" id="prod-codex" style="left:86%;top:32%;--maker-color:var(--c-openai)"><div class="nn">Codex</div><div class="nm">OpenAI</div></div>
+  <div class="node product fp" id="prod-gemini-app" style="left:86%;top:48%;--maker-color:var(--c-google)"><div class="nn">Gemini App</div><div class="nm">Google</div></div>
+  <div class="node product" id="prod-copilot" style="left:86%;top:70%"><div class="nn">GitHub Copilot</div><div class="nm">GitHub</div></div>
+  <div class="node product" id="prod-cline" style="left:86%;top:86%"><div class="nn">Cline</div><div class="nm">Open-source</div></div>
+
+  <!-- Group labels -->
+  <div class="grp-lbl" id="gl-code" style="left:86%;top:5%">Coding Agents <span style="opacity:.5">(1st-party)</span></div>
+  <div class="grp-lbl" id="gl-tp" style="left:86%;top:60%">Third-Party</div>
+
+  <!-- Interaction hint -->
+  <div id="hint">Click any model or product to see what it connects to</div>
+
+  <!-- Company filter -->
+  <div id="co-filter">
+    <button class="fbtn act" data-f="all">Show everything</button>
+    <button class="fbtn" data-f="db">On our DB laptop</button>
+    <button class="fbtn" data-f="at">At Alexander Thamm</button>
+  </div>
+
+  <!-- Recap overlay -->
+  <div id="recap">
+    <p class="rl" style="--d:0">Model = the brain. Product = the body. API = the connection.</p>
+    <p class="rl" style="--d:1">A model can power many products.<br>A product can use many models.</p>
+    <p class="rl" style="--d:2">What we're allowed to use depends on the company,<br>not on the technology.</p>
+  </div>
+
+</div>
+</div>
+
+<!-- ───── Caption ───── -->
+<div id="caption-area">
+  <p id="caption"></p>
+  <p id="co-note"></p>
+</div>
+
+<!-- ───── Navigation ───── -->
+<footer id="nav">
+  <button class="nbtn" id="btn-prev">&larr; Previous</button>
+  <span id="counter">1 / 8</span>
+  <button class="nbtn" id="btn-next">Next &rarr;</button>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════ */
+
+const TOTAL = 8;
+let scene = 1, selNode = null, coFilter = 'all';
+
+const captions = {
+  1: 'Every AI tool is really just this — something that thinks, something that acts, and a connection between them.',
+  2: "That\u2019s all a \u2018model\u2019 and a \u2018product\u2019 and an \u2018API\u2019 are.",
+  3: 'Different companies make different models. Each has its own personality and strengths.',
+  4: 'Some products are locked to their maker\u2019s model. Others can work with many.',
+  5: 'APIs are the wires. OpenRouter is a universal adapter \u2014 one connection, any model. Some companies also build their own internal APIs that wrap several models \u2014 you\u2019ll see one in the DB view.',
+  6: '',
+  7: '',
+  8: ''
+};
+
+const coNotes = {
+  all: '',
+  db: "On our DB laptop, one coding agent is allowed \u2014 Copilot. It doesn\u2019t talk to OpenAI or Anthropic directly. It talks to the DB GenAI Hub, an internal API that DB built, which gives us GPT and Claude. Everything else \u2014 Claude App, Codex, Gemini App, Cline, and direct external APIs \u2014 is blocked. Not technically. By contract.",
+  at: "At Alexander Thamm, the allowed setup is Cline with OpenRouter \u2014 which reaches any model. Different company, different contract, different answer."
+};
+
+/* Nodes: id -> first visible scene (exit scene defaults to 99) */
+const nodeEnter = {
+  'gen-brain':1,'gen-body':1,
+  'model-gpt':3,'model-claude':3,'model-gemini':3,
+  'prod-claude-app':4,'prod-codex':4,'prod-gemini-app':4,'prod-copilot':4,'prod-cline':4,
+  'api-openai':5,'api-anthropic':5,'api-google':5,'api-openrouter':5,
+  'api-db-hub':99 /* managed separately */
+};
+const nodeExit = {'gen-brain':3,'gen-body':4};
+
+const lblEnter = {'cl-model':3,'cl-api':5,'cl-product':4,'gl-code':4,'gl-tp':4};
+
+/* Standard connections: [fromId, toId, colorVar] */
+const STD_CONNS = [
+  ['api-openai','model-gpt','--c-openai'],['api-anthropic','model-claude','--c-anthropic'],
+  ['api-google','model-gemini','--c-google'],
+  ['api-openrouter','model-gpt','--c-openrouter'],['api-openrouter','model-claude','--c-openrouter'],['api-openrouter','model-gemini','--c-openrouter'],
+  ['prod-claude-app','api-anthropic','--c-anthropic'],['prod-codex','api-openai','--c-openai'],['prod-gemini-app','api-google','--c-google'],
+  ['prod-copilot','api-openai','--c-openai'],['prod-copilot','api-anthropic','--c-anthropic'],['prod-copilot','api-google','--c-google'],['prod-copilot','api-openrouter','--c-openrouter'],
+  ['prod-cline','api-openai','--c-openai'],['prod-cline','api-anthropic','--c-anthropic'],['prod-cline','api-google','--c-google'],['prod-cline','api-openrouter','--c-openrouter']
+];
+const DB_CONNS = [
+  ['prod-copilot','api-db-hub','--c-db'],['api-db-hub','model-gpt','--c-db'],['api-db-hub','model-claude','--c-db']
+];
+
+/* Highlight sets for Scene 6 */
+function buildHighlightSet(nodeId) {
+  const sets = {
+    'model-gpt':{n:['model-gpt','api-openai','api-openrouter','prod-codex','prod-copilot','prod-cline'],c:[['api-openai','model-gpt'],['api-openrouter','model-gpt'],['prod-codex','api-openai'],['prod-copilot','api-openai'],['prod-copilot','api-openrouter'],['prod-cline','api-openai'],['prod-cline','api-openrouter']]},
+    'model-claude':{n:['model-claude','api-anthropic','api-openrouter','prod-claude-app','prod-copilot','prod-cline'],c:[['api-anthropic','model-claude'],['api-openrouter','model-claude'],['prod-claude-app','api-anthropic'],['prod-copilot','api-anthropic'],['prod-copilot','api-openrouter'],['prod-cline','api-anthropic'],['prod-cline','api-openrouter']]},
+    'model-gemini':{n:['model-gemini','api-google','api-openrouter','prod-gemini-app','prod-copilot','prod-cline'],c:[['api-google','model-gemini'],['api-openrouter','model-gemini'],['prod-gemini-app','api-google'],['prod-copilot','api-google'],['prod-copilot','api-openrouter'],['prod-cline','api-google'],['prod-cline','api-openrouter']]},
+    'prod-claude-app':{n:['prod-claude-app','api-anthropic','model-claude'],c:[['prod-claude-app','api-anthropic'],['api-anthropic','model-claude']]},
+    'prod-codex':{n:['prod-codex','api-openai','model-gpt'],c:[['prod-codex','api-openai'],['api-openai','model-gpt']]},
+    'prod-gemini-app':{n:['prod-gemini-app','api-google','model-gemini'],c:[['prod-gemini-app','api-google'],['api-google','model-gemini']]},
+    'prod-copilot':{n:['prod-copilot','api-openai','api-anthropic','api-google','api-openrouter','model-gpt','model-claude','model-gemini'],c:[['prod-copilot','api-openai'],['prod-copilot','api-anthropic'],['prod-copilot','api-google'],['prod-copilot','api-openrouter'],['api-openai','model-gpt'],['api-anthropic','model-claude'],['api-google','model-gemini'],['api-openrouter','model-gpt'],['api-openrouter','model-claude'],['api-openrouter','model-gemini']]},
+    'prod-cline':{n:['prod-cline','api-openai','api-anthropic','api-google','api-openrouter','model-gpt','model-claude','model-gemini'],c:[['prod-cline','api-openai'],['prod-cline','api-anthropic'],['prod-cline','api-google'],['prod-cline','api-openrouter'],['api-openai','model-gpt'],['api-anthropic','model-claude'],['api-google','model-gemini'],['api-openrouter','model-gpt'],['api-openrouter','model-claude'],['api-openrouter','model-gemini']]},
+    'api-openai':{n:['api-openai','model-gpt','prod-codex','prod-copilot','prod-cline'],c:[['api-openai','model-gpt'],['prod-codex','api-openai'],['prod-copilot','api-openai'],['prod-cline','api-openai']]},
+    'api-anthropic':{n:['api-anthropic','model-claude','prod-claude-app','prod-copilot','prod-cline'],c:[['api-anthropic','model-claude'],['prod-claude-app','api-anthropic'],['prod-copilot','api-anthropic'],['prod-cline','api-anthropic']]},
+    'api-google':{n:['api-google','model-gemini','prod-gemini-app','prod-copilot','prod-cline'],c:[['api-google','model-gemini'],['prod-gemini-app','api-google'],['prod-copilot','api-google'],['prod-cline','api-google']]},
+    'api-openrouter':{n:['api-openrouter','model-gpt','model-claude','model-gemini','prod-copilot','prod-cline'],c:[['api-openrouter','model-gpt'],['api-openrouter','model-claude'],['api-openrouter','model-gemini'],['prod-copilot','api-openrouter'],['prod-cline','api-openrouter']]}
+  };
+  return sets[nodeId] || null;
+}
+
+/* Company filter definitions */
+const CO = {
+  db:{bright:['model-gpt','model-claude','prod-copilot','api-db-hub'],blocked:['model-gemini','api-openai','api-anthropic','api-google','api-openrouter','prod-claude-app','prod-codex','prod-gemini-app','prod-cline']},
+  at:{bright:['model-gpt','model-claude','model-gemini','prod-cline','api-openrouter'],blocked:['api-openai','api-anthropic','api-google','prod-claude-app','prod-codex','prod-gemini-app','prod-copilot']}
+};
+
+/* ═══════════════════════════════════════════
+   DOM REFS
+   ═══════════════════════════════════════════ */
+
+const $ = id => document.getElementById(id);
+const svg = $('conn-svg');
+const allNodes = () => document.querySelectorAll('.node');
+const connPaths = new Map(); // key "fromId|toId" -> <path>
+
+/* ═══════════════════════════════════════════
+   CONNECTION DRAWING
+   ═══════════════════════════════════════════ */
+
+function connKey(a,b){return a+'|'+b}
+
+function calcPath(fromEl, toEl) {
+  const dr = $('diagram').getBoundingClientRect();
+  const fr = fromEl.getBoundingClientRect();
+  const tr = toEl.getBoundingClientRect();
+  const fcx = fr.left+fr.width/2, tcx = tr.left+tr.width/2;
+  let x1,y1,x2,y2;
+  if(fcx<tcx){
+    x1=fr.right-dr.left; y1=fr.top+fr.height/2-dr.top;
+    x2=tr.left-dr.left;  y2=tr.top+tr.height/2-dr.top;
+  } else {
+    x1=fr.left-dr.left;  y1=fr.top+fr.height/2-dr.top;
+    x2=tr.right-dr.left; y2=tr.top+tr.height/2-dr.top;
+  }
+  const dx=Math.abs(x2-x1)*0.38;
+  const sx=x1<x2?1:-1;
+  return `M${x1},${y1} C${x1+dx*sx},${y1} ${x2-dx*sx},${y2} ${x2},${y2}`;
+}
+
+function ensurePath(fromId, toId, colorVar) {
+  const k = connKey(fromId,toId);
+  if(connPaths.has(k)) return connPaths.get(k);
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.classList.add('cline');
+  p.dataset.from = fromId;
+  p.dataset.to = toId;
+  p.dataset.colorVar = colorVar;
+  svg.appendChild(p);
+  connPaths.set(k,p);
+  return p;
+}
+
+function updateGenericLine() {
+  const brain = $('gen-brain'), body = $('gen-body');
+  if(!brain || !body) return;
+  const show = scene<=2;
+  const show3 = scene<=3; // faded in scene 3
+  const d = calcGenericPath();
+  $('gen-line').setAttribute('d',d);
+  $('gen-glow').setAttribute('d',d);
+  $('gen-line').classList.toggle('vis', show3);
+  $('gen-glow').classList.toggle('vis', show);
+  if(scene===3){$('gen-line').style.opacity='.2';$('gen-glow').style.opacity='0';}
+  else if(show){$('gen-line').style.opacity='';$('gen-glow').style.opacity='';}
+  else{$('gen-line').style.opacity='';$('gen-glow').style.opacity='';}
+}
+
+function calcGenericPath(){
+  const dr=$('diagram').getBoundingClientRect();
+  const b=$('gen-brain').getBoundingClientRect();
+  const bd=$('gen-body').getBoundingClientRect();
+  const x1=b.right-dr.left, y1=b.top+b.height/2-dr.top;
+  const x2=bd.left-dr.left, y2=bd.top+bd.height/2-dr.top;
+  const dx=(x2-x1)*0.35;
+  return `M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`;
+}
+
+function drawAllConnections() {
+  const showConns = scene>=5 && scene<=7;
+  const isDB = scene===7 && coFilter==='db';
+  const isAT = scene===7 && coFilter==='at';
+  const isInteractive = scene===6 && selNode;
+  let hlSet = null;
+  if(isInteractive) hlSet = buildHighlightSet(selNode);
+
+  // Determine which connection set is active
+  let activeConns = STD_CONNS;
+  let dbConnsActive = false;
+  if(isDB){activeConns=[]; dbConnsActive=true;}
+  if(isAT){activeConns = STD_CONNS.filter(c=>{
+    // only cline->openrouter and openrouter->models
+    const k = connKey(c[0],c[1]);
+    return ['prod-cline|api-openrouter','api-openrouter|model-gpt','api-openrouter|model-claude','api-openrouter|model-gemini'].includes(k);
+  });}
+
+  // Standard connections
+  STD_CONNS.forEach(([from,to,cv])=>{
+    const fromEl=$(from), toEl=$(to);
+    if(!fromEl||!toEl) return;
+    const p = ensurePath(from,to,cv);
+    if(!fromEl.classList.contains('vis')||!toEl.classList.contains('vis')||!showConns){
+      p.style.opacity='0'; return;
+    }
+    // Update path geometry
+    p.setAttribute('d', calcPath(fromEl,toEl));
+    p.style.stroke = `var(${cv})`;
+    p.style.filter = '';
+    p.classList.remove('pulse');
+
+    if(isInteractive && hlSet){
+      const match = hlSet.c.some(([a,b])=>a===from&&b===to);
+      p.style.opacity = match ? '1' : '0.06';
+      if(match){p.style.filter='url(#glow-sm)';p.style.strokeWidth='2.5';}
+      else{p.style.strokeWidth='2';}
+    } else if(isDB){
+      p.style.opacity='0.04';p.style.strokeWidth='2';
+    } else if(isAT){
+      const k=connKey(from,to);
+      const active=['prod-cline|api-openrouter','api-openrouter|model-gpt','api-openrouter|model-claude','api-openrouter|model-gemini'].includes(k);
+      p.style.opacity=active?'1':'0.04';
+      if(active){p.style.filter='url(#glow-sm)';p.style.strokeWidth='2.5';}
+      else{p.style.strokeWidth='2';}
+    } else if(scene===8){
+      p.style.opacity='0.08';p.style.strokeWidth='2';
+    } else {
+      p.style.opacity=String(getComputedStyle(document.documentElement).getPropertyValue('--line-default-opacity')||.35);
+      p.style.strokeWidth='2';
+    }
+  });
+
+  // DB-specific connections
+  DB_CONNS.forEach(([from,to,cv])=>{
+    const fromEl=$(from), toEl=$(to);
+    if(!fromEl||!toEl) return;
+    const p = ensurePath(from,to,cv);
+    if(!isDB || !fromEl.classList.contains('vis')||!toEl.classList.contains('vis')){
+      p.style.opacity='0'; return;
+    }
+    p.setAttribute('d', calcPath(fromEl,toEl));
+    p.style.stroke=`var(${cv})`;
+    p.style.opacity='1';
+    p.style.filter='url(#glow-sm)';
+    p.style.strokeWidth='2.5';
+  });
+}
+
+/* ═══════════════════════════════════════════
+   LABELS (Scene 1→2 morph)
+   ═══════════════════════════════════════════ */
+
+function updateLabels() {
+  const brainLbl = $('lbl-brain'), bodyLbl = $('lbl-body'), connLbl = $('lbl-conn-txt');
+  const wantModel = scene>=2;
+  const brainText = wantModel?'Model':'brain';
+  const bodyText = wantModel?'Product':'body';
+  const connText = wantModel?'API':'connection';
+
+  [brainLbl, bodyLbl, connLbl].forEach(el=>{
+    const target = el===brainLbl?brainText:el===bodyLbl?bodyText:connText;
+    if(el.textContent!==target){
+      el.classList.add('fade');
+      setTimeout(()=>{el.textContent=target;el.classList.remove('fade');},260);
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════
+   RENDER
+   ═══════════════════════════════════════════ */
+
+function render() {
+  // Node visibility
+  allNodes().forEach(n=>{
+    const id = n.id;
+    const enter = nodeEnter[id]||99;
+    const exit = nodeExit[id]||99;
+    let vis = scene>=enter && scene<exit;
+
+    // DB Hub special
+    if(id==='api-db-hub') vis = scene===7 && coFilter==='db';
+
+    // Scene 8: all visible nodes get dimmed
+    n.classList.toggle('vis', vis);
+    n.classList.remove('dim','blocked','hl','clickable');
+
+    // Scene 6 highlighting
+    if(scene===6 && vis && (n.classList.contains('model')||n.classList.contains('product')||n.classList.contains('api'))){
+      n.classList.add('clickable');
+      if(selNode){
+        const hlSet = buildHighlightSet(selNode);
+        if(hlSet){
+          n.classList.toggle('hl', hlSet.n.includes(id));
+          n.classList.toggle('dim', !hlSet.n.includes(id));
+        }
+      }
+    }
+
+    // Scene 7 company filter
+    if(scene===7 && vis){
+      if(coFilter==='db'){
+        if(CO.db.blocked.includes(id)){n.classList.add('blocked');}
+        else if(CO.db.bright.includes(id)){n.classList.add('hl');}
+      } else if(coFilter==='at'){
+        if(CO.at.blocked.includes(id)){n.classList.add('blocked');}
+        else if(CO.at.bright.includes(id)){n.classList.add('hl');}
+      }
+    }
+
+    // Scene 8 dim all
+    if(scene===8 && vis) n.classList.add('dim');
+  });
+
+  // Label elements
+  Object.entries(lblEnter).forEach(([id,s])=>{
+    const el=$(id);
+    if(el) el.classList.toggle('vis', scene>=s && scene<9);
+  });
+
+  // Connection label
+  $('label-conn').classList.toggle('vis', scene<=2);
+
+  // Hint / filter / recap
+  $('hint').classList.toggle('vis', scene===6);
+  $('co-filter').classList.toggle('vis', scene===7);
+  $('recap').classList.toggle('vis', scene===8);
+
+  // Labels morph
+  updateLabels();
+
+  // Caption
+  updateCaption();
+
+  // Nav
+  $('btn-prev').disabled = scene===1;
+  $('btn-next').disabled = scene===TOTAL;
+  $('counter').textContent = scene+' / '+TOTAL;
+
+  // Draw connections (after layout settles)
+  requestAnimationFrame(()=>{
+    updateGenericLine();
+    drawAllConnections();
+  });
+}
+
+function updateCaption(){
+  const cap = $('caption'), note = $('co-note');
+  cap.classList.add('fade');
+  setTimeout(()=>{
+    cap.textContent = captions[scene]||'';
+    if(scene===7) note.textContent = coNotes[coFilter]||'';
+    else note.textContent = '';
+    cap.classList.remove('fade');
+    // Redraw connections in case layout shifted
+    requestAnimationFrame(()=>{updateGenericLine();drawAllConnections();});
+  },220);
+}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════ */
+
+function go(n){
+  if(n<1||n>TOTAL) return;
+  prevScene=scene;
+  selNode=null; hoveredNode=null;
+  if(n!==7) coFilter='all'; // reset filter when leaving scene 7
+  scene=n;
+  // Reset filter buttons
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('act',b.dataset.f==='all'));
+  // Clear hover classes
+  document.querySelectorAll('.node.hover-hl,.node.hover-dim').forEach(el=>el.classList.remove('hover-hl','hover-dim'));
+  render();
+  // Animate line drawing for Scene 5 entry
+  requestAnimationFrame(()=>setTimeout(animateNewLines,50));
+}
+
+$('btn-prev').addEventListener('click',()=>go(scene-1));
+$('btn-next').addEventListener('click',()=>go(scene+1));
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='Right') go(scene+1);
+  if(e.key==='ArrowLeft'||e.key==='Left') go(scene-1);
+});
+
+/* ═══════════════════════════════════════════
+   SCENE 6 INTERACTIVITY
+   ═══════════════════════════════════════════ */
+
+let hoveredNode = null;
+
+function applyHoverHighlight(nodeId) {
+  if(scene!==6 || selNode) return; // don't hover-preview when a node is locked
+  const hlSet = buildHighlightSet(nodeId);
+  if(!hlSet) return;
+  const visibleNodes = document.querySelectorAll('.node.vis.clickable');
+  visibleNodes.forEach(n=>{
+    n.classList.remove('hover-hl','hover-dim');
+    if(hlSet.n.includes(n.id)) n.classList.add('hover-hl');
+    else n.classList.add('hover-dim');
+  });
+  // Highlight matching connections
+  connPaths.forEach((p,k)=>{
+    const [from,to] = k.split('|');
+    const match = hlSet.c.some(([a,b])=>a===from&&b===to);
+    if(p.style.opacity!=='0'){
+      p.style.opacity = match ? '1' : '0.06';
+      if(match){p.style.filter='url(#glow-sm)';p.style.strokeWidth='2.5';}
+      else{p.style.filter='';p.style.strokeWidth='2';}
+    }
+  });
+}
+
+function clearHoverHighlight() {
+  if(scene!==6 || selNode) return;
+  document.querySelectorAll('.node.hover-hl,.node.hover-dim').forEach(n=>{
+    n.classList.remove('hover-hl','hover-dim');
+  });
+  drawAllConnections(); // restore default
+}
+
+document.querySelectorAll('.node.model, .node.product, .node.api').forEach(n=>{
+  n.addEventListener('click',e=>{
+    if(scene!==6) return;
+    e.stopPropagation();
+    const id=n.id;
+    if(selNode===id) selNode=null; // toggle off
+    else selNode=id;
+    clearHoverHighlight();
+    render();
+  });
+  n.addEventListener('mouseenter',()=>{
+    if(scene!==6||selNode) return;
+    hoveredNode=n.id;
+    applyHoverHighlight(n.id);
+  });
+  n.addEventListener('mouseleave',()=>{
+    if(scene!==6) return;
+    hoveredNode=null;
+    clearHoverHighlight();
+  });
+});
+
+// Click on empty area resets
+$('diagram').addEventListener('click',e=>{
+  if(scene===6 && selNode && (e.target.id==='diagram'||e.target===svg)){
+    selNode=null; render();
+  }
+});
+
+/* ═══════════════════════════════════════════
+   SCENE 7 COMPANY FILTER
+   ═══════════════════════════════════════════ */
+
+document.querySelectorAll('.fbtn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(scene!==7) return;
+    coFilter = btn.dataset.f;
+    document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('act',b===btn));
+    render();
+  });
+});
+
+/* ═══════════════════════════════════════════
+   THEME TOGGLE
+   ═══════════════════════════════════════════ */
+
+$('theme-toggle').addEventListener('click',()=>{
+  const html = document.documentElement;
+  const isDark = html.classList.contains('dark');
+  html.classList.toggle('dark',!isDark);
+  html.classList.toggle('light',isDark);
+  $('icon-sun').style.display = isDark?'block':'none';
+  $('icon-moon').style.display = isDark?'none':'block';
+  requestAnimationFrame(()=>{updateGenericLine();drawAllConnections();});
+});
+
+/* ═══════════════════════════════════════════
+   RESIZE
+   ═══════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════
+   LINE DRAWING ANIMATION
+   ═══════════════════════════════════════════ */
+
+let prevScene = 0;
+function animateNewLines() {
+  // Only animate when entering scene 5 for the first time
+  if(scene===5 && prevScene<5){
+    connPaths.forEach((p)=>{
+      if(p.style.opacity==='0') return;
+      try{
+        const len = p.getTotalLength();
+        p.style.strokeDasharray = len;
+        p.style.strokeDashoffset = len;
+        p.style.transition = 'none';
+        requestAnimationFrame(()=>{
+          p.style.transition = 'stroke-dashoffset 600ms ease-out, opacity 400ms ease';
+          p.style.strokeDashoffset = '0';
+          setTimeout(()=>{p.style.strokeDasharray='';p.style.strokeDashoffset='';p.style.transition='opacity 400ms ease,stroke 300ms ease';},650);
+        });
+      } catch(e){}
+    });
+  }
+}
+
+let resizeTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(()=>{updateGenericLine();drawAllConnections();},100);
+});
+
+/* ═══════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════ */
+
+render();
+// Re-render after fonts load for correct connection positions
+document.fonts.ready.then(()=>requestAnimationFrame(()=>{updateGenericLine();drawAllConnections();}));
+</script>
+</body>
+</html>
