@@ -9,14 +9,14 @@ import '../sections/07-workflow.js';
 import '../sections/08-copilot.js';
 
 const sections = [
-  { tag: 's01-context',         title: 'Context & Goal' },
-  { tag: 's02-landscape',       title: 'What is What' },
-  { tag: 's03-gap',             title: 'The Capability Gap' },
-  { tag: 's04-vibe-vs-agentic', title: 'Vibe Coding vs Agentic Engineering' },
+  { tag: 's01-context',         title: 'Kontext & Ziel' },
+  { tag: 's02-landscape',       title: 'Was ist was' },
+  { tag: 's03-gap',             title: 'Die Fähigkeitslücke' },
+  { tag: 's04-vibe-vs-agentic', title: 'Vibe Coding vs. Agentic Engineering' },
   { tag: 's05-primitives-1',    title: 'Primitives — Memory, Skills, MCP' },
   { tag: 's06-primitives-2',    title: 'Primitives — Hooks, Subagents, Scope' },
   { tag: 's07-workflow',        title: 'Workflow & Best Practices' },
-  { tag: 's08-copilot',         title: 'Copilot in Practice' },
+  { tag: 's08-copilot',         title: 'Copilot in der Praxis' },
 ];
 
 const stage     = document.getElementById('stage');
@@ -73,19 +73,6 @@ document.addEventListener('keydown', e => {
   } else if (e.key === 'End') {
     mount(sections.length - 1);
   }
-});
-
-/* Theme toggle */
-const themeToggle = document.getElementById('theme-toggle');
-const iconSun  = document.getElementById('icon-sun');
-const iconMoon = document.getElementById('icon-moon');
-themeToggle.addEventListener('click', () => {
-  const html = document.documentElement;
-  const isDark = html.classList.contains('dark');
-  html.classList.toggle('dark',  !isDark);
-  html.classList.toggle('light',  isDark);
-  iconSun.style.display  = isDark ? 'block' : 'none';
-  iconMoon.style.display = isDark ? 'none'  : 'block';
 });
 
 /* Initial mount — respect hash like #3 */

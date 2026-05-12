@@ -4,5 +4,5 @@ definePlaceholder(
   's07-workflow',
   7,
   'Workflow & Best Practices',
-  'Explore → Discuss → Plan → Code → Review. Interview the agent. Run multiple sessions. Review every diff.'
+  'Explore → Discuss → Plan → Code → Review. Den Agenten befragen. Mehrere Sessions parallel. Jeden Diff reviewen.'
 );
