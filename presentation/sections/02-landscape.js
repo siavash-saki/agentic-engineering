@@ -1,6 +1,6 @@
 /* Section 2 — Was ist was
    Three-column landscape (Modelle / APIs / Produkte) with vendor brand colors
-   and a DB-laptop filter that locks down everything except Copilot ↔ DB GenAI Hub. */
+   and a DB-laptop filter that only highlights Copilot + Kiro. */
 
 const TAG = 's02-landscape';
 
@@ -11,19 +11,18 @@ const MODELS = [
 ];
 
 const APIS = [
-  { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',     top: '14%' },
-  { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic',  top: '32%' },
-  { id: 'a-google',    name: 'Google API',    color: 'c-google',     top: '50%' },
-  { id: 'a-router',    name: 'OpenRouter',    color: 'c-router',     top: '68%' },
-  { id: 'a-dbhub',     name: 'DB GenAI Hub',  sub: 'DB InfraGO', color: 'c-db', top: '88%' },
+  { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',     top: '20%' },
+  { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic',  top: '40%' },
+  { id: 'a-google',    name: 'Google API',    color: 'c-google',     top: '60%' },
+  { id: 'a-router',    name: 'OpenRouter',    color: 'c-router',     top: '80%' },
 ];
 
 const PRODUCTS = [
   { id: 'p-claude-app', name: 'Claude App',    maker: 'Anthropic',    color: 'c-anthropic', top: '12%' },
-  { id: 'p-codex',      name: 'Codex',          maker: 'OpenAI',       color: 'c-openai',    top: '26%' },
-  { id: 'p-gemini-app', name: 'Gemini App',     maker: 'Google',       color: 'c-google',    top: '40%' },
-  { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',       color: null,           top: '62%' },
-  { id: 'p-cline',      name: 'Cline',          maker: 'Open Source',  color: null,           top: '78%' },
+  { id: 'p-codex',      name: 'Codex',         maker: 'OpenAI',       color: 'c-openai',    top: '28%' },
+  { id: 'p-gemini-app', name: 'Gemini App',    maker: 'Google',       color: 'c-google',    top: '44%' },
+  { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',      color: null,          top: '64%' },
+  { id: 'p-kiro',       name: 'Kiro',          maker: 'Amazon',       color: 'c-aws',       top: '80%' },
 ];
 
 /* [from, to, color-token] — lines are drawn right-to-left visually (product → api → model). */
@@ -41,24 +40,16 @@ const CONNS_STD = [
   ['p-copilot',   'a-anthropic','c-anthropic'],
   ['p-copilot',   'a-google',   'c-google'],
   ['p-copilot',   'a-router',   'c-router'],
-  ['p-cline',     'a-openai',   'c-openai'],
-  ['p-cline',     'a-anthropic','c-anthropic'],
-  ['p-cline',     'a-google',   'c-google'],
-  ['p-cline',     'a-router',   'c-router'],
+  ['p-kiro',      'a-anthropic','c-anthropic'],
+  ['p-kiro',      'a-openai',   'c-openai'],
 ];
 
-const CONNS_DB = [
-  ['p-copilot', 'a-dbhub',  'c-db'],
-  ['a-dbhub',   'm-gpt',    'c-db'],
-  ['a-dbhub',   'm-claude', 'c-db'],
-];
-
-const DB_ALLOWED = ['p-copilot', 'a-dbhub', 'm-gpt', 'm-claude'];
-const DB_BLOCKED = ['p-claude-app','p-codex','p-gemini-app','p-cline','a-openai','a-anthropic','a-google','a-router','m-gemini'];
+const DB_ALLOWED = ['p-copilot', 'p-kiro', 'a-openai', 'a-anthropic', 'a-google', 'm-gpt', 'm-claude', 'm-gemini'];
+const DB_BLOCKED = ['p-claude-app', 'p-codex', 'p-gemini-app', 'a-router'];
 
 const CAPTIONS = {
   all: 'Ein Modell kann viele Produkte antreiben. Ein Produkt kann viele Modelle nutzen. Es ist <b>many-to-many</b>.',
-  db:  'Auf dem DB-Laptop ist nur <b>ein</b> Coding-Agent erlaubt: Copilot. Er spricht nicht direkt mit OpenAI oder Anthropic — sondern mit dem <b>DB GenAI Hub</b>, einer DB-internen API, die uns GPT und Claude bereitstellt. Alles andere ist gesperrt — nicht technisch, sondern <b>vertraglich</b>.',
+  db:  'Auf dem DB-Laptop sind <b>zwei</b> Coding-Agenten erlaubt: <b>GitHub Copilot</b> (GitHub-Subscription) und <b>Kiro</b> (AWS-Subscription). Direkte API-Zugriffe und Standalone-Apps wie Claude oder ChatGPT sind gesperrt — nicht technisch, sondern <b>vertraglich</b>.',
 };
 
 class Section02 extends HTMLElement {
@@ -70,7 +61,7 @@ class Section02 extends HTMLElement {
           --c-anthropic: #D97757;
           --c-google:    #4285F4;
           --c-router:    #7C3AED;
-          --c-db:        var(--db-red);
+          --c-aws:       #FF9900;
 
           display: flex !important;
           flex-direction: column;
@@ -345,22 +336,17 @@ class Section02 extends HTMLElement {
       }
     });
 
-    /* DB-Hub is always present in DOM, but only meaningful in DB view.
-       Outside DB view, dim it so the main map reads cleanly. */
-    if (view !== 'db') this.nodes.get('a-dbhub').classList.add('dim');
-
     this.caption.innerHTML = CAPTIONS[view];
     this.drawConnections();
   }
 
   hoverSet(id) {
     const set = new Set([id]);
-    const activeConns = (this.view === 'db') ? CONNS_DB : CONNS_STD;
     /* Add direct neighbours, then second hop through APIs. */
-    const direct = activeConns.filter(([f, t]) => f === id || t === id);
+    const direct = CONNS_STD.filter(([f, t]) => f === id || t === id);
     direct.forEach(([f, t]) => { set.add(f); set.add(t); });
     /* Second hop: if hovering a product or model, include the API's other side. */
-    const second = activeConns.filter(([f, t]) => set.has(f) || set.has(t));
+    const second = CONNS_STD.filter(([f, t]) => set.has(f) || set.has(t));
     second.forEach(([f, t]) => { set.add(f); set.add(t); });
     return set;
   }
@@ -369,10 +355,6 @@ class Section02 extends HTMLElement {
     if (!this.stage.isConnected) return;
     const stageRect = this.stage.getBoundingClientRect();
     if (stageRect.width === 0) return;
-
-    const activeConns = this.view === 'db'
-      ? CONNS_DB.concat(CONNS_STD.map(c => [...c, true]))   /* std lines remain dim in DB view */
-      : CONNS_STD;
 
     const used = new Set();
 
@@ -405,8 +387,10 @@ class Section02 extends HTMLElement {
     };
 
     if (this.view === 'db') {
-      CONNS_STD.forEach(([f, t, c]) => draw(f, t, c, { dim: true }));
-      CONNS_DB.forEach(([f, t, c]) => draw(f, t, c));
+      CONNS_STD.forEach(([f, t, c]) => {
+        const allowed = DB_ALLOWED.includes(f) && DB_ALLOWED.includes(t);
+        draw(f, t, c, { dim: !allowed });
+      });
     } else {
       CONNS_STD.forEach(([f, t, c]) => draw(f, t, c));
     }
