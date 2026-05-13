@@ -2,7 +2,7 @@
    Visualization: three model lanes (Opus / Sonnet / Haiku) with
    speed/cost bars and an example task that "routes" into each lane. */
 
-const TAG = 's16-tip-model';
+const TAG = 's17-tip-model';
 
 const MODELS = [
   {

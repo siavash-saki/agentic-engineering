@@ -2,7 +2,7 @@
    Visualization: a rules file at the top broadcasts its rules to three
    sessions below. Each session reads the file before it starts. */
 
-const TAG = 's17-tip-rules';
+const TAG = 's18-tip-rules';
 
 const RULES = [
   'Tests vor Implementierung',

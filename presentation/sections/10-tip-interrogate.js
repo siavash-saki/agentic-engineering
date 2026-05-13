@@ -2,7 +2,7 @@
    Visualization: chat exchange — user asks, agent replies with
    what it understood + what's still open. Open items pulse red. */
 
-const TAG = 's09-tip-interrogate';
+const TAG = 's10-tip-interrogate';
 
 class SectionTip01 extends HTMLElement {
   connectedCallback() {
