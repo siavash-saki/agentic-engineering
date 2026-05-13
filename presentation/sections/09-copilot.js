@@ -1,7 +1,7 @@
-/* Section 8 — Copilot in der Praxis
+/* Section 9 — Copilot in der Praxis
    Montag-morgen-Aktionsplan. */
 
-const TAG = 's08-copilot';
+const TAG = 's09-copilot';
 
 const STEPS = [
   {
@@ -39,7 +39,7 @@ const STEPS = [
   },
 ];
 
-class Section08 extends HTMLElement {
+class Section09 extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <style>
@@ -60,14 +60,14 @@ class Section08 extends HTMLElement {
           color: var(--db-red);
           margin-bottom: var(--db-space-3);
           opacity: 0;
-          animation: s08-fade 500ms var(--db-ease) 80ms forwards;
+          animation: s09-fade 500ms var(--db-ease) 80ms forwards;
         }
         ${TAG} h1 {
           margin: 0 0 var(--db-space-3);
           font-size: var(--db-fs-h1);
           line-height: var(--db-lh-h1);
           opacity: 0;
-          animation: s08-fade 600ms var(--db-ease) 200ms forwards;
+          animation: s09-fade 600ms var(--db-ease) 200ms forwards;
         }
         ${TAG} h1 b { color: var(--db-red); font-weight: inherit; }
         ${TAG} .lede {
@@ -77,7 +77,7 @@ class Section08 extends HTMLElement {
           max-width: 900px;
           margin: 0 0 var(--db-space-6);
           opacity: 0;
-          animation: s08-fade 600ms var(--db-ease) 340ms forwards;
+          animation: s09-fade 600ms var(--db-ease) 340ms forwards;
         }
 
         ${TAG} .steps {
@@ -95,7 +95,7 @@ class Section08 extends HTMLElement {
           gap: var(--db-space-3);
           opacity: 0;
           transform: translateY(12px);
-          animation: s08-rise 600ms var(--db-ease) forwards;
+          animation: s09-rise 600ms var(--db-ease) forwards;
           position: relative;
           overflow: hidden;
         }
@@ -178,15 +178,15 @@ class Section08 extends HTMLElement {
           color: var(--db-text-strong);
           text-align: center;
           opacity: 0;
-          animation: s08-fade 600ms var(--db-ease) 1100ms forwards;
+          animation: s09-fade 600ms var(--db-ease) 1100ms forwards;
         }
         ${TAG} .punch b { color: var(--db-red); }
 
-        @keyframes s08-fade {
+        @keyframes s09-fade {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes s08-rise {
+        @keyframes s09-rise {
           to { opacity: 1; transform: translateY(0); }
         }
 
@@ -227,4 +227,4 @@ class Section08 extends HTMLElement {
   }
 }
 
-customElements.define(TAG, Section08);
+customElements.define(TAG, Section09);

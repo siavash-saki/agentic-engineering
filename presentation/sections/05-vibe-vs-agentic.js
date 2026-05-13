@@ -1,7 +1,7 @@
-/* Section 4 — Vibe Coding vs. Agentic Engineering
+/* Section 5 — Vibe Coding vs. Agentic Engineering
    Zwei Arbeitsweisen Seite an Seite. */
 
-const TAG = 's04-vibe-vs-agentic';
+const TAG = 's05-vibe-vs-agentic';
 
 const ROWS = [
   { dim: 'Eingabe',          vibe: 'Bauchgefühl-Prompt',     agentic: 'Klare Spezifikation' },
@@ -12,7 +12,7 @@ const ROWS = [
   { dim: 'Skaliert auf …',   vibe: 'Spielzeug-Probleme',     agentic: 'Produktionscode' },
 ];
 
-class Section04 extends HTMLElement {
+class Section05 extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <style>
@@ -33,14 +33,14 @@ class Section04 extends HTMLElement {
           color: var(--db-red);
           margin-bottom: var(--db-space-3);
           opacity: 0;
-          animation: s04-fade 500ms var(--db-ease) 80ms forwards;
+          animation: s05-fade 500ms var(--db-ease) 80ms forwards;
         }
         ${TAG} h1 {
           margin: 0 0 var(--db-space-3);
           font-size: var(--db-fs-h2);
           line-height: var(--db-lh-h2);
           opacity: 0;
-          animation: s04-fade 600ms var(--db-ease) 200ms forwards;
+          animation: s05-fade 600ms var(--db-ease) 200ms forwards;
         }
         ${TAG} .lede {
           font-size: var(--db-fs-lead);
@@ -49,7 +49,7 @@ class Section04 extends HTMLElement {
           max-width: 820px;
           margin: 0 0 var(--db-space-6);
           opacity: 0;
-          animation: s04-fade 600ms var(--db-ease) 350ms forwards;
+          animation: s05-fade 600ms var(--db-ease) 350ms forwards;
         }
         ${TAG} .grid {
           display: grid;
@@ -63,7 +63,7 @@ class Section04 extends HTMLElement {
           padding: var(--db-space-5);
           opacity: 0;
           transform: translateX(-12px);
-          animation: s04-slide 600ms var(--db-ease) 550ms forwards;
+          animation: s05-slide 600ms var(--db-ease) 550ms forwards;
         }
         ${TAG} .col.agentic {
           background: var(--db-cool-gray-100);
@@ -124,15 +124,15 @@ class Section04 extends HTMLElement {
           color: var(--db-text-strong);
           text-align: center;
           opacity: 0;
-          animation: s04-fade 600ms var(--db-ease) 1000ms forwards;
+          animation: s05-fade 600ms var(--db-ease) 1000ms forwards;
         }
         ${TAG} .punch b { color: var(--db-red); }
 
-        @keyframes s04-fade {
+        @keyframes s05-fade {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes s04-slide {
+        @keyframes s05-slide {
           to { opacity: 1; transform: translateX(0); }
         }
 
@@ -181,4 +181,4 @@ class Section04 extends HTMLElement {
   }
 }
 
-customElements.define(TAG, Section04);
+customElements.define(TAG, Section05);

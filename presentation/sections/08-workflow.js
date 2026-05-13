@@ -1,7 +1,7 @@
-/* Section 7 — Workflow & Best Practices
+/* Section 8 — Workflow & Best Practices
    Fünf-Phasen-Fluss plus drei Disziplinen. */
 
-const TAG = 's07-workflow';
+const TAG = 's08-workflow';
 
 const PHASES = [
   { num: '1', name: 'Explore',  body: 'Den Agenten Code lesen lassen, bevor er schreibt. Existierende Muster, Tests, Konventionen finden.' },
@@ -26,7 +26,7 @@ const PRACTICES = [
   },
 ];
 
-class Section07 extends HTMLElement {
+class Section08 extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <style>
@@ -47,14 +47,14 @@ class Section07 extends HTMLElement {
           color: var(--db-red);
           margin-bottom: var(--db-space-3);
           opacity: 0;
-          animation: s07-fade 500ms var(--db-ease) 80ms forwards;
+          animation: s08-fade 500ms var(--db-ease) 80ms forwards;
         }
         ${TAG} h1 {
           margin: 0 0 var(--db-space-3);
           font-size: var(--db-fs-h2);
           line-height: var(--db-lh-h2);
           opacity: 0;
-          animation: s07-fade 600ms var(--db-ease) 200ms forwards;
+          animation: s08-fade 600ms var(--db-ease) 200ms forwards;
         }
         ${TAG} .lede {
           font-size: var(--db-fs-lead);
@@ -63,7 +63,7 @@ class Section07 extends HTMLElement {
           max-width: 900px;
           margin: 0 0 var(--db-space-6);
           opacity: 0;
-          animation: s07-fade 600ms var(--db-ease) 340ms forwards;
+          animation: s08-fade 600ms var(--db-ease) 340ms forwards;
         }
 
         ${TAG} .flow {
@@ -82,7 +82,7 @@ class Section07 extends HTMLElement {
           gap: var(--db-space-2);
           opacity: 0;
           transform: translateY(10px);
-          animation: s07-rise 500ms var(--db-ease) forwards;
+          animation: s08-rise 500ms var(--db-ease) forwards;
         }
         ${TAG} .phase:nth-child(1) { animation-delay: 500ms; }
         ${TAG} .phase:nth-child(2) { animation-delay: 620ms; }
@@ -119,7 +119,7 @@ class Section07 extends HTMLElement {
           color: var(--db-text-muted);
           margin-bottom: var(--db-space-4);
           opacity: 0;
-          animation: s07-fade 500ms var(--db-ease) 1150ms forwards;
+          animation: s08-fade 500ms var(--db-ease) 1150ms forwards;
         }
         ${TAG} .practices {
           display: grid;
@@ -135,7 +135,7 @@ class Section07 extends HTMLElement {
           position: relative;
           opacity: 0;
           transform: translateY(10px);
-          animation: s07-rise 500ms var(--db-ease) forwards;
+          animation: s08-rise 500ms var(--db-ease) forwards;
         }
         ${TAG} .practice::before {
           content: "";
@@ -161,11 +161,11 @@ class Section07 extends HTMLElement {
           color: var(--db-text);
         }
 
-        @keyframes s07-fade {
+        @keyframes s08-fade {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes s07-rise {
+        @keyframes s08-rise {
           to { opacity: 1; transform: translateY(0); }
         }
 
@@ -206,4 +206,4 @@ class Section07 extends HTMLElement {
   }
 }
 
-customElements.define(TAG, Section07);
+customElements.define(TAG, Section08);
