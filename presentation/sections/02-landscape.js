@@ -1,8 +1,9 @@
 /* Section 2 — Was ist was
-   Three logical sections: Modell · (API & Subscription) · Produkt.
-   The middle section visually contains two sub-columns (APIs left, Subs right)
-   under one combined header. A DB-laptop filter shows the exact subscription
-   paths that DB actually uses. */
+   Three sections: Modell · (API & Subscription) · Produkt.
+   API and Subscription are PARALLEL alternatives in the middle — a product
+   reaches a model either through one or the other, never chained. The
+   DB-laptop filter shows the actual subscription paths DB uses (no direct
+   API access). */
 
 const TAG = 's02-landscape';
 
@@ -34,33 +35,46 @@ const PRODUCTS = [
   { id: 'p-kiro',       name: 'Kiro',           maker: 'Amazon',    color: 'c-aws',       top: '86%' },
 ];
 
-/* Each route is the chain of nodes from product to model.
+/* Each route: [Product, Intermediary (API or Sub), Model].
+   API and Subscription are PARALLEL alternatives — they are NOT chained.
+   A product can reach a model either via a direct API or via a subscription.
    Used for connection rendering AND for hover highlight. */
 const ROUTES = [
-  ['p-codex',      's-openai',    'a-openai',    'm-gpt'],
-  ['p-claude-app', 's-anthropic', 'a-anthropic', 'm-claude'],
+  /* Codex: usable via OpenAI API or via OpenAI Subscription */
+  ['p-codex',      'a-openai',    'm-gpt'],
+  ['p-codex',      's-openai',    'm-gpt'],
+  /* Claude App: usable via Anthropic API or via Anthropic Subscription */
+  ['p-claude-app', 'a-anthropic', 'm-claude'],
+  ['p-claude-app', 's-anthropic', 'm-claude'],
+  /* Gemini App: via Google API (no Google subscription shown) */
   ['p-gemini-app', 'a-google',    'm-gemini'],
-  ['p-copilot',    's-github',    'a-openai',    'm-gpt'],
-  ['p-copilot',    's-github',    'a-anthropic', 'm-claude'],
-  ['p-copilot',    's-github',    'a-google',    'm-gemini'],
-  ['p-kiro',       's-amazon',    'a-anthropic', 'm-claude'],
+  /* GitHub Copilot: only via GitHub Subscription — no API path */
+  ['p-copilot',    's-github',    'm-gpt'],
+  ['p-copilot',    's-github',    'm-claude'],
+  ['p-copilot',    's-github',    'm-gemini'],
+  /* Kiro: only via Amazon Subscription — no API path */
+  ['p-kiro',       's-amazon',    'm-claude'],
 ];
 
 const EDGE_COLOR = {
-  'p-codex|s-openai':           'c-openai',
-  'p-claude-app|s-anthropic':   'c-anthropic',
-  'p-gemini-app|a-google':      'c-google',
-  'p-copilot|s-github':         'c-github',
-  'p-kiro|s-amazon':            'c-aws',
-  's-openai|a-openai':          'c-openai',
-  's-anthropic|a-anthropic':    'c-anthropic',
-  's-github|a-openai':          'c-openai',
-  's-github|a-anthropic':       'c-anthropic',
-  's-github|a-google':          'c-google',
-  's-amazon|a-anthropic':       'c-anthropic',
-  'a-openai|m-gpt':             'c-openai',
-  'a-anthropic|m-claude':       'c-anthropic',
-  'a-google|m-gemini':          'c-google',
+  /* Product → Intermediary */
+  'p-codex|a-openai':         'c-openai',
+  'p-codex|s-openai':         'c-openai',
+  'p-claude-app|a-anthropic': 'c-anthropic',
+  'p-claude-app|s-anthropic': 'c-anthropic',
+  'p-gemini-app|a-google':    'c-google',
+  'p-copilot|s-github':       'c-github',
+  'p-kiro|s-amazon':          'c-aws',
+  /* Intermediary → Model */
+  'a-openai|m-gpt':           'c-openai',
+  's-openai|m-gpt':           'c-openai',
+  'a-anthropic|m-claude':     'c-anthropic',
+  's-anthropic|m-claude':     'c-anthropic',
+  'a-google|m-gemini':        'c-google',
+  's-github|m-gpt':           'c-github',
+  's-github|m-claude':        'c-github',
+  's-github|m-gemini':        'c-github',
+  's-amazon|m-claude':        'c-aws',
 };
 
 /* Build unique segment list from ROUTES. */
@@ -87,12 +101,15 @@ const ROUTER_EDGES = [
   ['a-router', 'm-gemini', 'c-router'],
 ];
 
-const DB_ALLOWED = ['p-copilot', 'p-kiro', 's-github', 's-amazon', 'a-openai', 'a-anthropic', 'm-gpt', 'm-claude'];
-const DB_BLOCKED = ['p-codex', 'p-claude-app', 'p-gemini-app', 's-openai', 's-anthropic', 'a-google', 'a-router', 'm-gemini'];
+/* At DB: only the GitHub and Amazon subscriptions are active.
+   APIs are not paid for directly — every API is dimmed. */
+const DB_ALLOWED = ['p-copilot', 'p-kiro', 's-github', 's-amazon', 'm-gpt', 'm-claude'];
+const DB_BLOCKED = ['p-codex', 'p-claude-app', 'p-gemini-app', 's-openai', 's-anthropic',
+                    'a-openai', 'a-anthropic', 'a-google', 'a-router', 'm-gemini'];
 
 const CAPTIONS = {
-  all: 'Jeder Coding-Agent läuft über eine kommerzielle <b>Subscription</b>. Sie entscheidet, welche APIs — und damit welche Modelle — erreichbar sind.',
-  db:  'Bei der DB sind <b>zwei</b> Subscriptions aktiv: <b>GitHub</b> (für Copilot — Zugriff auf GPT und Claude) und <b>Amazon</b> (für Kiro — nur Claude). Andere Subscriptions sind nicht vorgesehen.',
+  all: 'Ein Produkt erreicht ein Modell <b>entweder</b> direkt über die <b>API</b> (pay-per-use) <b>oder</b> über eine <b>Subscription</b> (monatlich, oft Enterprise) — beides sind parallele, kommerzielle Pfade.',
+  db:  'Bei der DB sind <b>zwei</b> Subscriptions aktiv: <b>GitHub</b> (Copilot → GPT und Claude) und <b>Amazon</b> (Kiro → nur Claude). Direkte API-Nutzung ist nicht vorgesehen.',
 };
 
 class Section02 extends HTMLElement {
