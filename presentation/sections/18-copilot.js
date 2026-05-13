@@ -1,7 +1,7 @@
-/* Section 9 — Copilot in der Praxis
+/* Section 18 — Copilot in der Praxis
    Montag-morgen-Aktionsplan. */
 
-const TAG = 's09-copilot';
+const TAG = 's18-copilot';
 
 const STEPS = [
   {
