@@ -1,55 +1,81 @@
 /* Section 2 — Was ist was
-   Three-column landscape (Modelle / APIs / Produkte) with vendor brand colors
-   and a DB-laptop filter that only highlights Copilot + Kiro. */
+   Four-column landscape (Modelle / APIs / Subscriptions / Produkte) with
+   vendor brand colors and a DB-laptop filter showing the exact subscription
+   paths that DB actually uses. */
 
 const TAG = 's02-landscape';
 
 const MODELS = [
-  { id: 'm-gpt',     name: 'GPT',    maker: 'OpenAI',    color: 'c-openai',    top: '22%' },
-  { id: 'm-claude',  name: 'Claude', maker: 'Anthropic', color: 'c-anthropic', top: '50%' },
-  { id: 'm-gemini',  name: 'Gemini', maker: 'Google',    color: 'c-google',    top: '78%' },
+  { id: 'm-gpt',    name: 'GPT',    maker: 'OpenAI',    color: 'c-openai',    top: '30%' },
+  { id: 'm-claude', name: 'Claude', maker: 'Anthropic', color: 'c-anthropic', top: '70%' },
 ];
 
 const APIS = [
-  { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',     top: '20%' },
-  { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic',  top: '40%' },
-  { id: 'a-google',    name: 'Google API',    color: 'c-google',     top: '60%' },
-  { id: 'a-router',    name: 'OpenRouter',    color: 'c-router',     top: '80%' },
+  { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',    top: '30%' },
+  { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic', top: '70%' },
+];
+
+const SUBS = [
+  { id: 's-openai',    vendor: 'OpenAI',    color: 'c-openai',    top: '14%' },
+  { id: 's-anthropic', vendor: 'Anthropic', color: 'c-anthropic', top: '38%' },
+  { id: 's-github',    vendor: 'GitHub',    color: 'c-github',    top: '62%' },
+  { id: 's-amazon',    vendor: 'Amazon',    color: 'c-aws',       top: '86%' },
 ];
 
 const PRODUCTS = [
-  { id: 'p-claude-app', name: 'Claude App',    maker: 'Anthropic',    color: 'c-anthropic', top: '12%' },
-  { id: 'p-codex',      name: 'Codex',         maker: 'OpenAI',       color: 'c-openai',    top: '28%' },
-  { id: 'p-gemini-app', name: 'Gemini App',    maker: 'Google',       color: 'c-google',    top: '44%' },
-  { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',      color: null,          top: '64%' },
-  { id: 'p-kiro',       name: 'Kiro',          maker: 'Amazon',       color: 'c-aws',       top: '80%' },
+  { id: 'p-codex',      name: 'Codex',          maker: 'OpenAI',    color: 'c-openai',    top: '14%' },
+  { id: 'p-claude-app', name: 'Claude App',     maker: 'Anthropic', color: 'c-anthropic', top: '38%' },
+  { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',    color: 'c-github',    top: '62%' },
+  { id: 'p-kiro',       name: 'Kiro',           maker: 'Amazon',    color: 'c-aws',       top: '86%' },
 ];
 
-/* [from, to, color-token] — lines are drawn right-to-left visually (product → api → model). */
-const CONNS_STD = [
-  ['a-openai',    'm-gpt',    'c-openai'],
-  ['a-anthropic', 'm-claude', 'c-anthropic'],
-  ['a-google',    'm-gemini', 'c-google'],
-  ['a-router',    'm-gpt',    'c-router'],
-  ['a-router',    'm-claude', 'c-router'],
-  ['a-router',    'm-gemini', 'c-router'],
-  ['p-claude-app','a-anthropic','c-anthropic'],
-  ['p-codex',     'a-openai',   'c-openai'],
-  ['p-gemini-app','a-google',   'c-google'],
-  ['p-copilot',   'a-openai',   'c-openai'],
-  ['p-copilot',   'a-anthropic','c-anthropic'],
-  ['p-copilot',   'a-google',   'c-google'],
-  ['p-copilot',   'a-router',   'c-router'],
-  ['p-kiro',      'a-anthropic','c-anthropic'],
-  ['p-kiro',      'a-openai',   'c-openai'],
+/* Each route lists all nodes from product → subscription → api → model.
+   Used both for drawing connection segments and for hover highlighting. */
+const ROUTES = [
+  ['p-codex',      's-openai',    'a-openai',    'm-gpt'],
+  ['p-claude-app', 's-anthropic', 'a-anthropic', 'm-claude'],
+  ['p-copilot',    's-github',    'a-openai',    'm-gpt'],
+  ['p-copilot',    's-github',    'a-anthropic', 'm-claude'],
+  ['p-kiro',       's-amazon',    'a-anthropic', 'm-claude'],
 ];
 
-const DB_ALLOWED = ['p-copilot', 'p-kiro', 'a-openai', 'a-anthropic', 'a-google', 'm-gpt', 'm-claude', 'm-gemini'];
-const DB_BLOCKED = ['p-claude-app', 'p-codex', 'p-gemini-app', 'a-router'];
+/* Edge color rules: product↔sub uses subscription colour;
+   sub↔api and api↔model use API colour. */
+const EDGE_COLOR = {
+  'p-codex|s-openai':         'c-openai',
+  'p-claude-app|s-anthropic': 'c-anthropic',
+  'p-copilot|s-github':       'c-github',
+  'p-kiro|s-amazon':          'c-aws',
+  's-openai|a-openai':        'c-openai',
+  's-anthropic|a-anthropic':  'c-anthropic',
+  's-github|a-openai':        'c-openai',
+  's-github|a-anthropic':     'c-anthropic',
+  's-amazon|a-anthropic':     'c-anthropic',
+  'a-openai|m-gpt':           'c-openai',
+  'a-anthropic|m-claude':     'c-anthropic',
+};
+
+/* Build segment list (unique edges) from ROUTES. */
+const SEGMENTS = (() => {
+  const seen = new Set();
+  const out = [];
+  ROUTES.forEach(route => {
+    for (let i = 0; i < route.length - 1; i++) {
+      const key = `${route[i]}|${route[i + 1]}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push([route[i], route[i + 1], EDGE_COLOR[key]]);
+    }
+  });
+  return out;
+})();
+
+const DB_ALLOWED = ['p-copilot', 'p-kiro', 's-github', 's-amazon', 'a-openai', 'a-anthropic', 'm-gpt', 'm-claude'];
+const DB_BLOCKED = ['p-codex', 'p-claude-app', 's-openai', 's-anthropic'];
 
 const CAPTIONS = {
-  all: 'Ein Modell kann viele Produkte antreiben. Ein Produkt kann viele Modelle nutzen. Es ist <b>many-to-many</b>.',
-  db:  'Auf dem DB-Laptop sind <b>zwei</b> Coding-Agenten erlaubt: <b>GitHub Copilot</b> (GitHub-Subscription) und <b>Kiro</b> (AWS-Subscription). Direkte API-Zugriffe und Standalone-Apps wie Claude oder ChatGPT sind gesperrt — nicht technisch, sondern <b>vertraglich</b>.',
+  all: 'Jeder Coding-Agent läuft über eine kommerzielle <b>Subscription</b>. Sie entscheidet, welche Modelle erreichbar sind — nicht das, was technisch möglich wäre.',
+  db:  'Bei der DB sind <b>zwei</b> Subscriptions aktiv: <b>GitHub</b> (für Copilot — Zugriff auf GPT und Claude) und <b>Amazon</b> (für Kiro — nur Claude). Andere Subscriptions sind nicht vorgesehen.',
 };
 
 class Section02 extends HTMLElement {
@@ -59,9 +85,8 @@ class Section02 extends HTMLElement {
         ${TAG} {
           --c-openai:    #10A37F;
           --c-anthropic: #D97757;
-          --c-google:    #4285F4;
-          --c-router:    #7C3AED;
           --c-aws:       #FF9900;
+          --c-github:    #24292F;
 
           display: flex !important;
           flex-direction: column;
@@ -155,8 +180,8 @@ class Section02 extends HTMLElement {
           transform: translate(-50%, -50%);
           z-index: 2;
           background: var(--db-bg);
-          padding: 10px 16px;
-          min-width: 132px;
+          padding: 10px 14px;
+          min-width: 124px;
           font-size: var(--db-fs-small);
           line-height: 1.2;
           transition:
@@ -179,6 +204,13 @@ class Section02 extends HTMLElement {
           border-radius: var(--db-radius);
           text-align: center;
         }
+        ${TAG} .node.sub {
+          border: 2px dashed var(--node-color, var(--db-cool-gray-300));
+          border-radius: 999px;
+          text-align: center;
+          padding: 8px 16px;
+        }
+        ${TAG} .node.sub .nn { color: var(--node-color); }
         ${TAG} .node.product {
           border: 1px solid var(--db-border);
           border-right: 4px solid var(--maker-color, var(--db-cool-gray-300));
@@ -210,7 +242,7 @@ class Section02 extends HTMLElement {
 
         ${TAG} .caption {
           flex-shrink: 0;
-          max-width: 880px;
+          max-width: 920px;
           margin: var(--db-space-3) auto 0;
           font-size: var(--db-fs-body);
           line-height: var(--db-lh-body);
@@ -228,7 +260,7 @@ class Section02 extends HTMLElement {
       </style>
 
       <div class="top">
-        <h2>Modell · API · Produkt</h2>
+        <h2>Modell · API · Subscription · Produkt</h2>
         <div class="toggle" role="tablist">
           <button type="button" data-view="all" class="active">Alle verfügbar</button>
           <button type="button" data-view="db">Auf dem DB-Laptop</button>
@@ -238,27 +270,34 @@ class Section02 extends HTMLElement {
       <div class="stage">
         <svg class="conn" xmlns="http://www.w3.org/2000/svg"></svg>
 
-        <div class="col-lbl" style="left:10%">Modell</div>
-        <div class="col-lbl" style="left:50%">API</div>
-        <div class="col-lbl" style="left:90%">Produkt</div>
+        <div class="col-lbl" style="left:8%">Modell</div>
+        <div class="col-lbl" style="left:35%">API</div>
+        <div class="col-lbl" style="left:62%">Subscription</div>
+        <div class="col-lbl" style="left:89%">Produkt</div>
 
         ${MODELS.map(m => `
           <div class="node model" data-id="${m.id}"
-               style="left:10%;top:${m.top};--node-color:var(--${m.color})">
+               style="left:8%;top:${m.top};--node-color:var(--${m.color})">
             <div class="nn">${m.name}</div>
             <div class="nm">${m.maker}</div>
           </div>`).join('')}
 
         ${APIS.map(a => `
           <div class="node api" data-id="${a.id}"
-               style="left:50%;top:${a.top};--node-color:var(--${a.color})">
+               style="left:35%;top:${a.top};--node-color:var(--${a.color})">
             <div class="nn">${a.name}</div>
-            ${a.sub ? `<div class="nm">${a.sub}</div>` : ''}
+          </div>`).join('')}
+
+        ${SUBS.map(s => `
+          <div class="node sub" data-id="${s.id}"
+               style="left:62%;top:${s.top};--node-color:var(--${s.color})">
+            <div class="nn">${s.vendor}</div>
+            <div class="nm">Subscription</div>
           </div>`).join('')}
 
         ${PRODUCTS.map(p => `
           <div class="node product" data-id="${p.id}"
-               style="left:90%;top:${p.top};${p.color ? `--maker-color:var(--${p.color})` : ''}">
+               style="left:89%;top:${p.top};--maker-color:var(--${p.color})">
             <div class="nn">${p.name}</div>
             <div class="nm">${p.maker}</div>
           </div>`).join('')}
@@ -267,13 +306,13 @@ class Section02 extends HTMLElement {
       <p class="caption"></p>
     `;
 
-    this.stage    = this.querySelector('.stage');
-    this.svg      = this.querySelector('.conn');
-    this.caption  = this.querySelector('.caption');
-    this.nodes    = new Map(
+    this.stage   = this.querySelector('.stage');
+    this.svg     = this.querySelector('.conn');
+    this.caption = this.querySelector('.caption');
+    this.nodes   = new Map(
       Array.from(this.querySelectorAll('.node')).map(n => [n.dataset.id, n])
     );
-    this.paths    = new Map();
+    this.paths   = new Map();
 
     this.view = 'all';
     this.hovered = null;
@@ -291,8 +330,6 @@ class Section02 extends HTMLElement {
 
     this.render();
 
-    /* Re-draw after section's entry transition + after fonts load,
-       since node sizes shift slightly when Fira Sans takes over. */
     setTimeout(() => this.drawConnections(), 60);
     setTimeout(() => this.drawConnections(), 450);
     if (document.fonts && document.fonts.ready) {
@@ -318,11 +355,19 @@ class Section02 extends HTMLElement {
     this.render();
   }
 
+  /* The set of nodes that lie on a route containing `id`. */
+  hoverSet(id) {
+    const set = new Set();
+    ROUTES.forEach(route => {
+      if (route.includes(id)) route.forEach(n => set.add(n));
+    });
+    return set;
+  }
+
   render() {
     const view = this.view;
     const hovered = this.hovered;
 
-    /* Node visibility / state */
     this.nodes.forEach((n, id) => {
       n.classList.remove('hl', 'dim', 'locked');
 
@@ -340,25 +385,15 @@ class Section02 extends HTMLElement {
     this.drawConnections();
   }
 
-  hoverSet(id) {
-    const set = new Set([id]);
-    /* Add direct neighbours, then second hop through APIs. */
-    const direct = CONNS_STD.filter(([f, t]) => f === id || t === id);
-    direct.forEach(([f, t]) => { set.add(f); set.add(t); });
-    /* Second hop: if hovering a product or model, include the API's other side. */
-    const second = CONNS_STD.filter(([f, t]) => set.has(f) || set.has(t));
-    second.forEach(([f, t]) => { set.add(f); set.add(t); });
-    return set;
-  }
-
   drawConnections() {
     if (!this.stage.isConnected) return;
     const stageRect = this.stage.getBoundingClientRect();
     if (stageRect.width === 0) return;
 
     const used = new Set();
+    const hoverSet = this.hovered ? this.hoverSet(this.hovered) : null;
 
-    const draw = (from, to, colorVar, opts = {}) => {
+    SEGMENTS.forEach(([from, to, colorVar]) => {
       const key = `${from}|${to}`;
       used.add(key);
       let p = this.paths.get(key);
@@ -376,24 +411,13 @@ class Section02 extends HTMLElement {
       p.classList.remove('hl', 'dim');
 
       if (this.view === 'db') {
-        if (opts.dim) p.classList.add('dim');
-        else p.classList.add('hl');
-      } else if (this.hovered) {
-        const set = this.hoverSet(this.hovered);
-        const match = set.has(from) && set.has(to);
-        if (match) p.classList.add('hl');
-        else p.classList.add('dim');
+        const allowed = DB_ALLOWED.includes(from) && DB_ALLOWED.includes(to);
+        p.classList.add(allowed ? 'hl' : 'dim');
+      } else if (hoverSet) {
+        const match = hoverSet.has(from) && hoverSet.has(to);
+        p.classList.add(match ? 'hl' : 'dim');
       }
-    };
-
-    if (this.view === 'db') {
-      CONNS_STD.forEach(([f, t, c]) => {
-        const allowed = DB_ALLOWED.includes(f) && DB_ALLOWED.includes(t);
-        draw(f, t, c, { dim: !allowed });
-      });
-    } else {
-      CONNS_STD.forEach(([f, t, c]) => draw(f, t, c));
-    }
+    });
 
     /* Remove paths that no longer apply. */
     this.paths.forEach((p, key) => {
