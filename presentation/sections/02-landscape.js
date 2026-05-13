@@ -109,8 +109,33 @@ const DB_BLOCKED = ['p-codex', 'p-claude-app', 'p-gemini-app', 's-openai', 's-an
 
 const CAPTIONS = {
   all: 'Ein Produkt erreicht ein Modell <b>entweder</b> direkt über die <b>API</b> (pay-per-use) <b>oder</b> über eine <b>Subscription</b> (monatlich, oft Enterprise) — beides sind parallele, kommerzielle Pfade.',
+  api: '<b>Pay-per-use:</b> das Produkt ruft die Modell-API direkt auf — meist mit einem eigenen API-Key. Jede Anfrage wird einzeln abgerechnet. Schnell zu starten, aber nicht jeder Agent bietet diesen Pfad.',
+  sub: '<b>Monatliche Subscription:</b> Pauschalvertrag, oft Enterprise. Eine Subscription kann mehrere Modelle abdecken. Bei Coding-Agenten wie Copilot oder Kiro der einzige Pfad — direkter API-Zugang ist hier nicht vorgesehen.',
   db:  'Bei der DB sind <b>zwei</b> Subscriptions aktiv: <b>GitHub</b> (Copilot → GPT und Claude) und <b>Amazon</b> (Kiro → nur Claude). Direkte API-Nutzung ist nicht vorgesehen.',
 };
+
+/* Map each node-id to its kind. Used to dim the "other" kind in api/sub view. */
+function nodeKind(id) {
+  if (id.startsWith('m-')) return 'model';
+  if (id.startsWith('a-')) return 'api';
+  if (id.startsWith('s-')) return 'sub';
+  if (id.startsWith('p-')) return 'product';
+  return null;
+}
+function edgeKind(from, to) {
+  if (from.startsWith('a-') || to.startsWith('a-')) return 'api';
+  if (from.startsWith('s-') || to.startsWith('s-')) return 'sub';
+  return null;
+}
+
+/* Which products participate in API routes vs Sub routes. */
+const API_PRODUCTS = new Set();
+const SUB_PRODUCTS = new Set();
+ROUTES.forEach(route => {
+  const kind = edgeKind(route[0], route[1]);
+  if (kind === 'api') API_PRODUCTS.add(route[0]);
+  if (kind === 'sub') SUB_PRODUCTS.add(route[0]);
+});
 
 class Section02 extends HTMLElement {
   connectedCallback() {
@@ -211,6 +236,7 @@ class Section02 extends HTMLElement {
         }
         ${TAG} .cline.hl  { opacity: 1; stroke-width: 2.5; }
         ${TAG} .cline.dim { opacity: 0.06; }
+        ${TAG} .cline.faded { opacity: 0.02; }
         ${TAG} .cline.passive { opacity: 0.18; stroke-dasharray: 3 4; }
 
         ${TAG} .col-lbl {
@@ -285,6 +311,11 @@ class Section02 extends HTMLElement {
           opacity: 0.25;
           filter: grayscale(0.6);
         }
+        ${TAG} .node.faded {
+          opacity: 0.08;
+          filter: grayscale(0.85);
+          pointer-events: none;
+        }
         ${TAG} .node.hl {
           box-shadow: 0 0 0 2px var(--node-color, var(--maker-color, var(--db-red))),
                       0 4px 14px rgba(0,0,0,0.08);
@@ -325,8 +356,10 @@ class Section02 extends HTMLElement {
       <div class="top">
         <h2>Modell · API &amp; Subscription · Produkt</h2>
         <div class="toggle" role="tablist">
-          <button type="button" data-view="all" class="active">Alle verfügbar</button>
-          <button type="button" data-view="db">Auf dem DB-Laptop</button>
+          <button type="button" data-view="all" class="active">Alle Pfade</button>
+          <button type="button" data-view="api">Nur API</button>
+          <button type="button" data-view="sub">Nur Subscription</button>
+          <button type="button" data-view="db">DB-Laptop</button>
         </div>
       </div>
 
@@ -440,11 +473,19 @@ class Section02 extends HTMLElement {
     const hovered = this.hovered;
 
     this.nodes.forEach((n, id) => {
-      n.classList.remove('hl', 'dim', 'locked');
+      n.classList.remove('hl', 'dim', 'locked', 'faded');
+      const kind = nodeKind(id);
 
       if (view === 'db') {
         if (DB_BLOCKED.includes(id)) n.classList.add('dim', 'locked');
         else if (DB_ALLOWED.includes(id)) n.classList.add('hl');
+      } else if (view === 'api') {
+        /* Fade out anything that isn't an API path. */
+        if (kind === 'sub') n.classList.add('faded');
+        else if (kind === 'product' && !API_PRODUCTS.has(id)) n.classList.add('faded');
+      } else if (view === 'sub') {
+        if (kind === 'api') n.classList.add('faded');
+        else if (kind === 'product' && !SUB_PRODUCTS.has(id)) n.classList.add('faded');
       } else if (hovered) {
         const set = this.hoverSet(hovered);
         if (set.has(id)) n.classList.add('hl');
@@ -479,11 +520,20 @@ class Section02 extends HTMLElement {
       if (!fEl || !tEl) return;
       p.setAttribute('d', this.calcPath(fEl, tEl, stageRect));
       p.style.stroke = `var(--${colorVar})`;
-      p.classList.remove('hl', 'dim', 'passive');
+      p.classList.remove('hl', 'dim', 'faded', 'passive');
+
+      const ek = edgeKind(from, to);
 
       if (this.view === 'db') {
         const allowed = DB_ALLOWED.includes(from) && DB_ALLOWED.includes(to);
         p.classList.add(allowed ? 'hl' : 'dim');
+      } else if (this.view === 'api') {
+        if (ek === 'sub') p.classList.add('faded');
+        else if (passive) p.classList.add('passive');
+      } else if (this.view === 'sub') {
+        if (ek === 'api') p.classList.add('faded');
+        /* OpenRouter (passive API edges) is also faded in sub mode. */
+        else if (passive) p.classList.add('faded');
       } else if (hoverSet) {
         const match = hoverSet.has(from) && hoverSet.has(to);
         p.classList.add(match ? 'hl' : 'dim');
