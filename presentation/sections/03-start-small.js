@@ -36,7 +36,7 @@ class Section03Start extends HTMLElement {
         ${TAG} h1 b { color: var(--db-red); font-weight: inherit; }
 
         ${TAG} .hero {
-          margin: 0 0 var(--db-space-5);
+          margin: 0;
           background: var(--db-cool-gray-100);
           border-radius: var(--db-radius-md);
           padding: var(--db-space-4);
@@ -50,32 +50,6 @@ class Section03Start extends HTMLElement {
           display: block;
           border-radius: var(--db-radius);
         }
-
-        ${TAG} .punch {
-          background: var(--db-bg);
-          border-left: 4px solid var(--db-red);
-          padding: var(--db-space-3) var(--db-space-4);
-          margin: 0 0 var(--db-space-4);
-          font-size: var(--db-fs-body);
-          line-height: var(--db-lh-body);
-          color: var(--db-text);
-          border-radius: 0 var(--db-radius) var(--db-radius) 0;
-          opacity: 0;
-          animation: s03s-fade 600ms var(--db-ease) 700ms forwards;
-        }
-        ${TAG} .punch b { color: var(--db-red); }
-
-        ${TAG} .takeaway {
-          font-size: var(--db-fs-h4);
-          line-height: var(--db-lh-h4);
-          font-weight: 700;
-          color: var(--db-text-strong);
-          margin: 0;
-          text-align: center;
-          opacity: 0;
-          animation: s03s-fade 600ms var(--db-ease) 900ms forwards;
-        }
-        ${TAG} .takeaway b { color: var(--db-red); }
 
         @keyframes s03s-fade {
           from { opacity: 0; transform: translateY(8px); }
@@ -96,18 +70,6 @@ class Section03Start extends HTMLElement {
         <div class="hero">
           <img src="/presentation/assets/start-small.png" alt="Waterfall · Agile · AI — Build-Progressionen im Vergleich">
         </div>
-
-        <p class="punch">
-          <b>Agile</b> liefert jeden Schritt nutzbar — Skateboard, Roller, Fahrrad,
-          Motorrad, Auto. <b>KI</b> macht das Gegenteil: auf eine kleine Frage
-          kommt ein <b>Framework</b>, ein „Helper", ein Fallback, ein Test, ein
-          Refactor. Maximaler Output ab Sekunde eins.
-        </p>
-
-        <p class="takeaway">
-          Aufgabe: <b>aktiv klein halten</b> — engen Scope, kurze Prompts,
-          explizit sagen, was du <b>nicht</b> willst.
-        </p>
       </div>
     `;
   }
