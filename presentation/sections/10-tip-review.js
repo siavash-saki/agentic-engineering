@@ -3,7 +3,7 @@
    A line with a subtle bug glows red — the kind of thing that slips
    through if you just hit Accept. */
 
-const TAG = 's11-tip-review';
+const TAG = 's10-tip-review';
 
 class SectionTip03 extends HTMLElement {
   connectedCallback() {

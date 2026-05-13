@@ -1,10 +1,10 @@
-/* Section 4 — Vertrauen / Carwash
+/* Section 3 — Vertrauen / Carwash
    Konkretes Beispiel: zwei AIs scheitern an derselben Frage.
    Take-away: jeden Output reviewen. */
 
-const TAG = 's04-trust';
+const TAG = 's03-trust';
 
-class Section04 extends HTMLElement {
+class Section03 extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <style>
@@ -25,14 +25,14 @@ class Section04 extends HTMLElement {
           color: var(--db-red);
           margin-bottom: var(--db-space-3);
           opacity: 0;
-          animation: s04-fade 500ms var(--db-ease) 80ms forwards;
+          animation: s03-fade 500ms var(--db-ease) 80ms forwards;
         }
         ${TAG} h1 {
           margin: 0 0 var(--db-space-4);
           font-size: var(--db-fs-h2);
           line-height: var(--db-lh-h2);
           opacity: 0;
-          animation: s04-fade 600ms var(--db-ease) 200ms forwards;
+          animation: s03-fade 600ms var(--db-ease) 200ms forwards;
         }
         ${TAG} h1 b { color: var(--db-red); font-weight: inherit; }
 
@@ -47,7 +47,7 @@ class Section04 extends HTMLElement {
           color: var(--db-text-strong);
           border-radius: 0 var(--db-radius) var(--db-radius) 0;
           opacity: 0;
-          animation: s04-fade 600ms var(--db-ease) 340ms forwards;
+          animation: s03-fade 600ms var(--db-ease) 340ms forwards;
         }
         ${TAG} .question b { color: var(--db-red); font-style: normal; font-weight: 700; }
 
@@ -62,7 +62,7 @@ class Section04 extends HTMLElement {
           flex-direction: column;
           opacity: 0;
           transform: translateY(12px);
-          animation: s04-rise 600ms var(--db-ease) forwards;
+          animation: s03-rise 600ms var(--db-ease) forwards;
         }
         ${TAG} .shot:nth-child(1) { animation-delay: 500ms; }
         ${TAG} .shot:nth-child(2) { animation-delay: 650ms; }
@@ -91,7 +91,7 @@ class Section04 extends HTMLElement {
           line-height: var(--db-lh-body);
           color: var(--db-text);
           opacity: 0;
-          animation: s04-fade 600ms var(--db-ease) 850ms forwards;
+          animation: s03-fade 600ms var(--db-ease) 850ms forwards;
         }
         ${TAG} .punch b { color: var(--db-red); }
 
@@ -103,15 +103,15 @@ class Section04 extends HTMLElement {
           margin: 0;
           text-align: center;
           opacity: 0;
-          animation: s04-fade 600ms var(--db-ease) 1050ms forwards;
+          animation: s03-fade 600ms var(--db-ease) 1050ms forwards;
         }
         ${TAG} .takeaway b { color: var(--db-red); }
 
-        @keyframes s04-fade {
+        @keyframes s03-fade {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes s04-rise {
+        @keyframes s03-rise {
           to { opacity: 1; transform: translateY(0); }
         }
 
@@ -155,4 +155,4 @@ class Section04 extends HTMLElement {
   }
 }
 
-customElements.define(TAG, Section04);
+customElements.define(TAG, Section03);

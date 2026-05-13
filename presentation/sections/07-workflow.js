@@ -1,7 +1,7 @@
-/* Section 8 — Empfohlener Workflow
+/* Section 7 — Empfohlener Workflow
    Fünf-Phasen-Fluss. Die Disziplinen folgen als eigene Tip-Slides. */
 
-const TAG = 's08-workflow';
+const TAG = 's07-workflow';
 
 const PHASES = [
   { num: '1', name: 'Explore',  body: 'Den Agenten Code lesen lassen, bevor er schreibt. Existierende Muster, Tests, Konventionen finden.' },
@@ -11,7 +11,7 @@ const PHASES = [
   { num: '5', name: 'Review',   body: 'Jeden Diff lesen. Keine Akzeptanz auf Vertrauensbasis — auch nicht beim eigenen Agenten.' },
 ];
 
-class Section08 extends HTMLElement {
+class Section07 extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <style>
@@ -32,14 +32,14 @@ class Section08 extends HTMLElement {
           color: var(--db-red);
           margin-bottom: var(--db-space-3);
           opacity: 0;
-          animation: s08-fade 500ms var(--db-ease) 80ms forwards;
+          animation: s07-fade 500ms var(--db-ease) 80ms forwards;
         }
         ${TAG} h1 {
           margin: 0 0 var(--db-space-3);
           font-size: var(--db-fs-h2);
           line-height: var(--db-lh-h2);
           opacity: 0;
-          animation: s08-fade 600ms var(--db-ease) 200ms forwards;
+          animation: s07-fade 600ms var(--db-ease) 200ms forwards;
         }
         ${TAG} .lede {
           font-size: var(--db-fs-lead);
@@ -48,7 +48,7 @@ class Section08 extends HTMLElement {
           max-width: 900px;
           margin: 0 0 var(--db-space-6);
           opacity: 0;
-          animation: s08-fade 600ms var(--db-ease) 340ms forwards;
+          animation: s07-fade 600ms var(--db-ease) 340ms forwards;
         }
 
         ${TAG} .flow {
@@ -66,7 +66,7 @@ class Section08 extends HTMLElement {
           gap: var(--db-space-2);
           opacity: 0;
           transform: translateY(10px);
-          animation: s08-rise 500ms var(--db-ease) forwards;
+          animation: s07-rise 500ms var(--db-ease) forwards;
         }
         ${TAG} .phase:nth-child(1) { animation-delay: 500ms; }
         ${TAG} .phase:nth-child(2) { animation-delay: 620ms; }
@@ -105,15 +105,15 @@ class Section08 extends HTMLElement {
           line-height: var(--db-lh-body);
           color: var(--db-text);
           opacity: 0;
-          animation: s08-fade 500ms var(--db-ease) 1200ms forwards;
+          animation: s07-fade 500ms var(--db-ease) 1200ms forwards;
         }
         ${TAG} .next-up b { color: var(--db-red); }
 
-        @keyframes s08-fade {
+        @keyframes s07-fade {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes s08-rise {
+        @keyframes s07-rise {
           to { opacity: 1; transform: translateY(0); }
         }
 
@@ -148,4 +148,4 @@ class Section08 extends HTMLElement {
   }
 }
 
-customElements.define(TAG, Section08);
+customElements.define(TAG, Section07);

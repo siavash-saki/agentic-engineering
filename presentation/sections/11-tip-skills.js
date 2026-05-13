@@ -2,7 +2,7 @@
    Visualization: a slash command types itself at the top, then expands
    into a skill definition with structured steps below. */
 
-const TAG = 's12-tip-skills';
+const TAG = 's11-tip-skills';
 
 class SectionTip04 extends HTMLElement {
   connectedCallback() {
