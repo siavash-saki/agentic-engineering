@@ -21,16 +21,16 @@ const APIS = [
 
 const SUBS = [
   { id: 's-openai',    vendor: 'OpenAI',    color: 'c-openai',    top: '14%' },
-  { id: 's-anthropic', vendor: 'Anthropic', color: 'c-anthropic', top: '38%' },
-  { id: 's-github',    vendor: 'GitHub',    color: 'c-github',    top: '62%' },
+  { id: 's-anthropic', vendor: 'Anthropic', color: 'c-anthropic', top: '32%' },
+  { id: 's-github',    vendor: 'GitHub',    color: 'c-github',    top: '68%' },
   { id: 's-amazon',    vendor: 'Amazon',    color: 'c-aws',       top: '86%' },
 ];
 
 const PRODUCTS = [
   { id: 'p-codex',      name: 'Codex',          maker: 'OpenAI',    color: 'c-openai',    top: '14%' },
-  { id: 'p-claude-app', name: 'Claude App',     maker: 'Anthropic', color: 'c-anthropic', top: '38%' },
+  { id: 'p-claude-app', name: 'Claude App',     maker: 'Anthropic', color: 'c-anthropic', top: '32%' },
   { id: 'p-gemini-app', name: 'Gemini App',     maker: 'Google',    color: 'c-google',    top: '50%' },
-  { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',    color: 'c-github',    top: '62%' },
+  { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',    color: 'c-github',    top: '68%' },
   { id: 'p-kiro',       name: 'Kiro',           maker: 'Amazon',    color: 'c-aws',       top: '86%' },
 ];
 
@@ -347,7 +347,7 @@ class Section02 extends HTMLElement {
           <button type="button" data-view="all" class="active">Alle Pfade</button>
           <button type="button" data-view="api">Nur API</button>
           <button type="button" data-view="sub">Nur Subscription</button>
-          <button type="button" data-view="db">DB-Laptop</button>
+          <button type="button" data-view="db">DB InfraGo</button>
         </div>
       </div>
 
@@ -512,8 +512,10 @@ class Section02 extends HTMLElement {
         p.classList.add(allowed ? 'hl' : 'dim');
       } else if (this.view === 'api') {
         if (ek === 'sub') p.classList.add('faded');
+        else if (ek === 'api') p.classList.add('hl');
       } else if (this.view === 'sub') {
         if (ek === 'api') p.classList.add('faded');
+        else if (ek === 'sub') p.classList.add('hl');
       } else if (hoverSet) {
         const match = hoverSet.has(from) && hoverSet.has(to);
         p.classList.add(match ? 'hl' : 'dim');
