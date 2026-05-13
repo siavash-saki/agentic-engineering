@@ -442,11 +442,20 @@ class Section02 extends HTMLElement {
     this.render();
   }
 
-  /* The set of nodes on a route containing `id`. */
+  /* The set of nodes on a route containing `id`.
+     In api/sub view, only routes matching the current filter count. */
   hoverSet(id) {
     const set = new Set();
+    const filter = (this.view === 'api') ? 'api'
+                : (this.view === 'sub') ? 'sub'
+                : null;
     ROUTES.forEach(route => {
-      if (route.includes(id)) route.forEach(n => set.add(n));
+      if (!route.includes(id)) return;
+      if (filter) {
+        const routeKind = edgeKind(route[0], route[1]); // product → intermediary
+        if (routeKind !== filter) return;
+      }
+      route.forEach(n => set.add(n));
     });
     return set;
   }
@@ -454,24 +463,33 @@ class Section02 extends HTMLElement {
   render() {
     const view = this.view;
     const hovered = this.hovered;
+    const hoverSet = hovered ? this.hoverSet(hovered) : null;
 
     this.nodes.forEach((n, id) => {
       n.classList.remove('hl', 'dim', 'locked', 'faded');
       const kind = nodeKind(id);
 
+      /* DB view is always-on: lock blocked, highlight allowed, ignore hover. */
       if (view === 'db') {
         if (DB_BLOCKED.includes(id)) n.classList.add('dim', 'locked');
         else if (DB_ALLOWED.includes(id)) n.classList.add('hl');
-      } else if (view === 'api') {
-        /* Fade out anything that isn't an API path. */
-        if (kind === 'sub') n.classList.add('faded');
-        else if (kind === 'product' && !API_PRODUCTS.has(id)) n.classList.add('faded');
+        return;
+      }
+
+      /* Mode-level fading: in api/sub view the irrelevant side is invisible. */
+      let fadedByMode = false;
+      if (view === 'api') {
+        if (kind === 'sub') fadedByMode = true;
+        else if (kind === 'product' && !API_PRODUCTS.has(id)) fadedByMode = true;
       } else if (view === 'sub') {
-        if (kind === 'api') n.classList.add('faded');
-        else if (kind === 'product' && !SUB_PRODUCTS.has(id)) n.classList.add('faded');
-      } else if (hovered) {
-        const set = this.hoverSet(hovered);
-        if (set.has(id)) n.classList.add('hl');
+        if (kind === 'api') fadedByMode = true;
+        else if (kind === 'product' && !SUB_PRODUCTS.has(id)) fadedByMode = true;
+      }
+      if (fadedByMode) { n.classList.add('faded'); return; }
+
+      /* Hover state (works in all/api/sub modes on the still-visible nodes). */
+      if (hoverSet) {
+        if (hoverSet.has(id)) n.classList.add('hl');
         else n.classList.add('dim');
       }
     });
@@ -510,15 +528,19 @@ class Section02 extends HTMLElement {
       if (this.view === 'db') {
         const allowed = DB_ALLOWED.includes(from) && DB_ALLOWED.includes(to);
         p.classList.add(allowed ? 'hl' : 'dim');
-      } else if (this.view === 'api') {
-        if (ek === 'sub') p.classList.add('faded');
-        else if (ek === 'api') p.classList.add('hl');
-      } else if (this.view === 'sub') {
-        if (ek === 'api') p.classList.add('faded');
-        else if (ek === 'sub') p.classList.add('hl');
-      } else if (hoverSet) {
-        const match = hoverSet.has(from) && hoverSet.has(to);
-        p.classList.add(match ? 'hl' : 'dim');
+      } else {
+        /* Mode-level fading for the irrelevant edge kind. */
+        let fadedByMode = false;
+        if (this.view === 'api' && ek === 'sub') fadedByMode = true;
+        else if (this.view === 'sub' && ek === 'api') fadedByMode = true;
+
+        if (fadedByMode) {
+          p.classList.add('faded');
+        } else if (hoverSet) {
+          const match = hoverSet.has(from) && hoverSet.has(to);
+          p.classList.add(match ? 'hl' : 'dim');
+        }
+        /* else: default cline opacity 0.32 — nothing applied. */
       }
     };
 
