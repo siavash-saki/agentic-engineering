@@ -1,48 +1,47 @@
-/* Section 5 — Primitives Part 1
-   Memory · Skills · MCP — drei framework-unabhängige Bausteine. */
+/* Section 7 — Primitives Part 2
+   Hooks · Subagents · Scope — die drei verbleibenden Bausteine. */
 
-const TAG = 's05-primitives-1';
+const TAG = 's07-primitives-2';
 
 const PRIMITIVES = [
   {
-    num: '01',
-    name: 'Memory',
-    blurb: 'Markdown-Datei mit dauerhaften Anweisungen, die der Agent bei jedem Session-Start liest — Build-Befehle, Coding-Standards, Architekturentscheidungen.',
-    why:   'Einmal aufschreiben, jede Session dabei.',
+    num: '04',
+    name: 'Hooks',
+    blurb: 'Deterministische Shell-Befehle, die bei Lifecycle-Events feuern — vor/nach einem Tool-Call, beim Prompt, beim Session-Ende. Was das Modell vergisst, vergisst der Hook nicht.',
+    why:   'Policy, die das Modell nicht aushebeln kann.',
     rows: [
-      ['Claude Code', 'CLAUDE.md  +  @AGENTS.md'],
-      ['Copilot',     'AGENTS.md  +  .github/copilot-instructions.md'],
-      ['Codex',       'AGENTS.md'],
-      ['Kiro',        'AGENTS.md  +  .kiro/steering/'],
+      ['Claude Code', 'PreToolUse · PostToolUse · UserPromptSubmit · Stop  (+25 weitere)'],
+      ['Copilot',     '.github/hooks/*.json'],
+      ['Codex',       'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
+      ['Kiro',        'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
     ],
   },
   {
-    num: '02',
-    name: 'Skills',
-    blurb: 'Wiederverwendbare, benannte Prozeduren — ein Release-Playbook, eine Security-Review-Checkliste. Als Markdown gespeichert, vom Modell auf Abruf geladen.',
-    why:   '„Tribal Knowledge" wird Code — auditierbar, teilbar.',
+    num: '05',
+    name: 'Subagents',
+    blurb: 'Spezialisierte Agenten mit eigenem System-Prompt und engerem Tool-Set, an die der Haupt-Agent Teilaufgaben delegieren kann. Eigener Kontext, parallelisierbar.',
+    why:   'Kontext-Budget schonen. Parallelität gewinnen.',
     rows: [
-      ['Claude Code', 'Skills  (.claude/skills/*/SKILL.md)'],
-      ['Copilot',     'Agent Skills  (.github/skills/)'],
-      ['Codex',       '— (über Custom Agents)'],
-      ['Kiro',        'Prompts  (.kiro/prompts/)'],
+      ['Claude Code', '.claude/agents/  (+ Explore, Plan, general-purpose)'],
+      ['Copilot',     '*.agent.md'],
+      ['Codex',       '.codex/agents/*.toml'],
+      ['Kiro',        '.kiro/agents/*.json'],
     ],
   },
   {
-    num: '03',
-    name: 'MCP',
-    blurb: 'Model Context Protocol — offener Standard, damit Agenten mit externen Systemen reden: Jira, Postgres, GitHub, der DB GenAI Hub.',
-    why:   'Ein Server, jedes Tool. Wechsel ist reversibel.',
+    num: '06',
+    name: 'Scope',
+    blurb: 'Jeder Baustein lebt an zwei Orten: im Projekt (committed, geteilt) oder im Home-Verzeichnis (persönlich). Dasselbe Muster in jedem Tool.',
+    why:   'Team-Standards committen. Persönliches lokal halten.',
     rows: [
-      ['Claude Code', '.mcp.json  +  ~/.claude.json'],
-      ['Copilot',     '~/.copilot/mcp-config.json'],
-      ['Codex',       '.codex/config.toml'],
-      ['Kiro',        '.kiro/settings/mcp.json'],
+      ['Projekt',     './.&lt;tool&gt;/  →  committed, vom Team geteilt'],
+      ['Benutzer',    '~/.&lt;tool&gt;/  →  lokal, persönlich'],
+      ['Enterprise',  '/etc/&lt;tool&gt;/  →  IT-Policy, nicht überschreibbar'],
     ],
   },
 ];
 
-class Section05 extends HTMLElement {
+class Section07 extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <style>
@@ -63,14 +62,14 @@ class Section05 extends HTMLElement {
           color: var(--db-red);
           margin-bottom: var(--db-space-3);
           opacity: 0;
-          animation: s05-fade 500ms var(--db-ease) 80ms forwards;
+          animation: s07-fade 500ms var(--db-ease) 80ms forwards;
         }
         ${TAG} h1 {
           margin: 0 0 var(--db-space-3);
           font-size: var(--db-fs-h2);
           line-height: var(--db-lh-h2);
           opacity: 0;
-          animation: s05-fade 600ms var(--db-ease) 200ms forwards;
+          animation: s07-fade 600ms var(--db-ease) 200ms forwards;
         }
         ${TAG} .lede {
           font-size: var(--db-fs-lead);
@@ -79,7 +78,7 @@ class Section05 extends HTMLElement {
           max-width: 900px;
           margin: 0 0 var(--db-space-6);
           opacity: 0;
-          animation: s05-fade 600ms var(--db-ease) 350ms forwards;
+          animation: s07-fade 600ms var(--db-ease) 350ms forwards;
         }
         ${TAG} .lede b { color: var(--db-red); font-weight: 700; }
         ${TAG} .cards {
@@ -95,7 +94,7 @@ class Section05 extends HTMLElement {
           flex-direction: column;
           opacity: 0;
           transform: translateY(12px);
-          animation: s05-rise 600ms var(--db-ease) forwards;
+          animation: s07-rise 600ms var(--db-ease) forwards;
         }
         ${TAG} .card:nth-child(1) { animation-delay: 550ms; }
         ${TAG} .card:nth-child(2) { animation-delay: 700ms; }
@@ -172,11 +171,11 @@ class Section05 extends HTMLElement {
           font-weight: 700;
         }
 
-        @keyframes s05-fade {
+        @keyframes s07-fade {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes s05-rise {
+        @keyframes s07-rise {
           to { opacity: 1; transform: translateY(0); }
         }
 
@@ -185,11 +184,11 @@ class Section05 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Bausteine · Teil 1</span>
-        <h1>Memory · Skills · MCP</h1>
+        <span class="db-eyebrow">Bausteine · Teil 2</span>
+        <h1>Hooks · Subagents · Scope</h1>
         <p class="lede">
-          Drei framework-unabhängige Bausteine. Dieselben Konzepte in jedem Tool —
-          nur unter <b>anderen Namen</b>.
+          Die letzten drei Bausteine — und das organisierende Prinzip dahinter:
+          alles existiert <b>im Projekt</b> oder <b>beim Benutzer</b>.
         </p>
         <div class="cards">
           ${PRIMITIVES.map(p => `
@@ -213,4 +212,4 @@ class Section05 extends HTMLElement {
   }
 }
 
-customElements.define(TAG, Section05);
+customElements.define(TAG, Section07);

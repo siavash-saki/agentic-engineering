@@ -1,42 +1,43 @@
-/* Section 6 — Primitives Part 2
-   Hooks · Subagents · Scope — die drei verbleibenden Bausteine. */
+/* Section 6 — Primitives Part 1
+   Memory · Skills · MCP — drei framework-unabhängige Bausteine. */
 
-const TAG = 's06-primitives-2';
+const TAG = 's06-primitives-1';
 
 const PRIMITIVES = [
   {
-    num: '04',
-    name: 'Hooks',
-    blurb: 'Deterministische Shell-Befehle, die bei Lifecycle-Events feuern — vor/nach einem Tool-Call, beim Prompt, beim Session-Ende. Was das Modell vergisst, vergisst der Hook nicht.',
-    why:   'Policy, die das Modell nicht aushebeln kann.',
+    num: '01',
+    name: 'Memory',
+    blurb: 'Markdown-Datei mit dauerhaften Anweisungen, die der Agent bei jedem Session-Start liest — Build-Befehle, Coding-Standards, Architekturentscheidungen.',
+    why:   'Einmal aufschreiben, jede Session dabei.',
     rows: [
-      ['Claude Code', 'PreToolUse · PostToolUse · UserPromptSubmit · Stop  (+25 weitere)'],
-      ['Copilot',     '.github/hooks/*.json'],
-      ['Codex',       'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
-      ['Kiro',        'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
+      ['Claude Code', 'CLAUDE.md  +  @AGENTS.md'],
+      ['Copilot',     'AGENTS.md  +  .github/copilot-instructions.md'],
+      ['Codex',       'AGENTS.md'],
+      ['Kiro',        'AGENTS.md  +  .kiro/steering/'],
     ],
   },
   {
-    num: '05',
-    name: 'Subagents',
-    blurb: 'Spezialisierte Agenten mit eigenem System-Prompt und engerem Tool-Set, an die der Haupt-Agent Teilaufgaben delegieren kann. Eigener Kontext, parallelisierbar.',
-    why:   'Kontext-Budget schonen. Parallelität gewinnen.',
+    num: '02',
+    name: 'Skills',
+    blurb: 'Wiederverwendbare, benannte Prozeduren — ein Release-Playbook, eine Security-Review-Checkliste. Als Markdown gespeichert, vom Modell auf Abruf geladen.',
+    why:   '„Tribal Knowledge" wird Code — auditierbar, teilbar.',
     rows: [
-      ['Claude Code', '.claude/agents/  (+ Explore, Plan, general-purpose)'],
-      ['Copilot',     '*.agent.md'],
-      ['Codex',       '.codex/agents/*.toml'],
-      ['Kiro',        '.kiro/agents/*.json'],
+      ['Claude Code', 'Skills  (.claude/skills/*/SKILL.md)'],
+      ['Copilot',     'Agent Skills  (.github/skills/)'],
+      ['Codex',       '— (über Custom Agents)'],
+      ['Kiro',        'Prompts  (.kiro/prompts/)'],
     ],
   },
   {
-    num: '06',
-    name: 'Scope',
-    blurb: 'Jeder Baustein lebt an zwei Orten: im Projekt (committed, geteilt) oder im Home-Verzeichnis (persönlich). Dasselbe Muster in jedem Tool.',
-    why:   'Team-Standards committen. Persönliches lokal halten.',
+    num: '03',
+    name: 'MCP',
+    blurb: 'Model Context Protocol — offener Standard, damit Agenten mit externen Systemen reden: Jira, Postgres, GitHub, der DB GenAI Hub.',
+    why:   'Ein Server, jedes Tool. Wechsel ist reversibel.',
     rows: [
-      ['Projekt',     './.&lt;tool&gt;/  →  committed, vom Team geteilt'],
-      ['Benutzer',    '~/.&lt;tool&gt;/  →  lokal, persönlich'],
-      ['Enterprise',  '/etc/&lt;tool&gt;/  →  IT-Policy, nicht überschreibbar'],
+      ['Claude Code', '.mcp.json  +  ~/.claude.json'],
+      ['Copilot',     '~/.copilot/mcp-config.json'],
+      ['Codex',       '.codex/config.toml'],
+      ['Kiro',        '.kiro/settings/mcp.json'],
     ],
   },
 ];
@@ -184,11 +185,11 @@ class Section06 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Bausteine · Teil 2</span>
-        <h1>Hooks · Subagents · Scope</h1>
+        <span class="db-eyebrow">Bausteine · Teil 1</span>
+        <h1>Memory · Skills · MCP</h1>
         <p class="lede">
-          Die letzten drei Bausteine — und das organisierende Prinzip dahinter:
-          alles existiert <b>im Projekt</b> oder <b>beim Benutzer</b>.
+          Drei framework-unabhängige Bausteine. Dieselben Konzepte in jedem Tool —
+          nur unter <b>anderen Namen</b>.
         </p>
         <div class="cards">
           ${PRIMITIVES.map(p => `

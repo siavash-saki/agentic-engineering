@@ -2,7 +2,7 @@
    Visualization: two git timelines stacked. Top = one huge commit;
    bottom = many small commits with a rollback arrow pointing to one. */
 
-const TAG = 's13-tip-commits';
+const TAG = 's14-tip-commits';
 
 const SMALL = [
   'login validation',

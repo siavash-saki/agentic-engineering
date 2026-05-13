@@ -3,7 +3,7 @@
    independent "thinking" pulse and a single distinct task. Below, the
    anti-pattern: one chaotic window with everything mixed. */
 
-const TAG = 's09-tip-parallel';
+const TAG = 's10-tip-parallel';
 
 class SectionTip02 extends HTMLElement {
   connectedCallback() {

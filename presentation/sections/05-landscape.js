@@ -1,11 +1,11 @@
-/* Section 2 — Was ist was
+/* Section 5 — Was ist was
    Three sections: Modell · (API & Subscription) · Produkt.
    API and Subscription are PARALLEL alternatives in the middle — a product
    reaches a model either through one or the other, never chained. The
    DB-laptop filter shows the actual subscription paths DB uses (no direct
    API access). */
 
-const TAG = 's02-landscape';
+const TAG = 's05-landscape';
 
 const MODELS = [
   { id: 'm-gpt',    name: 'GPT',    maker: 'OpenAI',    color: 'c-openai',    top: '22%' },
@@ -127,7 +127,7 @@ ROUTES.forEach(route => {
   if (kind === 'sub') SUB_PRODUCTS.add(route[0]);
 });
 
-class Section02 extends HTMLElement {
+class Section05 extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <style>
@@ -154,7 +154,7 @@ class Section02 extends HTMLElement {
           width: 100%;
           margin: 0 auto var(--db-space-4);
           opacity: 0;
-          animation: s02-fade 500ms var(--db-ease) 50ms forwards;
+          animation: s05-fade 500ms var(--db-ease) 50ms forwards;
         }
         ${TAG} .top h2 {
           margin: 0;
@@ -195,7 +195,7 @@ class Section02 extends HTMLElement {
           margin: 0 auto;
           min-height: 0;
           opacity: 0;
-          animation: s02-fade 600ms var(--db-ease) 200ms forwards;
+          animation: s05-fade 600ms var(--db-ease) 200ms forwards;
         }
 
         /* The middle band visually groups APIs + Subs into a single section. */
@@ -331,11 +331,11 @@ class Section02 extends HTMLElement {
           color: var(--db-text);
           text-align: center;
           opacity: 0;
-          animation: s02-fade 500ms var(--db-ease) 450ms forwards;
+          animation: s05-fade 500ms var(--db-ease) 450ms forwards;
         }
         ${TAG} .caption b { color: var(--db-red); font-weight: 700; }
 
-        @keyframes s02-fade {
+        @keyframes s05-fade {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
@@ -570,4 +570,4 @@ class Section02 extends HTMLElement {
   }
 }
 
-customElements.define(TAG, Section02);
+customElements.define(TAG, Section05);

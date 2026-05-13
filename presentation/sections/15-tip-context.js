@@ -3,7 +3,7 @@
    it becomes muddied with confusion markers. A "Neue Session" reset
    reveals a clean empty bar below. */
 
-const TAG = 's14-tip-context';
+const TAG = 's15-tip-context';
 
 const CHUNKS = [
   { l: 26, c: '#2563eb', t: 'Auth-Bug' },
