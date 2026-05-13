@@ -1,18 +1,22 @@
 /* Section 2 — Was ist was
-   Four-column landscape (Modelle / APIs / Subscriptions / Produkte) with
-   vendor brand colors and a DB-laptop filter showing the exact subscription
+   Three logical sections: Modell · (API & Subscription) · Produkt.
+   The middle section visually contains two sub-columns (APIs left, Subs right)
+   under one combined header. A DB-laptop filter shows the exact subscription
    paths that DB actually uses. */
 
 const TAG = 's02-landscape';
 
 const MODELS = [
-  { id: 'm-gpt',    name: 'GPT',    maker: 'OpenAI',    color: 'c-openai',    top: '30%' },
-  { id: 'm-claude', name: 'Claude', maker: 'Anthropic', color: 'c-anthropic', top: '70%' },
+  { id: 'm-gpt',    name: 'GPT',    maker: 'OpenAI',    color: 'c-openai',    top: '22%' },
+  { id: 'm-claude', name: 'Claude', maker: 'Anthropic', color: 'c-anthropic', top: '50%' },
+  { id: 'm-gemini', name: 'Gemini', maker: 'Google',    color: 'c-google',    top: '78%' },
 ];
 
 const APIS = [
-  { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',    top: '30%' },
-  { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic', top: '70%' },
+  { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',    top: '20%' },
+  { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic', top: '44%' },
+  { id: 'a-google',    name: 'Google API',    color: 'c-google',    top: '68%' },
+  { id: 'a-router',    name: 'OpenRouter',    color: 'c-router',    top: '88%' },
 ];
 
 const SUBS = [
@@ -25,37 +29,41 @@ const SUBS = [
 const PRODUCTS = [
   { id: 'p-codex',      name: 'Codex',          maker: 'OpenAI',    color: 'c-openai',    top: '14%' },
   { id: 'p-claude-app', name: 'Claude App',     maker: 'Anthropic', color: 'c-anthropic', top: '38%' },
+  { id: 'p-gemini-app', name: 'Gemini App',     maker: 'Google',    color: 'c-google',    top: '50%' },
   { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',    color: 'c-github',    top: '62%' },
   { id: 'p-kiro',       name: 'Kiro',           maker: 'Amazon',    color: 'c-aws',       top: '86%' },
 ];
 
-/* Each route lists all nodes from product → subscription → api → model.
-   Used both for drawing connection segments and for hover highlighting. */
+/* Each route is the chain of nodes from product to model.
+   Used for connection rendering AND for hover highlight. */
 const ROUTES = [
   ['p-codex',      's-openai',    'a-openai',    'm-gpt'],
   ['p-claude-app', 's-anthropic', 'a-anthropic', 'm-claude'],
+  ['p-gemini-app', 'a-google',    'm-gemini'],
   ['p-copilot',    's-github',    'a-openai',    'm-gpt'],
   ['p-copilot',    's-github',    'a-anthropic', 'm-claude'],
+  ['p-copilot',    's-github',    'a-google',    'm-gemini'],
   ['p-kiro',       's-amazon',    'a-anthropic', 'm-claude'],
 ];
 
-/* Edge color rules: product↔sub uses subscription colour;
-   sub↔api and api↔model use API colour. */
 const EDGE_COLOR = {
-  'p-codex|s-openai':         'c-openai',
-  'p-claude-app|s-anthropic': 'c-anthropic',
-  'p-copilot|s-github':       'c-github',
-  'p-kiro|s-amazon':          'c-aws',
-  's-openai|a-openai':        'c-openai',
-  's-anthropic|a-anthropic':  'c-anthropic',
-  's-github|a-openai':        'c-openai',
-  's-github|a-anthropic':     'c-anthropic',
-  's-amazon|a-anthropic':     'c-anthropic',
-  'a-openai|m-gpt':           'c-openai',
-  'a-anthropic|m-claude':     'c-anthropic',
+  'p-codex|s-openai':           'c-openai',
+  'p-claude-app|s-anthropic':   'c-anthropic',
+  'p-gemini-app|a-google':      'c-google',
+  'p-copilot|s-github':         'c-github',
+  'p-kiro|s-amazon':            'c-aws',
+  's-openai|a-openai':          'c-openai',
+  's-anthropic|a-anthropic':    'c-anthropic',
+  's-github|a-openai':          'c-openai',
+  's-github|a-anthropic':       'c-anthropic',
+  's-github|a-google':          'c-google',
+  's-amazon|a-anthropic':       'c-anthropic',
+  'a-openai|m-gpt':             'c-openai',
+  'a-anthropic|m-claude':       'c-anthropic',
+  'a-google|m-gemini':          'c-google',
 };
 
-/* Build segment list (unique edges) from ROUTES. */
+/* Build unique segment list from ROUTES. */
 const SEGMENTS = (() => {
   const seen = new Set();
   const out = [];
@@ -70,11 +78,20 @@ const SEGMENTS = (() => {
   return out;
 })();
 
+/* OpenRouter sits in the middle for completeness (it's a universal API), but
+   no product in the diagram routes through it. Show passive edges to all
+   three models so viewers see what it does. */
+const ROUTER_EDGES = [
+  ['a-router', 'm-gpt',    'c-router'],
+  ['a-router', 'm-claude', 'c-router'],
+  ['a-router', 'm-gemini', 'c-router'],
+];
+
 const DB_ALLOWED = ['p-copilot', 'p-kiro', 's-github', 's-amazon', 'a-openai', 'a-anthropic', 'm-gpt', 'm-claude'];
-const DB_BLOCKED = ['p-codex', 'p-claude-app', 's-openai', 's-anthropic'];
+const DB_BLOCKED = ['p-codex', 'p-claude-app', 'p-gemini-app', 's-openai', 's-anthropic', 'a-google', 'a-router', 'm-gemini'];
 
 const CAPTIONS = {
-  all: 'Jeder Coding-Agent läuft über eine kommerzielle <b>Subscription</b>. Sie entscheidet, welche Modelle erreichbar sind — nicht das, was technisch möglich wäre.',
+  all: 'Jeder Coding-Agent läuft über eine kommerzielle <b>Subscription</b>. Sie entscheidet, welche APIs — und damit welche Modelle — erreichbar sind.',
   db:  'Bei der DB sind <b>zwei</b> Subscriptions aktiv: <b>GitHub</b> (für Copilot — Zugriff auf GPT und Claude) und <b>Amazon</b> (für Kiro — nur Claude). Andere Subscriptions sind nicht vorgesehen.',
 };
 
@@ -85,6 +102,8 @@ class Section02 extends HTMLElement {
         ${TAG} {
           --c-openai:    #10A37F;
           --c-anthropic: #D97757;
+          --c-google:    #4285F4;
+          --c-router:    #7C3AED;
           --c-aws:       #FF9900;
           --c-github:    #24292F;
 
@@ -148,6 +167,19 @@ class Section02 extends HTMLElement {
           animation: s02-fade 600ms var(--db-ease) 200ms forwards;
         }
 
+        /* The middle band visually groups APIs + Subs into a single section. */
+        ${TAG} .mid-band {
+          position: absolute;
+          top: 22px;
+          bottom: 0;
+          left: 25%;
+          right: 25%;
+          background: var(--db-bg-subtle);
+          border-radius: var(--db-radius-md);
+          z-index: 0;
+          opacity: 0.55;
+        }
+
         ${TAG} .conn {
           position: absolute; inset: 0;
           width: 100%; height: 100%;
@@ -162,6 +194,7 @@ class Section02 extends HTMLElement {
         }
         ${TAG} .cline.hl  { opacity: 1; stroke-width: 2.5; }
         ${TAG} .cline.dim { opacity: 0.06; }
+        ${TAG} .cline.passive { opacity: 0.18; stroke-dasharray: 3 4; }
 
         ${TAG} .col-lbl {
           position: absolute;
@@ -172,6 +205,19 @@ class Section02 extends HTMLElement {
           letter-spacing: 0.12em;
           text-transform: uppercase;
           color: var(--db-text-subtle);
+          z-index: 3;
+          white-space: nowrap;
+        }
+        ${TAG} .col-sublbl {
+          position: absolute;
+          top: 18px;
+          transform: translateX(-50%);
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.10em;
+          text-transform: uppercase;
+          color: var(--db-text-subtle);
+          opacity: 0.7;
           z-index: 3;
         }
 
@@ -260,7 +306,7 @@ class Section02 extends HTMLElement {
       </style>
 
       <div class="top">
-        <h2>Modell · API · Subscription · Produkt</h2>
+        <h2>Modell · API &amp; Subscription · Produkt</h2>
         <div class="toggle" role="tablist">
           <button type="button" data-view="all" class="active">Alle verfügbar</button>
           <button type="button" data-view="db">Auf dem DB-Laptop</button>
@@ -268,12 +314,15 @@ class Section02 extends HTMLElement {
       </div>
 
       <div class="stage">
+        <div class="mid-band"></div>
         <svg class="conn" xmlns="http://www.w3.org/2000/svg"></svg>
 
         <div class="col-lbl" style="left:8%">Modell</div>
-        <div class="col-lbl" style="left:35%">API</div>
-        <div class="col-lbl" style="left:62%">Subscription</div>
-        <div class="col-lbl" style="left:89%">Produkt</div>
+        <div class="col-lbl" style="left:50%">API &amp; Subscription</div>
+        <div class="col-lbl" style="left:92%">Produkt</div>
+
+        <div class="col-sublbl" style="left:35%">api</div>
+        <div class="col-sublbl" style="left:64%">subscription</div>
 
         ${MODELS.map(m => `
           <div class="node model" data-id="${m.id}"
@@ -290,14 +339,14 @@ class Section02 extends HTMLElement {
 
         ${SUBS.map(s => `
           <div class="node sub" data-id="${s.id}"
-               style="left:62%;top:${s.top};--node-color:var(--${s.color})">
+               style="left:64%;top:${s.top};--node-color:var(--${s.color})">
             <div class="nn">${s.vendor}</div>
             <div class="nm">Subscription</div>
           </div>`).join('')}
 
         ${PRODUCTS.map(p => `
           <div class="node product" data-id="${p.id}"
-               style="left:89%;top:${p.top};--maker-color:var(--${p.color})">
+               style="left:92%;top:${p.top};--maker-color:var(--${p.color})">
             <div class="nn">${p.name}</div>
             <div class="nm">${p.maker}</div>
           </div>`).join('')}
@@ -355,12 +404,17 @@ class Section02 extends HTMLElement {
     this.render();
   }
 
-  /* The set of nodes that lie on a route containing `id`. */
+  /* The set of nodes on a route containing `id`. */
   hoverSet(id) {
     const set = new Set();
     ROUTES.forEach(route => {
       if (route.includes(id)) route.forEach(n => set.add(n));
     });
+    /* OpenRouter is not on any route — handle its hover specially: include
+       all three models. */
+    if (id === 'a-router') {
+      set.add('a-router'); set.add('m-gpt'); set.add('m-claude'); set.add('m-gemini');
+    }
     return set;
   }
 
@@ -393,7 +447,7 @@ class Section02 extends HTMLElement {
     const used = new Set();
     const hoverSet = this.hovered ? this.hoverSet(this.hovered) : null;
 
-    SEGMENTS.forEach(([from, to, colorVar]) => {
+    const drawSegment = ([from, to, colorVar], passive = false) => {
       const key = `${from}|${to}`;
       used.add(key);
       let p = this.paths.get(key);
@@ -408,7 +462,7 @@ class Section02 extends HTMLElement {
       if (!fEl || !tEl) return;
       p.setAttribute('d', this.calcPath(fEl, tEl, stageRect));
       p.style.stroke = `var(--${colorVar})`;
-      p.classList.remove('hl', 'dim');
+      p.classList.remove('hl', 'dim', 'passive');
 
       if (this.view === 'db') {
         const allowed = DB_ALLOWED.includes(from) && DB_ALLOWED.includes(to);
@@ -416,10 +470,14 @@ class Section02 extends HTMLElement {
       } else if (hoverSet) {
         const match = hoverSet.has(from) && hoverSet.has(to);
         p.classList.add(match ? 'hl' : 'dim');
+      } else if (passive) {
+        p.classList.add('passive');
       }
-    });
+    };
 
-    /* Remove paths that no longer apply. */
+    SEGMENTS.forEach(seg => drawSegment(seg, false));
+    ROUTER_EDGES.forEach(seg => drawSegment(seg, true));
+
     this.paths.forEach((p, key) => {
       if (!used.has(key)) { p.remove(); this.paths.delete(key); }
     });
