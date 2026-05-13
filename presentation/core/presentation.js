@@ -41,11 +41,39 @@ const sections = [
   { tag: 's19-copilot',          title: 'Copilot in der Praxis' },
 ];
 
-const stage     = document.getElementById('stage');
-const counter   = document.getElementById('counter');
-const prevBtn   = document.getElementById('btn-prev');
-const nextBtn   = document.getElementById('btn-next');
-const pageTitle = document.querySelector('.page-title');
+const CHAPTERS = [
+  { label: 'Start',      index: 0,  key: null },
+  { label: 'Primitives', index: 5,  key: 'p'  },
+  { label: 'Tips',       index: 9,  key: 't'  },
+  { label: 'Copilot',    index: 18, key: 'c'  },
+];
+
+const stage      = document.getElementById('stage');
+const counter    = document.getElementById('counter');
+const prevBtn    = document.getElementById('btn-prev');
+const nextBtn    = document.getElementById('btn-next');
+const chaptersEl = document.getElementById('chapters');
+const pageTitle  = document.querySelector('.page-title');
+
+CHAPTERS.forEach(ch => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.innerHTML = ch.key
+    ? `${ch.label}<span class="key">${ch.key.toUpperCase()}</span>`
+    : ch.label;
+  btn.title = ch.key
+    ? `Sprung zu „${ch.label}" (Taste ${ch.key.toUpperCase()})`
+    : `Sprung zu „${ch.label}"`;
+  btn.addEventListener('click', () => mount(ch.index));
+  ch.btn = btn;
+  chaptersEl.appendChild(btn);
+});
+
+function updateChapterHighlight(index) {
+  let active = null;
+  for (const ch of CHAPTERS) if (ch.index <= index) active = ch;
+  CHAPTERS.forEach(ch => ch.btn.classList.toggle('current', ch === active));
+}
 
 let current = -1;
 let transitioning = false;
@@ -76,6 +104,7 @@ function mount(index) {
   prevBtn.disabled = index === 0;
   nextBtn.disabled = index === sections.length - 1;
   pageTitle.textContent = sections[index].title;
+  updateChapterHighlight(index);
   history.replaceState(null, '', `#${index + 1}`);
 }
 
@@ -94,6 +123,9 @@ document.addEventListener('keydown', e => {
     mount(0);
   } else if (e.key === 'End') {
     mount(sections.length - 1);
+  } else {
+    const ch = CHAPTERS.find(c => c.key && c.key === e.key.toLowerCase());
+    if (ch) { e.preventDefault(); mount(ch.index); }
   }
 });
 
