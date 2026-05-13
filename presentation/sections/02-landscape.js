@@ -15,9 +15,8 @@ const MODELS = [
 
 const APIS = [
   { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',    top: '20%' },
-  { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic', top: '44%' },
-  { id: 'a-google',    name: 'Google API',    color: 'c-google',    top: '68%' },
-  { id: 'a-router',    name: 'OpenRouter',    color: 'c-router',    top: '88%' },
+  { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic', top: '50%' },
+  { id: 'a-google',    name: 'Google API',    color: 'c-google',    top: '80%' },
 ];
 
 const SUBS = [
@@ -92,20 +91,11 @@ const SEGMENTS = (() => {
   return out;
 })();
 
-/* OpenRouter sits in the middle for completeness (it's a universal API), but
-   no product in the diagram routes through it. Show passive edges to all
-   three models so viewers see what it does. */
-const ROUTER_EDGES = [
-  ['a-router', 'm-gpt',    'c-router'],
-  ['a-router', 'm-claude', 'c-router'],
-  ['a-router', 'm-gemini', 'c-router'],
-];
-
 /* At DB: only the GitHub and Amazon subscriptions are active.
    APIs are not paid for directly — every API is dimmed. */
 const DB_ALLOWED = ['p-copilot', 'p-kiro', 's-github', 's-amazon', 'm-gpt', 'm-claude'];
 const DB_BLOCKED = ['p-codex', 'p-claude-app', 'p-gemini-app', 's-openai', 's-anthropic',
-                    'a-openai', 'a-anthropic', 'a-google', 'a-router', 'm-gemini'];
+                    'a-openai', 'a-anthropic', 'a-google', 'm-gemini'];
 
 const CAPTIONS = {
   all: 'Ein Produkt erreicht ein Modell <b>entweder</b> direkt über die <b>API</b> (pay-per-use) <b>oder</b> über eine <b>Subscription</b> (monatlich, oft Enterprise) — beides sind parallele, kommerzielle Pfade.',
@@ -145,7 +135,6 @@ class Section02 extends HTMLElement {
           --c-openai:    #10A37F;
           --c-anthropic: #D97757;
           --c-google:    #4285F4;
-          --c-router:    #7C3AED;
           --c-aws:       #FF9900;
           --c-github:    #24292F;
 
@@ -237,7 +226,6 @@ class Section02 extends HTMLElement {
         ${TAG} .cline.hl  { opacity: 1; stroke-width: 2.5; }
         ${TAG} .cline.dim { opacity: 0.06; }
         ${TAG} .cline.faded { opacity: 0.02; }
-        ${TAG} .cline.passive { opacity: 0.18; stroke-dasharray: 3 4; }
 
         ${TAG} .col-lbl {
           position: absolute;
@@ -460,11 +448,6 @@ class Section02 extends HTMLElement {
     ROUTES.forEach(route => {
       if (route.includes(id)) route.forEach(n => set.add(n));
     });
-    /* OpenRouter is not on any route — handle its hover specially: include
-       all three models. */
-    if (id === 'a-router') {
-      set.add('a-router'); set.add('m-gpt'); set.add('m-claude'); set.add('m-gemini');
-    }
     return set;
   }
 
@@ -505,7 +488,7 @@ class Section02 extends HTMLElement {
     const used = new Set();
     const hoverSet = this.hovered ? this.hoverSet(this.hovered) : null;
 
-    const drawSegment = ([from, to, colorVar], passive = false) => {
+    const drawSegment = ([from, to, colorVar]) => {
       const key = `${from}|${to}`;
       used.add(key);
       let p = this.paths.get(key);
@@ -520,7 +503,7 @@ class Section02 extends HTMLElement {
       if (!fEl || !tEl) return;
       p.setAttribute('d', this.calcPath(fEl, tEl, stageRect));
       p.style.stroke = `var(--${colorVar})`;
-      p.classList.remove('hl', 'dim', 'faded', 'passive');
+      p.classList.remove('hl', 'dim', 'faded');
 
       const ek = edgeKind(from, to);
 
@@ -529,21 +512,15 @@ class Section02 extends HTMLElement {
         p.classList.add(allowed ? 'hl' : 'dim');
       } else if (this.view === 'api') {
         if (ek === 'sub') p.classList.add('faded');
-        else if (passive) p.classList.add('passive');
       } else if (this.view === 'sub') {
         if (ek === 'api') p.classList.add('faded');
-        /* OpenRouter (passive API edges) is also faded in sub mode. */
-        else if (passive) p.classList.add('faded');
       } else if (hoverSet) {
         const match = hoverSet.has(from) && hoverSet.has(to);
         p.classList.add(match ? 'hl' : 'dim');
-      } else if (passive) {
-        p.classList.add('passive');
       }
     };
 
-    SEGMENTS.forEach(seg => drawSegment(seg, false));
-    ROUTER_EDGES.forEach(seg => drawSegment(seg, true));
+    SEGMENTS.forEach(seg => drawSegment(seg));
 
     this.paths.forEach((p, key) => {
       if (!used.has(key)) { p.remove(); this.paths.delete(key); }
