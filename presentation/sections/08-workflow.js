@@ -1,5 +1,5 @@
-/* Section 8 — Workflow & Best Practices
-   Fünf-Phasen-Fluss plus drei Disziplinen. */
+/* Section 8 — Empfohlener Workflow
+   Fünf-Phasen-Fluss. Die Disziplinen folgen als eigene Tip-Slides. */
 
 const TAG = 's08-workflow';
 
@@ -9,21 +9,6 @@ const PHASES = [
   { num: '3', name: 'Plan',     body: 'Expliziter Plan — auf Papier oder im Plan-Mode. Erst freigeben, dann implementieren.' },
   { num: '4', name: 'Code',     body: 'Den Plan ausführen. Kleine Schritte. Bei Abweichung zurück zur Diskussion.' },
   { num: '5', name: 'Review',   body: 'Jeden Diff lesen. Keine Akzeptanz auf Vertrauensbasis — auch nicht beim eigenen Agenten.' },
-];
-
-const PRACTICES = [
-  {
-    title: 'Den Agenten befragen',
-    body:  'Vor dem Implementieren: „Was hast du verstanden? Was sind die offenen Fragen?" Halluzinationen tauchen in der Antwort auf, nicht im Code.',
-  },
-  {
-    title: 'Parallele Sessions',
-    body:  'Unabhängige Aufgaben gehen in separate Sessions oder Subagenten. Eine Session pro Mental-Kontext — sonst verschwimmen die Konversationen.',
-  },
-  {
-    title: 'Jeden Diff reviewen',
-    body:  'Auto-Accept ist die einzige nicht verhandelbare Regel. Wer den Diff nicht liest, übernimmt Code, den niemand verstanden hat.',
-  },
 ];
 
 class Section08 extends HTMLElement {
@@ -70,7 +55,6 @@ class Section08 extends HTMLElement {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
           gap: var(--db-space-2);
-          margin-bottom: var(--db-space-7);
           position: relative;
         }
         ${TAG} .phase {
@@ -111,55 +95,19 @@ class Section08 extends HTMLElement {
           color: var(--db-text);
         }
 
-        ${TAG} .practices-title {
-          font-size: var(--db-fs-caption);
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: var(--db-text-muted);
-          margin-bottom: var(--db-space-4);
-          opacity: 0;
-          animation: s08-fade 500ms var(--db-ease) 1150ms forwards;
-        }
-        ${TAG} .practices {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--db-space-4);
-        }
-        ${TAG} .practice {
+        ${TAG} .next-up {
+          margin-top: var(--db-space-7);
           padding: var(--db-space-4) var(--db-space-5);
-          padding-left: calc(var(--db-space-5) + 4px);
-          background: var(--db-bg);
-          border: 1px solid var(--db-border);
-          border-radius: var(--db-radius);
-          position: relative;
-          opacity: 0;
-          transform: translateY(10px);
-          animation: s08-rise 500ms var(--db-ease) forwards;
-        }
-        ${TAG} .practice::before {
-          content: "";
-          position: absolute;
-          left: 0; top: 0; bottom: 0;
-          width: 4px;
-          background: var(--db-red);
-          border-radius: var(--db-radius) 0 0 var(--db-radius);
-        }
-        ${TAG} .practice:nth-child(1) { animation-delay: 1250ms; }
-        ${TAG} .practice:nth-child(2) { animation-delay: 1370ms; }
-        ${TAG} .practice:nth-child(3) { animation-delay: 1490ms; }
-        ${TAG} .practice h4 {
-          margin: 0 0 var(--db-space-2);
-          font-size: var(--db-fs-h5);
-          line-height: var(--db-lh-h5);
-          color: var(--db-text-strong);
-        }
-        ${TAG} .practice p {
-          margin: 0;
-          font-size: var(--db-fs-small);
-          line-height: var(--db-lh-small);
+          background: var(--db-cool-gray-100);
+          border-left: 4px solid var(--db-red);
+          border-radius: 0 var(--db-radius) var(--db-radius) 0;
+          font-size: var(--db-fs-body);
+          line-height: var(--db-lh-body);
           color: var(--db-text);
+          opacity: 0;
+          animation: s08-fade 500ms var(--db-ease) 1200ms forwards;
         }
+        ${TAG} .next-up b { color: var(--db-red); }
 
         @keyframes s08-fade {
           from { opacity: 0; transform: translateY(8px); }
@@ -171,11 +119,10 @@ class Section08 extends HTMLElement {
 
         @media (max-width: 1024px) {
           ${TAG} .flow { grid-template-columns: repeat(2, 1fr); }
-          ${TAG} .practices { grid-template-columns: 1fr; }
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Wie man wirklich arbeitet</span>
+        <span class="db-eyebrow">Empfohlener Workflow</span>
         <h1>Explore → Discuss → Plan → Code → Review</h1>
         <p class="lede">
           Der Code ist der letzte Schritt — nicht der erste. Wer das umdreht,
@@ -192,15 +139,10 @@ class Section08 extends HTMLElement {
           `).join('')}
         </div>
 
-        <div class="practices-title">Drei Disziplinen, die den Unterschied machen</div>
-        <div class="practices">
-          ${PRACTICES.map(p => `
-            <div class="practice">
-              <h4>${p.title}</h4>
-              <p>${p.body}</p>
-            </div>
-          `).join('')}
-        </div>
+        <p class="next-up">
+          Auf den folgenden Slides: <b>neun Disziplinen</b>, die diesen Workflow
+          überhaupt erst tragen.
+        </p>
       </div>
     `;
   }

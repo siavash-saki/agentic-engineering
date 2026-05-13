@@ -125,13 +125,13 @@ class Section04 extends HTMLElement {
         <h1>AI heute blind vertrauen funktioniert <b>nicht</b></h1>
 
         <p class="question">
-          „I want to go to a carwash to wash my car. It is only <b>50 meters away</b>.
-          Should I go by car or walk?"
+          „Ich möchte zu einer Waschanlage, um mein Auto zu waschen. Sie ist nur
+          <b>50 Meter entfernt</b>. Soll ich mit dem Auto fahren oder zu Fuß gehen?"
         </p>
 
         <div class="shots">
           <div class="shot">
-            <div class="label">ChatGPT</div>
+            <div class="label">ChatGPT 5.5</div>
             <img src="/presentation/assets/carwash-chatgpt.png" alt="ChatGPT empfiehlt zu Fuß zu gehen">
           </div>
           <div class="shot">

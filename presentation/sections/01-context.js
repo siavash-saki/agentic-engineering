@@ -24,7 +24,12 @@ class Section01 extends HTMLElement {
         }
         ${TAG} .db-eyebrow {
           color: var(--db-red);
-          margin-bottom: var(--db-space-4);
+          font-size: var(--db-fs-h2);
+          line-height: var(--db-lh-h2);
+          letter-spacing: 0;
+          text-transform: none;
+          font-weight: 900;
+          margin-bottom: var(--db-space-5);
           opacity: 0;
           animation: s01-fade 600ms var(--db-ease) 100ms forwards;
         }
@@ -98,7 +103,7 @@ class Section01 extends HTMLElement {
       </style>
       <div class="wrap">
         <span class="db-eyebrow">Agentic Engineering — DB Intern</span>
-        <h1>KI-Tools <b>bewusst</b> einsetzen</h1>
+        <h1>KI-Coding-Tools <b>bewusst</b> einsetzen</h1>
         <p class="lede">
           Die meisten von uns nutzen KI-Coding-Tools täglich. Wenige nutzen sie
           bewusst. In diesem Vortrag geht es um die Lücke zwischen beidem —
@@ -106,7 +111,7 @@ class Section01 extends HTMLElement {
         </p>
         <div class="goals-title">Was Sie mitnehmen</div>
         <ul class="goals">
-          <li>Ein gemeinsames Vokabular — was ein <b>Modell</b>, ein <b>Produkt</b> und eine <b>API</b> wirklich sind, und welches davon welches ist</li>
+          <li><b>Vibe Coding</b> vs <b>Agentic Engineering</b></li>
           <li>Ein mentales Modell für die framework-unabhängigen Konzepte hinter jedem KI-Coding-Tool</li>
           <li>Einen Workflow, den Sie ab Montagmorgen anwenden können — in Copilot, bei der DB</li>
         </ul>
