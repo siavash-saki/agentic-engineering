@@ -22,7 +22,7 @@ class SectionTip01 extends HTMLElement {
           width: 100%;
         }
         ${TAG} .db-eyebrow {
-          color: var(--db-red);
+          color: var(--db-red); font-size: var(--db-fs-h4); letter-spacing: 0.04em; font-weight: 900;
           margin-bottom: var(--db-space-3);
           opacity: 0;
           animation: tip01-fade 500ms var(--db-ease) 80ms forwards;
@@ -172,7 +172,7 @@ class SectionTip01 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 1 · Disziplin</span>
+        <span class="db-eyebrow">Tip 1</span>
         <h1>Befragen, <b>bevor</b> er codet</h1>
         <p class="lede">
           „Was hast du verstanden? Welche Fragen sind offen?" — Halluzinationen

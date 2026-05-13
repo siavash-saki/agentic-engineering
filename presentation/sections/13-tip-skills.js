@@ -22,7 +22,7 @@ class SectionTip04 extends HTMLElement {
           width: 100%;
         }
         ${TAG} .db-eyebrow {
-          color: var(--db-red);
+          color: var(--db-red); font-size: var(--db-fs-h4); letter-spacing: 0.04em; font-weight: 900;
           margin-bottom: var(--db-space-3);
           opacity: 0;
           animation: tip04-fade 500ms var(--db-ease) 80ms forwards;
@@ -166,7 +166,7 @@ class SectionTip04 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 4 · Disziplin</span>
+        <span class="db-eyebrow">Tip 4</span>
         <h1>Was Sie zweimal tun, wird ein <b>Skill</b></h1>
         <p class="lede">
           Wiederkehrende Workflows als Custom Skill speichern. Ein Befehl,

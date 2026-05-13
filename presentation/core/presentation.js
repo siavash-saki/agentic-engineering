@@ -16,8 +16,9 @@ import '../sections/14-tip-interview.js';
 import '../sections/15-tip-commits.js';
 import '../sections/16-tip-context.js';
 import '../sections/17-tip-model.js';
-import '../sections/18-tip-rules.js';
-import '../sections/19-copilot.js';
+import '../sections/18-tip-multimodel.js';
+import '../sections/19-tip-rules.js';
+import '../sections/20-copilot.js';
 
 const sections = [
   { tag: 's01-context',          title: 'Kontext & Ziel' },
@@ -37,15 +38,16 @@ const sections = [
   { tag: 's15-tip-commits',      title: 'Tip 6 · Klein committen' },
   { tag: 's16-tip-context',      title: 'Tip 7 · Kontext frisch halten' },
   { tag: 's17-tip-model',        title: 'Tip 8 · Richtiges Modell' },
-  { tag: 's18-tip-rules',        title: 'Tip 9 · Projekt-Regeln' },
-  { tag: 's19-copilot',          title: 'Copilot in der Praxis' },
+  { tag: 's18-tip-multimodel',   title: 'Tip 9 · Mehrere Anbieter' },
+  { tag: 's19-tip-rules',        title: 'Tip 10 · Projekt-Regeln' },
+  { tag: 's20-copilot',          title: 'Copilot in der Praxis' },
 ];
 
 const CHAPTERS = [
   { label: 'Start',      index: 0,  key: null },
   { label: 'Primitives', index: 5,  key: 'p'  },
   { label: 'Tips',       index: 9,  key: 't'  },
-  { label: 'Copilot',    index: 18, key: 'c'  },
+  { label: 'Copilot',    index: 19, key: 'c'  },
 ];
 
 const stage      = document.getElementById('stage');

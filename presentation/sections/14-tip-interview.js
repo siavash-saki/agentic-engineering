@@ -29,7 +29,7 @@ class SectionTip05 extends HTMLElement {
           width: 100%;
         }
         ${TAG} .db-eyebrow {
-          color: var(--db-red);
+          color: var(--db-red); font-size: var(--db-fs-h4); letter-spacing: 0.04em; font-weight: 900;
           margin-bottom: var(--db-space-3);
           opacity: 0;
           animation: tip05-fade 500ms var(--db-ease) 80ms forwards;
@@ -176,7 +176,7 @@ class SectionTip05 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 5 · Disziplin</span>
+        <span class="db-eyebrow">Tip 5</span>
         <h1>Lass den Agenten <b>dich</b> interviewen</h1>
         <p class="lede">
           Sie wissen, was Sie wollen — aber nicht alles, was relevant ist.

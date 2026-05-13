@@ -1,14 +1,16 @@
-/* Tip 9 — Projekt-Regeln pflegen
+/* Tip 10 — Projekt-Regeln schreiben & pflegen
    Visualization: a rules file at the top broadcasts its rules to three
-   sessions below. Each session reads the file before it starts. */
+   sessions below. A new rule fades in late to show that the file grows
+   with the project. */
 
-const TAG = 's18-tip-rules';
+const TAG = 's19-tip-rules';
 
 const RULES = [
-  'Tests vor Implementierung',
-  'Keine Mocks im Integrationstest',
-  'Datenbank: Migration mit Rollback',
-  'Logging: strukturiert, kein print()',
+  { text: 'Tests vor Implementierung',           neu: false },
+  { text: 'Keine Mocks im Integrationstest',     neu: false },
+  { text: 'Datenbank: Migration mit Rollback',   neu: false },
+  { text: 'Logging: strukturiert, kein print()', neu: false },
+  { text: 'Feature-Flag für jede Migration',     neu: true  },
 ];
 
 const SESSIONS = [
@@ -35,7 +37,7 @@ class SectionTip09 extends HTMLElement {
           width: 100%;
         }
         ${TAG} .db-eyebrow {
-          color: var(--db-red);
+          color: var(--db-red); font-size: var(--db-fs-h4); letter-spacing: 0.04em; font-weight: 900;
           margin-bottom: var(--db-space-3);
           opacity: 0;
           animation: tip09-fade 500ms var(--db-ease) 80ms forwards;
@@ -108,6 +110,21 @@ class SectionTip09 extends HTMLElement {
         ${TAG} .rules-file li:nth-child(2) { animation: tip09-pop 350ms var(--db-ease) 850ms forwards; }
         ${TAG} .rules-file li:nth-child(3) { animation: tip09-pop 350ms var(--db-ease) 1000ms forwards; }
         ${TAG} .rules-file li:nth-child(4) { animation: tip09-pop 350ms var(--db-ease) 1150ms forwards; }
+        ${TAG} .rules-file li.neu          { animation: tip09-pop 500ms var(--db-ease) 2700ms forwards; }
+        ${TAG} .rules-file li .neu-badge {
+          display: inline-block;
+          margin-left: 8px;
+          padding: 1px 6px;
+          background: var(--db-red);
+          color: #fff;
+          font-size: 9px;
+          letter-spacing: 0.08em;
+          font-weight: 700;
+          border-radius: 3px;
+          vertical-align: 1px;
+          opacity: 0;
+          animation: tip09-fade 350ms var(--db-ease) 3000ms forwards;
+        }
 
         ${TAG} .flow-lines {
           position: relative;
@@ -181,7 +198,7 @@ class SectionTip09 extends HTMLElement {
           color: var(--db-text-strong);
           text-align: center;
           opacity: 0;
-          animation: tip09-fade 600ms var(--db-ease) 2700ms forwards;
+          animation: tip09-fade 600ms var(--db-ease) 3300ms forwards;
         }
         ${TAG} .punch b { color: var(--db-red); }
 
@@ -200,16 +217,17 @@ class SectionTip09 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 9 · Disziplin</span>
-        <h1>Projekt-Regeln <b>einmal</b> schreiben</h1>
+        <span class="db-eyebrow">Tip 10</span>
+        <h1>Projekt-Regeln <b>schreiben</b> und <b>pflegen</b></h1>
         <p class="lede">
-          Konventionen, Standards, Konstanten — was bei jedem Onboarding
-          erklärt werden müsste, gehört in eine Datei, die jede Session liest.
+          Konventionen, Standards, Konstanten — was bei jedem Onboarding erklärt
+          werden müsste, gehört in eine Datei, die jede Session liest. Pflege sie
+          wie Code: passe sie an, wenn das Projekt wächst.
         </p>
 
         <div class="rules-file">
           <ul>
-            ${RULES.map(r => `<li>${r}</li>`).join('')}
+            ${RULES.map(r => `<li class="${r.neu ? 'neu' : ''}">${r.text}${r.neu ? '<span class="neu-badge">NEU</span>' : ''}</li>`).join('')}
           </ul>
         </div>
 
@@ -232,7 +250,7 @@ class SectionTip09 extends HTMLElement {
         </div>
 
         <p class="punch">
-          Einmal geschrieben — in <b>jeder Session</b> wirksam.
+          Einmal schreiben, <b>regelmäßig pflegen</b> — in jeder Session wirksam.
         </p>
       </div>
     `;

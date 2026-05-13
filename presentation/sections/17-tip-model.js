@@ -47,7 +47,7 @@ class SectionTip08 extends HTMLElement {
           width: 100%;
         }
         ${TAG} .db-eyebrow {
-          color: var(--db-red);
+          color: var(--db-red); font-size: var(--db-fs-h4); letter-spacing: 0.04em; font-weight: 900;
           margin-bottom: var(--db-space-3);
           opacity: 0;
           animation: tip08-fade 500ms var(--db-ease) 80ms forwards;
@@ -182,7 +182,7 @@ class SectionTip08 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 8 · Disziplin</span>
+        <span class="db-eyebrow">Tip 8</span>
         <h1>Das passende Modell für die <b>passende Aufgabe</b></h1>
         <p class="lede">
           Ein Hammer für jeden Nagel ist teuer — und langsam. Wer das richtige

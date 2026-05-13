@@ -31,7 +31,7 @@ class SectionTip07 extends HTMLElement {
           width: 100%;
         }
         ${TAG} .db-eyebrow {
-          color: var(--db-red);
+          color: var(--db-red); font-size: var(--db-fs-h4); letter-spacing: 0.04em; font-weight: 900;
           margin-bottom: var(--db-space-3);
           opacity: 0;
           animation: tip07-fade 500ms var(--db-ease) 80ms forwards;
@@ -203,7 +203,7 @@ class SectionTip07 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 7 · Disziplin</span>
+        <span class="db-eyebrow">Tip 7</span>
         <h1>Verwirrt? <b>Neue Session</b></h1>
         <p class="lede">
           Ein verwirrter Agent bleibt verwirrt. Kontext, der einmal vergiftet ist,

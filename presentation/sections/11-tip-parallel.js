@@ -23,7 +23,7 @@ class SectionTip02 extends HTMLElement {
           width: 100%;
         }
         ${TAG} .db-eyebrow {
-          color: var(--db-red);
+          color: var(--db-red); font-size: var(--db-fs-h4); letter-spacing: 0.04em; font-weight: 900;
           margin-bottom: var(--db-space-3);
           opacity: 0;
           animation: tip02-fade 500ms var(--db-ease) 80ms forwards;
@@ -164,7 +164,7 @@ class SectionTip02 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 2 · Disziplin</span>
+        <span class="db-eyebrow">Tip 2</span>
         <h1>Eine Session pro <b>Mental-Kontext</b></h1>
         <p class="lede">
           Unabhängige Aufgaben gehören in separate Sessions oder Subagenten.

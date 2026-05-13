@@ -1,7 +1,7 @@
 /* Section 17 — Copilot in der Praxis
    Montag-morgen-Aktionsplan. */
 
-const TAG = 's19-copilot';
+const TAG = 's20-copilot';
 
 const STEPS = [
   {
