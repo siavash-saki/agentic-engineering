@@ -52,4 +52,4 @@ presentation/
 
 ## Deploy
 
-Deploys as a static site. [`vercel.json`](vercel.json) rewrites `/` to `/presentation/index.html`, so the root URL serves the deck.
+Deploys as a static site, auto-deployed by Vercel's Git integration on every push to `main`. [`vercel.json`](vercel.json) rewrites `/` to `/presentation/index.html` and maps all other paths into `/presentation/`, so the deck and its relative assets resolve correctly from the root URL.
