@@ -115,7 +115,7 @@ class Section01 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Agentic Engineering — DB Intern</span>
+        <span class="db-eyebrow">Agentic Engineering</span>
         <h1>KI-Coding-Tools <b>bewusst</b> einsetzen</h1>
         <p class="lede">
           Die meisten von uns nutzen KI-Coding-Tools täglich. Wenige nutzen sie
@@ -126,7 +126,7 @@ class Section01 extends HTMLElement {
         <ul class="goals">
           <li><b>Vibe Coding</b> vs <b>Agentic Engineering</b></li>
           <li>Ein mentales Modell für die framework-unabhängigen Konzepte hinter jedem KI-Coding-Tool</li>
-          <li>Einen Workflow, den du ab Montagmorgen anwenden kannst — in Copilot, bei der DB</li>
+          <li>Einen Workflow, den du ab Montagmorgen anwenden kannst — in Claude Code, Copilot, Cursor oder Codex</li>
         </ul>
       </div>
     `;

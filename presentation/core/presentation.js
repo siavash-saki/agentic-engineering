@@ -56,7 +56,7 @@ const sections = [
   { tag: 's25-tip-model',        title: 'Tip 8 · Richtiges Tier' },
   { tag: 's26-tip-multimodel',   title: 'Tip 9 · Mehrere Anbieter' },
   { tag: 's27-tip-rules',        title: 'Tip 10 · Projekt-Regeln' },
-  { tag: 's28-copilot',          title: 'Copilot in der Praxis' },
+  { tag: 's28-copilot',          title: 'In der Praxis' },
 ];
 
 const CHAPTERS = [
@@ -64,7 +64,7 @@ const CHAPTERS = [
   { label: 'Primitives', index: 5,  key: 'p'  },
   { label: 'SDD',        index: 8,  key: 's'  },
   { label: 'Tips',       index: 16, key: 't'  },
-  { label: 'Copilot',    index: 27, key: 'c'  },
+  { label: 'Praxis',     index: 27, key: 'r'  },
 ];
 
 const stage      = document.getElementById('stage');
@@ -132,6 +132,30 @@ const go = delta => mount(current + delta);
 prevBtn.addEventListener('click', () => go(-1));
 nextBtn.addEventListener('click', () => go(1));
 
+/* ───── Fullscreen toggle ───── */
+const fsBtn = document.getElementById('btn-fullscreen');
+const FS_ICON_ENTER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/></svg>`;
+const FS_ICON_EXIT  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M16 21v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>`;
+
+function updateFsIcon() {
+  const isFs = !!document.fullscreenElement;
+  fsBtn.innerHTML = isFs ? FS_ICON_EXIT : FS_ICON_ENTER;
+  fsBtn.title = isFs ? 'Vollbild verlassen (F)' : 'Vollbild (F)';
+  fsBtn.setAttribute('aria-label', fsBtn.title);
+}
+
+function toggleFullscreen() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen?.();
+  } else {
+    document.documentElement.requestFullscreen?.().catch(() => {});
+  }
+}
+
+fsBtn.addEventListener('click', toggleFullscreen);
+document.addEventListener('fullscreenchange', updateFsIcon);
+updateFsIcon();
+
 document.addEventListener('keydown', e => {
   if (e.target.closest('input,textarea,select')) return;
   if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
@@ -142,6 +166,8 @@ document.addEventListener('keydown', e => {
     mount(0);
   } else if (e.key === 'End') {
     mount(sections.length - 1);
+  } else if (e.key === 'f' || e.key === 'F') {
+    e.preventDefault(); toggleFullscreen();
   } else {
     const ch = CHAPTERS.find(c => c.key && c.key === e.key.toLowerCase());
     if (ch) { e.preventDefault(); mount(ch.index); }

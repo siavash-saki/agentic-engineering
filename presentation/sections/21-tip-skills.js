@@ -67,7 +67,7 @@ class SectionTip04 extends HTMLElement {
           overflow: hidden;
           white-space: nowrap;
           width: 0;
-          animation: tip04-type 900ms steps(14, end) 700ms forwards;
+          animation: tip04-type 900ms steps(10, end) 700ms forwards;
         }
         ${TAG} .terminal .caret {
           display: inline-block;
@@ -152,7 +152,7 @@ class SectionTip04 extends HTMLElement {
           to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes tip04-type {
-          to { width: 14ch; }
+          to { width: 10ch; }
         }
         @keyframes tip04-blink {
           0%, 100% { opacity: 1; }
@@ -175,7 +175,7 @@ class SectionTip04 extends HTMLElement {
 
         <div class="terminal">
           <span class="prompt">›</span>
-          <span class="cmd">/db-pr-review</span>
+          <span class="cmd">/pr-review</span>
           <span class="caret"></span>
         </div>
 
@@ -183,7 +183,7 @@ class SectionTip04 extends HTMLElement {
           <div class="skill-label">Skill-<br>Definition</div>
           <ol>
             <li>Lies den <b>Git-Diff</b> der aktuellen Branch</li>
-            <li>Prüfe gegen <b>DB-Codestyle</b> und interne Conventions</li>
+            <li>Prüfe gegen <b>Team-Codestyle</b> und interne Conventions</li>
             <li>Markiere <b>Sicherheits-</b> und Logging-Auffälligkeiten</li>
             <li>Schreibe strukturierte <b>Review-Notes</b> als PR-Kommentar</li>
           </ol>

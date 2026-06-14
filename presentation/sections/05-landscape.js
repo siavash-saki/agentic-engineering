@@ -1,9 +1,7 @@
 /* Section 5 — Was ist was
    Three sections: Modell · (API & Subscription) · Produkt.
    API and Subscription are PARALLEL alternatives in the middle — a product
-   reaches a model either through one or the other, never chained. The
-   DB-laptop filter shows the actual subscription paths DB uses (no direct
-   API access). */
+   reaches a model either through one or the other, never chained. */
 
 const TAG = 's05-landscape';
 
@@ -91,17 +89,10 @@ const SEGMENTS = (() => {
   return out;
 })();
 
-/* At DB: only the GitHub and Amazon subscriptions are active.
-   APIs are not paid for directly — every API is dimmed. */
-const DB_ALLOWED = ['p-copilot', 'p-kiro', 's-github', 's-amazon', 'm-gpt', 'm-claude'];
-const DB_BLOCKED = ['p-codex', 'p-claude-app', 'p-gemini-app', 's-openai', 's-anthropic',
-                    'a-openai', 'a-anthropic', 'a-google', 'm-gemini'];
-
 const CAPTIONS = {
   all: 'Ein Produkt erreicht ein Modell <b>entweder</b> direkt über die <b>API</b> (pay-per-use) <b>oder</b> über eine <b>Subscription</b> (monatlich, oft Enterprise) — beides sind parallele, kommerzielle Pfade.',
   api: '<b>Pay-per-use:</b> das Produkt ruft die Modell-API direkt auf — meist mit einem eigenen API-Key. Jede Anfrage wird einzeln abgerechnet. Schnell zu starten, aber nicht jeder Agent bietet diesen Pfad.',
   sub: '<b>Monatliche Subscription:</b> Pauschalvertrag, oft Enterprise. Eine Subscription kann mehrere Modelle abdecken. Bei Coding-Agenten wie Copilot oder Kiro der einzige Pfad — direkter API-Zugang ist hier nicht vorgesehen.',
-  db:  'Bei der DB sind <b>zwei</b> Subscriptions aktiv: <b>GitHub</b> (Copilot → GPT und Claude) und <b>Amazon</b> (Kiro → nur Claude). Direkte API-Nutzung ist nicht vorgesehen.',
 };
 
 /* Map each node-id to its kind. Used to dim the "other" kind in api/sub view. */
@@ -317,20 +308,6 @@ class Section05 extends HTMLElement {
           box-shadow: 0 0 0 2px var(--node-color, var(--maker-color, var(--db-red))),
                       0 4px 14px rgba(0,0,0,0.08);
         }
-        ${TAG} .node.locked::after {
-          content: "";
-          position: absolute;
-          top: -8px; right: -8px;
-          width: 20px; height: 20px;
-          background: var(--db-red);
-          border-radius: 50%;
-          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'><rect x='5' y='11' width='14' height='10' rx='1'/><path d='M8 11V7a4 4 0 018 0v4' fill='none' stroke='%23fff' stroke-width='2'/></svg>");
-          background-size: 13px 13px;
-          background-repeat: no-repeat;
-          background-position: center;
-          z-index: 4;
-        }
-
         ${TAG} .caption {
           flex-shrink: 0;
           max-width: 920px;
@@ -356,7 +333,6 @@ class Section05 extends HTMLElement {
           <button type="button" data-view="all" class="active" title="Taste 1">Alle Pfade<span class="kbd">1</span></button>
           <button type="button" data-view="api" title="Taste 2">Nur API<span class="kbd">2</span></button>
           <button type="button" data-view="sub" title="Taste 3">Nur Subscription<span class="kbd">3</span></button>
-          <button type="button" data-view="db" title="Taste 4">DB InfraGo<span class="kbd">4</span></button>
         </div>
       </div>
 
@@ -426,7 +402,7 @@ class Section05 extends HTMLElement {
 
     /* Keyboard shortcuts: 1/2/3/4 cycle through the view toggle so the
        presenter can switch views from a clicker without reaching the mouse. */
-    const KEY_MAP = { '1': 'all', '2': 'api', '3': 'sub', '4': 'db' };
+    const KEY_MAP = { '1': 'all', '2': 'api', '3': 'sub' };
     this.onKeydown = (e) => {
       if (e.target.closest('input,textarea,select')) return;
       const v = KEY_MAP[e.key];
@@ -486,15 +462,8 @@ class Section05 extends HTMLElement {
     const hoverSet = hovered ? this.hoverSet(hovered) : null;
 
     this.nodes.forEach((n, id) => {
-      n.classList.remove('hl', 'dim', 'locked', 'faded');
+      n.classList.remove('hl', 'dim', 'faded');
       const kind = nodeKind(id);
-
-      /* DB view is always-on: lock blocked, highlight allowed, ignore hover. */
-      if (view === 'db') {
-        if (DB_BLOCKED.includes(id)) n.classList.add('dim', 'locked');
-        else if (DB_ALLOWED.includes(id)) n.classList.add('hl');
-        return;
-      }
 
       /* Mode-level fading: in api/sub view the irrelevant side is invisible. */
       let fadedByMode = false;
@@ -545,23 +514,18 @@ class Section05 extends HTMLElement {
 
       const ek = edgeKind(from, to);
 
-      if (this.view === 'db') {
-        const allowed = DB_ALLOWED.includes(from) && DB_ALLOWED.includes(to);
-        p.classList.add(allowed ? 'hl' : 'dim');
-      } else {
-        /* Mode-level fading for the irrelevant edge kind. */
-        let fadedByMode = false;
-        if (this.view === 'api' && ek === 'sub') fadedByMode = true;
-        else if (this.view === 'sub' && ek === 'api') fadedByMode = true;
+      /* Mode-level fading for the irrelevant edge kind. */
+      let fadedByMode = false;
+      if (this.view === 'api' && ek === 'sub') fadedByMode = true;
+      else if (this.view === 'sub' && ek === 'api') fadedByMode = true;
 
-        if (fadedByMode) {
-          p.classList.add('faded');
-        } else if (hoverSet) {
-          const match = hoverSet.has(from) && hoverSet.has(to);
-          p.classList.add(match ? 'hl' : 'dim');
-        }
-        /* else: default cline opacity 0.32 — nothing applied. */
+      if (fadedByMode) {
+        p.classList.add('faded');
+      } else if (hoverSet) {
+        const match = hoverSet.has(from) && hoverSet.has(to);
+        p.classList.add(match ? 'hl' : 'dim');
       }
+      /* else: default cline opacity 0.32 — nothing applied. */
     };
 
     SEGMENTS.forEach(seg => drawSegment(seg));

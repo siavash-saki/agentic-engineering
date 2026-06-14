@@ -1,5 +1,5 @@
-/* Section 28 — Copilot in der Praxis
-   Montag-morgen-Aktionsplan. */
+/* Section 28 — Agenten in der Praxis
+   Montag-morgen-Aktionsplan. Tool-unabhängig formuliert. */
 
 const TAG = 's28-copilot';
 
@@ -7,8 +7,8 @@ const STEPS = [
   {
     when:  'Heute',
     time:  '15 Minuten',
-    title: 'Instructions anlegen',
-    body:  'Im Repo-Root die Datei <code>.github/copilot-instructions.md</code> anlegen. Drei Abschnitte reichen:',
+    title: 'Memory anlegen',
+    body:  'Im Repo-Root eine Memory-Datei anlegen — je nach Tool <code>AGENTS.md</code>, <code>CLAUDE.md</code> oder <code>.github/copilot-instructions.md</code>. Drei Abschnitte reichen:',
     bullets: [
       'Build-Befehl &amp; Test-Befehl',
       'Coding-Standards, die ihr wirklich anwendet',
@@ -21,7 +21,7 @@ const STEPS = [
     title: 'Erstes Skill schreiben',
     body:  'Eine wiederkehrende Aufgabe — Code-Review-Checkliste, Release-Schritte, Onboarding — als Skill speichern:',
     bullets: [
-      '<code>.github/skills/&lt;name&gt;/SKILL.md</code>',
+      '<code>.&lt;tool&gt;/skills/&lt;name&gt;/SKILL.md</code>',
       'Slash-aufrufbar via <code>/&lt;name&gt;</code>',
       'Vom Modell auto-geladen, wenn Beschreibung passt',
     ],
@@ -30,10 +30,10 @@ const STEPS = [
     when:  'Diesen Monat',
     time:  'Ein Halbtag',
     title: 'MCP-Server konfigurieren',
-    body:  'Den Agenten mit eurem wichtigsten internen Tool reden lassen — GitLab, oAIsys-Docs, semantic code:',
+    body:  'Den Agenten mit euren wichtigsten Systemen reden lassen — Git-Plattform, Doku, semantische Code-Suche:',
     bullets: [
-      '<code>.vscode/mcp.json</code> im Repo',
-      'z.&nbsp;B. <code>oAIsys-Docs</code>, <code>gitlab</code>, <code>serena</code>',
+      'MCP-Konfig im Repo — <code>.mcp.json</code> oder <code>.vscode/mcp.json</code>',
+      'z.&nbsp;B. <code>git</code>, <code>docs</code>, <code>semantic-code</code>',
       'Einmal konfiguriert — jede MCP-fähige IDE nutzt ihn',
     ],
   },
@@ -196,7 +196,7 @@ class Section28 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Copilot, konkret</span>
+        <span class="db-eyebrow">Konkret werden</span>
         <h1>Montag morgen — <b>was tun?</b></h1>
         <p class="lede">
           Drei konkrete Schritte. Jeder davon ist in einer überschaubaren Zeit

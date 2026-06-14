@@ -7,7 +7,7 @@ const TAG = 's22-tip-interview';
 const QA = [
   { q: 'Welches Problem löst die Funktion?',     a: 'CSV-Export für Reporting-Team' },
   { q: 'Wer ruft sie auf — UI oder Job?',         a: 'Wöchentlicher Cron-Job' },
-  { q: 'Welche Felder, in welcher Reihenfolge?',  a: 'ID, Datum, Strecke, Auslastung' },
+  { q: 'Welche Felder, in welcher Reihenfolge?',  a: 'ID, Datum, Region, Auslastung' },
   { q: 'Wie groß werden die Exporte?',            a: '~ 80 MB · streamen, nicht buffern' },
 ];
 
@@ -198,7 +198,7 @@ class SectionTip05 extends HTMLElement {
             <ul>
               <li>Zweck: <b>CSV-Export Reporting</b></li>
               <li>Trigger: <b>Cron, wöchentlich</b></li>
-              <li>Schema: <b>ID, Datum, Strecke, Auslastung</b></li>
+              <li>Schema: <b>ID, Datum, Region, Auslastung</b></li>
               <li>Performance: <b>Streamed, ~80 MB</b></li>
             </ul>
           </div>

@@ -31,7 +31,7 @@ const PRIMITIVES = [
   {
     num: '03',
     name: 'MCP',
-    blurb: 'Model Context Protocol — offener Standard, damit Agenten mit externen Systemen reden: Jira, Postgres, GitHub, der DB GenAI Hub.',
+    blurb: 'Model Context Protocol — offener Standard, damit Agenten mit externen Systemen reden: Jira, Postgres, GitHub, ein interner Wissens-Hub.',
     why:   'Ein Server, jedes Tool. Wechsel ist reversibel.',
     rows: [
       ['Claude Code', '.mcp.json  +  ~/.claude.json'],

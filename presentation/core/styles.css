@@ -38,6 +38,28 @@ body { display: flex; flex-direction: column; background: var(--db-bg); }
   gap: var(--db-space-5);
 }
 #header .db-header__brand { justify-self: start; }
+#header .db-header__brand .brand-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: var(--db-red);
+  color: #fff;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+#header .db-header__brand .brand-name {
+  font-family: var(--db-font-head);
+  font-size: var(--db-fs-h5);
+  font-weight: 700;
+  color: var(--db-text-strong);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
 #header .page-title {
   justify-self: center;
   font-family: var(--db-font-head);
@@ -79,6 +101,7 @@ body { display: flex; flex-direction: column; background: var(--db-bg); }
 
 /* ───── Nav bar ───── */
 #nav {
+  position: relative;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -88,6 +111,16 @@ body { display: flex; flex-direction: column; background: var(--db-bg); }
   background: var(--db-cool-gray-100);
   border-top: 1px solid var(--db-border);
 }
+#btn-fullscreen {
+  position: absolute;
+  right: var(--db-gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  min-height: 36px;
+  padding: 0;
+}
+#btn-fullscreen svg { width: 18px; height: 18px; display: block; }
 #counter {
   font-size: var(--db-fs-small);
   font-weight: 700;
@@ -140,6 +173,8 @@ body { display: flex; flex-direction: column; background: var(--db-bg); }
 @media (max-width: 600px) {
   #header .header-inner { min-height: 48px; }
   #header .page-title { font-size: var(--db-fs-small); }
+  #header .db-header__brand .brand-name { display: none; }
+  #btn-fullscreen { display: none; }
 }
 
 /* ───── Section conventions ───── */

@@ -209,8 +209,8 @@ class SectionTip09 extends HTMLElement {
         <p class="lede">
           Kein Anbieter ist überall der beste. Wer alle drei großen Modelle
           regelmäßig nutzt, lernt ihre Stärken und Schwächen kennen — und wählt
-          beim Start einer Aufgabe das richtige Werkzeug. In Copilot bei der DB
-          sind alle drei verfügbar.
+          beim Start einer Aufgabe das richtige Werkzeug. Viele Coding-Agenten
+          (z.&nbsp;B. Claude Code, Copilot, Cursor) geben dir Zugriff auf mehrere davon.
         </p>
 
         <div class="cards">
