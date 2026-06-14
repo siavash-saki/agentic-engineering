@@ -131,12 +131,12 @@ class Section02 extends HTMLElement {
 
         <div class="shots">
           <div class="shot">
-            <div class="label">ChatGPT 5.5</div>
-            <img src="/presentation/assets/carwash-chatgpt.png" alt="ChatGPT empfiehlt zu Fuß zu gehen">
+            <div class="label">ChatGPT</div>
+            <img src="assets/carwash-chatgpt.png" alt="ChatGPT empfiehlt zu Fuß zu gehen">
           </div>
           <div class="shot">
-            <div class="label">Claude (Opus 4.7)</div>
-            <img src="/presentation/assets/carwash-claude.png" alt="Claude empfiehlt zu Fuß zu gehen">
+            <div class="label">Claude</div>
+            <img src="assets/carwash-claude.png" alt="Claude empfiehlt zu Fuß zu gehen">
           </div>
         </div>
 

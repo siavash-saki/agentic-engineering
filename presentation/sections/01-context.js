@@ -90,6 +90,19 @@ class Section01 extends HTMLElement {
         ${TAG} ul.goals li:nth-child(1) { animation-delay: 880ms; }
         ${TAG} ul.goals li:nth-child(2) { animation-delay: 1020ms; }
         ${TAG} ul.goals li:nth-child(3) { animation-delay: 1160ms; }
+        ${TAG} .note {
+          margin: var(--db-space-6) 0 0;
+          font-size: var(--db-fs-small);
+          line-height: var(--db-lh-small);
+          color: var(--db-text-muted);
+          opacity: 0;
+          animation: s01-fade 600ms var(--db-ease) 1400ms forwards;
+        }
+        ${TAG} .note code {
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          font-size: 0.92em;
+          color: var(--db-text);
+        }
         @keyframes s01-fade {
           from { opacity: 0; transform: translateY(12px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -109,11 +122,11 @@ class Section01 extends HTMLElement {
           bewusst. In diesem Vortrag geht es um die Lücke zwischen beidem —
           und die Engineering-Praxis, die sie schließt.
         </p>
-        <div class="goals-title">Was Sie mitnehmen</div>
+        <div class="goals-title">Was du mitnimmst</div>
         <ul class="goals">
           <li><b>Vibe Coding</b> vs <b>Agentic Engineering</b></li>
           <li>Ein mentales Modell für die framework-unabhängigen Konzepte hinter jedem KI-Coding-Tool</li>
-          <li>Einen Workflow, den Sie ab Montagmorgen anwenden können — in Copilot, bei der DB</li>
+          <li>Einen Workflow, den du ab Montagmorgen anwenden kannst — in Copilot, bei der DB</li>
         </ul>
       </div>
     `;

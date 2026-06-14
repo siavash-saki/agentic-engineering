@@ -50,6 +50,16 @@ class Section03Start extends HTMLElement {
           display: block;
           border-radius: var(--db-radius);
         }
+        ${TAG} .punch {
+          margin: var(--db-space-5) 0 0;
+          font-size: var(--db-fs-h4);
+          line-height: var(--db-lh-h4);
+          color: var(--db-text-strong);
+          text-align: center;
+          opacity: 0;
+          animation: s03s-fade 600ms var(--db-ease) 800ms forwards;
+        }
+        ${TAG} .punch b { color: var(--db-red); }
 
         @keyframes s03s-fade {
           from { opacity: 0; transform: translateY(8px); }
@@ -68,7 +78,7 @@ class Section03Start extends HTMLElement {
         <h1>KI startet <b>überkomplex</b> — du musst sie klein halten</h1>
 
         <div class="hero">
-          <img src="/presentation/assets/start-small.png" alt="Waterfall · Agile · AI — Build-Progressionen im Vergleich">
+          <img src="assets/start-small.png" alt="Waterfall · Agile · AI — Build-Progressionen im Vergleich">
         </div>
       </div>
     `;

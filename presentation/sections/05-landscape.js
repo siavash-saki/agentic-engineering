@@ -186,6 +186,15 @@ class Section05 extends HTMLElement {
           background: var(--db-red);
           color: #fff;
         }
+        ${TAG} .toggle .kbd {
+          margin-left: 6px;
+          padding: 0 5px;
+          border: 1px solid currentColor;
+          border-radius: 3px;
+          opacity: 0.55;
+          font-size: 0.78em;
+          font-weight: 700;
+        }
 
         ${TAG} .stage {
           flex: 1;
@@ -344,10 +353,10 @@ class Section05 extends HTMLElement {
       <div class="top">
         <h2>Modell · API &amp; Subscription · Produkt</h2>
         <div class="toggle" role="tablist">
-          <button type="button" data-view="all" class="active">Alle Pfade</button>
-          <button type="button" data-view="api">Nur API</button>
-          <button type="button" data-view="sub">Nur Subscription</button>
-          <button type="button" data-view="db">DB InfraGo</button>
+          <button type="button" data-view="all" class="active" title="Taste 1">Alle Pfade<span class="kbd">1</span></button>
+          <button type="button" data-view="api" title="Taste 2">Nur API<span class="kbd">2</span></button>
+          <button type="button" data-view="sub" title="Taste 3">Nur Subscription<span class="kbd">3</span></button>
+          <button type="button" data-view="db" title="Taste 4">DB InfraGo<span class="kbd">4</span></button>
         </div>
       </div>
 
@@ -415,6 +424,16 @@ class Section05 extends HTMLElement {
     this.ro = new ResizeObserver(() => this.drawConnections());
     this.ro.observe(this.stage);
 
+    /* Keyboard shortcuts: 1/2/3/4 cycle through the view toggle so the
+       presenter can switch views from a clicker without reaching the mouse. */
+    const KEY_MAP = { '1': 'all', '2': 'api', '3': 'sub', '4': 'db' };
+    this.onKeydown = (e) => {
+      if (e.target.closest('input,textarea,select')) return;
+      const v = KEY_MAP[e.key];
+      if (v) { e.preventDefault(); this.setView(v); }
+    };
+    document.addEventListener('keydown', this.onKeydown);
+
     this.render();
 
     setTimeout(() => this.drawConnections(), 60);
@@ -426,6 +445,7 @@ class Section05 extends HTMLElement {
 
   disconnectedCallback() {
     this.ro?.disconnect();
+    if (this.onKeydown) document.removeEventListener('keydown', this.onKeydown);
   }
 
   setView(v) {

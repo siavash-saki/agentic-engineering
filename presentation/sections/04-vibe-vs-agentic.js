@@ -4,8 +4,8 @@
 const TAG = 's04-vibe-vs-agentic';
 
 const ROWS = [
-  { dim: 'Eingabe',          vibe: 'Bauchgefühl-Prompt',     agentic: 'Klare Spezifikation' },
-  { dim: 'Kontext',          vibe: 'Was das Modell zufällig weiß', agentic: 'Skills, AGENTS.md, MCP' },
+  { dim: 'Eingabe',          vibe: 'Bauchgefühl-Prompt',     agentic: 'Klare <b>Spezifikation</b>' },
+  { dim: 'Kontext',          vibe: 'Was das Modell zufällig weiß', agentic: 'Memory, Skills, MCP' },
   { dim: 'Workflow',          vibe: '„Mal sehen, was rauskommt"',   agentic: 'Plan → Code → Review' },
   { dim: 'Review',           vibe: 'Vorschlag akzeptieren',  agentic: 'Diff für Diff geprüft' },
   { dim: 'Wiederholbarkeit', vibe: 'Einmalig — beim nächsten Mal anders', agentic: 'Reproduzierbar' },
@@ -116,6 +116,7 @@ class Section04 extends HTMLElement {
           color: var(--db-text);
         }
         ${TAG} .col.agentic dd { color: var(--db-text-strong); font-weight: 700; }
+        ${TAG} .col.agentic dd b { color: var(--db-red); font-weight: 700; }
 
         ${TAG} .punch {
           margin: 0;
@@ -173,9 +174,6 @@ class Section04 extends HTMLElement {
             </dl>
           </div>
         </div>
-        <p class="punch">
-          Das Werkzeug ist dasselbe. Was sich ändert, ist die <b>Praxis</b>.
-        </p>
       </div>
     `;
   }

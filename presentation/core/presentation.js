@@ -8,17 +8,25 @@ import '../sections/06-primitives-1.js';
 import '../sections/07-primitives-2.js';
 import '../sections/08-context-loading.js';
 import '../sections/09-workflow.js';
-import '../sections/10-tip-interrogate.js';
-import '../sections/11-tip-parallel.js';
-import '../sections/12-tip-review.js';
-import '../sections/13-tip-skills.js';
-import '../sections/14-tip-interview.js';
-import '../sections/15-tip-commits.js';
-import '../sections/16-tip-context.js';
-import '../sections/17-tip-model.js';
-import '../sections/18-tip-multimodel.js';
-import '../sections/19-tip-rules.js';
-import '../sections/20-copilot.js';
+import '../sections/10-sdd-callout.js';
+import '../sections/11-sdd-artifacts.js';
+import '../sections/12-sdd-spec.js';
+import '../sections/13-sdd-plan.js';
+import '../sections/14-sdd-tasks.js';
+import '../sections/15-sdd-workflow.js';
+import '../sections/16-sdd-antipatterns.js';
+import '../sections/17-tips-intro.js';
+import '../sections/18-tip-interrogate.js';
+import '../sections/19-tip-parallel.js';
+import '../sections/20-tip-review.js';
+import '../sections/21-tip-skills.js';
+import '../sections/22-tip-interview.js';
+import '../sections/23-tip-commits.js';
+import '../sections/24-tip-context.js';
+import '../sections/25-tip-model.js';
+import '../sections/26-tip-multimodel.js';
+import '../sections/27-tip-rules.js';
+import '../sections/28-copilot.js';
 
 const sections = [
   { tag: 's01-context',          title: 'Kontext & Ziel' },
@@ -30,24 +38,33 @@ const sections = [
   { tag: 's07-primitives-2',     title: 'Primitives — Hooks, Subagents, Scope' },
   { tag: 's08-context-loading',  title: 'Wann lädt was in den Kontext' },
   { tag: 's09-workflow',         title: 'Empfohlener Workflow' },
-  { tag: 's10-tip-interrogate',  title: 'Tip 1 · Den Agenten befragen' },
-  { tag: 's11-tip-parallel',     title: 'Tip 2 · Parallele Sessions' },
-  { tag: 's12-tip-review',       title: 'Tip 3 · Jeden Diff reviewen' },
-  { tag: 's13-tip-skills',       title: 'Tip 4 · Custom Skills' },
-  { tag: 's14-tip-interview',    title: 'Tip 5 · Agent interviewt dich' },
-  { tag: 's15-tip-commits',      title: 'Tip 6 · Klein committen' },
-  { tag: 's16-tip-context',      title: 'Tip 7 · Kontext frisch halten' },
-  { tag: 's17-tip-model',        title: 'Tip 8 · Richtiges Modell' },
-  { tag: 's18-tip-multimodel',   title: 'Tip 9 · Mehrere Anbieter' },
-  { tag: 's19-tip-rules',        title: 'Tip 10 · Projekt-Regeln' },
-  { tag: 's20-copilot',          title: 'Copilot in der Praxis' },
+  { tag: 's10-sdd-callout',      title: 'SDD · Spec, Plan, Tasks' },
+  { tag: 's11-sdd-artifacts',    title: 'SDD · Drei Artefakte' },
+  { tag: 's12-sdd-spec',         title: 'SDD · Spec (Rate-Limiting)' },
+  { tag: 's13-sdd-plan',         title: 'SDD · Plan (Rate-Limiting)' },
+  { tag: 's14-sdd-tasks',        title: 'SDD · Tasks (Rate-Limiting)' },
+  { tag: 's15-sdd-workflow',     title: 'SDD im Workflow · Gates' },
+  { tag: 's16-sdd-antipatterns', title: 'SDD · Anti-Patterns' },
+  { tag: 's17-tips-intro',       title: 'Best Practices · Zehn Disziplinen' },
+  { tag: 's18-tip-interrogate',  title: 'Tip 1 · Den Agenten befragen' },
+  { tag: 's19-tip-parallel',     title: 'Tip 2 · Parallele Sessions' },
+  { tag: 's20-tip-review',       title: 'Tip 3 · Jeden Diff reviewen' },
+  { tag: 's21-tip-skills',       title: 'Tip 4 · Custom Skills' },
+  { tag: 's22-tip-interview',    title: 'Tip 5 · Agent interviewt dich' },
+  { tag: 's23-tip-commits',      title: 'Tip 6 · Klein committen' },
+  { tag: 's24-tip-context',      title: 'Tip 7 · Kontext frisch halten' },
+  { tag: 's25-tip-model',        title: 'Tip 8 · Richtiges Tier' },
+  { tag: 's26-tip-multimodel',   title: 'Tip 9 · Mehrere Anbieter' },
+  { tag: 's27-tip-rules',        title: 'Tip 10 · Projekt-Regeln' },
+  { tag: 's28-copilot',          title: 'Copilot in der Praxis' },
 ];
 
 const CHAPTERS = [
   { label: 'Start',      index: 0,  key: null },
   { label: 'Primitives', index: 5,  key: 'p'  },
-  { label: 'Tips',       index: 9,  key: 't'  },
-  { label: 'Copilot',    index: 19, key: 'c'  },
+  { label: 'SDD',        index: 8,  key: 's'  },
+  { label: 'Tips',       index: 16, key: 't'  },
+  { label: 'Copilot',    index: 27, key: 'c'  },
 ];
 
 const stage      = document.getElementById('stage');

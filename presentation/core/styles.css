@@ -4,6 +4,27 @@
  * does not provide. All colors, type, spacing, and shadows come from DB tokens.
  */
 
+/* Scale down DB tokens for the slide context. DB defaults are tuned for full
+ * marketing pages; slides need to fit in a single viewport without scrolling.
+ * Roughly an 18% reduction across the type scale, lighter on spacing. */
+:root {
+  --db-fs-h1: 46px;  --db-lh-h1: 52px;
+  --db-fs-h2: 32px;  --db-lh-h2: 38px;
+  --db-fs-h3: 24px;  --db-lh-h3: 30px;
+  --db-fs-h4: 19px;  --db-lh-h4: 26px;
+  --db-fs-h5: 16px;  --db-lh-h5: 22px;
+  --db-fs-lead: 17px;  --db-lh-lead: 26px;
+  --db-fs-body: 14px;  --db-lh-body: 22px;
+  --db-fs-small: 12px; --db-lh-small: 18px;
+  --db-fs-caption: 11px; --db-lh-caption: 14px;
+
+  --db-space-5: 20px;
+  --db-space-6: 28px;
+  --db-space-7: 40px;
+  --db-space-8: 52px;
+  --db-space-9: 76px;
+}
+
 html, body { height: 100%; overflow: hidden; }
 body { display: flex; flex-direction: column; background: var(--db-bg); }
 
@@ -47,6 +68,11 @@ body { display: flex; flex-direction: column; background: var(--db-bg); }
   transition:
     opacity   400ms var(--db-ease),
     transform 400ms var(--db-ease);
+  /* Sections center their content vertically. Without `safe`, flex
+     centering clips overflowing content at both ends and breaks scrolling.
+     `safe center` falls back to flex-start when content exceeds the
+     viewport — the slide top stays visible and the rest can be scrolled. */
+  justify-content: safe center;
 }
 #stage > *.entering { opacity: 0; transform: translateY(14px); }
 #stage > *.exiting  { opacity: 0; transform: translateY(-14px); }
@@ -115,3 +141,7 @@ body { display: flex; flex-direction: column; background: var(--db-bg); }
   #header .header-inner { min-height: 48px; }
   #header .page-title { font-size: var(--db-fs-small); }
 }
+
+/* ───── Section conventions ───── */
+/* Bold spans inside any section's .lede are red — consistent across slides. */
+.lede b { color: var(--db-red); font-weight: 700; }

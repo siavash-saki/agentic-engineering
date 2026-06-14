@@ -95,8 +95,30 @@ class Section09 extends HTMLElement {
           color: var(--db-text);
         }
 
+        ${TAG} .loop {
+          margin-top: var(--db-space-4);
+          padding: var(--db-space-3) var(--db-space-5);
+          background: var(--db-cool-gray-100);
+          border-left: 4px dashed var(--db-cool-gray-400);
+          border-radius: 0 var(--db-radius) var(--db-radius) 0;
+          font-size: var(--db-fs-small);
+          line-height: var(--db-lh-small);
+          color: var(--db-text);
+          display: flex;
+          align-items: center;
+          gap: var(--db-space-3);
+          opacity: 0;
+          animation: s09-fade 500ms var(--db-ease) 1100ms forwards;
+        }
+        ${TAG} .loop .icon {
+          font-size: 20px;
+          color: var(--db-cool-gray-400);
+          line-height: 1;
+        }
+        ${TAG} .loop b { color: var(--db-text-strong); }
+
         ${TAG} .next-up {
-          margin-top: var(--db-space-7);
+          margin-top: var(--db-space-5);
           padding: var(--db-space-4) var(--db-space-5);
           background: var(--db-cool-gray-100);
           border-left: 4px solid var(--db-red);
@@ -105,7 +127,7 @@ class Section09 extends HTMLElement {
           line-height: var(--db-lh-body);
           color: var(--db-text);
           opacity: 0;
-          animation: s09-fade 500ms var(--db-ease) 1200ms forwards;
+          animation: s09-fade 500ms var(--db-ease) 1300ms forwards;
         }
         ${TAG} .next-up b { color: var(--db-red); }
 
@@ -139,9 +161,14 @@ class Section09 extends HTMLElement {
           `).join('')}
         </div>
 
+        <div class="loop">
+          <span class="icon" aria-hidden="true">↺</span>
+          <span><b>Bei Abweichung</b> in Code zurück zu Discuss — Annahmen prüfen, nicht den Plan biegen.</span>
+        </div>
+
         <p class="next-up">
-          Auf den folgenden Slides: <b>neun Disziplinen</b>, die diesen Workflow
-          überhaupt erst tragen.
+          Auf den folgenden Slides: die <b>Artefakte</b>, die Discuss und Plan
+          produzieren — und die menschlichen Freigaben dazwischen.
         </p>
       </div>
     `;
