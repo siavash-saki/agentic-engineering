@@ -1,19 +1,52 @@
 /* Section 4 — Vibe Coding vs. Agentic Engineering
    Zwei Arbeitsweisen Seite an Seite. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's04-vibe-vs-agentic';
 
-const ROWS = [
-  { dim: 'Eingabe',          vibe: 'Bauchgefühl-Prompt',     agentic: 'Klare <b>Spezifikation</b>' },
-  { dim: 'Kontext',          vibe: 'Was das Modell zufällig weiß', agentic: 'Memory, Skills, MCP' },
-  { dim: 'Workflow',          vibe: '„Mal sehen, was rauskommt"',   agentic: 'Plan → Code → Review' },
-  { dim: 'Review',           vibe: 'Vorschlag akzeptieren',  agentic: 'Diff für Diff geprüft' },
-  { dim: 'Wiederholbarkeit', vibe: 'Einmalig — beim nächsten Mal anders', agentic: 'Reproduzierbar' },
-  { dim: 'Skaliert auf …',   vibe: 'Spielzeug-Probleme',     agentic: 'Produktionscode' },
-];
+const CONTENT = {
+  en: {
+    eyebrow: 'Two ways to work',
+    title: 'Vibe Coding vs. Agentic Engineering',
+    lede: `Same model. Both ship code. Only one of them survives past the
+      weekend project.`,
+    vibeTitle: 'Vibe Coding',
+    vibeTag: '"Real quick, let me just …"',
+    agenticTitle: 'Agentic Engineering',
+    agenticTag: '"Before I touch a key …"',
+    rows: [
+      { dim: 'Input',          vibe: 'A gut-feel prompt',          agentic: 'A clear <b>specification</b>' },
+      { dim: 'Context',        vibe: 'Whatever the model happens to know', agentic: 'Memory, Skills, MCP' },
+      { dim: 'Workflow',       vibe: '"Let\'s see what comes out"',  agentic: 'Plan → Code → Review' },
+      { dim: 'Review',         vibe: 'Accept the suggestion',      agentic: 'Checked diff by diff' },
+      { dim: 'Repeatability',  vibe: 'One-shot — different next time', agentic: 'Reproducible' },
+      { dim: 'Scales to …',    vibe: 'Toy problems',               agentic: 'Production code' },
+    ],
+  },
+  de: {
+    eyebrow: 'Zwei Arbeitsweisen',
+    title: 'Vibe Coding vs. Agentic Engineering',
+    lede: `Beide nutzen dasselbe Modell. Beide schreiben Code. Nur eine der beiden
+      skaliert über das Wochenend-Projekt hinaus.`,
+    vibeTitle: 'Vibe Coding',
+    vibeTag: '„Mal eben schnell …"',
+    agenticTitle: 'Agentic Engineering',
+    agenticTag: '„Bevor ich loslege …"',
+    rows: [
+      { dim: 'Eingabe',          vibe: 'Bauchgefühl-Prompt',     agentic: 'Klare <b>Spezifikation</b>' },
+      { dim: 'Kontext',          vibe: 'Was das Modell zufällig weiß', agentic: 'Memory, Skills, MCP' },
+      { dim: 'Workflow',          vibe: '„Mal sehen, was rauskommt"',   agentic: 'Plan → Code → Review' },
+      { dim: 'Review',           vibe: 'Vorschlag akzeptieren',  agentic: 'Diff für Diff geprüft' },
+      { dim: 'Wiederholbarkeit', vibe: 'Einmalig — beim nächsten Mal anders', agentic: 'Reproduzierbar' },
+      { dim: 'Skaliert auf …',   vibe: 'Spielzeug-Probleme',     agentic: 'Produktionscode' },
+    ],
+  },
+};
 
 class Section04 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -142,18 +175,17 @@ class Section04 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Zwei Arbeitsweisen</span>
-        <h1>Vibe Coding vs. Agentic Engineering</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.title}</h1>
         <p class="lede">
-          Beide nutzen dasselbe Modell. Beide schreiben Code. Nur eine der beiden
-          skaliert über das Wochenend-Projekt hinaus.
+          ${t.lede}
         </p>
         <div class="grid">
           <div class="col vibe">
-            <h2>Vibe Coding</h2>
-            <p class="tag">„Mal eben schnell …"</p>
+            <h2>${t.vibeTitle}</h2>
+            <p class="tag">${t.vibeTag}</p>
             <dl>
-              ${ROWS.map(r => `
+              ${t.rows.map(r => `
                 <div>
                   <dt>${r.dim}</dt>
                   <dd>${r.vibe}</dd>
@@ -162,10 +194,10 @@ class Section04 extends HTMLElement {
             </dl>
           </div>
           <div class="col agentic">
-            <h2>Agentic Engineering</h2>
-            <p class="tag">„Bevor ich loslege …"</p>
+            <h2>${t.agenticTitle}</h2>
+            <p class="tag">${t.agenticTag}</p>
             <dl>
-              ${ROWS.map(r => `
+              ${t.rows.map(r => `
                 <div>
                   <dt>${r.dim}</dt>
                   <dd>${r.agentic}</dd>

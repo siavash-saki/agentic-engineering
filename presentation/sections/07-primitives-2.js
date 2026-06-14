@@ -1,48 +1,102 @@
 /* Section 7 — Primitives Part 2
    Hooks · Subagents · Scope — die drei verbleibenden Bausteine. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's07-primitives-2';
 
-const PRIMITIVES = [
-  {
-    num: '04',
-    name: 'Hooks',
-    blurb: 'Deterministische Shell-Befehle, die bei Lifecycle-Events feuern — vor/nach einem Tool-Call, beim Prompt, beim Session-Ende. Was das Modell vergisst, vergisst der Hook nicht.',
-    why:   'Policy, die das Modell nicht aushebeln kann.',
-    rows: [
-      ['Claude Code', 'PreToolUse · PostToolUse · UserPromptSubmit · Stop  (+25 weitere)'],
-      ['Copilot',     '.github/hooks/*.json'],
-      ['Codex',       'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
-      ['Kiro',        'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
+const CONTENT = {
+  en: {
+    eyebrow: 'Primitives · Part 2',
+    h1: 'Hooks · Subagents · Scope',
+    lede: `The last three primitives — and the principle that organizes them all:
+          everything lives <b>in the project</b> or <b>in your home directory</b>.`,
+    primitives: [
+      {
+        num: '04',
+        name: 'Hooks',
+        blurb: 'Deterministic shell commands that fire on lifecycle events — before or after a tool call, on a prompt, on session end. What the model forgets, the hook never does.',
+        why:   'Policy the model can\'t talk its way around.',
+        rows: [
+          ['Claude Code', 'PreToolUse · PostToolUse · UserPromptSubmit · Stop  (+25 more)'],
+          ['Copilot',     '.github/hooks/*.json'],
+          ['Codex',       'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
+          ['Kiro',        'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
+        ],
+      },
+      {
+        num: '05',
+        name: 'Subagents',
+        blurb: 'Specialized agents with their own system prompt and a tighter tool set, so the main agent can hand off subtasks. Separate context, run in parallel.',
+        why:   'Save context budget. Win parallelism.',
+        rows: [
+          ['Claude Code', '.claude/agents/  (+ Explore, Plan, general-purpose)'],
+          ['Copilot',     '*.agent.md'],
+          ['Codex',       '.codex/agents/*.toml'],
+          ['Kiro',        '.kiro/agents/*.json'],
+        ],
+      },
+      {
+        num: '06',
+        name: 'Scope',
+        blurb: 'Every primitive lives in two places: in the project (committed, shared) or in your home directory (personal). Same pattern in every tool.',
+        why:   'Commit team standards. Keep personal stuff local.',
+        rows: [
+          ['Project',     './.&lt;tool&gt;/  →  committed, shared with the team'],
+          ['User',        '~/.&lt;tool&gt;/  →  local, personal'],
+          ['Enterprise',  '/etc/&lt;tool&gt;/  →  IT policy, can\'t be overridden'],
+        ],
+      },
     ],
   },
-  {
-    num: '05',
-    name: 'Subagents',
-    blurb: 'Spezialisierte Agenten mit eigenem System-Prompt und engerem Tool-Set, an die der Haupt-Agent Teilaufgaben delegieren kann. Eigener Kontext, parallelisierbar.',
-    why:   'Kontext-Budget schonen. Parallelität gewinnen.',
-    rows: [
-      ['Claude Code', '.claude/agents/  (+ Explore, Plan, general-purpose)'],
-      ['Copilot',     '*.agent.md'],
-      ['Codex',       '.codex/agents/*.toml'],
-      ['Kiro',        '.kiro/agents/*.json'],
+  de: {
+    eyebrow: 'Bausteine · Teil 2',
+    h1: 'Hooks · Subagents · Scope',
+    lede: `Die letzten drei Bausteine — und das organisierende Prinzip dahinter:
+          alles existiert <b>im Projekt</b> oder <b>beim Benutzer</b>.`,
+    primitives: [
+      {
+        num: '04',
+        name: 'Hooks',
+        blurb: 'Deterministische Shell-Befehle, die bei Lifecycle-Events feuern — vor/nach einem Tool-Call, beim Prompt, beim Session-Ende. Was das Modell vergisst, vergisst der Hook nicht.',
+        why:   'Policy, die das Modell nicht aushebeln kann.',
+        rows: [
+          ['Claude Code', 'PreToolUse · PostToolUse · UserPromptSubmit · Stop  (+25 weitere)'],
+          ['Copilot',     '.github/hooks/*.json'],
+          ['Codex',       'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
+          ['Kiro',        'PreToolUse · PostToolUse · UserPromptSubmit · Stop'],
+        ],
+      },
+      {
+        num: '05',
+        name: 'Subagents',
+        blurb: 'Spezialisierte Agenten mit eigenem System-Prompt und engerem Tool-Set, an die der Haupt-Agent Teilaufgaben delegieren kann. Eigener Kontext, parallelisierbar.',
+        why:   'Kontext-Budget schonen. Parallelität gewinnen.',
+        rows: [
+          ['Claude Code', '.claude/agents/  (+ Explore, Plan, general-purpose)'],
+          ['Copilot',     '*.agent.md'],
+          ['Codex',       '.codex/agents/*.toml'],
+          ['Kiro',        '.kiro/agents/*.json'],
+        ],
+      },
+      {
+        num: '06',
+        name: 'Scope',
+        blurb: 'Jeder Baustein lebt an zwei Orten: im Projekt (committed, geteilt) oder im Home-Verzeichnis (persönlich). Dasselbe Muster in jedem Tool.',
+        why:   'Team-Standards committen. Persönliches lokal halten.',
+        rows: [
+          ['Projekt',     './.&lt;tool&gt;/  →  committed, vom Team geteilt'],
+          ['Benutzer',    '~/.&lt;tool&gt;/  →  lokal, persönlich'],
+          ['Enterprise',  '/etc/&lt;tool&gt;/  →  IT-Policy, nicht überschreibbar'],
+        ],
+      },
     ],
   },
-  {
-    num: '06',
-    name: 'Scope',
-    blurb: 'Jeder Baustein lebt an zwei Orten: im Projekt (committed, geteilt) oder im Home-Verzeichnis (persönlich). Dasselbe Muster in jedem Tool.',
-    why:   'Team-Standards committen. Persönliches lokal halten.',
-    rows: [
-      ['Projekt',     './.&lt;tool&gt;/  →  committed, vom Team geteilt'],
-      ['Benutzer',    '~/.&lt;tool&gt;/  →  lokal, persönlich'],
-      ['Enterprise',  '/etc/&lt;tool&gt;/  →  IT-Policy, nicht überschreibbar'],
-    ],
-  },
-];
+};
 
 class Section07 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -184,14 +238,13 @@ class Section07 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Bausteine · Teil 2</span>
-        <h1>Hooks · Subagents · Scope</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Die letzten drei Bausteine — und das organisierende Prinzip dahinter:
-          alles existiert <b>im Projekt</b> oder <b>beim Benutzer</b>.
+          ${t.lede}
         </p>
         <div class="cards">
-          ${PRIMITIVES.map(p => `
+          ${t.primitives.map(p => `
             <div class="card">
               <div class="head">
                 <div class="num">${p.num}</div>

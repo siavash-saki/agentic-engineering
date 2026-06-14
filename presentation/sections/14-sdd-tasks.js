@@ -1,11 +1,50 @@
 /* Section 14 — SDD: Rate-Limiting · Tasks (3/3 of the triptych)
    Same template, last segment active. Closing punch lands the "three
    resolutions of the same feature" idea. */
+import { getLang } from '../core/i18n.js';
 
 const TAG = 's14-sdd-tasks';
 
+const CONTENT = {
+  en: {
+    eyebrow: 'Example · Rate-Limiting',
+    h1: 'Tasks — the <b>steps</b>',
+    segSpec: 'Spec',
+    segPlan: 'Plan',
+    segTasks: 'Tasks',
+    feat: '# Tasks: Rate-Limiting',
+    tasks: [
+      'Wire up the Redis connection in <code>config/redis.ts</code>',
+      'Implement the token-bucket middleware',
+      '429 response with a Retry-After header',
+      'Fail open on Redis timeout',
+      'Integration test: over limit → 429',
+      'Integration test: under limit → 200',
+    ],
+    punch: 'One feature, three resolutions — <b>the what</b>, <b>the how</b>, <b>the steps</b>.',
+  },
+  de: {
+    eyebrow: 'Beispiel · Rate-Limiting',
+    h1: 'Tasks — der <b>Schritt</b>',
+    segSpec: 'Spec',
+    segPlan: 'Plan',
+    segTasks: 'Tasks',
+    feat: '# Tasks: Rate-Limiting',
+    tasks: [
+      'Redis-Verbindung in <code>config/redis.ts</code> aufsetzen',
+      'Token-Bucket-Middleware implementieren',
+      '429-Antwort mit Retry-After-Header',
+      'Fail-open bei Redis-Timeout',
+      'Integrationstest: über Limit → 429',
+      'Integrationstest: unter Limit → 200',
+    ],
+    punch: 'Dieselbe Sache, drei Auflösungen — <b>das Was</b>, <b>das Wie</b>, <b>der Schritt</b>.',
+  },
+};
+
 class Section14SDD extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -144,31 +183,31 @@ class Section14SDD extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Beispiel · Rate-Limiting</span>
-        <h1>Tasks — der <b>Schritt</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
 
         <div class="crumb">
-          <span class="seg done">Spec</span>
+          <span class="seg done">${t.segSpec}</span>
           <span class="arrow">→</span>
-          <span class="seg done">Plan</span>
+          <span class="seg done">${t.segPlan}</span>
           <span class="arrow">→</span>
-          <span class="seg active">Tasks</span>
+          <span class="seg active">${t.segTasks}</span>
         </div>
 
         <div class="doc">
-          <p class="feat"># Tasks: Rate-Limiting</p>
+          <p class="feat">${t.feat}</p>
           <ul>
-            <li>Redis-Verbindung in <code>config/redis.ts</code> aufsetzen</li>
-            <li>Token-Bucket-Middleware implementieren</li>
-            <li>429-Antwort mit Retry-After-Header</li>
-            <li>Fail-open bei Redis-Timeout</li>
-            <li>Integrationstest: über Limit → 429</li>
-            <li>Integrationstest: unter Limit → 200</li>
+            <li>${t.tasks[0]}</li>
+            <li>${t.tasks[1]}</li>
+            <li>${t.tasks[2]}</li>
+            <li>${t.tasks[3]}</li>
+            <li>${t.tasks[4]}</li>
+            <li>${t.tasks[5]}</li>
           </ul>
         </div>
 
         <p class="punch">
-          Dieselbe Sache, drei Auflösungen — <b>das Was</b>, <b>das Wie</b>, <b>der Schritt</b>.
+          ${t.punch}
         </p>
       </div>
     `;

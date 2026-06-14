@@ -1,21 +1,68 @@
 /* Section 8 — Wann lädt was in den Kontext?
    Framework-agnostic version: AGENTS.md statt CLAUDE.md.
-   Inspired by "When features load into context" — Anthropic. */
+   Inspired by "When features load into context" — Anthropic.
+   Content lives in a { en, de } map, selected at render time via getLang(). */
+
+import { getLang } from '../core/i18n.js';
 
 const TAG = 's08-context-loading';
 
-const SESSION_START = [
-  { title: 'AGENTS.md',  sub: 'Voller Inhalt, jede Anfrage' },
-  { title: 'MCP-Server', sub: 'Tool-Definitionen, jede Anfrage' },
-  { title: 'Skills <sup>*</sup>',     sub: 'Nur Beschreibungen (Standard)' },
-];
-
-const ON_USE = [
-  { title: 'Skills',     sub: 'Voller Inhalt bei Aufruf' },
-];
+const CONTENT = {
+  en: {
+    eyebrow: 'Context economy',
+    h1: 'What loads into <b>context</b> — and when?',
+    headSessionStart: 'Session start',
+    headOnUse: 'On use',
+    headIsolated: 'Isolated',
+    panelContextWindow: 'Context window',
+    panelSeparate: 'Separate context',
+    sessionStart: [
+      { title: 'AGENTS.md',  sub: 'Full content, every request' },
+      { title: 'MCP servers', sub: 'Tool definitions, every request' },
+      { title: 'Skills <sup>*</sup>',     sub: 'Descriptions only (default)' },
+    ],
+    onUse: [
+      { title: 'Skills',     sub: 'Full content when invoked' },
+    ],
+    subagentsTitle: 'Subagents',
+    subagentsSub: 'Fresh, own context',
+    hooksTitle: 'Hooks',
+    hooksSub: 'External, zero tokens',
+    legendAlways: 'Always in context',
+    legendOnUse: 'Loads on use',
+    legendIsolated: 'Outside the main context',
+    footnote: '*Skills with <code>disableModelInvocation: true</code> load nothing until you call them explicitly.',
+  },
+  de: {
+    eyebrow: 'Kontext-Ökonomie',
+    h1: 'Wann lädt was in den <b>Kontext</b>?',
+    headSessionStart: 'Session-Start',
+    headOnUse: 'Bei Aufruf',
+    headIsolated: 'Isoliert',
+    panelContextWindow: 'Kontextfenster',
+    panelSeparate: 'Separater Kontext',
+    sessionStart: [
+      { title: 'AGENTS.md',  sub: 'Voller Inhalt, jede Anfrage' },
+      { title: 'MCP-Server', sub: 'Tool-Definitionen, jede Anfrage' },
+      { title: 'Skills <sup>*</sup>',     sub: 'Nur Beschreibungen (Standard)' },
+    ],
+    onUse: [
+      { title: 'Skills',     sub: 'Voller Inhalt bei Aufruf' },
+    ],
+    subagentsTitle: 'Subagents',
+    subagentsSub: 'Frisch, eigener Kontext',
+    hooksTitle: 'Hooks',
+    hooksSub: 'Extern, kein Token-Verbrauch',
+    legendAlways: 'Immer im Kontext',
+    legendOnUse: 'Lädt bei Aufruf',
+    legendIsolated: 'Außerhalb Hauptkontext',
+    footnote: '*Skills mit <code>disableModelInvocation: true</code> laden nichts, bis du sie explizit aufrufst.',
+  },
+};
 
 class Section08Context extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -270,23 +317,23 @@ class Section08Context extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Kontext-Ökonomie</span>
-        <h1>Wann lädt was in den <b>Kontext</b>?</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
 
         <div class="headers">
           <div class="left-heads">
-            <div class="h">Session-Start</div>
-            <div class="h">Bei Aufruf</div>
+            <div class="h">${t.headSessionStart}</div>
+            <div class="h">${t.headOnUse}</div>
           </div>
-          <div class="h">Isoliert</div>
+          <div class="h">${t.headIsolated}</div>
         </div>
 
         <div class="stage">
           <div class="panel">
-            <span class="panel-label">Kontextfenster</span>
+            <span class="panel-label">${t.panelContextWindow}</span>
             <div class="ctx-cols">
               <div class="col">
-                ${SESSION_START.map(it => `
+                ${t.sessionStart.map(it => `
                   <div class="box always">
                     <div class="t">${it.title}</div>
                     <div class="s">${it.sub}</div>
@@ -294,7 +341,7 @@ class Section08Context extends HTMLElement {
                 `).join('')}
               </div>
               <div class="col">
-                ${ON_USE.map(it => `
+                ${t.onUse.map(it => `
                   <div class="box on-use">
                     <div class="t">${it.title}</div>
                     <div class="s">${it.sub}</div>
@@ -306,29 +353,29 @@ class Section08Context extends HTMLElement {
 
           <div class="right-stack">
             <div class="panel">
-              <span class="panel-label">Separater Kontext</span>
+              <span class="panel-label">${t.panelSeparate}</span>
               <div class="box separate">
-                <div class="t">Subagents</div>
-                <div class="s">Frisch, eigener Kontext</div>
+                <div class="t">${t.subagentsTitle}</div>
+                <div class="s">${t.subagentsSub}</div>
               </div>
             </div>
             <div class="panel">
               <div class="box external">
-                <div class="t">Hooks</div>
-                <div class="s">Extern, kein Token-Verbrauch</div>
+                <div class="t">${t.hooksTitle}</div>
+                <div class="s">${t.hooksSub}</div>
               </div>
             </div>
           </div>
         </div>
 
         <div class="legend">
-          <span class="item"><span class="swatch"></span> Immer im Kontext</span>
-          <span class="item"><span class="swatch on-use"></span> Lädt bei Aufruf</span>
-          <span class="item"><span class="swatch isolated"></span> Außerhalb Hauptkontext</span>
+          <span class="item"><span class="swatch"></span> ${t.legendAlways}</span>
+          <span class="item"><span class="swatch on-use"></span> ${t.legendOnUse}</span>
+          <span class="item"><span class="swatch isolated"></span> ${t.legendIsolated}</span>
         </div>
 
         <p class="footnote">
-          *Skills mit <code>disableModelInvocation: true</code> laden nichts, bis du sie explizit aufrufst.
+          ${t.footnote}
         </p>
       </div>
     `;

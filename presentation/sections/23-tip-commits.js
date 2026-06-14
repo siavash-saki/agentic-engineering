@@ -2,20 +2,60 @@
    Visualization: two git timelines stacked. Top = one huge commit;
    bottom = many small commits with a rollback arrow pointing to one. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's23-tip-commits';
 
-const SMALL = [
-  'login validation',
-  'session token TTL',
-  'CSRF middleware',
-  'rate-limit auth',
-  'audit log entry',
-  'refactor guards',
-  'unit-test auth',
-];
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 6',
+    h1: 'Commit small — <b>early and often</b>',
+    lede: `
+      Every commit is a checkpoint. Skip them and you burn hours
+      the moment the agent takes a wrong turn.`,
+    badLabel: 'Anti-Pattern',
+    badSub: '"Big Bang" commit',
+    goodLabel: 'Do this instead',
+    goodSub: 'Small, semantic commits',
+    rollback: 'roll back here',
+    punch: `When something breaks: <b>one commit back</b> — not a whole day.`,
+    small: [
+      'login validation',
+      'session token TTL',
+      'CSRF middleware',
+      'rate-limit auth',
+      'audit log entry',
+      'refactor guards',
+      'unit-test auth',
+    ],
+  },
+  de: {
+    eyebrow: 'Tip 6',
+    h1: 'Klein committen — <b>früh und oft</b>',
+    lede: `
+      Jeder Commit ist ein Reset-Punkt. Ohne sie verliert man Stunden,
+      wenn der Agent eine falsche Abzweigung nimmt.`,
+    badLabel: 'Anti-Pattern',
+    badSub: '„Big Bang"-Commit',
+    goodLabel: 'So besser',
+    goodSub: 'Kleine, semantische Commits',
+    rollback: 'hier zurück',
+    punch: `Wenn etwas bricht: <b>ein Commit zurück</b> — nicht ein Tag.`,
+    small: [
+      'login validation',
+      'session token TTL',
+      'CSRF middleware',
+      'rate-limit auth',
+      'audit log entry',
+      'refactor guards',
+      'unit-test auth',
+    ],
+  },
+};
 
 class SectionTip06 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -131,7 +171,7 @@ class SectionTip06 extends HTMLElement {
         }
         ${TAG} .row.good .timeline {
           display: grid;
-          grid-template-columns: repeat(${SMALL.length}, 1fr);
+          grid-template-columns: repeat(${t.small.length}, 1fr);
           align-items: center;
         }
         ${TAG} .row.good .commit {
@@ -143,7 +183,7 @@ class SectionTip06 extends HTMLElement {
           animation: tip06-pulse 1800ms ease-in-out 1600ms infinite;
         }
         ${TAG} .row.good .commit.focus::after {
-          content: "hier zurück";
+          content: "${t.rollback}";
           position: absolute;
           left: 50%;
           bottom: calc(100% + 10px);
@@ -210,15 +250,12 @@ class SectionTip06 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 6</span>
-        <h1>Klein committen — <b>früh und oft</b></h1>
-        <p class="lede">
-          Jeder Commit ist ein Reset-Punkt. Ohne sie verliert man Stunden,
-          wenn der Agent eine falsche Abzweigung nimmt.
-        </p>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
+        <p class="lede">${t.lede}</p>
 
         <div class="row bad">
-          <div class="side-label">Anti-Pattern<span>„Big Bang"-Commit</span></div>
+          <div class="side-label">${t.badLabel}<span>${t.badSub}</span></div>
           <div class="timeline">
             <div class="axis"></div>
             <div class="commit huge"><span class="x">!</span></div>
@@ -226,18 +263,16 @@ class SectionTip06 extends HTMLElement {
         </div>
 
         <div class="row good">
-          <div class="side-label">So besser<span>Kleine, semantische Commits</span></div>
+          <div class="side-label">${t.goodLabel}<span>${t.goodSub}</span></div>
           <div class="timeline">
             <div class="axis"></div>
-            ${SMALL.map((m, i) => `
+            ${t.small.map((m, i) => `
               <div class="commit ${i === 3 ? 'focus' : ''}"><span class="lbl">${m}</span></div>
             `).join('')}
           </div>
         </div>
 
-        <p class="punch">
-          Wenn etwas bricht: <b>ein Commit zurück</b> — nicht ein Tag.
-        </p>
+        <p class="punch">${t.punch}</p>
       </div>
     `;
   }

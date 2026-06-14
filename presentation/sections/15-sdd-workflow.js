@@ -3,18 +3,61 @@
    under Discuss/Plan and the two human gates between phases.
    Resolves the common misconception that Discuss and Plan are one step. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's15-sdd-workflow';
 
-const PHASES = [
-  { name: 'Explore',  body: 'Agent liest Code, Muster, Tests.', artifact: null },
-  { name: 'Discuss',  body: 'Offene Fragen klären.',             artifact: { file: 'specs/&lt;feature&gt;.md', kind: 'Spec' } },
-  { name: 'Plan',     body: 'Plan-Mode liest die Spec.',          artifact: { file: 'plan.md',                  kind: 'Plan' } },
-  { name: 'Code',     body: 'Tasks abarbeiten. Spec im Prompt.',  artifact: null },
-  { name: 'Review',   body: 'Jeden Diff gegen die Spec.',         artifact: null },
-];
+const CONTENT = {
+  en: {
+    eyebrow: 'Where SDD lives in your workflow',
+    h1: 'Discuss writes the <b>Spec</b>. Plan writes the <b>Plan</b>.',
+    lede: `Two steps, two artifacts — not one artifact straddling both.
+          A human gate sits between the phases.`,
+    phases: [
+      { name: 'Explore',  body: 'Agent reads the code, the patterns, the tests.', artifact: null },
+      { name: 'Discuss',  body: 'Nail down the open questions.',                  artifact: { file: 'specs/&lt;feature&gt;.md', kind: 'Spec' } },
+      { name: 'Plan',     body: 'Plan-Mode reads the spec.',                      artifact: { file: 'plan.md',                  kind: 'Plan' } },
+      { name: 'Code',     body: 'Work the tasks. Spec stays in the prompt.',      artifact: null },
+      { name: 'Review',   body: 'Every diff, checked against the spec.',          artifact: null },
+    ],
+    writesPrefix: 'writes · ',
+    gate1Label: 'Gate',
+    gate1Desc: 'Approve the spec',
+    gate2Label: 'Gate',
+    gate2Desc: 'Approve the plan',
+    loopArrow: 'Code &nbsp;↺&nbsp; Discuss',
+    loopText: '<b>When reality drifts</b>, loop back to the discussion — the spec gets updated, not ignored.',
+    punch: `Discuss settles the open questions. Plan reads the spec. Code references it.
+          Review checks <b>against</b> it.`,
+  },
+  de: {
+    eyebrow: 'Wo SDD im Workflow sitzt',
+    h1: 'Discuss schreibt die <b>Spec</b>. Plan schreibt den <b>Plan</b>.',
+    lede: `Zwei Schritte, zwei Artefakte — nicht ein Artefakt, das beide überspannt.
+          Zwischen den Phasen sitzen menschliche Freigaben.`,
+    phases: [
+      { name: 'Explore',  body: 'Agent liest Code, Muster, Tests.', artifact: null },
+      { name: 'Discuss',  body: 'Offene Fragen klären.',             artifact: { file: 'specs/&lt;feature&gt;.md', kind: 'Spec' } },
+      { name: 'Plan',     body: 'Plan-Mode liest die Spec.',          artifact: { file: 'plan.md',                  kind: 'Plan' } },
+      { name: 'Code',     body: 'Tasks abarbeiten. Spec im Prompt.',  artifact: null },
+      { name: 'Review',   body: 'Jeden Diff gegen die Spec.',         artifact: null },
+    ],
+    writesPrefix: 'schreibt · ',
+    gate1Label: 'Gate',
+    gate1Desc: 'Spec freigeben',
+    gate2Label: 'Gate',
+    gate2Desc: 'Plan freigeben',
+    loopArrow: 'Code &nbsp;↺&nbsp; Discuss',
+    loopText: '<b>Bei Abweichung</b> zurück zur Diskussion — die Spec wird angepasst, nicht ignoriert.',
+    punch: `Discuss klärt offene Fragen. Plan liest die Spec. Code referenziert sie.
+          Review prüft <b>gegen</b> sie.`,
+  },
+};
 
 class Section15SDD extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
+    const PHASES = t.phases;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -205,11 +248,10 @@ class Section15SDD extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Wo SDD im Workflow sitzt</span>
-        <h1>Discuss schreibt die <b>Spec</b>. Plan schreibt den <b>Plan</b>.</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Zwei Schritte, zwei Artefakte — nicht ein Artefakt, das beide überspannt.
-          Zwischen den Phasen sitzen menschliche Freigaben.
+          ${t.lede}
         </p>
 
         <div class="flow">
@@ -221,7 +263,7 @@ class Section15SDD extends HTMLElement {
                 <p>${p.body}</p>
                 ${p.artifact ? `
                   <div class="artifact">
-                    <span class="kind">schreibt · ${p.artifact.kind}</span>
+                    <span class="kind">${t.writesPrefix}${p.artifact.kind}</span>
                     <span class="file">${p.artifact.file}</span>
                   </div>
                 ` : ''}
@@ -232,16 +274,16 @@ class Section15SDD extends HTMLElement {
               gate = `
                 <div class="gate g1">
                   <div class="icon">1</div>
-                  <div class="label">Gate</div>
-                  <div class="desc">Spec freigeben</div>
+                  <div class="label">${t.gate1Label}</div>
+                  <div class="desc">${t.gate1Desc}</div>
                 </div>
               `;
             } else if (i === 2) {
               gate = `
                 <div class="gate g2">
                   <div class="icon">2</div>
-                  <div class="label">Gate</div>
-                  <div class="desc">Plan freigeben</div>
+                  <div class="label">${t.gate2Label}</div>
+                  <div class="desc">${t.gate2Desc}</div>
                 </div>
               `;
             } else if (i < PHASES.length - 1) {
@@ -252,13 +294,12 @@ class Section15SDD extends HTMLElement {
         </div>
 
         <div class="loop">
-          <span class="arrow">Code &nbsp;↺&nbsp; Discuss</span>
-          <span><b>Bei Abweichung</b> zurück zur Diskussion — die Spec wird angepasst, nicht ignoriert.</span>
+          <span class="arrow">${t.loopArrow}</span>
+          <span>${t.loopText}</span>
         </div>
 
         <p class="punch">
-          Discuss klärt offene Fragen. Plan liest die Spec. Code referenziert sie.
-          Review prüft <b>gegen</b> sie.
+          ${t.punch}
         </p>
       </div>
     `;

@@ -1,10 +1,83 @@
 /* Section 13 — SDD: Rate-Limiting · Plan (2/3 of the triptych)
-   Same template as slide 12 with the crumb's middle segment now active. */
+   Same template as slide 12 with the crumb's middle segment now active.
+   Content lives in a { en, de } map and is selected at render time via getLang(). */
+
+import { getLang } from '../core/i18n.js';
 
 const TAG = 's13-sdd-plan';
 
+const CONTENT = {
+  en: {
+    eyebrow: 'Example · Rate-Limiting',
+    h1: 'Plan — the <b>How</b>',
+    crumbSpec: 'Spec',
+    crumbPlan: 'Plan',
+    crumbTasks: 'Tasks',
+    feat: '# Plan: Rate-Limiting',
+    approachTitle: '## Approach',
+    approach: `Token bucket per token, held in Redis. Runs as middleware in
+          front of the router.<br>
+          <span class="note">(Decided in Discuss: per token, sliding window.)</span>`,
+    orderTitle: '## Sequence',
+    order: [
+      'Redis connection + config.',
+      'Token-bucket middleware.',
+      '429 response with Retry-After.',
+      'Fail-open behavior on Redis timeout.',
+      'Integration tests.',
+    ],
+    risksTitle: '## Risks',
+    risks: [
+      `Redis is a single point of failure → fail open on timeout
+                (let traffic through rather than lock everyone out).`,
+    ],
+    filesTitle: '## Affected files',
+    files: [
+      'middleware/rateLimit.ts',
+      'config/redis.ts',
+      'tests/rateLimit.integration.test.ts',
+    ],
+    caption: `The open questions got settled in Discuss. This is where the
+          <b>technical decision</b> lives.`,
+  },
+  de: {
+    eyebrow: 'Beispiel · Rate-Limiting',
+    h1: 'Plan — das <b>Wie</b>',
+    crumbSpec: 'Spec',
+    crumbPlan: 'Plan',
+    crumbTasks: 'Tasks',
+    feat: '# Plan: Rate-Limiting',
+    approachTitle: '## Ansatz',
+    approach: `Token-Bucket pro Token, gehalten in Redis. Als Middleware vor dem
+          Router.<br>
+          <span class="note">(Entscheidung aus Discuss: pro Token, Sliding Window.)</span>`,
+    orderTitle: '## Reihenfolge',
+    order: [
+      'Redis-Verbindung + Config.',
+      'Token-Bucket-Middleware.',
+      '429-Antwort inkl. Retry-After.',
+      'Fail-open-Verhalten bei Redis-Timeout.',
+      'Integrationstests.',
+    ],
+    risksTitle: '## Risiken',
+    risks: [
+      `Redis als Single Point of Failure → bei Timeout fail-open
+                (lieber durchlassen als alle aussperren).`,
+    ],
+    filesTitle: '## Betroffene Dateien',
+    files: [
+      'middleware/rateLimit.ts',
+      'config/redis.ts',
+      'tests/rateLimit.integration.test.ts',
+    ],
+    caption: `Die offenen Fragen sind in Discuss geklärt. Hier ist der Ort für die
+          <b>technische Entscheidung</b>.`,
+  },
+};
+
 class Section13SDD extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -158,51 +231,41 @@ class Section13SDD extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Beispiel · Rate-Limiting</span>
-        <h1>Plan — das <b>Wie</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
 
         <div class="crumb">
-          <span class="seg done">Spec</span>
+          <span class="seg done">${t.crumbSpec}</span>
           <span class="arrow">→</span>
-          <span class="seg active">Plan</span>
+          <span class="seg active">${t.crumbPlan}</span>
           <span class="arrow">→</span>
-          <span class="seg">Tasks</span>
+          <span class="seg">${t.crumbTasks}</span>
         </div>
 
         <div class="doc">
-          <p class="feat"># Plan: Rate-Limiting</p>
+          <p class="feat">${t.feat}</p>
 
-          <h2>## Ansatz</h2>
-          <p>Token-Bucket pro Token, gehalten in Redis. Als Middleware vor dem
-          Router.<br>
-          <span class="note">(Entscheidung aus Discuss: pro Token, Sliding Window.)</span></p>
+          <h2>${t.approachTitle}</h2>
+          <p>${t.approach}</p>
 
-          <h2>## Reihenfolge</h2>
+          <h2>${t.orderTitle}</h2>
           <ol>
-            <li>Redis-Verbindung + Config.</li>
-            <li>Token-Bucket-Middleware.</li>
-            <li>429-Antwort inkl. Retry-After.</li>
-            <li>Fail-open-Verhalten bei Redis-Timeout.</li>
-            <li>Integrationstests.</li>
+            ${t.order.map(o => `<li>${o}</li>`).join('')}
           </ol>
 
-          <h2>## Risiken</h2>
+          <h2>${t.risksTitle}</h2>
           <ul>
-            <li>Redis als Single Point of Failure → bei Timeout fail-open
-                (lieber durchlassen als alle aussperren).</li>
+            ${t.risks.map(r => `<li>${r}</li>`).join('')}
           </ul>
 
-          <h2>## Betroffene Dateien</h2>
+          <h2>${t.filesTitle}</h2>
           <ul>
-            <li>middleware/rateLimit.ts</li>
-            <li>config/redis.ts</li>
-            <li>tests/rateLimit.integration.test.ts</li>
+            ${t.files.map(f => `<li>${f}</li>`).join('')}
           </ul>
         </div>
 
         <p class="caption">
-          Die offenen Fragen sind in Discuss geklärt. Hier ist der Ort für die
-          <b>technische Entscheidung</b>.
+          ${t.caption}
         </p>
       </div>
     `;

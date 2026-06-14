@@ -2,31 +2,84 @@
    The formal version of slide 10's metaphor. Same content the docs use
    under "Drei Artefakte: Spec, Plan, Tasks". */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's11-sdd-artifacts';
 
-const ROWS = [
-  {
-    file:    'specs/&lt;feature&gt;.md',
-    level:   'Was / Warum',
-    answers: 'Was soll das System tun?',
-    content: 'Kontext, Akzeptanzkriterien, Erfolgskriterien, Out of Scope. <b>Keine Implementierung.</b>',
+const CONTENT = {
+  en: {
+    eyebrow: 'Three artifacts',
+    h1: 'What lives <b>where</b>?',
+    lede: `
+      Spec ≠ Plan. The mature SDD toolchains (GitHub Spec Kit, Claude Code,
+      Amazon Kiro) all converged on the same split into three levels
+      — What, How, Step.
+    `,
+    thFile: 'File',
+    thLevel: 'Level',
+    thAnswers: 'Answers',
+    thContent: 'Holds',
+    rows: [
+      {
+        file:    'specs/&lt;feature&gt;.md',
+        level:   'What / Why',
+        answers: 'What should the system do?',
+        content: 'Context, acceptance criteria, success criteria, out of scope. <b>No implementation.</b>',
+      },
+      {
+        file:    'plan.md',
+        level:   'How',
+        answers: 'How do we build it?',
+        content: 'Approach, architecture, sequence, risks, files touched.',
+      },
+      {
+        file:    'tasks.md',
+        level:   'Steps',
+        answers: 'In what order, concretely?',
+        content: 'A flat, individually checkable to-do list.',
+      },
+    ],
+    punch: 'Keep the spec implementation-free — <b>so</b> the plan owns the "How".',
   },
-  {
-    file:    'plan.md',
-    level:   'Wie',
-    answers: 'Wie bauen wir das?',
-    content: 'Ansatz, Architektur, Reihenfolge, Risiken, betroffene Dateien.',
+  de: {
+    eyebrow: 'Drei Artefakte',
+    h1: 'Was steht <b>wo</b> drin?',
+    lede: `
+      Spec ≠ Plan. Die reifen SDD-Toolchains (GitHub Spec Kit, Claude Code,
+      Amazon Kiro) sind alle auf dieselbe Trennung in drei Ebenen zugelaufen
+      — Was, Wie, Schritt.
+    `,
+    thFile: 'Datei',
+    thLevel: 'Ebene',
+    thAnswers: 'Beantwortet',
+    thContent: 'Inhalt',
+    rows: [
+      {
+        file:    'specs/&lt;feature&gt;.md',
+        level:   'Was / Warum',
+        answers: 'Was soll das System tun?',
+        content: 'Kontext, Akzeptanzkriterien, Erfolgskriterien, Out of Scope. <b>Keine Implementierung.</b>',
+      },
+      {
+        file:    'plan.md',
+        level:   'Wie',
+        answers: 'Wie bauen wir das?',
+        content: 'Ansatz, Architektur, Reihenfolge, Risiken, betroffene Dateien.',
+      },
+      {
+        file:    'tasks.md',
+        level:   'Schritte',
+        answers: 'In welcher Reihenfolge, konkret?',
+        content: 'Flache, einzeln abhakbare Aufgabenliste.',
+      },
+    ],
+    punch: 'Spec bleibt implementierungsfrei — <b>damit</b> der Plan Raum für das „Wie" hat.',
   },
-  {
-    file:    'tasks.md',
-    level:   'Schritte',
-    answers: 'In welcher Reihenfolge, konkret?',
-    content: 'Flache, einzeln abhakbare Aufgabenliste.',
-  },
-];
+};
 
 class Section11SDD extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -151,25 +204,21 @@ class Section11SDD extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Drei Artefakte</span>
-        <h1>Was steht <b>wo</b> drin?</h1>
-        <p class="lede">
-          Spec ≠ Plan. Die reifen SDD-Toolchains (GitHub Spec Kit, Claude Code,
-          Amazon Kiro) sind alle auf dieselbe Trennung in drei Ebenen zugelaufen
-          — Was, Wie, Schritt.
-        </p>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
+        <p class="lede">${t.lede}</p>
 
         <table>
           <thead>
             <tr>
-              <th>Datei</th>
-              <th>Ebene</th>
-              <th>Beantwortet</th>
-              <th>Inhalt</th>
+              <th>${t.thFile}</th>
+              <th>${t.thLevel}</th>
+              <th>${t.thAnswers}</th>
+              <th>${t.thContent}</th>
             </tr>
           </thead>
           <tbody>
-            ${ROWS.map(r => `
+            ${t.rows.map(r => `
               <tr>
                 <td class="file">${r.file}</td>
                 <td class="level">${r.level}</td>
@@ -180,9 +229,7 @@ class Section11SDD extends HTMLElement {
           </tbody>
         </table>
 
-        <p class="punch">
-          Spec bleibt implementierungsfrei — <b>damit</b> der Plan Raum für das „Wie" hat.
-        </p>
+        <p class="punch">${t.punch}</p>
       </div>
     `;
   }

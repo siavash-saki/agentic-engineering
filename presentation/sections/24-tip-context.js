@@ -3,18 +3,58 @@
    it becomes muddied with confusion markers. A "Neue Session" reset
    reveals a clean empty bar below. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's24-tip-context';
 
-const CHUNKS = [
-  { l: 26, c: '#2563eb', t: 'Auth-Bug' },
-  { l: 14, c: '#7c3aed', t: 'Search' },
-  { l: 18, c: '#0891b2', t: 'CSS' },
-  { l: 10, c: '#16a34a', t: 'Tests' },
-  { l: 22, c: '#ca8a04', t: 'Refactor' },
-];
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 7',
+    h1: 'Confused agent? <b>New session</b>',
+    lede: `A confused agent stays confused. Once the context is poisoned,
+          every new prompt makes it worse — not better.`,
+    chunks: [
+      { l: 26, c: '#2563eb', t: 'Auth-Bug' },
+      { l: 14, c: '#7c3aed', t: 'Search' },
+      { l: 18, c: '#0891b2', t: 'CSS' },
+      { l: 10, c: '#16a34a', t: 'Tests' },
+      { l: 22, c: '#ca8a04', t: 'Refactor' },
+    ],
+    oldLabel: 'Session — 90 min old',
+    oldMeta: '5 topics, a pile of corrections, hallucinations',
+    warn: 'tangled',
+    reset: '/clear · New session',
+    freshLabel: 'Session — fresh',
+    freshMeta: 'one task, a clean start',
+    freshBar: 'empty · clear heads',
+    punch: '<b>Starting over</b> beats <b>untangling</b>.',
+  },
+  de: {
+    eyebrow: 'Tip 7',
+    h1: 'Verwirrt? <b>Neue Session</b>',
+    lede: `Ein verwirrter Agent bleibt verwirrt. Kontext, der einmal vergiftet ist,
+          wird mit jedem Prompt schlimmer — nicht besser.`,
+    chunks: [
+      { l: 26, c: '#2563eb', t: 'Auth-Bug' },
+      { l: 14, c: '#7c3aed', t: 'Search' },
+      { l: 18, c: '#0891b2', t: 'CSS' },
+      { l: 10, c: '#16a34a', t: 'Tests' },
+      { l: 22, c: '#ca8a04', t: 'Refactor' },
+    ],
+    oldLabel: 'Session — 90 min alt',
+    oldMeta: '5 Themen, mehrere Korrekturen, Halluzinationen',
+    warn: 'vermischt',
+    reset: '/clear · Neue Session',
+    freshLabel: 'Session — frisch',
+    freshMeta: 'eine Aufgabe, klarer Anfang',
+    freshBar: 'leer · klare Köpfe',
+    punch: '<b>Neustarten</b> ist schneller als <b>geradebiegen</b>.',
+  },
+};
 
 class SectionTip07 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -171,7 +211,7 @@ class SectionTip07 extends HTMLElement {
           background: #f0fdf4;
         }
         ${TAG} .bar.fresh::after {
-          content: "leer · klare Köpfe";
+          content: "${t.freshBar}";
           position: absolute;
           inset: 0;
           display: flex;
@@ -203,41 +243,40 @@ class SectionTip07 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 7</span>
-        <h1>Verwirrt? <b>Neue Session</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Ein verwirrter Agent bleibt verwirrt. Kontext, der einmal vergiftet ist,
-          wird mit jedem Prompt schlimmer — nicht besser.
+          ${t.lede}
         </p>
 
         <div class="bar-row old">
           <div class="bar-label">
-            <span>Session — 90 min alt</span>
-            <span class="meta">5 Themen, mehrere Korrekturen, Halluzinationen</span>
+            <span>${t.oldLabel}</span>
+            <span class="meta">${t.oldMeta}</span>
           </div>
           <div class="bar old">
-            ${CHUNKS.map(ch => `
+            ${t.chunks.map(ch => `
               <div class="chunk" data-t="${ch.t}" style="background: ${ch.c}; width: ${ch.l}%;"></div>
             `).join('')}
             <div class="noise"></div>
-            <div class="warn">vermischt</div>
+            <div class="warn">${t.warn}</div>
           </div>
         </div>
 
         <div class="reset-row">
-          <span class="reset">/clear · Neue Session</span>
+          <span class="reset">${t.reset}</span>
         </div>
 
         <div class="bar-row fresh">
           <div class="bar-label">
-            <span>Session — frisch</span>
-            <span class="meta">eine Aufgabe, klarer Anfang</span>
+            <span>${t.freshLabel}</span>
+            <span class="meta">${t.freshMeta}</span>
           </div>
           <div class="bar fresh"></div>
         </div>
 
         <p class="punch">
-          <b>Neustarten</b> ist schneller als <b>geradebiegen</b>.
+          ${t.punch}
         </p>
       </div>
     `;

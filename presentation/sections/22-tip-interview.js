@@ -2,17 +2,56 @@
    Visualization: the agent drives the conversation with questions on the
    left; on the right, a spec sheet fills in answer by answer. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's22-tip-interview';
 
-const QA = [
-  { q: 'Welches Problem löst die Funktion?',     a: 'CSV-Export für Reporting-Team' },
-  { q: 'Wer ruft sie auf — UI oder Job?',         a: 'Wöchentlicher Cron-Job' },
-  { q: 'Welche Felder, in welcher Reihenfolge?',  a: 'ID, Datum, Region, Auslastung' },
-  { q: 'Wie groß werden die Exporte?',            a: '~ 80 MB · streamen, nicht buffern' },
-];
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 5',
+    h1: 'Let the agent <b>interview you</b>',
+    lede: `You know what you want — but not everything that matters.
+          Flip the direction: the agent asks, you answer.`,
+    qa: [
+      { q: 'What problem does this function solve?',  a: 'CSV export for the reporting team' },
+      { q: 'Who calls it — UI or a job?',             a: 'Weekly cron job' },
+      { q: 'Which fields, in what order?',            a: 'ID, date, region, utilization' },
+      { q: 'How big do the exports get?',             a: '~ 80 MB · stream, do not buffer' },
+    ],
+    spec: [
+      'Purpose: <b>CSV export, reporting</b>',
+      'Trigger: <b>Cron, weekly</b>',
+      'Schema: <b>ID, date, region, utilization</b>',
+      'Performance: <b>Streamed, ~80 MB</b>',
+    ],
+    punch: `Four questions become a <b>spec</b> — the contract from the SDD chapter.
+          Guesswork becomes code.`,
+  },
+  de: {
+    eyebrow: 'Tip 5',
+    h1: 'Lass den Agenten <b>dich</b> interviewen',
+    lede: `Du weißt, was du willst — aber nicht alles, was relevant ist.
+          Dreh die Richtung um: der Agent fragt, du antwortest.`,
+    qa: [
+      { q: 'Welches Problem löst die Funktion?',     a: 'CSV-Export für Reporting-Team' },
+      { q: 'Wer ruft sie auf — UI oder Job?',         a: 'Wöchentlicher Cron-Job' },
+      { q: 'Welche Felder, in welcher Reihenfolge?',  a: 'ID, Datum, Region, Auslastung' },
+      { q: 'Wie groß werden die Exporte?',            a: '~ 80 MB · streamen, nicht buffern' },
+    ],
+    spec: [
+      'Zweck: <b>CSV-Export Reporting</b>',
+      'Trigger: <b>Cron, wöchentlich</b>',
+      'Schema: <b>ID, Datum, Region, Auslastung</b>',
+      'Performance: <b>Streamed, ~80 MB</b>',
+    ],
+    punch: `Aus vier Fragen entsteht eine <b>Spec</b> — der Vertrag aus dem SDD-Kapitel.
+          Aus Vermutungen entsteht Code.`,
+  },
+};
 
 class SectionTip05 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -176,16 +215,15 @@ class SectionTip05 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 5</span>
-        <h1>Lass den Agenten <b>dich</b> interviewen</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Du weißt, was du willst — aber nicht alles, was relevant ist.
-          Dreh die Richtung um: der Agent fragt, du antwortest.
+          ${t.lede}
         </p>
 
         <div class="stage">
           <div class="qa-stream">
-            ${QA.map(p => `
+            ${t.qa.map(p => `
               <div class="qa">
                 <div class="q">${p.q}</div>
                 <div class="sep">→</div>
@@ -196,17 +234,13 @@ class SectionTip05 extends HTMLElement {
 
           <div class="spec">
             <ul>
-              <li>Zweck: <b>CSV-Export Reporting</b></li>
-              <li>Trigger: <b>Cron, wöchentlich</b></li>
-              <li>Schema: <b>ID, Datum, Region, Auslastung</b></li>
-              <li>Performance: <b>Streamed, ~80 MB</b></li>
+              ${t.spec.map(s => `<li>${s}</li>`).join('')}
             </ul>
           </div>
         </div>
 
         <p class="punch">
-          Aus vier Fragen entsteht eine <b>Spec</b> — der Vertrag aus dem SDD-Kapitel.
-          Aus Vermutungen entsteht Code.
+          ${t.punch}
         </p>
       </div>
     `;

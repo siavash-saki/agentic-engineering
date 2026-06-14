@@ -1,36 +1,78 @@
 /* Section 10 — SDD Chapter opener
    Three metaphor cards anchor the Spec/Plan/Tasks trio before the formal
    table follows. Lead with the memorable image — the reader will quote
-   "Vertrag · Bauanleitung · Checkliste" long after the talk. */
+   "Contract · Build Plan · Checklist" long after the talk. */
+
+import { getLang } from '../core/i18n.js';
 
 const TAG = 's10-sdd-callout';
 
-const CARDS = [
-  {
-    artifact: 'Spec',
-    metaphor: 'Vertrag',
-    file:     'specs/&lt;feature&gt;.md',
-    answers:  'Was soll das System tun?',
-    body:     'Verhalten, Akzeptanzkriterien, Out of Scope. Keine Implementierung.',
+const CONTENT = {
+  en: {
+    eyebrow: 'Spec-Driven Development',
+    h1: 'Spec, Plan, Tasks — <b>three layers</b>',
+    lede: `When the agent builds the wrong thing, it's rarely the model's fault.
+          It's the briefing. SDD splits three layers we usually mash together.`,
+    cards: [
+      {
+        artifact: 'Spec',
+        metaphor: 'Contract',
+        file:     'specs/&lt;feature&gt;.md',
+        answers:  'What should the system do?',
+        body:     'Behavior, acceptance criteria, out of scope. No implementation.',
+      },
+      {
+        artifact: 'Plan',
+        metaphor: 'Build Plan',
+        file:     'plan.md',
+        answers:  'How do we build it?',
+        body:     'Approach, architecture, sequencing, risks, files touched.',
+      },
+      {
+        artifact: 'Tasks',
+        metaphor: 'Checklist',
+        file:     'tasks.md',
+        answers:  'In what order, concretely?',
+        body:     'A flat, checkable list. One task, one commit.',
+      },
+    ],
+    punch: 'Spec = <b>Contract</b>. Plan = <b>Build Plan</b>. Tasks = <b>Checklist</b>.',
   },
-  {
-    artifact: 'Plan',
-    metaphor: 'Bauanleitung',
-    file:     'plan.md',
-    answers:  'Wie bauen wir das?',
-    body:     'Ansatz, Architektur, Reihenfolge, Risiken, betroffene Dateien.',
+  de: {
+    eyebrow: 'Spec-Driven Development',
+    h1: 'Spec, Plan, Tasks — <b>drei Ebenen</b>',
+    lede: `Wenn der Agent das Falsche baut, lag's selten am Modell. Es lag am
+          Briefing. SDD trennt drei Ebenen, die wir sonst durcheinanderwerfen.`,
+    cards: [
+      {
+        artifact: 'Spec',
+        metaphor: 'Vertrag',
+        file:     'specs/&lt;feature&gt;.md',
+        answers:  'Was soll das System tun?',
+        body:     'Verhalten, Akzeptanzkriterien, Out of Scope. Keine Implementierung.',
+      },
+      {
+        artifact: 'Plan',
+        metaphor: 'Bauanleitung',
+        file:     'plan.md',
+        answers:  'Wie bauen wir das?',
+        body:     'Ansatz, Architektur, Reihenfolge, Risiken, betroffene Dateien.',
+      },
+      {
+        artifact: 'Tasks',
+        metaphor: 'Checkliste',
+        file:     'tasks.md',
+        answers:  'In welcher Reihenfolge, konkret?',
+        body:     'Flache, abhakbare Liste. Eine Task, ein Commit.',
+      },
+    ],
+    punch: 'Spec = <b>Vertrag</b>. Plan = <b>Bauanleitung</b>. Tasks = <b>Checkliste</b>.',
   },
-  {
-    artifact: 'Tasks',
-    metaphor: 'Checkliste',
-    file:     'tasks.md',
-    answers:  'In welcher Reihenfolge, konkret?',
-    body:     'Flache, abhakbare Liste. Eine Task, ein Commit.',
-  },
-];
+};
 
 class Section10SDD extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -162,15 +204,14 @@ class Section10SDD extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Spec-Driven Development</span>
-        <h1>Spec, Plan, Tasks — <b>drei Ebenen</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Wenn der Agent das Falsche baut, lag's selten am Modell. Es lag am
-          Briefing. SDD trennt drei Ebenen, die wir sonst durcheinanderwerfen.
+          ${t.lede}
         </p>
 
         <div class="cards">
-          ${CARDS.map(c => `
+          ${t.cards.map(c => `
             <div class="card">
               <div class="artifact">${c.artifact}</div>
               <h2 class="metaphor">${c.metaphor}</h2>
@@ -182,7 +223,7 @@ class Section10SDD extends HTMLElement {
         </div>
 
         <p class="punch">
-          Spec = <b>Vertrag</b>. Plan = <b>Bauanleitung</b>. Tasks = <b>Checkliste</b>.
+          ${t.punch}
         </p>
       </div>
     `;

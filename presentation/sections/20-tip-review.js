@@ -3,10 +3,38 @@
    A line with a subtle bug glows red — the kind of thing that slips
    through if you just hit Accept. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's20-tip-review';
+
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 3',
+    h1: 'Auto-Accept is a <b>trap</b>',
+    lede: `Skip the diff and you ship code nobody understood — not even the
+          agent that wrote it.`,
+    toggleOff: 'Auto-Accept',
+    toggleOn: 'Review by hand',
+    bugLabel: 'subtle bug',
+    note: `<code>=</code> instead of <code>===</code> — assigns <code>true</code> and returns it. Everyone is an admin.`,
+    punch: `One diff, one minute. Saves you <b>one production incident</b>.`,
+  },
+  de: {
+    eyebrow: 'Tip 3',
+    h1: 'Auto-Accept ist die <b>Falle</b>',
+    lede: `Wer den Diff nicht liest, übernimmt Code, den niemand verstanden hat
+          — auch nicht der Agent, der ihn geschrieben hat.`,
+    toggleOff: 'Auto-Accept',
+    toggleOn: 'Manuell reviewen',
+    bugLabel: 'subtiler Bug',
+    note: `<code>=</code> statt <code>===</code> — weist <code>true</code> zu und gibt es zurück. Jeder ist Admin.`,
+    punch: `Ein Diff, eine Minute. Spart <b>einen Production-Incident</b>.`,
+  },
+};
 
 class SectionTip03 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -130,7 +158,7 @@ class SectionTip03 extends HTMLElement {
           animation: tip03-glow 1600ms ease-in-out 1500ms infinite;
         }
         ${TAG} .diff .bug::after {
-          content: "subtiler Bug";
+          content: "${t.bugLabel}";
           position: absolute;
           right: 14px;
           background: var(--db-red);
@@ -186,17 +214,16 @@ class SectionTip03 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 3</span>
-        <h1>Auto-Accept ist die <b>Falle</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Wer den Diff nicht liest, übernimmt Code, den niemand verstanden hat
-          — auch nicht der Agent, der ihn geschrieben hat.
+          ${t.lede}
         </p>
 
         <div class="toggle-row">
-          <span class="toggle off"><span class="dot"></span>Auto-Accept</span>
+          <span class="toggle off"><span class="dot"></span>${t.toggleOff}</span>
           <span class="arrow">→</span>
-          <span class="toggle on"><span class="dot"></span>Manuell reviewen</span>
+          <span class="toggle on"><span class="dot"></span>${t.toggleOn}</span>
         </div>
 
         <div class="diff">
@@ -208,11 +235,11 @@ class SectionTip03 extends HTMLElement {
         </div>
 
         <p class="note">
-          <code>=</code> statt <code>===</code> — weist <code>true</code> zu und gibt es zurück. Jeder ist Admin.
+          ${t.note}
         </p>
 
         <p class="punch">
-          Ein Diff, eine Minute. Spart <b>einen Production-Incident</b>.
+          ${t.punch}
         </p>
       </div>
     `;

@@ -1,6 +1,6 @@
 # Agentic Engineering
 
-A self-contained, dependency-free web slide deck about **agentic engineering** — using AI coding tools deliberately rather than ad hoc. Company- and tool-agnostic; the content is in German.
+A self-contained, dependency-free web slide deck about **agentic engineering** — using AI coding tools deliberately rather than ad hoc. Company- and tool-agnostic, and fully **bilingual (English / German)** — toggle `EN / DE` in the header.
 
 The deck lives in [`presentation/`](presentation/) and is plain HTML/CSS/JS — no build step, no `node_modules`.
 
@@ -31,6 +31,12 @@ Then open <http://localhost:8000> (adjust the port to match the server you used)
 - The footer also has clickable chapter chips and Prev/Next buttons
 - Deep-link to a slide with the URL hash, e.g. `…:8000/#5`
 
+## Languages
+
+The deck ships in **English (default)** and **German**. Switch with the `EN / DE` toggle in the header; the choice is remembered (`localStorage`) and reflected on `<html lang>`. You can also pin a language via the URL, e.g. `…:8000/?lang=de#5`.
+
+Content lives in a `{ en, de }` map inside each section component and in [`core/i18n.js`](presentation/core/i18n.js); switching language re-mounts the current slide. The pre-bilingual German-only version is preserved at the git tag `v1-de`.
+
 ## Structure
 
 ```
@@ -38,8 +44,9 @@ presentation/
   index.html            # shell: header, stage, footer
   core/
     presentation.js     # slide registry + navigation/keyboard logic
+    i18n.js             # language state, persistence, EN/DE switching
     styles.css          # presentation shell layout
-  sections/             # one self-registering web component per slide
+  sections/             # one self-registering web component per slide ({ en, de } content)
   assets/               # design tokens + images
 ```
 

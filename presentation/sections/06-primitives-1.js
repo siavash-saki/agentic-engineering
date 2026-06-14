@@ -1,49 +1,104 @@
 /* Section 6 — Primitives Part 1
-   Memory · Skills · MCP — drei framework-unabhängige Bausteine. */
+   Memory · Skills · MCP — three framework-agnostic building blocks. */
+
+import { getLang } from '../core/i18n.js';
 
 const TAG = 's06-primitives-1';
 
-const PRIMITIVES = [
-  {
-    num: '01',
-    name: 'Memory',
-    blurb: 'Markdown-Datei mit dauerhaften Anweisungen, die der Agent bei jedem Session-Start liest — Build-Befehle, Coding-Standards, Architekturentscheidungen.',
-    why:   'Einmal aufschreiben, jede Session dabei.',
-    rows: [
-      ['Claude Code', 'CLAUDE.md  +  @AGENTS.md'],
-      ['Copilot',     'AGENTS.md  +  .github/copilot-instructions.md'],
-      ['Codex',       'AGENTS.md'],
-      ['Kiro',        'AGENTS.md  +  .kiro/steering/'],
+const CONTENT = {
+  en: {
+    eyebrow: 'Building Blocks · Part 1',
+    h1: 'Memory · Skills · MCP',
+    lede: `Three framework-agnostic building blocks. The same concepts in every
+          tool — just under <b>different names</b>.`,
+    primitives: [
+      {
+        num: '01',
+        name: 'Memory',
+        blurb: 'A markdown file of standing instructions the agent reads at every session start — build commands, coding standards, architecture decisions.',
+        why:   'Write it once, carry it into every session.',
+        rows: [
+          ['Claude Code', 'CLAUDE.md  +  @AGENTS.md'],
+          ['Copilot',     'AGENTS.md  +  .github/copilot-instructions.md'],
+          ['Codex',       'AGENTS.md'],
+          ['Kiro',        'AGENTS.md  +  .kiro/steering/'],
+        ],
+      },
+      {
+        num: '02',
+        name: 'Skills',
+        blurb: 'Reusable, named procedures — a release playbook, a security-review checklist. Stored as markdown, loaded by the model on demand.',
+        why:   'Tribal knowledge becomes code — auditable, shareable.',
+        rows: [
+          ['Claude Code', 'Skills  (.claude/skills/*/SKILL.md)'],
+          ['Copilot',     'Agent Skills  (.github/skills/)'],
+          ['Codex',       '— (via Custom Agents)'],
+          ['Kiro',        'Prompts  (.kiro/prompts/)'],
+        ],
+      },
+      {
+        num: '03',
+        name: 'MCP',
+        blurb: 'Model Context Protocol — an open standard that lets agents talk to external systems: Jira, Postgres, GitHub, an internal knowledge hub.',
+        why:   'One server, every tool. The switch is reversible.',
+        rows: [
+          ['Claude Code', '.mcp.json  +  ~/.claude.json'],
+          ['Copilot',     '~/.copilot/mcp-config.json'],
+          ['Codex',       '.codex/config.toml'],
+          ['Kiro',        '.kiro/settings/mcp.json'],
+        ],
+      },
     ],
   },
-  {
-    num: '02',
-    name: 'Skills',
-    blurb: 'Wiederverwendbare, benannte Prozeduren — ein Release-Playbook, eine Security-Review-Checkliste. Als Markdown gespeichert, vom Modell auf Abruf geladen.',
-    why:   '„Tribal Knowledge" wird Code — auditierbar, teilbar.',
-    rows: [
-      ['Claude Code', 'Skills  (.claude/skills/*/SKILL.md)'],
-      ['Copilot',     'Agent Skills  (.github/skills/)'],
-      ['Codex',       '— (über Custom Agents)'],
-      ['Kiro',        'Prompts  (.kiro/prompts/)'],
+  de: {
+    eyebrow: 'Bausteine · Teil 1',
+    h1: 'Memory · Skills · MCP',
+    lede: `Drei framework-unabhängige Bausteine. Dieselben Konzepte in jedem Tool —
+          nur unter <b>anderen Namen</b>.`,
+    primitives: [
+      {
+        num: '01',
+        name: 'Memory',
+        blurb: 'Markdown-Datei mit dauerhaften Anweisungen, die der Agent bei jedem Session-Start liest — Build-Befehle, Coding-Standards, Architekturentscheidungen.',
+        why:   'Einmal aufschreiben, jede Session dabei.',
+        rows: [
+          ['Claude Code', 'CLAUDE.md  +  @AGENTS.md'],
+          ['Copilot',     'AGENTS.md  +  .github/copilot-instructions.md'],
+          ['Codex',       'AGENTS.md'],
+          ['Kiro',        'AGENTS.md  +  .kiro/steering/'],
+        ],
+      },
+      {
+        num: '02',
+        name: 'Skills',
+        blurb: 'Wiederverwendbare, benannte Prozeduren — ein Release-Playbook, eine Security-Review-Checkliste. Als Markdown gespeichert, vom Modell auf Abruf geladen.',
+        why:   '„Tribal Knowledge" wird Code — auditierbar, teilbar.',
+        rows: [
+          ['Claude Code', 'Skills  (.claude/skills/*/SKILL.md)'],
+          ['Copilot',     'Agent Skills  (.github/skills/)'],
+          ['Codex',       '— (über Custom Agents)'],
+          ['Kiro',        'Prompts  (.kiro/prompts/)'],
+        ],
+      },
+      {
+        num: '03',
+        name: 'MCP',
+        blurb: 'Model Context Protocol — offener Standard, damit Agenten mit externen Systemen reden: Jira, Postgres, GitHub, ein interner Wissens-Hub.',
+        why:   'Ein Server, jedes Tool. Wechsel ist reversibel.',
+        rows: [
+          ['Claude Code', '.mcp.json  +  ~/.claude.json'],
+          ['Copilot',     '~/.copilot/mcp-config.json'],
+          ['Codex',       '.codex/config.toml'],
+          ['Kiro',        '.kiro/settings/mcp.json'],
+        ],
+      },
     ],
   },
-  {
-    num: '03',
-    name: 'MCP',
-    blurb: 'Model Context Protocol — offener Standard, damit Agenten mit externen Systemen reden: Jira, Postgres, GitHub, ein interner Wissens-Hub.',
-    why:   'Ein Server, jedes Tool. Wechsel ist reversibel.',
-    rows: [
-      ['Claude Code', '.mcp.json  +  ~/.claude.json'],
-      ['Copilot',     '~/.copilot/mcp-config.json'],
-      ['Codex',       '.codex/config.toml'],
-      ['Kiro',        '.kiro/settings/mcp.json'],
-    ],
-  },
-];
+};
 
 class Section06 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -185,14 +240,13 @@ class Section06 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Bausteine · Teil 1</span>
-        <h1>Memory · Skills · MCP</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Drei framework-unabhängige Bausteine. Dieselben Konzepte in jedem Tool —
-          nur unter <b>anderen Namen</b>.
+          ${t.lede}
         </p>
         <div class="cards">
-          ${PRIMITIVES.map(p => `
+          ${t.primitives.map(p => `
             <div class="card">
               <div class="head">
                 <div class="num">${p.num}</div>

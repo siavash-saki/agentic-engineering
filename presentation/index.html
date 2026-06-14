@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -20,18 +20,23 @@
       <span class="brand-name">Agentic&nbsp;Engineering</span>
     </a>
     <span class="page-title">Agentic Engineering</span>
-    <span class="header-right"></span>
+    <span class="header-right">
+      <div class="lang-toggle" role="group" aria-label="Language / Sprache">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="de">DE</button>
+      </div>
+    </span>
   </div>
 </header>
 
 <main id="stage"></main>
 
 <footer id="nav">
-  <button class="db-btn db-btn--secondary db-btn--small" id="btn-prev">&larr; Zurück</button>
+  <button class="db-btn db-btn--secondary db-btn--small" id="btn-prev">&larr; Back</button>
   <div id="chapters"></div>
-  <span id="counter">1 / 20</span>
-  <button class="db-btn db-btn--small" id="btn-next">Weiter &rarr;</button>
-  <button class="db-btn db-btn--secondary db-btn--small" id="btn-fullscreen" type="button" title="Vollbild (F)" aria-label="Vollbild"></button>
+  <span id="counter">1 / 28</span>
+  <button class="db-btn db-btn--small" id="btn-next">Next &rarr;</button>
+  <button class="db-btn db-btn--secondary db-btn--small" id="btn-fullscreen" type="button" title="Fullscreen (F)" aria-label="Fullscreen"></button>
 </footer>
 
 <script type="module" src="core/presentation.js"></script>

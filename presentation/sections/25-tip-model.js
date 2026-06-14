@@ -1,37 +1,91 @@
 /* Tip 8 — Das richtige Modell-Tier wählen
    Visualization: three lanes (Reasoning · Standard · Schnell) with
    speed/cost bars and an example task per tier. Tier-based, not
-   version-named — modelnames change, the tiers stay. */
+   version-named — modelnames change, the tiers stay.
+   Content lives in a { en, de } map and is selected at render time. */
+
+import { getLang } from '../core/i18n.js';
 
 const TAG = 's25-tip-model';
 
-const MODELS = [
-  {
-    name: 'Reasoning-Modell',
-    role: 'Tiefe Probleme · Architektur',
-    speed: 35, cost: 95,
-    task: 'Migration eines 80k-LOC Monolithen in Module entwerfen',
-    delay: 600,
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 8',
+    h1: 'The right <b>tier</b> for the job',
+    lede: `One hammer for every nail is slow — and expensive. Pick the right
+          tier and you only pay for depth where it actually earns its keep.`,
+    meterSpeed: 'Speed',
+    meterCost: 'Cost',
+    taskTag: 'Typical job',
+    footer: `Model names change every few months. <b>Pick the tier, not the version</b> —
+          whatever's available right now lives in the tool.`,
+    punch: `Standard covers most of it. <b>Reasoning when it's hard. Fast when it's trivial.</b>`,
+    models: [
+      {
+        name: 'Reasoning',
+        role: 'Hard problems · Architecture',
+        speed: 35, cost: 95,
+        task: 'Plan the breakup of an 80k-LOC monolith into modules',
+        delay: 600,
+      },
+      {
+        name: 'Standard',
+        role: 'Features · Tests · Implementation',
+        speed: 70, cost: 50,
+        task: 'Build a feature, write the tests',
+        delay: 900,
+        primary: true,
+      },
+      {
+        name: 'Fast',
+        role: 'Edits · Renames · Small patches',
+        speed: 95, cost: 18,
+        task: 'Rename a variable, fix a typo',
+        delay: 1200,
+      },
+    ],
   },
-  {
-    name: 'Standard',
-    role: 'Features · Tests · Implementierung',
-    speed: 70, cost: 50,
-    task: 'Feature implementieren, Tests schreiben',
-    delay: 900,
-    primary: true,
+  de: {
+    eyebrow: 'Tip 8',
+    h1: 'Das passende <b>Tier</b> für die passende Aufgabe',
+    lede: `Ein Hammer für jeden Nagel ist teuer — und langsam. Wer das richtige
+          Tier wählt, bezahlt für Tiefe nur dort, wo sie nötig ist.`,
+    meterSpeed: 'Tempo',
+    meterCost: 'Kosten',
+    taskTag: 'Typische Aufgabe',
+    footer: `Modellnamen ändern sich regelmäßig. <b>Tier wählen, nicht Version</b> —
+          was aktuell verfügbar ist, steht im Tool.`,
+    punch: `Standard reicht meistens. <b>Reasoning, wenn's hart wird. Schnell, wenn's einfach ist.</b>`,
+    models: [
+      {
+        name: 'Reasoning-Modell',
+        role: 'Tiefe Probleme · Architektur',
+        speed: 35, cost: 95,
+        task: 'Migration eines 80k-LOC Monolithen in Module entwerfen',
+        delay: 600,
+      },
+      {
+        name: 'Standard',
+        role: 'Features · Tests · Implementierung',
+        speed: 70, cost: 50,
+        task: 'Feature implementieren, Tests schreiben',
+        delay: 900,
+        primary: true,
+      },
+      {
+        name: 'Schnell',
+        role: 'Edits · Renames · kleine Patches',
+        speed: 95, cost: 18,
+        task: 'Variable umbenennen, Typo fixen',
+        delay: 1200,
+      },
+    ],
   },
-  {
-    name: 'Schnell',
-    role: 'Edits · Renames · kleine Patches',
-    speed: 95, cost: 18,
-    task: 'Variable umbenennen, Typo fixen',
-    delay: 1200,
-  },
-];
+};
 
 class SectionTip08 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -194,29 +248,28 @@ class SectionTip08 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 8</span>
-        <h1>Das passende <b>Tier</b> für die passende Aufgabe</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Ein Hammer für jeden Nagel ist teuer — und langsam. Wer das richtige
-          Tier wählt, bezahlt für Tiefe nur dort, wo sie nötig ist.
+          ${t.lede}
         </p>
 
         <div class="lanes">
-          ${MODELS.map((m, i) => `
+          ${t.models.map((m, i) => `
             <div class="lane ${m.primary ? 'primary' : ''}"
                  style="animation: tip08-rise 500ms var(--db-ease) ${m.delay}ms forwards;">
               <div class="role">${m.role}</div>
               <h3 class="name">${m.name}</h3>
               <div class="meters">
                 <div class="meter">
-                  <span>Tempo</span>
+                  <span>${t.meterSpeed}</span>
                   <span class="track">
                     <span class="fill" style="--w: ${m.speed}%; animation: tip08-fill 700ms var(--db-ease) ${m.delay + 200}ms forwards;"></span>
                   </span>
                   <span class="val">${m.speed}</span>
                 </div>
                 <div class="meter">
-                  <span>Kosten</span>
+                  <span>${t.meterCost}</span>
                   <span class="track">
                     <span class="fill" style="--w: ${m.cost}%; animation: tip08-fill 700ms var(--db-ease) ${m.delay + 350}ms forwards;"></span>
                   </span>
@@ -224,7 +277,7 @@ class SectionTip08 extends HTMLElement {
                 </div>
               </div>
               <div class="task">
-                <span class="tag">Typische Aufgabe</span>
+                <span class="tag">${t.taskTag}</span>
                 ${m.task}
               </div>
             </div>
@@ -232,12 +285,11 @@ class SectionTip08 extends HTMLElement {
         </div>
 
         <p class="footer">
-          Modellnamen ändern sich regelmäßig. <b>Tier wählen, nicht Version</b> —
-          was aktuell verfügbar ist, steht im Tool.
+          ${t.footer}
         </p>
 
         <p class="punch">
-          Standard reicht meistens. <b>Reasoning, wenn's hart wird. Schnell, wenn's einfach ist.</b>
+          ${t.punch}
         </p>
       </div>
     `;

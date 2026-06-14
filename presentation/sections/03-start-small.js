@@ -1,10 +1,26 @@
 /* Section 3 — Klein anfangen
    AI startet überkomplex — gegen die Best Practice „start small". */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's03-start-small';
+
+const CONTENT = {
+  en: {
+    eyebrow: 'Start small',
+    h1: 'AI reaches for <b>overkill</b> — your job is to keep it small',
+    heroAlt: 'Waterfall · Agile · AI — build progressions compared',
+  },
+  de: {
+    eyebrow: 'Klein anfangen',
+    h1: 'KI startet <b>überkomplex</b> — du musst sie klein halten',
+    heroAlt: 'Waterfall · Agile · AI — Build-Progressionen im Vergleich',
+  },
+};
 
 class Section03Start extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -74,11 +90,11 @@ class Section03Start extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Klein anfangen</span>
-        <h1>KI startet <b>überkomplex</b> — du musst sie klein halten</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
 
         <div class="hero">
-          <img src="assets/start-small.png" alt="Waterfall · Agile · AI — Build-Progressionen im Vergleich">
+          <img src="assets/start-small.png" alt="${t.heroAlt}">
         </div>
       </div>
     `;

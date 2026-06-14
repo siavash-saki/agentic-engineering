@@ -3,10 +3,48 @@
    independent "thinking" pulse and a single distinct task. Below, the
    anti-pattern: one chaotic window with everything mixed. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's19-tip-parallel';
+
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 2',
+    h1: 'One session per <b>mental context</b>',
+    lede: `Independent tasks belong in separate sessions or Subagents.
+          Mix them and the conversations blur — and so do the answers.`,
+    sessions: [
+      { tag: 'Session A', title: 'Auth bug', ctx: 'JWT expires after 30 s' },
+      { tag: 'Session B', title: 'Search refactor', ctx: 'Elasticsearch → Meilisearch' },
+      { tag: 'Session C', title: 'CI pipeline', ctx: 'Builds take 18 min' },
+    ],
+    antiLabel: 'Anti-pattern',
+    antiStrike: 'One session for everything',
+    antiText: `— contexts bleed together and the agent answers
+            with the wrong code.`,
+    punch: 'Working in parallel means <b>thinking in parallel</b>.',
+  },
+  de: {
+    eyebrow: 'Tip 2',
+    h1: 'Eine Session pro <b>Mental-Kontext</b>',
+    lede: `Unabhängige Aufgaben gehören in separate Sessions oder Subagenten.
+          Sonst verschwimmen die Konversationen — und mit ihnen die Antworten.`,
+    sessions: [
+      { tag: 'Session A', title: 'Auth-Bug', ctx: 'JWT läuft nach 30 s ab' },
+      { tag: 'Session B', title: 'Search-Refactor', ctx: 'Elasticsearch → Meilisearch' },
+      { tag: 'Session C', title: 'CI-Pipeline', ctx: 'Builds dauern 18 min' },
+    ],
+    antiLabel: 'Anti-Pattern',
+    antiStrike: 'Eine Session für alles',
+    antiText: `— Kontexte vermischen sich, der Agent
+            beantwortet Fragen mit dem falschen Code.`,
+    punch: 'Parallel arbeiten heißt: <b>parallel denken</b>.',
+  },
+};
 
 class SectionTip02 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -164,44 +202,42 @@ class SectionTip02 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 2</span>
-        <h1>Eine Session pro <b>Mental-Kontext</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Unabhängige Aufgaben gehören in separate Sessions oder Subagenten.
-          Sonst verschwimmen die Konversationen — und mit ihnen die Antworten.
+          ${t.lede}
         </p>
 
         <div class="sessions">
           <div class="session">
-            <div class="tag">Session A</div>
-            <h3>Auth-Bug</h3>
-            <div class="ctx">JWT läuft nach 30 s ab</div>
+            <div class="tag">${t.sessions[0].tag}</div>
+            <h3>${t.sessions[0].title}</h3>
+            <div class="ctx">${t.sessions[0].ctx}</div>
             <div class="dots"><span></span><span></span><span></span></div>
           </div>
           <div class="session">
-            <div class="tag">Session B</div>
-            <h3>Search-Refactor</h3>
-            <div class="ctx">Elasticsearch → Meilisearch</div>
+            <div class="tag">${t.sessions[1].tag}</div>
+            <h3>${t.sessions[1].title}</h3>
+            <div class="ctx">${t.sessions[1].ctx}</div>
             <div class="dots"><span></span><span></span><span></span></div>
           </div>
           <div class="session">
-            <div class="tag">Session C</div>
-            <h3>CI-Pipeline</h3>
-            <div class="ctx">Builds dauern 18 min</div>
+            <div class="tag">${t.sessions[2].tag}</div>
+            <h3>${t.sessions[2].title}</h3>
+            <div class="ctx">${t.sessions[2].ctx}</div>
             <div class="dots"><span></span><span></span><span></span></div>
           </div>
         </div>
 
         <div class="anti">
-          <span class="label">Anti-Pattern</span>
+          <span class="label">${t.antiLabel}</span>
           <span class="mess">
-            <s>Eine Session für alles</s> — Kontexte vermischen sich, der Agent
-            beantwortet Fragen mit dem falschen Code.
+            <s>${t.antiStrike}</s> ${t.antiText}
           </span>
         </div>
 
         <p class="punch">
-          Parallel arbeiten heißt: <b>parallel denken</b>.
+          ${t.punch}
         </p>
       </div>
     `;

@@ -1,11 +1,47 @@
+import { getLang } from '../core/i18n.js';
+
 /* Section 2 — Vertrauen / Carwash
    Konkretes Beispiel: zwei AIs scheitern an derselben Frage.
    Take-away: jeden Output reviewen. */
 
 const TAG = 's02-trust';
 
+const CONTENT = {
+  en: {
+    eyebrow: 'Trust is good, control is everything',
+    h1: `Blindly trusting AI today simply <b>doesn't work</b>`,
+    question: `"I want to drive to a car wash to clean my car. It's only
+          <b>50 meters away</b>. Should I take the car or walk?"`,
+    labelChatgpt: 'ChatGPT',
+    labelClaude: 'Claude',
+    altChatgpt: 'ChatGPT recommends walking',
+    altClaude: 'Claude recommends walking',
+    punch: `Both tell you to <b>walk</b>. Both missed that a car wash washes
+          <b>cars</b> — leave the car at home and there's nothing to wash. Looks
+          plausible, sounds convincing, dead <b>wrong</b>.`,
+    takeaway: `Today we <b>can't trust AI blindly</b>. Tomorrow, who knows —
+          but today the rule is simple: <b>review every output</b>.`,
+  },
+  de: {
+    eyebrow: 'Vertrauen ist gut, Kontrolle ist alles',
+    h1: `AI heute blind vertrauen funktioniert <b>nicht</b>`,
+    question: `„Ich möchte zu einer Waschanlage, um mein Auto zu waschen. Sie ist nur
+          <b>50 Meter entfernt</b>. Soll ich mit dem Auto fahren oder zu Fuß gehen?"`,
+    labelChatgpt: 'ChatGPT',
+    labelClaude: 'Claude',
+    altChatgpt: 'ChatGPT empfiehlt zu Fuß zu gehen',
+    altClaude: 'Claude empfiehlt zu Fuß zu gehen',
+    punch: `Beide empfehlen, <b>zu Fuß</b> zu gehen. Beide haben übersehen, dass eine
+          Waschanlage <b>Autos</b> wäscht — wer den Wagen zu Hause lässt, hat am
+          Carwash nichts zu waschen. Sieht plausibel aus, klingt überzeugend, ist <b>falsch</b>.`,
+    takeaway: `Heute können wir KI <b>nicht blind vertrauen</b>. Was morgen ist, wissen wir nicht —
+          aber heute heißt es: <b>jeden Output reviewen</b>.`,
+  },
+};
+
 class Section02 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -121,34 +157,30 @@ class Section02 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Vertrauen ist gut, Kontrolle ist alles</span>
-        <h1>AI heute blind vertrauen funktioniert <b>nicht</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
 
         <p class="question">
-          „Ich möchte zu einer Waschanlage, um mein Auto zu waschen. Sie ist nur
-          <b>50 Meter entfernt</b>. Soll ich mit dem Auto fahren oder zu Fuß gehen?"
+          ${t.question}
         </p>
 
         <div class="shots">
           <div class="shot">
-            <div class="label">ChatGPT</div>
-            <img src="assets/carwash-chatgpt.png" alt="ChatGPT empfiehlt zu Fuß zu gehen">
+            <div class="label">${t.labelChatgpt}</div>
+            <img src="assets/carwash-chatgpt.png" alt="${t.altChatgpt}">
           </div>
           <div class="shot">
-            <div class="label">Claude</div>
-            <img src="assets/carwash-claude.png" alt="Claude empfiehlt zu Fuß zu gehen">
+            <div class="label">${t.labelClaude}</div>
+            <img src="assets/carwash-claude.png" alt="${t.altClaude}">
           </div>
         </div>
 
         <p class="punch">
-          Beide empfehlen, <b>zu Fuß</b> zu gehen. Beide haben übersehen, dass eine
-          Waschanlage <b>Autos</b> wäscht — wer den Wagen zu Hause lässt, hat am
-          Carwash nichts zu waschen. Sieht plausibel aus, klingt überzeugend, ist <b>falsch</b>.
+          ${t.punch}
         </p>
 
         <p class="takeaway">
-          Heute können wir KI <b>nicht blind vertrauen</b>. Was morgen ist, wissen wir nicht —
-          aber heute heißt es: <b>jeden Output reviewen</b>.
+          ${t.takeaway}
         </p>
       </div>
     `;

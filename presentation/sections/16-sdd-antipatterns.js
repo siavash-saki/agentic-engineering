@@ -3,38 +3,82 @@
    chapter with the "spectrum" sign-off — replacing the longer
    "Wie viel davon brauche ich" prose from the source. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's16-sdd-antipatterns';
 
-const PATTERNS = [
-  {
-    name:   'Spec-after',
-    body:   'Erst Code, dann Spec.',
-    why:    'Das ist Dokumentation. Der Agent hatte beim Codieren keine Leitplanken.',
+const CONTENT = {
+  en: {
+    eyebrow: 'Anti-Patterns',
+    h1: 'Where it <b>falls apart</b>',
+    lede: `Five patterns that look like SDD — and deliver none of it.`,
+    patterns: [
+      {
+        name: 'Spec-after',
+        body: 'Code first, spec later.',
+        why:  "That's documentation. The agent coded with no guardrails.",
+      },
+      {
+        name: 'Pseudo-code spec',
+        body: 'The spec dictates the <i>how</i>, not the <i>what</i>.',
+        why:  'You lock in decisions the model would make better.',
+      },
+      {
+        name: 'Spec with no acceptance criteria',
+        body: 'Prose that sounds complete — but tests nothing.',
+        why:  'Useless in review, useless for generating code.',
+      },
+      {
+        name: 'Spec = plan',
+        body: 'Behavior and implementation in one document.',
+        why:  'Review loses its yardstick.',
+      },
+      {
+        name: 'Orphaned spec',
+        body: 'Written once, then ignored while you code.',
+        why:  "Unanchored in the prompt, the code drifts off the spec.",
+      },
+    ],
+    punch: 'SDD is a spectrum. <b>The costlier the mistake, the more spec.</b>',
   },
-  {
-    name:   'Pseudo-Code-Spec',
-    body:   'Spec beschreibt das <i>Wie</i> statt das <i>Was</i>.',
-    why:    'Verriegelt Entscheidungen, die das Modell besser trifft.',
+  de: {
+    eyebrow: 'Anti-Patterns',
+    h1: 'Was <b>schiefgeht</b>',
+    lede: `Fünf Muster, die wie SDD aussehen — aber nichts davon liefern.`,
+    patterns: [
+      {
+        name: 'Spec-after',
+        body: 'Erst Code, dann Spec.',
+        why:  'Das ist Dokumentation. Der Agent hatte beim Codieren keine Leitplanken.',
+      },
+      {
+        name: 'Pseudo-Code-Spec',
+        body: 'Spec beschreibt das <i>Wie</i> statt das <i>Was</i>.',
+        why:  'Verriegelt Entscheidungen, die das Modell besser trifft.',
+      },
+      {
+        name: 'Spec ohne Akzeptanzkriterien',
+        body: 'Fließtext, der vollständig klingt — aber nichts testet.',
+        why:  'Hilft weder im Review noch beim Code-Generieren.',
+      },
+      {
+        name: 'Spec = Plan',
+        body: 'Verhalten und Implementierung im selben Dokument.',
+        why:  'Review verliert seinen Maßstab.',
+      },
+      {
+        name: 'Verwaiste Spec',
+        body: 'Einmal geschrieben, dann beim Coden ignoriert.',
+        why:  'Ohne Verankerung im Prompt driftet der Code von der Spec weg.',
+      },
+    ],
+    punch: 'SDD ist ein Spektrum. <b>Je teurer ein Fehler, desto mehr Spec.</b>',
   },
-  {
-    name:   'Spec ohne Akzeptanzkriterien',
-    body:   'Fließtext, der vollständig klingt — aber nichts testet.',
-    why:    'Hilft weder im Review noch beim Code-Generieren.',
-  },
-  {
-    name:   'Spec = Plan',
-    body:   'Verhalten und Implementierung im selben Dokument.',
-    why:    'Review verliert seinen Maßstab.',
-  },
-  {
-    name:   'Verwaiste Spec',
-    body:   'Einmal geschrieben, dann beim Coden ignoriert.',
-    why:    'Ohne Verankerung im Prompt driftet der Code von der Spec weg.',
-  },
-];
+};
 
 class Section16SDD extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -142,14 +186,14 @@ class Section16SDD extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Anti-Patterns</span>
-        <h1>Was <b>schiefgeht</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Fünf Muster, die wie SDD aussehen — aber nichts davon liefern.
+          ${t.lede}
         </p>
 
         <ul class="patterns">
-          ${PATTERNS.map(p => `
+          ${t.patterns.map(p => `
             <li>
               <span class="name">${p.name}</span>
               <span class="body">
@@ -161,7 +205,7 @@ class Section16SDD extends HTMLElement {
         </ul>
 
         <p class="punch">
-          SDD ist ein Spektrum. <b>Je teurer ein Fehler, desto mehr Spec.</b>
+          ${t.punch}
         </p>
       </div>
     `;

@@ -2,10 +2,46 @@
    Visualization: a slash command types itself at the top, then expands
    into a skill definition with structured steps below. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's21-tip-skills';
+
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 4',
+    h1: 'Do it twice? Make it a <b>Skill</b>',
+    lede: `Capture recurring workflows as a Custom Skill. One command,
+          same standard every single time.`,
+    cmd: '/pr-review',
+    skillLabel: 'Skill<br>definition',
+    steps: [
+      'Read the <b>git diff</b> of the current branch',
+      'Check it against <b>team code style</b> and internal conventions',
+      'Flag <b>security</b> and logging red flags',
+      'Drop structured <b>review notes</b> as a PR comment',
+    ],
+    punch: `Four steps, defined once. <b>Run a hundred times.</b>`,
+  },
+  de: {
+    eyebrow: 'Tip 4',
+    h1: 'Was du zweimal tust, wird ein <b>Skill</b>',
+    lede: `Wiederkehrende Workflows als Custom Skill speichern. Ein Befehl,
+          jedes Mal derselbe Standard.`,
+    cmd: '/pr-review',
+    skillLabel: 'Skill-<br>Definition',
+    steps: [
+      'Lies den <b>Git-Diff</b> der aktuellen Branch',
+      'Prüfe gegen <b>Team-Codestyle</b> und interne Conventions',
+      'Markiere <b>Sicherheits-</b> und Logging-Auffälligkeiten',
+      'Schreibe strukturierte <b>Review-Notes</b> als PR-Kommentar',
+    ],
+    punch: `Vier Schritte, einmal definiert. <b>Hundertmal genutzt.</b>`,
+  },
+};
 
 class SectionTip04 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -166,31 +202,27 @@ class SectionTip04 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 4</span>
-        <h1>Was du zweimal tust, wird ein <b>Skill</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Wiederkehrende Workflows als Custom Skill speichern. Ein Befehl,
-          jedes Mal derselbe Standard.
+          ${t.lede}
         </p>
 
         <div class="terminal">
           <span class="prompt">›</span>
-          <span class="cmd">/pr-review</span>
+          <span class="cmd">${t.cmd}</span>
           <span class="caret"></span>
         </div>
 
         <div class="expand">
-          <div class="skill-label">Skill-<br>Definition</div>
+          <div class="skill-label">${t.skillLabel}</div>
           <ol>
-            <li>Lies den <b>Git-Diff</b> der aktuellen Branch</li>
-            <li>Prüfe gegen <b>Team-Codestyle</b> und interne Conventions</li>
-            <li>Markiere <b>Sicherheits-</b> und Logging-Auffälligkeiten</li>
-            <li>Schreibe strukturierte <b>Review-Notes</b> als PR-Kommentar</li>
+            ${t.steps.map(step => `<li>${step}</li>`).join('\n            ')}
           </ol>
         </div>
 
         <p class="punch">
-          Vier Schritte, einmal definiert. <b>Hundertmal genutzt.</b>
+          ${t.punch}
         </p>
       </div>
     `;

@@ -2,40 +2,94 @@
    Visualization: provider cards showing each model family's typical
    strengths. Encourages trying them all to learn capabilities. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's26-tip-multimodel';
 
-const PROVIDERS = [
-  {
-    name: 'Claude',
-    vendor: 'Anthropic',
-    initial: 'C',
-    accent: '#D97757',
-    strengths: ['Frontend & UI', 'Refactoring', 'Lange Aufgaben'],
-    weakness: 'Teurer bei reinem Code-Output',
-    delay: 600,
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 9',
+    h1: 'Different providers — <b>different strengths</b>',
+    lede: `No single provider wins everywhere. Run all three frontier models
+          regularly and you learn their strengths and blind spots — so you reach
+          for the right tool the moment a task starts. Plenty of coding agents
+          (e.g.&nbsp;Claude Code, Copilot, Cursor) hand you several at once.`,
+    weaknessLabel: 'Weakness',
+    punch: `Put them to work. <b>You only spot a model's edge once you've used it.</b>`,
+    providers: [
+      {
+        name: 'Claude',
+        vendor: 'Anthropic',
+        initial: 'C',
+        accent: '#D97757',
+        strengths: ['Frontend & UI', 'Refactoring', 'Long-running tasks'],
+        weakness: 'Pricier for raw code output',
+        delay: 600,
+      },
+      {
+        name: 'GPT',
+        vendor: 'OpenAI',
+        initial: 'G',
+        accent: '#10A37F',
+        strengths: ['Backend & logic', 'Tool-Use', 'Structured data'],
+        weakness: 'Terser, looser on context fidelity',
+        delay: 900,
+      },
+      {
+        name: 'Gemini',
+        vendor: 'Google',
+        initial: 'G',
+        accent: '#4285F4',
+        strengths: ['Huge Context', 'Multimodal', 'Cheap'],
+        weakness: 'Weaker on tool chains',
+        delay: 1200,
+      },
+    ],
   },
-  {
-    name: 'GPT',
-    vendor: 'OpenAI',
-    initial: 'G',
-    accent: '#10A37F',
-    strengths: ['Backend & Logik', 'Tool-Use', 'Strukturierte Daten'],
-    weakness: 'Knapper, weniger Kontext-Treue',
-    delay: 900,
+  de: {
+    eyebrow: 'Tip 9',
+    h1: 'Verschiedene Anbieter — <b>verschiedene Stärken</b>',
+    lede: `Kein Anbieter ist überall der beste. Wer alle drei großen Modelle
+          regelmäßig nutzt, lernt ihre Stärken und Schwächen kennen — und wählt
+          beim Start einer Aufgabe das richtige Werkzeug. Viele Coding-Agenten
+          (z.&nbsp;B. Claude Code, Copilot, Cursor) geben dir Zugriff auf mehrere davon.`,
+    weaknessLabel: 'Schwäche',
+    punch: `Probiere sie aus. <b>Du erkennst Stärken erst, wenn du sie kennst.</b>`,
+    providers: [
+      {
+        name: 'Claude',
+        vendor: 'Anthropic',
+        initial: 'C',
+        accent: '#D97757',
+        strengths: ['Frontend & UI', 'Refactoring', 'Lange Aufgaben'],
+        weakness: 'Teurer bei reinem Code-Output',
+        delay: 600,
+      },
+      {
+        name: 'GPT',
+        vendor: 'OpenAI',
+        initial: 'G',
+        accent: '#10A37F',
+        strengths: ['Backend & Logik', 'Tool-Use', 'Strukturierte Daten'],
+        weakness: 'Knapper, weniger Kontext-Treue',
+        delay: 900,
+      },
+      {
+        name: 'Gemini',
+        vendor: 'Google',
+        initial: 'G',
+        accent: '#4285F4',
+        strengths: ['Sehr langer Kontext', 'Multimodal', 'Günstig'],
+        weakness: 'Schwächer bei Tool-Chains',
+        delay: 1200,
+      },
+    ],
   },
-  {
-    name: 'Gemini',
-    vendor: 'Google',
-    initial: 'G',
-    accent: '#4285F4',
-    strengths: ['Sehr langer Kontext', 'Multimodal', 'Günstig'],
-    weakness: 'Schwächer bei Tool-Chains',
-    delay: 1200,
-  },
-];
+};
 
 class SectionTip09 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -204,17 +258,14 @@ class SectionTip09 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 9</span>
-        <h1>Verschiedene Anbieter — <b>verschiedene Stärken</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Kein Anbieter ist überall der beste. Wer alle drei großen Modelle
-          regelmäßig nutzt, lernt ihre Stärken und Schwächen kennen — und wählt
-          beim Start einer Aufgabe das richtige Werkzeug. Viele Coding-Agenten
-          (z.&nbsp;B. Claude Code, Copilot, Cursor) geben dir Zugriff auf mehrere davon.
+          ${t.lede}
         </p>
 
         <div class="cards">
-          ${PROVIDERS.map((p, i) => `
+          ${t.providers.map((p, i) => `
             <div class="card r${i + 1}" style="--accent: ${p.accent}; animation: tipMM-rise 500ms var(--db-ease) ${p.delay}ms forwards;">
               <div class="head">
                 <div class="badge">${p.initial}</div>
@@ -227,7 +278,7 @@ class SectionTip09 extends HTMLElement {
                 ${p.strengths.map(s => `<li>${s}</li>`).join('')}
               </ul>
               <div class="weakness">
-                <span class="tag">Schwäche</span>
+                <span class="tag">${t.weaknessLabel}</span>
                 ${p.weakness}
               </div>
             </div>
@@ -235,7 +286,7 @@ class SectionTip09 extends HTMLElement {
         </div>
 
         <p class="punch">
-          Probiere sie aus. <b>Du erkennst Stärken erst, wenn du sie kennst.</b>
+          ${t.punch}
         </p>
       </div>
     `;

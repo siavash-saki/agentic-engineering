@@ -1,11 +1,44 @@
 /* Section 1 — Context & Goal
-   Working pattern for other sections: light DOM, DB base styles inherited,
-   only section-specific layout and animations defined here. */
+   Working pattern for other sections: light DOM, base styles inherited,
+   only section-specific layout and animations defined here. Content lives in
+   a { en, de } map and is selected at render time via getLang(). */
+
+import { getLang } from '../core/i18n.js';
 
 const TAG = 's01-context';
 
+const CONTENT = {
+  en: {
+    eyebrow: 'Agentic Engineering',
+    h1: 'Code with AI <b>like you mean it</b>',
+    lede: `Most of us use AI coding tools every day. Few of us use them well.
+          This talk is about the gap between the two — and the engineering
+          practice that closes it.`,
+    goalsTitle: "What you'll walk away with",
+    goals: [
+      '<b>Vibe Coding</b> vs <b>Agentic Engineering</b>',
+      'A mental model for the framework-agnostic concepts behind every AI coding tool',
+      'A workflow you can apply from Monday morning — in Claude Code, Copilot, Cursor or Codex',
+    ],
+  },
+  de: {
+    eyebrow: 'Agentic Engineering',
+    h1: 'KI-Coding-Tools <b>bewusst</b> einsetzen',
+    lede: `Die meisten von uns nutzen KI-Coding-Tools täglich. Wenige nutzen sie
+          bewusst. In diesem Vortrag geht es um die Lücke zwischen beidem —
+          und die Engineering-Praxis, die sie schließt.`,
+    goalsTitle: 'Was du mitnimmst',
+    goals: [
+      '<b>Vibe Coding</b> vs <b>Agentic Engineering</b>',
+      'Ein mentales Modell für die framework-unabhängigen Konzepte hinter jedem KI-Coding-Tool',
+      'Einen Workflow, den du ab Montagmorgen anwenden kannst — in Claude Code, Copilot, Cursor oder Codex',
+    ],
+  },
+};
+
 class Section01 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -115,18 +148,12 @@ class Section01 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Agentic Engineering</span>
-        <h1>KI-Coding-Tools <b>bewusst</b> einsetzen</h1>
-        <p class="lede">
-          Die meisten von uns nutzen KI-Coding-Tools täglich. Wenige nutzen sie
-          bewusst. In diesem Vortrag geht es um die Lücke zwischen beidem —
-          und die Engineering-Praxis, die sie schließt.
-        </p>
-        <div class="goals-title">Was du mitnimmst</div>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
+        <p class="lede">${t.lede}</p>
+        <div class="goals-title">${t.goalsTitle}</div>
         <ul class="goals">
-          <li><b>Vibe Coding</b> vs <b>Agentic Engineering</b></li>
-          <li>Ein mentales Modell für die framework-unabhängigen Konzepte hinter jedem KI-Coding-Tool</li>
-          <li>Einen Workflow, den du ab Montagmorgen anwenden kannst — in Claude Code, Copilot, Cursor oder Codex</li>
+          ${t.goals.map(g => `<li>${g}</li>`).join('')}
         </ul>
       </div>
     `;

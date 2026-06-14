@@ -1,46 +1,100 @@
 /* Section 28 — Agenten in der Praxis
    Montag-morgen-Aktionsplan. Tool-unabhängig formuliert. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's28-copilot';
 
-const STEPS = [
-  {
-    when:  'Heute',
-    time:  '15 Minuten',
-    title: 'Memory anlegen',
-    body:  'Im Repo-Root eine Memory-Datei anlegen — je nach Tool <code>AGENTS.md</code>, <code>CLAUDE.md</code> oder <code>.github/copilot-instructions.md</code>. Drei Abschnitte reichen:',
-    bullets: [
-      'Build-Befehl &amp; Test-Befehl',
-      'Coding-Standards, die ihr wirklich anwendet',
-      '„Immer X tun" / „Niemals Y tun"',
+const CONTENT = {
+  en: {
+    eyebrow: 'Get concrete',
+    h1: 'Monday morning — <b>where do you start?</b>',
+    lede: `Three concrete moves. Each one fits in a sane block of time —
+          and each one pays off from day one.`,
+    steps: [
+      {
+        when:  'Today',
+        time:  '15 minutes',
+        title: 'Set up Memory',
+        body:  'Drop a Memory file in your repo root — <code>AGENTS.md</code>, <code>CLAUDE.md</code> or <code>.github/copilot-instructions.md</code>, depending on your tool. Three sections is plenty:',
+        bullets: [
+          'Build command &amp; test command',
+          'The coding standards you actually enforce',
+          '"Always do X" / "Never do Y"',
+        ],
+      },
+      {
+        when:  'This week',
+        time:  '1 hour',
+        title: 'Write your first Skill',
+        body:  'Take a recurring task — code-review checklist, release steps, onboarding — and capture it as a Skill:',
+        bullets: [
+          '<code>.&lt;tool&gt;/skills/&lt;name&gt;/SKILL.md</code>',
+          'Call it on demand with <code>/&lt;name&gt;</code>',
+          'Auto-loaded by the model when the description fits',
+        ],
+      },
+      {
+        when:  'This month',
+        time:  'Half a day',
+        title: 'Wire up an MCP server',
+        body:  'Let the agent talk to the systems you live in — Git platform, docs, semantic code search:',
+        bullets: [
+          'MCP config in the repo — <code>.mcp.json</code> or <code>.vscode/mcp.json</code>',
+          'e.&nbsp;g. <code>git</code>, <code>docs</code>, <code>semantic-code</code>',
+          'Configure it once — every MCP-aware IDE picks it up',
+        ],
+      },
     ],
+    punch: 'The tools will change. <b>The practice stays.</b>',
   },
-  {
-    when:  'Diese Woche',
-    time:  '1 Stunde',
-    title: 'Erstes Skill schreiben',
-    body:  'Eine wiederkehrende Aufgabe — Code-Review-Checkliste, Release-Schritte, Onboarding — als Skill speichern:',
-    bullets: [
-      '<code>.&lt;tool&gt;/skills/&lt;name&gt;/SKILL.md</code>',
-      'Slash-aufrufbar via <code>/&lt;name&gt;</code>',
-      'Vom Modell auto-geladen, wenn Beschreibung passt',
+  de: {
+    eyebrow: 'Konkret werden',
+    h1: 'Montag morgen — <b>was tun?</b>',
+    lede: `Drei konkrete Schritte. Jeder davon ist in einer überschaubaren Zeit
+          machbar — und jeder davon zahlt sich ab dem ersten Tag aus.`,
+    steps: [
+      {
+        when:  'Heute',
+        time:  '15 Minuten',
+        title: 'Memory anlegen',
+        body:  'Im Repo-Root eine Memory-Datei anlegen — je nach Tool <code>AGENTS.md</code>, <code>CLAUDE.md</code> oder <code>.github/copilot-instructions.md</code>. Drei Abschnitte reichen:',
+        bullets: [
+          'Build-Befehl &amp; Test-Befehl',
+          'Coding-Standards, die ihr wirklich anwendet',
+          '„Immer X tun" / „Niemals Y tun"',
+        ],
+      },
+      {
+        when:  'Diese Woche',
+        time:  '1 Stunde',
+        title: 'Erstes Skill schreiben',
+        body:  'Eine wiederkehrende Aufgabe — Code-Review-Checkliste, Release-Schritte, Onboarding — als Skill speichern:',
+        bullets: [
+          '<code>.&lt;tool&gt;/skills/&lt;name&gt;/SKILL.md</code>',
+          'Slash-aufrufbar via <code>/&lt;name&gt;</code>',
+          'Vom Modell auto-geladen, wenn Beschreibung passt',
+        ],
+      },
+      {
+        when:  'Diesen Monat',
+        time:  'Ein Halbtag',
+        title: 'MCP-Server konfigurieren',
+        body:  'Den Agenten mit euren wichtigsten Systemen reden lassen — Git-Plattform, Doku, semantische Code-Suche:',
+        bullets: [
+          'MCP-Konfig im Repo — <code>.mcp.json</code> oder <code>.vscode/mcp.json</code>',
+          'z.&nbsp;B. <code>git</code>, <code>docs</code>, <code>semantic-code</code>',
+          'Einmal konfiguriert — jede MCP-fähige IDE nutzt ihn',
+        ],
+      },
     ],
+    punch: 'Die Werkzeuge ändern sich. <b>Die Praxis bleibt.</b>',
   },
-  {
-    when:  'Diesen Monat',
-    time:  'Ein Halbtag',
-    title: 'MCP-Server konfigurieren',
-    body:  'Den Agenten mit euren wichtigsten Systemen reden lassen — Git-Plattform, Doku, semantische Code-Suche:',
-    bullets: [
-      'MCP-Konfig im Repo — <code>.mcp.json</code> oder <code>.vscode/mcp.json</code>',
-      'z.&nbsp;B. <code>git</code>, <code>docs</code>, <code>semantic-code</code>',
-      'Einmal konfiguriert — jede MCP-fähige IDE nutzt ihn',
-    ],
-  },
-];
+};
 
 class Section28 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -196,15 +250,12 @@ class Section28 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Konkret werden</span>
-        <h1>Montag morgen — <b>was tun?</b></h1>
-        <p class="lede">
-          Drei konkrete Schritte. Jeder davon ist in einer überschaubaren Zeit
-          machbar — und jeder davon zahlt sich ab dem ersten Tag aus.
-        </p>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
+        <p class="lede">${t.lede}</p>
 
         <div class="steps">
-          ${STEPS.map(s => `
+          ${t.steps.map(s => `
             <div class="step">
               <div class="when">
                 <span class="label">${s.when}</span>
@@ -219,9 +270,7 @@ class Section28 extends HTMLElement {
           `).join('')}
         </div>
 
-        <p class="punch">
-          Die Werkzeuge ändern sich. <b>Die Praxis bleibt.</b>
-        </p>
+        <p class="punch">${t.punch}</p>
       </div>
     `;
   }

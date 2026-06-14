@@ -1,11 +1,59 @@
+import { getLang } from '../core/i18n.js';
+
 /* Tip 1 — Den Agenten befragen
    Visualization: chat exchange — user asks, agent replies with
    what it understood + what's still open. Open items pulse red. */
 
 const TAG = 's18-tip-interrogate';
 
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 1',
+    h1: 'Interrogate it <b>before</b> it codes',
+    lede: `"What did you understand? What's still open?" — hallucinations
+          show up in the answer, not later in the diff.`,
+    userMsg: 'Implement the login API.',
+    agentLabel: 'Before I start …',
+    goodTitle: 'Understood',
+    goodItems: [
+      'JWT tokens for authentication',
+      'Endpoint <code>/api/login</code>',
+      'Existing user table',
+    ],
+    openTitle: 'Open',
+    openItems: [
+      'SSO or local passwords?',
+      'Refresh-token strategy?',
+      'Rate limiting needed?',
+    ],
+    punch: 'Three questions save <b>three hours of debugging</b>.',
+  },
+  de: {
+    eyebrow: 'Tip 1',
+    h1: 'Befragen, <b>bevor</b> er codet',
+    lede: `„Was hast du verstanden? Welche Fragen sind offen?" — Halluzinationen
+          zeigen sich in der Antwort, nicht erst im Diff.`,
+    userMsg: 'Implementiere die Login-API.',
+    agentLabel: 'Bevor ich loslege …',
+    goodTitle: 'Verstanden',
+    goodItems: [
+      'JWT-Token für Authentifizierung',
+      'Endpoint <code>/api/login</code>',
+      'Bestehende User-Tabelle',
+    ],
+    openTitle: 'Offen',
+    openItems: [
+      'SSO oder lokale Passwörter?',
+      'Refresh-Token-Strategie?',
+      'Rate Limiting nötig?',
+    ],
+    punch: 'Drei Fragen sparen <b>drei Stunden Debugging</b>.',
+  },
+};
+
 class SectionTip01 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -172,32 +220,31 @@ class SectionTip01 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 1</span>
-        <h1>Befragen, <b>bevor</b> er codet</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          „Was hast du verstanden? Welche Fragen sind offen?" — Halluzinationen
-          zeigen sich in der Antwort, nicht erst im Diff.
+          ${t.lede}
         </p>
 
         <div class="chat">
-          <div class="msg user">Implementiere die Login-API.</div>
+          <div class="msg user">${t.userMsg}</div>
           <div class="msg agent">
-            <div class="agent-label">Bevor ich loslege …</div>
+            <div class="agent-label">${t.agentLabel}</div>
             <div class="agent-cols">
               <div class="col good">
-                <div class="col-title good">Verstanden</div>
+                <div class="col-title good">${t.goodTitle}</div>
                 <ul>
-                  <li>JWT-Token für Authentifizierung</li>
-                  <li>Endpoint <code>/api/login</code></li>
-                  <li>Bestehende User-Tabelle</li>
+                  <li>${t.goodItems[0]}</li>
+                  <li>${t.goodItems[1]}</li>
+                  <li>${t.goodItems[2]}</li>
                 </ul>
               </div>
               <div class="col open">
-                <div class="col-title open">Offen</div>
+                <div class="col-title open">${t.openTitle}</div>
                 <ul>
-                  <li>SSO oder lokale Passwörter?</li>
-                  <li>Refresh-Token-Strategie?</li>
-                  <li>Rate Limiting nötig?</li>
+                  <li>${t.openItems[0]}</li>
+                  <li>${t.openItems[1]}</li>
+                  <li>${t.openItems[2]}</li>
                 </ul>
               </div>
             </div>
@@ -205,7 +252,7 @@ class SectionTip01 extends HTMLElement {
         </div>
 
         <p class="punch">
-          Drei Fragen sparen <b>drei Stunden Debugging</b>.
+          ${t.punch}
         </p>
       </div>
     `;

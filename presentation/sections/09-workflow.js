@@ -1,18 +1,50 @@
 /* Section 8 — Empfohlener Workflow
    Fünf-Phasen-Fluss. Die Disziplinen folgen als eigene Tip-Slides. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's09-workflow';
 
-const PHASES = [
-  { num: '1', name: 'Explore',  body: 'Den Agenten Code lesen lassen, bevor er schreibt. Existierende Muster, Tests, Konventionen finden.' },
-  { num: '2', name: 'Discuss',  body: 'Den Ansatz durchsprechen, bevor Code entsteht. Annahmen sichtbar machen.' },
-  { num: '3', name: 'Plan',     body: 'Expliziter Plan — auf Papier oder im Plan-Mode. Erst freigeben, dann implementieren.' },
-  { num: '4', name: 'Code',     body: 'Den Plan ausführen. Kleine Schritte. Bei Abweichung zurück zur Diskussion.' },
-  { num: '5', name: 'Review',   body: 'Jeden Diff lesen. Keine Akzeptanz auf Vertrauensbasis — auch nicht beim eigenen Agenten.' },
-];
+const CONTENT = {
+  en: {
+    eyebrow: 'The workflow that works',
+    h1: 'Explore → Discuss → Plan → Code → Review',
+    lede: `Code is the last step, not the first. Flip that order and the model
+          hands you exactly what you fed it: guesses.`,
+    phaseLabel: 'Phase',
+    phases: [
+      { num: '1', name: 'Explore',  body: 'Let the agent read the code before it writes a line. Surface the existing patterns, tests and conventions.' },
+      { num: '2', name: 'Discuss',  body: 'Talk through the approach before any code exists. Drag the assumptions into the open.' },
+      { num: '3', name: 'Plan',     body: 'An explicit plan — on paper or in plan mode. Approve first, then implement.' },
+      { num: '4', name: 'Code',     body: 'Execute the plan. Small steps. The moment it drifts, go back to Discuss.' },
+      { num: '5', name: 'Review',   body: 'Read every diff. Trust earns nothing here — not even your own agent.' },
+    ],
+    loop: '<b>When it drifts</b> in Code, loop back to Discuss — re-check the assumptions, don\'t bend the plan.',
+    nextUp: `Next up: the <b>artifacts</b> that Discuss and Plan produce — and the
+          human sign-offs in between.`,
+  },
+  de: {
+    eyebrow: 'Empfohlener Workflow',
+    h1: 'Explore → Discuss → Plan → Code → Review',
+    lede: `Der Code ist der letzte Schritt — nicht der erste. Wer das umdreht,
+          bekommt vom Modell genau das, was er hineingibt: Vermutungen.`,
+    phaseLabel: 'Phase',
+    phases: [
+      { num: '1', name: 'Explore',  body: 'Den Agenten Code lesen lassen, bevor er schreibt. Existierende Muster, Tests, Konventionen finden.' },
+      { num: '2', name: 'Discuss',  body: 'Den Ansatz durchsprechen, bevor Code entsteht. Annahmen sichtbar machen.' },
+      { num: '3', name: 'Plan',     body: 'Expliziter Plan — auf Papier oder im Plan-Mode. Erst freigeben, dann implementieren.' },
+      { num: '4', name: 'Code',     body: 'Den Plan ausführen. Kleine Schritte. Bei Abweichung zurück zur Diskussion.' },
+      { num: '5', name: 'Review',   body: 'Jeden Diff lesen. Keine Akzeptanz auf Vertrauensbasis — auch nicht beim eigenen Agenten.' },
+    ],
+    loop: '<b>Bei Abweichung</b> in Code zurück zu Discuss — Annahmen prüfen, nicht den Plan biegen.',
+    nextUp: `Auf den folgenden Slides: die <b>Artefakte</b>, die Discuss und Plan
+          produzieren — und die menschlichen Freigaben dazwischen.`,
+  },
+};
 
 class Section09 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -144,17 +176,16 @@ class Section09 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Empfohlener Workflow</span>
-        <h1>Explore → Discuss → Plan → Code → Review</h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
         <p class="lede">
-          Der Code ist der letzte Schritt — nicht der erste. Wer das umdreht,
-          bekommt vom Modell genau das, was er hineingibt: Vermutungen.
+          ${t.lede}
         </p>
 
         <div class="flow">
-          ${PHASES.map(p => `
+          ${t.phases.map(p => `
             <div class="phase">
-              <div class="num">${p.num} · Phase</div>
+              <div class="num">${p.num} · ${t.phaseLabel}</div>
               <h3>${p.name}</h3>
               <p>${p.body}</p>
             </div>
@@ -163,12 +194,11 @@ class Section09 extends HTMLElement {
 
         <div class="loop">
           <span class="icon" aria-hidden="true">↺</span>
-          <span><b>Bei Abweichung</b> in Code zurück zu Discuss — Annahmen prüfen, nicht den Plan biegen.</span>
+          <span>${t.loop}</span>
         </div>
 
         <p class="next-up">
-          Auf den folgenden Slides: die <b>Artefakte</b>, die Discuss und Plan
-          produzieren — und die menschlichen Freigaben dazwischen.
+          ${t.nextUp}
         </p>
       </div>
     `;

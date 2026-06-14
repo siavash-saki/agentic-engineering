@@ -3,39 +3,102 @@
    API and Subscription are PARALLEL alternatives in the middle — a product
    reaches a model either through one or the other, never chained. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's05-landscape';
 
-const MODELS = [
-  { id: 'm-gpt',    name: 'GPT',    maker: 'OpenAI',    color: 'c-openai',    top: '22%' },
-  { id: 'm-claude', name: 'Claude', maker: 'Anthropic', color: 'c-anthropic', top: '50%' },
-  { id: 'm-gemini', name: 'Gemini', maker: 'Google',    color: 'c-google',    top: '78%' },
-];
+/* All audience-visible strings live in CONTENT, selected at render time.
+   Brand / product / model names (GPT, Claude, OpenAI, …) are language-neutral
+   and therefore IDENTICAL across en and de. Non-text fields (ids, colors,
+   top positions) are byte-identical across both copies. */
+const CONTENT = {
+  en: {
+    heading: 'Model · API &amp; Subscription · Product',
+    toggle: {
+      all: { label: 'All paths',         kbd: '1', title: 'Key 1' },
+      api: { label: 'API only',          kbd: '2', title: 'Key 2' },
+      sub: { label: 'Subscription only', kbd: '3', title: 'Key 3' },
+    },
+    colLabels: { model: 'Model', mid: 'API &amp; Subscription', product: 'Product' },
+    colSublabels: { api: 'api', sub: 'subscription' },
+    subSuffix: 'Subscription',
 
-const APIS = [
-  { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',    top: '20%' },
-  { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic', top: '50%' },
-  { id: 'a-google',    name: 'Google API',    color: 'c-google',    top: '80%' },
-];
+    MODELS: [
+      { id: 'm-gpt',    name: 'GPT',    maker: 'OpenAI',    color: 'c-openai',    top: '22%' },
+      { id: 'm-claude', name: 'Claude', maker: 'Anthropic', color: 'c-anthropic', top: '50%' },
+      { id: 'm-gemini', name: 'Gemini', maker: 'Google',    color: 'c-google',    top: '78%' },
+    ],
+    APIS: [
+      { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',    top: '20%' },
+      { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic', top: '50%' },
+      { id: 'a-google',    name: 'Google API',    color: 'c-google',    top: '80%' },
+    ],
+    SUBS: [
+      { id: 's-openai',    vendor: 'OpenAI',    color: 'c-openai',    top: '14%' },
+      { id: 's-anthropic', vendor: 'Anthropic', color: 'c-anthropic', top: '32%' },
+      { id: 's-github',    vendor: 'GitHub',    color: 'c-github',    top: '68%' },
+      { id: 's-amazon',    vendor: 'Amazon',    color: 'c-aws',       top: '86%' },
+    ],
+    PRODUCTS: [
+      { id: 'p-codex',      name: 'Codex',          maker: 'OpenAI',    color: 'c-openai',    top: '14%' },
+      { id: 'p-claude-app', name: 'Claude App',     maker: 'Anthropic', color: 'c-anthropic', top: '32%' },
+      { id: 'p-gemini-app', name: 'Gemini App',     maker: 'Google',    color: 'c-google',    top: '50%' },
+      { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',    color: 'c-github',    top: '68%' },
+      { id: 'p-kiro',       name: 'Kiro',           maker: 'Amazon',    color: 'c-aws',       top: '86%' },
+    ],
+    CAPTIONS: {
+      all: 'A product reaches a model <b>either</b> straight through the <b>API</b> (pay-per-use) <b>or</b> through a <b>Subscription</b> (monthly, often Enterprise) — two parallel, commercial paths.',
+      api: '<b>Pay-per-use:</b> the product calls the model API directly — usually with its own API key. Every request is billed separately. Fast to start, but not every agent offers this path.',
+      sub: '<b>Monthly Subscription:</b> a flat contract, often Enterprise. One subscription can cover several models. For coding agents like Copilot or Kiro it is the only path — direct API access simply isn\'t on offer.',
+    },
+  },
+  de: {
+    heading: 'Modell · API &amp; Subscription · Produkt',
+    toggle: {
+      all: { label: 'Alle Pfade',        kbd: '1', title: 'Taste 1' },
+      api: { label: 'Nur API',           kbd: '2', title: 'Taste 2' },
+      sub: { label: 'Nur Subscription',  kbd: '3', title: 'Taste 3' },
+    },
+    colLabels: { model: 'Modell', mid: 'API &amp; Subscription', product: 'Produkt' },
+    colSublabels: { api: 'api', sub: 'subscription' },
+    subSuffix: 'Subscription',
 
-const SUBS = [
-  { id: 's-openai',    vendor: 'OpenAI',    color: 'c-openai',    top: '14%' },
-  { id: 's-anthropic', vendor: 'Anthropic', color: 'c-anthropic', top: '32%' },
-  { id: 's-github',    vendor: 'GitHub',    color: 'c-github',    top: '68%' },
-  { id: 's-amazon',    vendor: 'Amazon',    color: 'c-aws',       top: '86%' },
-];
-
-const PRODUCTS = [
-  { id: 'p-codex',      name: 'Codex',          maker: 'OpenAI',    color: 'c-openai',    top: '14%' },
-  { id: 'p-claude-app', name: 'Claude App',     maker: 'Anthropic', color: 'c-anthropic', top: '32%' },
-  { id: 'p-gemini-app', name: 'Gemini App',     maker: 'Google',    color: 'c-google',    top: '50%' },
-  { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',    color: 'c-github',    top: '68%' },
-  { id: 'p-kiro',       name: 'Kiro',           maker: 'Amazon',    color: 'c-aws',       top: '86%' },
-];
+    MODELS: [
+      { id: 'm-gpt',    name: 'GPT',    maker: 'OpenAI',    color: 'c-openai',    top: '22%' },
+      { id: 'm-claude', name: 'Claude', maker: 'Anthropic', color: 'c-anthropic', top: '50%' },
+      { id: 'm-gemini', name: 'Gemini', maker: 'Google',    color: 'c-google',    top: '78%' },
+    ],
+    APIS: [
+      { id: 'a-openai',    name: 'OpenAI API',    color: 'c-openai',    top: '20%' },
+      { id: 'a-anthropic', name: 'Anthropic API', color: 'c-anthropic', top: '50%' },
+      { id: 'a-google',    name: 'Google API',    color: 'c-google',    top: '80%' },
+    ],
+    SUBS: [
+      { id: 's-openai',    vendor: 'OpenAI',    color: 'c-openai',    top: '14%' },
+      { id: 's-anthropic', vendor: 'Anthropic', color: 'c-anthropic', top: '32%' },
+      { id: 's-github',    vendor: 'GitHub',    color: 'c-github',    top: '68%' },
+      { id: 's-amazon',    vendor: 'Amazon',    color: 'c-aws',       top: '86%' },
+    ],
+    PRODUCTS: [
+      { id: 'p-codex',      name: 'Codex',          maker: 'OpenAI',    color: 'c-openai',    top: '14%' },
+      { id: 'p-claude-app', name: 'Claude App',     maker: 'Anthropic', color: 'c-anthropic', top: '32%' },
+      { id: 'p-gemini-app', name: 'Gemini App',     maker: 'Google',    color: 'c-google',    top: '50%' },
+      { id: 'p-copilot',    name: 'GitHub Copilot', maker: 'GitHub',    color: 'c-github',    top: '68%' },
+      { id: 'p-kiro',       name: 'Kiro',           maker: 'Amazon',    color: 'c-aws',       top: '86%' },
+    ],
+    CAPTIONS: {
+      all: 'Ein Produkt erreicht ein Modell <b>entweder</b> direkt über die <b>API</b> (pay-per-use) <b>oder</b> über eine <b>Subscription</b> (monatlich, oft Enterprise) — beides sind parallele, kommerzielle Pfade.',
+      api: '<b>Pay-per-use:</b> das Produkt ruft die Modell-API direkt auf — meist mit einem eigenen API-Key. Jede Anfrage wird einzeln abgerechnet. Schnell zu starten, aber nicht jeder Agent bietet diesen Pfad.',
+      sub: '<b>Monatliche Subscription:</b> Pauschalvertrag, oft Enterprise. Eine Subscription kann mehrere Modelle abdecken. Bei Coding-Agenten wie Copilot oder Kiro der einzige Pfad — direkter API-Zugang ist hier nicht vorgesehen.',
+    },
+  },
+};
 
 /* Each route: [Product, Intermediary (API or Sub), Model].
    API and Subscription are PARALLEL alternatives — they are NOT chained.
    A product can reach a model either via a direct API or via a subscription.
-   Used for connection rendering AND for hover highlight. */
+   Used for connection rendering AND for hover highlight.
+   Routes reference node ids only — language-neutral, so they stay module-level. */
 const ROUTES = [
   /* Codex: usable via OpenAI API or via OpenAI Subscription */
   ['p-codex',      'a-openai',    'm-gpt'],
@@ -89,12 +152,6 @@ const SEGMENTS = (() => {
   return out;
 })();
 
-const CAPTIONS = {
-  all: 'Ein Produkt erreicht ein Modell <b>entweder</b> direkt über die <b>API</b> (pay-per-use) <b>oder</b> über eine <b>Subscription</b> (monatlich, oft Enterprise) — beides sind parallele, kommerzielle Pfade.',
-  api: '<b>Pay-per-use:</b> das Produkt ruft die Modell-API direkt auf — meist mit einem eigenen API-Key. Jede Anfrage wird einzeln abgerechnet. Schnell zu starten, aber nicht jeder Agent bietet diesen Pfad.',
-  sub: '<b>Monatliche Subscription:</b> Pauschalvertrag, oft Enterprise. Eine Subscription kann mehrere Modelle abdecken. Bei Coding-Agenten wie Copilot oder Kiro der einzige Pfad — direkter API-Zugang ist hier nicht vorgesehen.',
-};
-
 /* Map each node-id to its kind. Used to dim the "other" kind in api/sub view. */
 function nodeKind(id) {
   if (id.startsWith('m-')) return 'model';
@@ -120,6 +177,7 @@ ROUTES.forEach(route => {
 
 class Section05 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -328,11 +386,11 @@ class Section05 extends HTMLElement {
       </style>
 
       <div class="top">
-        <h2>Modell · API &amp; Subscription · Produkt</h2>
+        <h2>${t.heading}</h2>
         <div class="toggle" role="tablist">
-          <button type="button" data-view="all" class="active" title="Taste 1">Alle Pfade<span class="kbd">1</span></button>
-          <button type="button" data-view="api" title="Taste 2">Nur API<span class="kbd">2</span></button>
-          <button type="button" data-view="sub" title="Taste 3">Nur Subscription<span class="kbd">3</span></button>
+          <button type="button" data-view="all" class="active" title="${t.toggle.all.title}">${t.toggle.all.label}<span class="kbd">${t.toggle.all.kbd}</span></button>
+          <button type="button" data-view="api" title="${t.toggle.api.title}">${t.toggle.api.label}<span class="kbd">${t.toggle.api.kbd}</span></button>
+          <button type="button" data-view="sub" title="${t.toggle.sub.title}">${t.toggle.sub.label}<span class="kbd">${t.toggle.sub.kbd}</span></button>
         </div>
       </div>
 
@@ -340,34 +398,34 @@ class Section05 extends HTMLElement {
         <div class="mid-band"></div>
         <svg class="conn" xmlns="http://www.w3.org/2000/svg"></svg>
 
-        <div class="col-lbl" style="left:8%">Modell</div>
-        <div class="col-lbl" style="left:50%">API &amp; Subscription</div>
-        <div class="col-lbl" style="left:92%">Produkt</div>
+        <div class="col-lbl" style="left:8%">${t.colLabels.model}</div>
+        <div class="col-lbl" style="left:50%">${t.colLabels.mid}</div>
+        <div class="col-lbl" style="left:92%">${t.colLabels.product}</div>
 
-        <div class="col-sublbl" style="left:35%">api</div>
-        <div class="col-sublbl" style="left:64%">subscription</div>
+        <div class="col-sublbl" style="left:35%">${t.colSublabels.api}</div>
+        <div class="col-sublbl" style="left:64%">${t.colSublabels.sub}</div>
 
-        ${MODELS.map(m => `
+        ${t.MODELS.map(m => `
           <div class="node model" data-id="${m.id}"
                style="left:8%;top:${m.top};--node-color:var(--${m.color})">
             <div class="nn">${m.name}</div>
             <div class="nm">${m.maker}</div>
           </div>`).join('')}
 
-        ${APIS.map(a => `
+        ${t.APIS.map(a => `
           <div class="node api" data-id="${a.id}"
                style="left:35%;top:${a.top};--node-color:var(--${a.color})">
             <div class="nn">${a.name}</div>
           </div>`).join('')}
 
-        ${SUBS.map(s => `
+        ${t.SUBS.map(s => `
           <div class="node sub" data-id="${s.id}"
                style="left:64%;top:${s.top};--node-color:var(--${s.color})">
             <div class="nn">${s.vendor}</div>
-            <div class="nm">Subscription</div>
+            <div class="nm">${t.subSuffix}</div>
           </div>`).join('')}
 
-        ${PRODUCTS.map(p => `
+        ${t.PRODUCTS.map(p => `
           <div class="node product" data-id="${p.id}"
                style="left:92%;top:${p.top};--maker-color:var(--${p.color})">
             <div class="nn">${p.name}</div>
@@ -377,6 +435,8 @@ class Section05 extends HTMLElement {
 
       <p class="caption"></p>
     `;
+
+    this.captions = t.CAPTIONS;
 
     this.stage   = this.querySelector('.stage');
     this.svg     = this.querySelector('.conn');
@@ -483,7 +543,7 @@ class Section05 extends HTMLElement {
       }
     });
 
-    this.caption.innerHTML = CAPTIONS[view];
+    this.caption.innerHTML = this.captions[view];
     this.drawConnections();
   }
 

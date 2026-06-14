@@ -3,24 +3,56 @@
    sessions below. A new rule fades in late to show that the file grows
    with the project. */
 
+import { getLang } from '../core/i18n.js';
+
 const TAG = 's27-tip-rules';
 
-const RULES = [
-  { text: 'Tests vor Implementierung',           neu: false },
-  { text: 'Keine Mocks im Integrationstest',     neu: false },
-  { text: 'Datenbank: Migration mit Rollback',   neu: false },
-  { text: 'Logging: strukturiert, kein print()', neu: false },
-  { text: 'Feature-Flag für jede Migration',     neu: true  },
-];
-
-const SESSIONS = [
-  { who: 'Session A',  what: 'Auth refactor',       applied: 'Tests zuerst' },
-  { who: 'Session B',  what: 'Search-API',          applied: 'Strukturiertes Log' },
-  { who: 'Session C',  what: 'Reports-Migration',   applied: 'Mit Rollback' },
-];
+const CONTENT = {
+  en: {
+    eyebrow: 'Tip 10',
+    h1: 'Write project rules — and <b>keep</b> them <b>alive</b>',
+    lede: `Conventions, standards, constants — everything you'd have to explain at
+          every onboarding belongs in a file that every session reads. Maintain it
+          like code: update it as the project grows.`,
+    rules: [
+      { text: 'Tests before implementation',         neu: false },
+      { text: 'No mocks in integration tests',       neu: false },
+      { text: 'Database: migration with rollback',   neu: false },
+      { text: 'Logging: structured, no print()',     neu: false },
+      { text: 'Feature flag for every migration',    neu: true  },
+    ],
+    sessions: [
+      { who: 'Session A',  what: 'Auth refactor',       applied: 'Tests first' },
+      { who: 'Session B',  what: 'Search API',          applied: 'Structured log' },
+      { who: 'Session C',  what: 'Reports migration',   applied: 'With rollback' },
+    ],
+    punch: 'Write it once, <b>tend it often</b> — and it pays off in every session.',
+  },
+  de: {
+    eyebrow: 'Tip 10',
+    h1: 'Projekt-Regeln <b>schreiben</b> und <b>pflegen</b>',
+    lede: `Konventionen, Standards, Konstanten — was bei jedem Onboarding erklärt
+          werden müsste, gehört in eine Datei, die jede Session liest. Pflege sie
+          wie Code: passe sie an, wenn das Projekt wächst.`,
+    rules: [
+      { text: 'Tests vor Implementierung',           neu: false },
+      { text: 'Keine Mocks im Integrationstest',     neu: false },
+      { text: 'Datenbank: Migration mit Rollback',   neu: false },
+      { text: 'Logging: strukturiert, kein print()', neu: false },
+      { text: 'Feature-Flag für jede Migration',     neu: true  },
+    ],
+    sessions: [
+      { who: 'Session A',  what: 'Auth refactor',       applied: 'Tests zuerst' },
+      { who: 'Session B',  what: 'Search-API',          applied: 'Strukturiertes Log' },
+      { who: 'Session C',  what: 'Reports-Migration',   applied: 'Mit Rollback' },
+    ],
+    punch: 'Einmal schreiben, <b>regelmäßig pflegen</b> — in jeder Session wirksam.',
+  },
+};
 
 class SectionTip10 extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -217,17 +249,13 @@ class SectionTip10 extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Tip 10</span>
-        <h1>Projekt-Regeln <b>schreiben</b> und <b>pflegen</b></h1>
-        <p class="lede">
-          Konventionen, Standards, Konstanten — was bei jedem Onboarding erklärt
-          werden müsste, gehört in eine Datei, die jede Session liest. Pflege sie
-          wie Code: passe sie an, wenn das Projekt wächst.
-        </p>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
+        <p class="lede">${t.lede}</p>
 
         <div class="rules-file">
           <ul>
-            ${RULES.map(r => `<li class="${r.neu ? 'neu' : ''}">${r.text}${r.neu ? '<span class="neu-badge">NEU</span>' : ''}</li>`).join('')}
+            ${t.rules.map(r => `<li class="${r.neu ? 'neu' : ''}">${r.text}${r.neu ? '<span class="neu-badge">NEU</span>' : ''}</li>`).join('')}
           </ul>
         </div>
 
@@ -240,7 +268,7 @@ class SectionTip10 extends HTMLElement {
         </div>
 
         <div class="sessions">
-          ${SESSIONS.map(s => `
+          ${t.sessions.map(s => `
             <div class="session">
               <div class="who">${s.who}</div>
               <div class="what">${s.what}</div>
@@ -249,9 +277,7 @@ class SectionTip10 extends HTMLElement {
           `).join('')}
         </div>
 
-        <p class="punch">
-          Einmal schreiben, <b>regelmäßig pflegen</b> — in jeder Session wirksam.
-        </p>
+        <p class="punch">${t.punch}</p>
       </div>
     `;
   }

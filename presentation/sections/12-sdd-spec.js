@@ -1,11 +1,90 @@
 /* Section 12 — SDD: Rate-Limiting · Spec (1/3 of the triptych)
    Persistent crumb at top shows the trio. The next two slides reuse the
-   same template with the active segment shifted right. */
+   same template with the active segment shifted right. Content lives in a
+   { en, de } map and is selected at render time via getLang(). */
+
+import { getLang } from '../core/i18n.js';
 
 const TAG = 's12-sdd-spec';
 
+const CONTENT = {
+  en: {
+    eyebrow: 'Example · Rate-Limiting',
+    h1: 'Spec — the <b>What</b>',
+    segSpec: 'Spec',
+    segPlan: 'Plan',
+    segTasks: 'Tasks',
+    feat: '# Feature: Rate-limiting for the public search API',
+    contextH: '## Context',
+    contextP: `The <code>/search</code> endpoint is publicly reachable and a few
+          clients are hammering it. We need abuse protection that never locks
+          out legitimate users.`,
+    acceptH: '## Acceptance criteria',
+    accept: [
+      `Given a client under the limit, when it sends a request,
+                then the API responds normally (200).`,
+      `Given a client over 100 requests/minute, when it sends one more
+                request, then the API responds with 429 and a
+                Retry-After header.`,
+    ],
+    successH: '## Success criteria',
+    success: [
+      'Added latency p99 &lt; 5 ms.',
+      'Zero false positives for legitimate clients in the sample.',
+    ],
+    scopeH: '## Out of scope',
+    scope: [
+      'Per-endpoint differentiated limits.',
+      'Billing.',
+    ],
+    openH: '## Open questions',
+    open: [
+      'Limit per token or per IP?',
+      'Sliding window or fixed window?',
+    ],
+    caption: `Not a word about Redis, middleware or algorithm. Only <b>behavior</b>.`,
+  },
+  de: {
+    eyebrow: 'Beispiel · Rate-Limiting',
+    h1: 'Spec — das <b>Was</b>',
+    segSpec: 'Spec',
+    segPlan: 'Plan',
+    segTasks: 'Tasks',
+    feat: '# Feature: Rate-Limiting für die öffentliche Such-API',
+    contextH: '## Kontext',
+    contextP: `Der Endpoint <code>/search</code> ist öffentlich erreichbar und wird
+          von einzelnen Clients überlastet. Wir brauchen Missbrauchsschutz, ohne
+          legitime Nutzer auszusperren.`,
+    acceptH: '## Akzeptanzkriterien',
+    accept: [
+      `Gegeben ein Client unter dem Limit, wenn er einen Request sendet,
+                dann antwortet die API normal (200).`,
+      `Gegeben ein Client über 100 Requests/Minute, wenn er einen weiteren
+                Request sendet, dann antwortet die API mit 429 und einem
+                Retry-After-Header.`,
+    ],
+    successH: '## Erfolgskriterien',
+    success: [
+      'Zusätzliche Latenz p99 &lt; 5 ms.',
+      'Keine False Positives für legitime Clients in der Stichprobe.',
+    ],
+    scopeH: '## Out of Scope',
+    scope: [
+      'Pro-Endpoint differenzierte Limits.',
+      'Abrechnung / Billing.',
+    ],
+    openH: '## Offene Fragen',
+    open: [
+      'Limit pro Token oder pro IP?',
+      'Sliding Window oder Fixed Window?',
+    ],
+    caption: `Kein Wort über Redis, Middleware oder Algorithmus. Nur <b>Verhalten</b>.`,
+  },
+};
+
 class Section12SDD extends HTMLElement {
   connectedCallback() {
+    const t = CONTENT[getLang()] ?? CONTENT.en;
     this.innerHTML = `
       <style>
         ${TAG} {
@@ -140,55 +219,46 @@ class Section12SDD extends HTMLElement {
         }
       </style>
       <div class="wrap">
-        <span class="db-eyebrow">Beispiel · Rate-Limiting</span>
-        <h1>Spec — das <b>Was</b></h1>
+        <span class="db-eyebrow">${t.eyebrow}</span>
+        <h1>${t.h1}</h1>
 
         <div class="crumb">
-          <span class="seg active">Spec</span>
+          <span class="seg active">${t.segSpec}</span>
           <span class="arrow">→</span>
-          <span class="seg">Plan</span>
+          <span class="seg">${t.segPlan}</span>
           <span class="arrow">→</span>
-          <span class="seg">Tasks</span>
+          <span class="seg">${t.segTasks}</span>
         </div>
 
         <div class="doc">
-          <p class="feat"># Feature: Rate-Limiting für die öffentliche Such-API</p>
+          <p class="feat">${t.feat}</p>
 
-          <h2>## Kontext</h2>
-          <p>Der Endpoint <code>/search</code> ist öffentlich erreichbar und wird
-          von einzelnen Clients überlastet. Wir brauchen Missbrauchsschutz, ohne
-          legitime Nutzer auszusperren.</p>
+          <h2>${t.contextH}</h2>
+          <p>${t.contextP}</p>
 
-          <h2>## Akzeptanzkriterien</h2>
+          <h2>${t.acceptH}</h2>
           <ul>
-            <li>Gegeben ein Client unter dem Limit, wenn er einen Request sendet,
-                dann antwortet die API normal (200).</li>
-            <li>Gegeben ein Client über 100 Requests/Minute, wenn er einen weiteren
-                Request sendet, dann antwortet die API mit 429 und einem
-                Retry-After-Header.</li>
+            ${t.accept.map(li => `<li>${li}</li>`).join('\n            ')}
           </ul>
 
-          <h2>## Erfolgskriterien</h2>
+          <h2>${t.successH}</h2>
           <ul>
-            <li>Zusätzliche Latenz p99 &lt; 5 ms.</li>
-            <li>Keine False Positives für legitime Clients in der Stichprobe.</li>
+            ${t.success.map(li => `<li>${li}</li>`).join('\n            ')}
           </ul>
 
-          <h2>## Out of Scope</h2>
+          <h2>${t.scopeH}</h2>
           <ul>
-            <li>Pro-Endpoint differenzierte Limits.</li>
-            <li>Abrechnung / Billing.</li>
+            ${t.scope.map(li => `<li>${li}</li>`).join('\n            ')}
           </ul>
 
-          <h2>## Offene Fragen</h2>
+          <h2>${t.openH}</h2>
           <ul>
-            <li>Limit pro Token oder pro IP?</li>
-            <li>Sliding Window oder Fixed Window?</li>
+            ${t.open.map(li => `<li>${li}</li>`).join('\n            ')}
           </ul>
         </div>
 
         <p class="caption">
-          Kein Wort über Redis, Middleware oder Algorithmus. Nur <b>Verhalten</b>.
+          ${t.caption}
         </p>
       </div>
     `;
