@@ -1,0 +1,64 @@
+/* Innotrax theme overlay — PREVIEW ONLY (not wired into the live deck yet).
+ *
+ * Load order: tokens-light.css → db-base.css → core/styles.css → THIS FILE.
+ * Because the whole deck is driven by --db-* custom properties, re-skinning to
+ * the Innotrax look is purely a matter of remapping token VALUES. No section
+ * file is touched. This applies "colors, fonts, and slight shape" only — no
+ * logo, no Innotrax wordmark, nothing that brands the deck as Innotrax.
+ *
+ * Sourced from the innotrax-design skill: green #0E7734, navy #02014D,
+ * slate #869CBB, mint #EFFBE7, Inter / Roboto / Poppins, pill buttons,
+ * softly-rounded cards.
+ */
+
+:root {
+  /* ===== Brand: forest green replaces DB red everywhere it's referenced ===== */
+  --db-red:     #0E7734;   /* primary / accent (was #EC0016) */
+  --db-red-100: #EFFBE7;   /* brand mint tint */
+  --db-red-200: #D6F1C4;
+  --db-red-300: #A9DD8A;
+  --db-red-400: #5FB14A;
+  --db-red-500: #0E7734;
+  --db-red-600: #0B5E29;   /* hover  */
+  --db-red-700: #094B21;   /* active */
+  --db-red-800: #063517;
+
+  /* ===== Neutrals: keep cool grays, nudge the subtle surface toward mint ===== */
+  --db-cool-gray-100: #F2F7F1;  /* faint mint-neutral (cards, list rows) */
+  --db-cool-gray-200: #DCE6DD;
+  --db-border:        #DCE6DD;
+
+  /* ===== Text: navy headings, soft-charcoal body, slate for fine print ===== */
+  --db-text-strong:   #02014D;  /* navy headings (was #131821) */
+  --db-text:          #3C4043;  /* body (Innotrax #444 family) */
+  --db-text-muted:    #6B7280;
+  --db-text-subtle:   #869CBB;  /* slate accent */
+  --db-text-link:     #3C4043;
+  --db-text-link-hover: #0E7734;
+
+  /* ===== Typography: Inter display, Roboto body, Poppins on buttons ===== */
+  --db-font:      "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --db-font-head: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* ===== Shape: softly rounder cards (Innotrax cards are 25px) ===== */
+  --db-radius-sm: 6px;
+  --db-radius:    10px;
+  --db-radius-md: 16px;
+  --db-radius-lg: 22px;
+}
+
+/* ===== Pill buttons (Innotrax signature) — labels in Poppins, regular weight,
+ *  a touch of green polish on hover via the remapped --db-red scale. ===== */
+.db-btn {
+  border-radius: 100px;
+  font-family: "Poppins", var(--db-font);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.db-btn--secondary { border-radius: 100px; }
+
+/* Nav-bar chrome already pill-shaped (999px) — recolors automatically.
+ * Headings: Innotrax sits a hair lighter than DB's 900. Soften H1 to 800 and
+ * relax the negative tracking so navy reads clean. */
+h1 { font-weight: 800; letter-spacing: -0.005em; }
+h2, h3, h4 { letter-spacing: -0.005em; }
