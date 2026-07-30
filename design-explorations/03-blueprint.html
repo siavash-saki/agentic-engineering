@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Direction 03 — Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════════
+   DIRECTION 03 — BLUEPRINT
+   The deck argues "plan before you build". So it is drawn, not typeset:
+   a measured grid, stroked outlines with corner ticks, dimension lines
+   between related parts, and a real drawing title block on every sheet.
+   ══════════════════════════════════════════════════════════════════════ */
+
+:root{
+  --field:   #0A1B33;
+  --field-2: #0D2340;
+  --grid:    rgba(143,199,242,.085);
+  --stroke:  #8FC7F2;
+  --stroke-d:rgba(143,199,242,.32);
+  --chalk:   #EAF2FB;
+  --pencil:  #97AFC9;
+  --verify:  #5FD08A;
+  --flag:    #FF9B72;
+
+  --f-display:"Space Grotesk", system-ui, sans-serif;
+  --f-mono:   "Space Mono", ui-monospace, monospace;
+  --f-body:   "Inter", system-ui, sans-serif;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--field);color:var(--pencil);
+  font-family:var(--f-body);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.shell{max-width:1240px;margin:0 auto;padding:56px 40px 120px}
+
+/* ───────── page shell ───────── */
+.doc-head{margin-bottom:64px;border:1px solid var(--stroke-d);padding:30px 32px;position:relative;background:rgba(10,27,51,.75)}
+.doc-head::before,.doc-head::after{content:"";position:absolute;width:12px;height:12px;border:1px solid var(--stroke)}
+.doc-head::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.doc-head::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.doc-head .meta{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--pencil);display:flex;gap:22px;flex-wrap:wrap;margin-bottom:20px}
+.doc-head .meta b{color:var(--verify);font-weight:400}
+.doc-head h1{font-family:var(--f-display);font-weight:700;font-size:clamp(36px,5.6vw,60px);letter-spacing:-.025em;line-height:1.04;margin:0 0 18px;color:var(--chalk)}
+.doc-head p{max-width:64ch;font-size:17px;margin:0 0 24px}
+.verdict{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.verdict div{border:1px dashed var(--stroke-d);padding:14px 18px}
+.verdict dt{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--stroke);margin-bottom:5px}
+.verdict dd{margin:0;font-size:14px;line-height:1.5}
+
+h2.sec{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--stroke);font-weight:400;border-bottom:1px solid var(--stroke-d);padding-bottom:9px;margin:76px 0 28px;display:flex;justify-content:space-between;align-items:baseline}
+h2.sec span{color:var(--pencil)}
+
+/* ───────── palette ───────── */
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.sw{border:1px solid var(--stroke-d)}
+.sw .chip{height:70px;border-bottom:1px solid var(--stroke-d)}
+.sw .lbl{padding:9px 11px 12px;font-family:var(--f-mono);font-size:10.5px}
+.sw .lbl b{display:block;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk);margin-bottom:3px}
+
+/* ───────── type ───────── */
+.type-row{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:20px 0;border-bottom:1px dashed var(--stroke-d);align-items:baseline}
+.type-row .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--stroke)}
+.sp-display{font-family:var(--f-display);font-weight:700;font-size:44px;letter-spacing:-.028em;line-height:1.05;color:var(--chalk)}
+.sp-h2{font-family:var(--f-display);font-weight:600;font-size:26px;letter-spacing:-.018em;color:var(--chalk)}
+.sp-lede{font-size:19px;line-height:1.5}
+.sp-body{font-size:15px}
+.sp-mono{font-family:var(--f-mono);font-size:12.5px;color:var(--stroke)}
+.sp-label{font-family:var(--f-mono);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--verify)}
+
+/* ───────── components ───────── */
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:34px}
+.part>.cap{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--stroke);margin-bottom:12px}
+
+.bp-eyebrow{font-family:var(--f-mono);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--verify)}
+.bp-eyebrow::before{content:"[ "}.bp-eyebrow::after{content:" ]"}
+
+/* stroked box with corner ticks — the core container */
+.bp-box{position:relative;border:1px solid var(--stroke-d);padding:16px 18px;background:rgba(13,35,64,.5)}
+.bp-box .tick{position:absolute;width:9px;height:9px;border:1.5px solid var(--stroke)}
+.bp-box .tick.tl{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.bp-box .tick.tr{top:-1px;right:-1px;border-left:0;border-bottom:0}
+.bp-box .tick.bl{bottom:-1px;left:-1px;border-right:0;border-top:0}
+.bp-box .tick.br{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.bp-box h4{margin:0 0 6px;font-family:var(--f-display);font-weight:600;font-size:17px;color:var(--chalk);letter-spacing:-.015em}
+.bp-box p{margin:0;font-size:14px}
+
+/* dimension line — the signature */
+.bp-dim{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--stroke);padding:10px 0}
+.bp-dim .ln{flex:1;height:1px;background:var(--stroke-d);position:relative}
+.bp-dim .ln::before,.bp-dim .ln::after{content:"";position:absolute;top:-3px;width:1px;height:7px;background:var(--stroke)}
+.bp-dim .ln::before{left:0}.bp-dim .ln::after{right:0}
+
+.bp-annot{font-family:var(--f-mono);font-size:11px;color:var(--verify);padding-left:18px;position:relative}
+.bp-annot::before{content:"";position:absolute;left:0;top:.62em;width:12px;height:1px;background:var(--verify)}
+
+.bp-title-block{border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto auto;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.bp-title-block div{padding:8px 12px;border-right:1px solid var(--stroke-d)}
+.bp-title-block div:last-child{border-right:0}
+.bp-title-block b{display:block;color:var(--chalk);font-weight:700;margin-top:2px;letter-spacing:.06em}
+
+.bp-nav{display:flex;gap:0;border:1px solid var(--stroke-d);width:max-content}
+.bp-nav b,.bp-nav i{font-family:var(--f-mono);font-size:10px;font-style:normal;font-weight:400;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border-right:1px solid var(--stroke-d);color:var(--pencil)}
+.bp-nav :last-child{border-right:0}
+.bp-nav b{background:var(--stroke);color:var(--field);font-weight:700}
+
+/* ═══════════ SLIDES ═══════════ */
+.frame{container-type:inline-size;aspect-ratio:16/9;width:100%;margin:0 0 22px;position:relative;overflow:hidden;
+  background:var(--field);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:2.2cqw 2.2cqw;border:1px solid var(--stroke-d)}
+.frame-cap{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--stroke);margin:0 0 10px}
+
+.slide{
+  --fs-display:4.2cqw; --fs-h1:2.95cqw; --fs-h2:1.65cqw; --fs-h3:1.28cqw;
+  --fs-lede:1.42cqw;   --fs-body:1.08cqw; --fs-small:.92cqw; --fs-micro:.76cqw;
+  /* generous bottom padding keeps content clear of the absolute title block */
+  position:absolute;inset:0;padding:3cqw 3.2cqw 4.4cqw;display:flex;flex-direction:column;font-size:var(--fs-body);
+}
+.s-eyebrow{font-family:var(--f-mono);font-size:var(--fs-small);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--verify);margin-bottom:1.2cqw}
+.s-eyebrow::before{content:"[ "}.s-eyebrow::after{content:" ]"}
+.s-title{font-family:var(--f-display);font-weight:700;letter-spacing:-.028em;line-height:1.04;margin:0 0 1.1cqw;font-size:var(--fs-h1);color:var(--chalk)}
+.s-title.big{font-size:var(--fs-display)}
+.s-title u{text-decoration:none;color:var(--verify)}
+.s-lede{font-size:var(--fs-lede);line-height:1.5;color:var(--pencil);max-width:54ch;margin:0}
+.s-lede b{color:var(--chalk);font-weight:500}
+
+/* title block, bottom-right of every sheet */
+.titleblock{
+  position:absolute;right:0;bottom:0;display:grid;grid-auto-flow:column;
+  border-top:1px solid var(--stroke-d);border-left:1px solid var(--stroke-d);
+  font-family:var(--f-mono);font-size:var(--fs-micro);letter-spacing:.12em;text-transform:uppercase;color:var(--pencil);
+  background:rgba(10,27,51,.85);
+}
+.titleblock div{padding:.6cqw 1.2cqw;border-right:1px solid var(--stroke-d)}
+.titleblock div:last-child{border-right:0}
+.titleblock b{display:block;color:var(--chalk);font-weight:700;letter-spacing:.06em}
+.titleblock .v b{color:var(--verify)}
+
+/* slide 1 */
+.legend{margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqw}
+.lg{position:relative;border:1px solid var(--stroke-d);padding:1.3cqw 1.5cqw}
+.lg .tick{position:absolute;width:.7cqw;height:.7cqw;border:.12cqw solid var(--stroke)}
+.lg .tick.tl{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.lg .tick.br{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.lg .n{font-family:var(--f-mono);font-size:var(--fs-micro);letter-spacing:.16em;color:var(--stroke);margin-bottom:.5cqw}
+.lg .t{font-size:calc(var(--fs-body)*1.1);line-height:1.4;color:var(--chalk)}
+.lg .t b{color:var(--verify);font-weight:500}
+
+/* slide 2 — two drawn assemblies with a dimension line between */
+.assemblies{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-top:1.8cqw;flex:1;min-height:0;align-items:stretch}
+.asm{position:relative;border:1px solid var(--stroke-d);padding:1.4cqw 1.6cqw;display:flex;flex-direction:column}
+.asm.spec{border-color:var(--verify);background:rgba(95,208,138,.05)}
+.asm .tick{position:absolute;width:.7cqw;height:.7cqw;border:.12cqw solid var(--stroke)}
+.asm.spec .tick{border-color:var(--verify)}
+.asm .tick.tl{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.asm .tick.tr{top:-1px;right:-1px;border-left:0;border-bottom:0}
+.asm .tick.bl{bottom:-1px;left:-1px;border-right:0;border-top:0}
+.asm .tick.br{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.asm h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:var(--fs-h3);letter-spacing:-.02em;color:var(--pencil)}
+.asm.spec h3{color:var(--verify)}
+.asm .say{font-family:var(--f-mono);font-size:var(--fs-micro);color:var(--stroke);margin:.4cqw 0 1cqw;padding-bottom:.9cqw;border-bottom:1px dashed var(--stroke-d)}
+.asm dl{margin:0;display:grid;gap:.7cqw}
+.asm dt{font-family:var(--f-mono);font-size:var(--fs-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--stroke)}
+.asm dd{margin:.12cqw 0 0;font-size:var(--fs-body);line-height:1.35}
+.asm.spec dd{color:var(--chalk)}
+.asm.spec dd b{color:var(--verify);font-weight:500}
+/* the dimension gutter between the two assemblies */
+.gutter{width:5cqw;display:flex;align-items:center;justify-content:center;position:relative}
+.gutter .vline{position:absolute;top:12%;bottom:12%;width:1px;background:var(--stroke-d)}
+.gutter .vline::before,.gutter .vline::after{content:"";position:absolute;left:-.35cqw;width:.7cqw;height:1px;background:var(--stroke)}
+.gutter .vline::before{top:0}.gutter .vline::after{bottom:0}
+.gutter .lab{position:relative;writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--f-mono);font-size:var(--fs-micro);letter-spacing:.2em;text-transform:uppercase;color:var(--stroke);background:var(--field);padding:.6cqw 0}
+
+/* slide 3 — three drawn parts */
+.parts3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5cqw;margin-top:1.9cqw;flex:1;min-height:0}
+.p3{position:relative;border:1px solid var(--stroke-d);padding:1.3cqw 1.4cqw;display:flex;flex-direction:column;background:rgba(13,35,64,.45)}
+.p3 .tick{position:absolute;width:.7cqw;height:.7cqw;border:.12cqw solid var(--stroke)}
+.p3 .tick.tl{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.p3 .tick.br{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.p3 .pn{position:absolute;top:-.85cqw;left:1.2cqw;background:var(--field);padding:0 .6cqw;font-family:var(--f-mono);font-size:var(--fs-micro);letter-spacing:.16em;color:var(--stroke)}
+.p3 h3{margin:.4cqw 0 .5cqw;font-family:var(--f-display);font-weight:600;font-size:var(--fs-h3);letter-spacing:-.02em;color:var(--chalk)}
+.p3 .blurb{margin:0 0 1cqw;font-size:var(--fs-small);line-height:1.45}
+.p3 .map{margin:auto 0 0;border-top:1px dashed var(--stroke-d);padding-top:.6cqw;font-family:var(--f-mono);font-size:var(--fs-micro);line-height:1.9}
+.p3 .map .r{display:flex;justify-content:space-between;gap:.7cqw}
+.p3 .map .r span:last-child{color:var(--stroke);text-align:right}
+.p3 .why{margin:.9cqw 0 0;font-size:var(--fs-small);line-height:1.4;color:var(--verify);padding-left:1.4cqw;position:relative}
+.p3 .why::before{content:"";position:absolute;left:0;top:.65em;width:1cqw;height:1px;background:var(--verify)}
+
+/* slide 4 */
+.ten{display:grid;grid-template-columns:1fr 1fr;gap:.7cqw 2.6cqw;margin-top:2cqw;flex:1;align-content:space-between}
+.ten .d{display:grid;grid-template-columns:3.4cqw 1fr;gap:.9cqw;align-items:baseline;padding:.7cqw 0;border-bottom:1px dashed var(--stroke-d)}
+.ten .n{font-family:var(--f-mono);font-size:var(--fs-micro);color:var(--stroke);letter-spacing:.12em}
+.ten .t{font-family:var(--f-display);font-weight:500;font-size:calc(var(--fs-body)*1.1);color:var(--chalk);letter-spacing:-.012em}
+
+@media(max-width:760px){.shell{padding:32px 18px 80px}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="doc-head">
+    <div class="meta"><span>Direction 03 of 05</span><span>Agentic Engineering deck</span><b>Blueprint</b></div>
+    <h1>Plan before you build —<br>and let the slides prove it.</h1>
+    <p>Every sheet is a technical drawing. Boxes are stroked outlines with corner ticks rather than filled cards,
+       related parts are joined by dimension lines, notes hang off leader lines, and each slide closes with a real
+       drawing title block: sheet number, chapter, revision. The deck's central claim — that a specification comes
+       before a keystroke — is carried by the format itself, not just the words.</p>
+    <dl class="verdict">
+      <div><dt>Best for</dt><dd>The spec-driven chapter especially. Makes process diagrams and workflows feel native rather than bolted on.</dd></div>
+      <div><dt>Costs you</dt><dd>The strongest metaphor of the five. If you don't commit to it on every slide, it reads as a gimmick.</dd></div>
+      <div><dt>Risk taken</dt><dd>Outlines everywhere, fills almost nowhere. Depth comes from line weight, not shadow.</dd></div>
+    </dl>
+  </header>
+
+  <h2 class="sec">Palette <span>Field, line, chalk — plus two signals</span></h2>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#0A1B33"></div><div class="lbl"><b>Field</b><span>#0A1B33</span></div></div>
+    <div class="sw"><div class="chip" style="background:#0D2340"></div><div class="lbl"><b>Fill</b><span>#0D2340</span></div></div>
+    <div class="sw"><div class="chip" style="background:#8FC7F2"></div><div class="lbl"><b>Stroke</b><span>#8FC7F2</span></div></div>
+    <div class="sw"><div class="chip" style="background:#EAF2FB"></div><div class="lbl"><b>Chalk</b><span>#EAF2FB</span></div></div>
+    <div class="sw"><div class="chip" style="background:#5FD08A"></div><div class="lbl"><b>Verified</b><span>#5FD08A</span></div></div>
+    <div class="sw"><div class="chip" style="background:#FF9B72"></div><div class="lbl"><b>Flag</b><span>#FF9B72</span></div></div>
+  </div>
+
+  <h2 class="sec">Type <span>Space Grotesk · Space Mono · Inter</span></h2>
+  <div>
+    <div class="type-row"><div class="k">Display / Grotesk 700</div><div class="sp-display">Code with AI like you mean it</div></div>
+    <div class="type-row"><div class="k">Section / Grotesk 600</div><div class="sp-h2">Memory · Skills · MCP</div></div>
+    <div class="type-row"><div class="k">Lede / Inter 400</div><div class="sp-lede">Same model. Both ship code. Only one of them survives past the weekend project.</div></div>
+    <div class="type-row"><div class="k">Body / Inter 400</div><div class="sp-body">A markdown file of standing instructions the agent reads at every session start.</div></div>
+    <div class="type-row"><div class="k">Annotation / Mono</div><div class="sp-mono">.claude/skills/&lt;name&gt;/SKILL.md</div></div>
+    <div class="type-row"><div class="k">Label / Mono 700</div><div class="sp-label">[ Building blocks · part 1 ]</div></div>
+  </div>
+
+  <h2 class="sec">Components <span>Drawn, not filled</span></h2>
+  <div class="parts">
+    <div class="part"><div class="cap">Eyebrow</div><div class="bp-eyebrow">Building blocks · part 1</div></div>
+    <div class="part"><div class="cap">Chapter nav</div><div class="bp-nav"><b>Context</b><i>Primitives</i><i>Spec-driven</i><i>Practices</i></div></div>
+    <div class="part"><div class="cap">Annotation on a leader line</div><div class="bp-annot">One file: AGENTS.md — the rest symlink it.</div></div>
+    <div class="part"><div class="cap">Stroked part with corner ticks</div>
+      <div class="bp-box"><span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+        <h4>Memory</h4><p>Standing instructions the agent reads at every session start.</p></div>
+    </div>
+    <div class="part"><div class="cap">Dimension line</div><div class="bp-dim"><span class="ln"></span><span>same concept</span><span class="ln"></span></div></div>
+    <div class="part"><div class="cap">Title block</div>
+      <div class="bp-title-block"><div>Sheet title<b>Memory · Skills · MCP</b></div><div>Sheet<b>05 / 30</b></div><div>Rev<b>A</b></div></div>
+    </div>
+  </div>
+
+  <h2 class="sec">Slides <span>Rendered at 16 : 9</span></h2>
+
+  <p class="frame-cap">Opening</p>
+  <div class="frame"><div class="slide">
+    <span class="s-eyebrow">Agentic Engineering</span>
+    <h1 class="s-title big">Code with AI<br><u>like you mean it</u></h1>
+    <p class="s-lede">Most of us use AI coding tools every day. Few of us use them well. This talk is about the gap between the two — and the engineering practice that closes it.</p>
+    <div class="legend">
+      <div class="lg"><span class="tick tl"></span><span class="tick br"></span><div class="n">01 · Distinction</div><div class="t"><b>Vibe Coding</b> vs <b>Agentic Engineering</b></div></div>
+      <div class="lg"><span class="tick tl"></span><span class="tick br"></span><div class="n">02 · Model</div><div class="t">The framework-agnostic concepts behind every AI coding tool</div></div>
+      <div class="lg"><span class="tick tl"></span><span class="tick br"></span><div class="n">03 · Practice</div><div class="t">A workflow you can apply from Monday morning</div></div>
+    </div>
+    <div class="titleblock"><div>Sheet title<b>Opening</b></div><div>Sheet<b>01 / 30</b></div><div class="v">Chapter<b>Context</b></div></div>
+  </div></div>
+
+  <p class="frame-cap">Comparison — the thesis slide</p>
+  <div class="frame"><div class="slide">
+    <span class="s-eyebrow">Two ways to work</span>
+    <h1 class="s-title">Vibe Coding vs. Agentic Engineering</h1>
+    <p class="s-lede">Same model. Both ship code. Only one of them survives past the weekend project.</p>
+    <div class="assemblies">
+      <div class="asm">
+        <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+        <h3>Vibe Coding</h3>
+        <p class="say">"Real quick, let me just …"</p>
+        <dl>
+          <div><dt>Input</dt><dd>A gut-feel prompt</dd></div>
+          <div><dt>Context</dt><dd>Whatever the model happens to know</dd></div>
+          <div><dt>Workflow</dt><dd>"Let's see what comes out"</dd></div>
+          <div><dt>Review</dt><dd>Accept the suggestion</dd></div>
+          <div><dt>Repeatability</dt><dd>One-shot — different next time</dd></div>
+          <div><dt>Scales to …</dt><dd>Toy problems</dd></div>
+        </dl>
+      </div>
+      <div class="gutter"><span class="vline"></span><span class="lab">same model</span></div>
+      <div class="asm spec">
+        <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+        <h3>Agentic Engineering</h3>
+        <p class="say">"Before I touch a key …"</p>
+        <dl>
+          <div><dt>Input</dt><dd>A clear <b>specification</b></dd></div>
+          <div><dt>Context</dt><dd>Memory, Skills, MCP</dd></div>
+          <div><dt>Workflow</dt><dd>Plan → Code → Review</dd></div>
+          <div><dt>Review</dt><dd>Checked diff by diff</dd></div>
+          <div><dt>Repeatability</dt><dd>Repeatable</dd></div>
+          <div><dt>Scales to …</dt><dd>Production code</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="titleblock"><div>Sheet title<b>Vibe vs. Agentic</b></div><div>Sheet<b>03 / 30</b></div><div class="v">Chapter<b>Context</b></div></div>
+  </div></div>
+
+  <p class="frame-cap">Dense reference — three primitives</p>
+  <div class="frame"><div class="slide">
+    <span class="s-eyebrow">Building blocks · part 1</span>
+    <h1 class="s-title">Memory · Skills · MCP</h1>
+    <p class="s-lede">Three framework-agnostic building blocks. The same concepts in every tool — and increasingly even under the <b>same file names</b>.</p>
+    <div class="parts3">
+      <div class="p3"><span class="tick tl"></span><span class="tick br"></span><span class="pn">Part 01</span>
+        <h3>Memory</h3>
+        <p class="blurb">Standing instructions the agent reads at every session start — build commands, standards, decisions.</p>
+        <div class="map">
+          <div class="r"><span>Claude</span><span>CLAUDE.md</span></div>
+          <div class="r"><span>Copilot</span><span>AGENTS.md</span></div>
+          <div class="r"><span>Codex</span><span>AGENTS.md</span></div>
+          <div class="r"><span>Cursor</span><span>.cursor/rules/</span></div>
+        </div>
+        <p class="why">One file: AGENTS.md — the rest symlink it.</p>
+      </div>
+      <div class="p3"><span class="tick tl"></span><span class="tick br"></span><span class="pn">Part 02</span>
+        <h3>Skills</h3>
+        <p class="blurb">Reusable, named procedures — a release playbook, a review checklist. Loaded on demand.</p>
+        <div class="map">
+          <div class="r"><span>Claude</span><span>.claude/skills/</span></div>
+          <div class="r"><span>Copilot</span><span>.github/skills/</span></div>
+          <div class="r"><span>Codex</span><span>.agents/skills/</span></div>
+          <div class="r"><span>Cursor</span><span>.cursor/skills/</span></div>
+        </div>
+        <p class="why">Tribal knowledge becomes code.</p>
+      </div>
+      <div class="p3"><span class="tick tl"></span><span class="tick br"></span><span class="pn">Part 03</span>
+        <h3>MCP</h3>
+        <p class="blurb">An open standard that lets agents talk to Jira, Postgres, GitHub, an internal knowledge hub.</p>
+        <div class="map">
+          <div class="r"><span>Claude</span><span>.mcp.json</span></div>
+          <div class="r"><span>Copilot</span><span>.vscode/mcp.json</span></div>
+          <div class="r"><span>Codex</span><span>config.toml</span></div>
+          <div class="r"><span>Cursor</span><span>.cursor/mcp.json</span></div>
+        </div>
+        <p class="why">One server, every tool. Reversible.</p>
+      </div>
+    </div>
+    <div class="titleblock"><div>Sheet title<b>Memory · Skills · MCP</b></div><div>Sheet<b>05 / 30</b></div><div class="v">Chapter<b>Primitives</b></div></div>
+  </div></div>
+
+  <p class="frame-cap">List slide — ten disciplines</p>
+  <div class="frame"><div class="slide">
+    <span class="s-eyebrow">Best practices</span>
+    <h1 class="s-title">Ten <u>disciplines</u></h1>
+    <p class="s-lede">The workflow won't carry itself. Ten practices that decide whether your AI coding tool earns its keep — or quietly burns your hours.</p>
+    <div class="ten">
+      <div class="d"><span class="n">01</span><span class="t">Make the agent ask</span></div>
+      <div class="d"><span class="n">06</span><span class="t">Commit small, early, often</span></div>
+      <div class="d"><span class="n">02</span><span class="t">Give it a feedback loop</span></div>
+      <div class="d"><span class="n">07</span><span class="t">Do it twice? Make it a Skill</span></div>
+      <div class="d"><span class="n">03</span><span class="t">One session per mental context</span></div>
+      <div class="d"><span class="n">08</span><span class="t">Project rules, kept alive</span></div>
+      <div class="d"><span class="n">04</span><span class="t">Confused? Fresh session</span></div>
+      <div class="d"><span class="n">09</span><span class="t">The right tier for the job</span></div>
+      <div class="d"><span class="n">05</span><span class="t">Review every diff</span></div>
+      <div class="d"><span class="n">10</span><span class="t">Use them all</span></div>
+    </div>
+    <div class="titleblock"><div>Sheet title<b>Ten disciplines</b></div><div>Sheet<b>19 / 30</b></div><div class="v">Chapter<b>Practices</b></div></div>
+  </div></div>
+
+</div>
+</body>
+</html>

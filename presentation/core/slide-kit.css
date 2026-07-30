@@ -1,0 +1,432 @@
+/* SLIDE KIT — the recurring devices of the Field Guide language.
+ *
+ * Loaded last, after theme-field-guide.css.
+ *
+ * Slides carry no chapter label and no position indicator: see criterion 6 of
+ * the spec. The rail that used to live here was removed at the pilot gate.
+ *
+ * These classes exist so that 30 slides express the same idea the same way. A
+ * slide that needs a device found here MUST use it rather than redefining it
+ * locally: the point is that a viewer who learns the rule on slide 3 can still
+ * read it on slide 27, and that a rule can be swept deck-wide in one edit.
+ *
+ * If a slide genuinely needs something new, add it here with a name that says
+ * what it MEANS, not what it looks like.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   1. THE THREE ELEVATIONS
+   Paper is the ground and needs no class. .fg-card marks items that
+   are peers of each other. .fg-card--answer is reserved for the answer
+   in a comparison — the option the audience should leave with.
+
+   The answer is distinguished by depth, a hairline accent ring and a
+   heavier heading, NOT by a coloured edge bar. All three cues survive
+   greyscale, which a 3px green line does not meaningfully do.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-card {
+  background: var(--fg-card);
+  border-radius: var(--ae-radius-lg);
+  padding: var(--ae-space-5);
+  box-shadow: var(--fg-d1);
+  /* The hairline edge is what makes a white card legible ON white-adjacent
+     paper — without it a card is a vague bright patch (0003 pilot gate).
+     A neutral full border, not the accent edge bar the 0002 spec forbids. */
+  border: 1px solid var(--fg-hair);
+}
+.fg-card--answer {
+  box-shadow: var(--fg-d3), var(--fg-ring);
+}
+/* A card that is a peer but wants more presence than a list row — used where
+ * cards are the slide's primary content rather than a supporting grid. */
+.fg-card--raised { box-shadow: var(--fg-d2); }
+
+.fg-card__title {
+  font-family: var(--ae-font-head);
+  font-size: var(--ae-fs-h4);
+  line-height: var(--ae-lh-h4);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  color: var(--fg-ink);
+  margin: 0 0 var(--ae-space-2);
+}
+.fg-card--answer .fg-card__title {
+  color: var(--fg-green-d);
+  font-weight: 700;      /* a greyscale-safe cue on top of the depth */
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   1b. ORDINAL ON A HEADING  —  "4" in front of "Confused? Fresh session"
+   For an item that is one of a numbered run: the ten practices. This is
+   NOT the navigation furniture criterion 6 removed. That stated where
+   you were in the deck, which the heading never needed to say; this is
+   the item's own number, which its heading does not otherwise carry —
+   and without it the audience cannot tell tip four from tip nine.
+
+   Lives inside the heading so it inherits the display face and scales
+   with it, rather than being a second thing to keep in sync.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-ord {
+  color: var(--fg-green);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-right: 0.38em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   2. THE TITLE HIGHLIGHT
+   The deck's one flourish. A mint band sitting on the baseline, clear
+   of descenders — hence the gradient rather than a background colour.
+   For title words only; it is not a general emphasis device.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-mark {
+  background: linear-gradient(
+    180deg,
+    transparent 34%,
+    var(--fg-mint) 34%,
+    var(--fg-mint) 88%,
+    transparent 88%
+  );
+  color: inherit;
+  padding: 0 0.07em;
+  border-radius: 0.1em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   3. CODE
+   Monospace means code: a file path, a file name, a command, a hex
+   value. Nothing else. Never in all caps.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-code {
+  font-family: var(--ae-font-mono);
+  font-size: 0.94em;      /* Plex Mono runs large next to Inter */
+  color: var(--fg-green-d);
+  text-transform: none;   /* defensive: never inherit an all-caps label */
+  letter-spacing: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   3b. SOURCE PANEL  —  a mock-up of a real file or a terminal
+   The SDD example slides show spec.md, plan.md, tasks.md and
+   verification.md as the documents a reader would actually open; other
+   slides show a diff, a directory tree, a git log, an AGENTS.md. Their
+   whole contents are literal file source, so the code face is correct
+   throughout — including the prose inside them, because prose inside a
+   markdown file is still that file's source.
+
+   The class exists to say so in the markup rather than leaving it to a
+   reviewer's judgment: it is what makes "monospace only on code"
+   checkable on a slide whose content is a document. It does NOT license
+   labels, headings or table headers that merely sit inside the panel —
+   those are prose and take the body face.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-source { font-family: var(--ae-font-mono); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   4. DATA ROWS  —  a key and a value, usually a tool and its file
+   Keys are prose and set in the body face. Values are paths, so they
+   are mono. This split is the whole monospace rule, in one component.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-rows { margin: 0; }
+.fg-rows__r {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--ae-space-3);
+  align-items: baseline;
+  padding: var(--ae-space-2) 0;
+  border-bottom: 1px solid var(--fg-hair);
+}
+.fg-rows__r:last-child { border-bottom: 0; }
+.fg-rows dt {
+  font-size: var(--ae-fs-small);
+  line-height: var(--ae-lh-small);
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+.fg-rows dd {
+  margin: 0;
+  font-family: var(--ae-font-mono);
+  font-size: calc(var(--ae-fs-small) * 0.94);
+  line-height: var(--ae-lh-small);
+  color: var(--fg-green-d);
+  text-align: right;
+}
+
+/* A tighter variant for the tool-mapping wells on the primitives slides. */
+.fg-map {
+  background: var(--fg-paper);
+  border-radius: var(--ae-radius);
+  padding: var(--ae-space-3) var(--ae-space-4);
+}
+.fg-map .fg-rows__r { border-bottom: 0; padding: 2px 0; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   5. NUMBERED BADGE  —  ordinal markers on cards and lists
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.9em;
+  height: 1.9em;
+  border-radius: var(--ae-radius-sm);
+  background: var(--fg-mint);
+  color: var(--fg-green-d);
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   6. NOTE  —  the one-line takeaway under a block
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-note {
+  display: flex;
+  gap: var(--ae-space-3);
+  background: var(--fg-mint);
+  border-radius: var(--ae-radius-md);
+  padding: var(--ae-space-4) var(--ae-space-5);
+  font-size: var(--ae-fs-small);
+  line-height: var(--ae-lh-small);
+  color: var(--fg-green-d);
+}
+.fg-note::before {
+  content: "→";
+  flex: none;
+  font-weight: 600;
+  color: var(--fg-green);
+}
+.fg-note b { font-weight: 600; }
+
+/* An inline version with no chrome, for a takeaway that sits on the paper. */
+.fg-takeaway {
+  display: flex;
+  gap: var(--ae-space-2);
+  font-size: var(--ae-fs-small);
+  line-height: var(--ae-lh-small);
+  font-weight: 500;
+  color: var(--fg-green-d);
+}
+.fg-takeaway::before {
+  content: "→";
+  flex: none;
+  color: var(--fg-green);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   7. LABEL  —  a small piece of metadata that is prose, not code
+   The replacement for the all-caps monospace labels the deck used to
+   set. Inter, sentence case by default.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-label {
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+}
+.fg-label--accent { color: var(--fg-green); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   8. SLIDE FOOTER  —  provenance, "as of" stamps, source notes
+   Claims on slides carry their date (CLAUDE.md); this is where.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ae-space-5);
+  margin-top: var(--ae-space-5);
+  padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  color: var(--fg-faint);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   9. SLIDE FRAME  —  shared padding and measure
+   Sections still own their own layout; this only standardises the box
+   they lay out inside, so headings and content align deck-wide.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-wrap {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+.fg-lede {
+  font-size: var(--ae-fs-lead);
+  line-height: var(--ae-lh-lead);
+  color: var(--fg-body);
+  max-width: 62ch;
+  margin: 0;
+}
+.fg-lede b { color: var(--fg-green-d); font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   10. MOTION — THE DRAWN LAYER
+   The deck moves like it is being drawn: rules extend, the mint
+   highlight sweeps in, connectors trace across, items rise. These are
+   shared devices used by every slide instead of thirty local keyframe
+   sets.
+
+   THE CONTRACT every device follows: the element's base style IS its
+   resting state. Keyframes describe only the departure — a `from` with
+   no `to` — and `both` fill covers the delay. Three criteria then hold
+   by construction: reduced motion shows finished slides (the shell
+   collapses durations to 1ms), print shows finished slides (the guard
+   below removes the animation, leaving the base), and an interrupted
+   entrance still ends complete.
+
+   CHOREOGRAPHY is a single numbered scale: an element states its slot
+   with `--fg-at` (an integer, inline). Slots are one beat apart.
+   Convention, not enforcement: 0 structure · 1 heading · 2 lede ·
+   3–4 the drawing · 5+ the items it connects. THE SCALE ENDS AT SLOT
+   12 — the last slot settles well inside the spec's three-second
+   ceiling, and a slide that wants a later slot is over budget by
+   definition. Note that custom properties inherit: give each animated
+   element its own `--fg-at` rather than relying on an ancestor's.
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  --fg-beat:      110ms;  /* one choreography slot */
+  --fg-dur-rise:  480ms;
+  --fg-dur-draw:  700ms;  /* rules, wires — overridable per instance */
+  --fg-dur-sweep: 600ms;
+}
+
+/* An element that enters by rising into its resting place. */
+.fg-in {
+  animation: fg-rise var(--fg-dur-rise) var(--ae-ease) both;
+}
+@keyframes fg-rise {
+  from { opacity: 0; transform: translateY(12px); }
+}
+
+/* A hairline that draws itself to length. */
+.fg-rule {
+  height: 1px;
+  border: 0;
+  background: var(--fg-hair);
+  transform-origin: left center;
+  animation: fg-extend var(--fg-dur-draw) var(--ae-ease) both;
+}
+@keyframes fg-extend {
+  from { transform: scaleX(0); }
+}
+
+/* The mint title highlight, arriving as a sweep. Composes with
+   .fg-mark; the resting appearance is identical to the static mark. */
+.fg-mark--sweep {
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  animation: fg-sweep var(--fg-dur-sweep) var(--ae-ease) both;
+}
+@keyframes fg-sweep {
+  from { background-size: 0% 100%; }
+}
+
+/* A connector drawn between peers — a thin accent line tracing across
+   the slide, with optional node dots. Decorative by definition: it is
+   hidden from assistive tech and carries nothing the slide does not
+   already say. The path MUST declare pathLength="100" so one rule fits
+   every geometry. Only slides whose primary content is a horizontal
+   run of three or more peers get one — never a comparison, where a
+   joining line would say the opposite of what the slide says. */
+.fg-wire { display: block; overflow: visible; pointer-events: none; }
+.fg-wire path {
+  fill: none;
+  stroke: var(--fg-green);
+  stroke-width: 1.5;
+  opacity: 0.55;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation: fg-trace var(--fg-dur-draw) var(--ae-ease) both;
+}
+@keyframes fg-trace {
+  from { stroke-dashoffset: 100; }
+}
+.fg-wire circle {
+  fill: var(--fg-green);
+  animation: fg-appear 300ms var(--ae-ease) both;
+}
+@keyframes fg-appear {
+  from { opacity: 0; }
+}
+
+/* One delay rule for every device. Declared after the shorthands above
+   so the longhand wins the cascade; the 60ms base lets the slide
+   crossfade begin before the first element moves. */
+.fg-in, .fg-rule, .fg-mark--sweep, .fg-wire path, .fg-wire circle {
+  animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat));
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   11. HOVER — RESPONSE WITHOUT SPENDING RESERVED MEANING
+   A hovered card or row lifts to the MIDDLE elevation and its heading
+   takes the accent. The deepest elevation and the answer ring are
+   never granted by hover: the answer keeps both, hovered or not, and
+   nothing else may acquire them. Mark
+   the heading that should tint with .fg-hover-title — the answer's
+   heading is already accent-coloured and is not marked.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-hover {
+  transition: transform 240ms var(--ae-ease), box-shadow 240ms var(--ae-ease);
+}
+.fg-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--fg-d2);
+}
+.fg-hover:hover :is(.fg-card__title, .fg-hover-title) { color: var(--fg-green); }
+/* The answer outranks the hover rule by specificity: it must never be
+   downgraded to the middle depth, and its ring never blinks off. */
+.fg-card--answer.fg-hover:hover { box-shadow: var(--fg-d3), var(--fg-ring); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   12. RECURRING CUE — the one gentle "this keeps happening" signal
+   At most one element per slide carries it.
+   Resting state is cue-free, so print never shows it; reduced motion
+   clamps it to a single instant iteration.
+   ═══════════════════════════════════════════════════════════════════ */
+.fg-cue { position: relative; }
+.fg-cue::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 1.5px solid var(--fg-green);
+  opacity: 0;
+  pointer-events: none;
+  animation: fg-pulse 2.8s var(--ae-ease) 2s infinite;
+}
+@keyframes fg-pulse {
+  0%        { transform: scale(1);    opacity: 0.5; }
+  70%, 100% { transform: scale(1.04); opacity: 0;   }
+}
+
+/* Print shows resting states: strip the motion, the base styles are
+   the finished slide. Scoped to the devices — slides not yet converted
+   keep their legacy behaviour until their batch lands. */
+@media print {
+  .fg-in, .fg-rule, .fg-mark--sweep, .fg-wire path, .fg-wire circle,
+  .fg-cue::after {
+    animation: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GUARD RAILS
+   Two rules the deck kept breaking. Kept as real CSS rather than
+   review notes, because a rule that is only written down decays.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Monospace is never set in all caps: the letterforms are already
+   distinct, and capitalising them turns code into decoration. */
+.fg-code,
+.fg-rows dd,
+[class*="fg-"] code,
+#stage code,
+#stage kbd,
+#stage samp { text-transform: none !important; }

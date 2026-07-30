@@ -1,0 +1,296 @@
+/* Presentation shell.
+ * Sits on top of tokens.css + base.css, under theme-field-guide.css.
+ * Only contains layout, the slide scale, and section-transition rules that the
+ * base stylesheet does not provide. All colours come from the theme.
+ */
+
+/* ═══════════ THE SLIDE SCALE ═══════════
+ *
+ * A slide is one viewport tall, so its type is sized from viewport HEIGHT — not
+ * fixed pixels. This is the decision the whole type system rests on, and it exists
+ * because three requirements are otherwise incompatible: nothing on a slide may
+ * be smaller than 14px, nothing may overflow, and no content may be cut to make
+ * room.
+ *
+ * Fixed pixels can satisfy any two of those. Raising an 11px floor to 14px in a
+ * fixed scale pushes the dense slides past the bottom of the screen, and the
+ * only fixed-pixel escapes are cutting words or accepting a scrollbar mid-talk.
+ * A height-relative scale satisfies all three: the deck keeps its proportions on
+ * whatever the venue projector turns out to be, and the type grows with the
+ * room instead of being tuned for one laptop.
+ *
+ * Every size is clamped at both ends:
+ *   - the LOWER bound is the legibility floor. It is what makes the 14px
+ *     minimum and 16px body true even on a short window.
+ *   - the UPPER bound stops the type ballooning on a 4K display or a very tall
+ *     browser window, where pure vh would produce headlines nobody asked for.
+ *
+ * The vh figures are derived from the approved design exploration, which
+ * expressed the same scale as a fraction of slide height. Reference column is
+ * a 1920×1080 screen, where the stage is ~967px tall after the header and nav
+ * bar — the resolution the deck is presented at.
+ *
+ * Line heights are unitless on purpose, so they track the font size instead of
+ * being a second set of numbers to keep in sync.
+ */
+:root {
+  /*                    floor      height-relative   ceiling        @1080p */
+  --ae-fs-display: clamp(40px,      7.48vh,          104px);     /* ~81px */
+  --ae-lh-display: 1.04;
+  --ae-fs-h1:      clamp(34px,      5.33vh,           76px);     /* ~58px */
+  --ae-lh-h1:      1.05;
+  --ae-fs-h2:      clamp(24px,      3.19vh,           44px);     /* ~34px */
+  --ae-lh-h2:      1.12;
+  --ae-fs-h3:      clamp(20px,      2.54vh,           34px);     /* ~27px */
+  --ae-lh-h3:      1.20;
+  --ae-fs-h4:      clamp(17px,      2.20vh,           28px);     /* ~24px */
+  --ae-lh-h4:      1.30;
+  --ae-fs-h5:      clamp(16px,      1.90vh,           24px);     /* ~21px */
+  --ae-lh-h5:      1.35;
+  --ae-fs-lead:    clamp(19px,      2.54vh,           34px);     /* ~27px */
+  --ae-lh-lead:    1.50;
+  --ae-fs-body:    clamp(16px,      2.04vh,           26px);     /* ~22px */
+  --ae-lh-body:    1.45;
+  --ae-fs-small:   clamp(15px,      1.81vh,           23px);     /* ~20px */
+  --ae-lh-small:   1.45;
+  /* The floor. Nothing on a slide is allowed to be smaller than this. */
+  --ae-fs-caption: clamp(14px,      1.62vh,           20px);     /* ~17px */
+  --ae-lh-caption: 1.40;
+
+  /* Spacing tracks the same axis, or the rhythm drifts as the type grows.
+   * 1 and 2 stay fixed: they are hairline gaps, not layout. */
+  --ae-space-3: clamp(8px,   1.1vh, 14px);
+  --ae-space-4: clamp(10px,  1.5vh, 18px);
+  --ae-space-5: clamp(14px,  2.1vh, 26px);
+  --ae-space-6: clamp(18px,  2.9vh, 36px);
+  --ae-space-7: clamp(24px,  4.0vh, 50px);
+  --ae-space-8: clamp(30px,  5.2vh, 66px);
+  --ae-space-9: clamp(40px,  7.4vh, 96px);
+
+  /* Slide side padding scales with WIDTH — it is a horizontal measure. */
+  --ae-gutter: clamp(20px, 3.4vw, 64px);
+}
+
+/* The deck's own floor, exposed so a slide can reason about it rather than
+ * guessing a pixel value. Anything smaller is a bug, not a style choice. */
+:root { --fg-fs-floor: var(--ae-fs-caption); }
+
+html, body { height: 100%; overflow: hidden; }
+body { display: flex; flex-direction: column; background: var(--ae-bg); }
+
+/* ═══════════ CHROME ═══════════
+ *
+ * The header and nav bar are deliberately sized in FIXED pixels, not the slide
+ * scale. Two reasons: chrome that grows with viewport height steals the height
+ * the slide needs, and chrome is not slide content — the 14px floor is a
+ * promise about what the audience has to read, and nobody in row twenty is
+ * reading the language toggle.
+ *
+ * Chrome is quiet: paper ground, hairline separators, one accent for state.
+ */
+
+/* ───── Header ───── */
+#header {
+  flex-shrink: 0;
+  z-index: 50;
+  background: var(--fg-paper);
+  border-bottom: 1px solid var(--fg-hair);
+}
+#header .header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 54px;
+  gap: var(--ae-space-5);
+}
+#header .ae-header__brand { justify-self: start; }
+#header .ae-header__brand .brand-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: var(--ae-radius-sm);
+  background: var(--fg-green);
+  color: #fff;
+  /* A chevron is a glyph, not code — it does not get the mono face. */
+  font-family: var(--ae-font);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+#header .ae-header__brand .brand-name {
+  font-family: var(--ae-font-head);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: var(--fg-ink);
+  white-space: nowrap;
+}
+#header .page-title {
+  justify-self: center;
+  font-family: var(--ae-font);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60ch;
+}
+#header .header-right { justify-self: end; }
+#header .lang-toggle {
+  display: inline-flex;
+  border: 1px solid var(--fg-hair);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--fg-card);
+}
+#header .lang-toggle button {
+  font-family: var(--ae-font);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 5px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: background 160ms var(--ae-ease), color 160ms var(--ae-ease);
+}
+#header .lang-toggle button + button { border-left: 1px solid var(--fg-hair); }
+#header .lang-toggle button:hover { color: var(--fg-ink); background: var(--ae-cool-gray-100); }
+#header .lang-toggle button.active { background: var(--fg-green); color: #fff; }
+
+/* ───── Stage (where sections mount) ───── */
+#stage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  background: var(--ae-bg);
+}
+#stage > * {
+  position: absolute;
+  inset: 0;
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity   400ms var(--ae-ease),
+    transform 400ms var(--ae-ease);
+  /* Sections center their content vertically. Without `safe`, flex
+     centering clips overflowing content at both ends and breaks scrolling.
+     `safe center` falls back to flex-start when content exceeds the
+     viewport — the slide top stays visible and the rest can be scrolled. */
+  justify-content: safe center;
+}
+#stage > *.entering { opacity: 0; transform: translateY(14px); }
+#stage > *.exiting  { opacity: 0; transform: translateY(-14px); }
+
+/* ───── Nav bar ───── */
+#nav {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px var(--ae-gutter);
+  background: var(--fg-paper);
+  border-top: 1px solid var(--fg-hair);
+}
+#nav .ae-btn {
+  font-size: 13px;
+  padding: 6px 16px;
+  min-height: 34px;
+}
+/* Scoped to #nav as well, or the rule above wins on specificity (1-1-0 beats
+ * 1-0-0) and its horizontal padding squeezes the icon to zero width. */
+#nav #btn-fullscreen {
+  position: absolute;
+  right: var(--ae-gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+}
+#nav #btn-fullscreen svg { width: 17px; height: 17px; display: block; }
+#counter {
+  font-family: var(--ae-font);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  min-width: 64px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+#chapters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+#chapters button {
+  font-family: var(--ae-font);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 5px 13px;
+  border: 1px solid var(--fg-hair);
+  background: var(--fg-card);
+  color: var(--fg-muted);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 180ms var(--ae-ease),
+              color 180ms var(--ae-ease),
+              border-color 180ms var(--ae-ease);
+}
+#chapters button:hover {
+  border-color: var(--ae-cool-gray-400);
+  color: var(--fg-ink);
+}
+#chapters button.current {
+  background: var(--fg-green);
+  border-color: var(--fg-green);
+  color: #fff;
+  font-weight: 600;
+}
+#chapters button .key {
+  margin-left: 6px;
+  padding: 0 5px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  opacity: 0.55;
+  font-size: 0.78em;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  #header .header-inner { min-height: 48px; }
+  #header .page-title { font-size: 12.5px; }
+  #header .ae-header__brand .brand-name { display: none; }
+  #btn-fullscreen { display: none; }
+}
+
+/* ───── Section conventions ───── */
+/* Bold spans inside any section's lede carry the accent, deck-wide. Kept on
+ * both the legacy .lede class and the slide kit's .fg-lede while the slides
+ * are converted. */
+.lede b, .fg-lede b { color: var(--fg-green-d); font-weight: 600; }
+
+/* ───── Reduced motion ─────
+ * Sections animate their content in with per-element delays. With reduced
+ * motion, collapse every animation/transition to a single instant frame:
+ * `forwards` fill still applies, so slides render fully revealed. Infinite
+ * pulse loops are clamped to one iteration. */
+@media (prefers-reduced-motion: reduce) {
+  #stage *, #stage *::before, #stage *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>09 · Paper Circuit — title page prototype</title>
+<!-- Prototype only. EN only, one slide, throwaway code: this file exists so a
+     human can judge a direction, not to ship. Fonts come from the deck. -->
+<link rel="stylesheet" href="../presentation/assets/fonts.css">
+<style>
+  :root {
+    --paper:   #F7F8FA;
+    --ink:     #171A21;
+    --grey:    #5C6270;
+    --indigo:  #4F46E5;
+    --violet:  #8B5CF6;
+    --mint:    #34D399;
+    --peach:   #FBA26B;
+    --f-disp:  'Bricolage Grotesque', system-ui, sans-serif;
+    --f-body:  'Inter', system-ui, sans-serif;
+    --f-mono:  'IBM Plex Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--f-body);
+    background: var(--paper);
+    color: var(--ink);
+    overflow: hidden;
+  }
+
+  /* ───── drifting colour fields, far behind everything ───── */
+  .blob {
+    position: fixed; border-radius: 50%;
+    filter: blur(90px); opacity: .5;
+    pointer-events: none;
+  }
+  .blob.a { width: 46vw; height: 46vw; left: -12vw;  top: -18vw;   background: radial-gradient(circle, var(--indigo), transparent 65%); animation: drift-a 26s ease-in-out infinite alternate; }
+  .blob.b { width: 40vw; height: 40vw; right: -10vw; top: 8vh;     background: radial-gradient(circle, var(--mint),   transparent 65%); animation: drift-b 31s ease-in-out infinite alternate; }
+  .blob.c { width: 34vw; height: 34vw; left: 28vw;   bottom: -16vw;background: radial-gradient(circle, var(--peach),  transparent 65%); animation: drift-c 24s ease-in-out infinite alternate; }
+
+  /* faint dot lattice on top of the blobs, under the content */
+  .lattice {
+    position: fixed; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(23,26,33,.14) 1px, transparent 1px);
+    background-size: 26px 26px;
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 45%, black 30%, transparent 100%);
+  }
+
+  .stage {
+    position: relative; height: 100%;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 6vh 8vw;
+    max-width: 1520px; margin: 0 auto;
+  }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: .9em;
+    width: fit-content;
+    font-family: var(--f-mono); font-size: clamp(11px, .82vw, 14px);
+    letter-spacing: .12em; color: var(--grey);
+    padding: .55em 1.1em; border-radius: 100px;
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(23,26,33,.1);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    margin-bottom: 3.4vh;
+    opacity: 0; animation: rise .6s cubic-bezier(.2,.7,.2,1) .15s forwards;
+  }
+  .eyebrow .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--mint);
+    animation: pulse 2.4s ease-out infinite;
+  }
+
+  h1 {
+    font-family: var(--f-disp);
+    font-weight: 800;
+    font-size: clamp(58px, 8.6vw, 134px);
+    line-height: .96; letter-spacing: -.03em;
+    margin-bottom: 3vh;
+    opacity: 0; animation: rise .7s cubic-bezier(.2,.7,.2,1) .35s forwards;
+  }
+  h1 .grad {
+    background: linear-gradient(92deg, var(--indigo) 10%, var(--violet) 50%, var(--mint) 95%);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+  }
+
+  .lede {
+    font-size: clamp(17px, 1.45vw, 24px);
+    line-height: 1.5; color: var(--grey);
+    max-width: 48ch; margin-bottom: 5.5vh;
+    opacity: 0; animation: rise .6s cubic-bezier(.2,.7,.2,1) .55s forwards;
+  }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  /* ───── circuit line joining the cards ───── */
+  .deck { position: relative; }
+  .circuit {
+    position: absolute; left: 4%; right: 4%; top: -3.4vh; height: 3.4vh;
+    width: 92%; overflow: visible; pointer-events: none;
+  }
+  .circuit path { fill: none; stroke: rgba(79,70,229,.4); stroke-width: 1.5; }
+  .circuit path.flow {
+    stroke: var(--indigo); stroke-width: 2;
+    stroke-dasharray: 10 130;
+    animation: flow 3.2s linear infinite;
+  }
+  .circuit circle { fill: var(--indigo); }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8vw; }
+  .card {
+    --mx: 50%; --my: 50%;
+    position: relative;
+    border-radius: 18px;
+    padding: clamp(20px, 2.1vw, 32px);
+    background: rgba(255,255,255,.58);
+    border: 1px solid rgba(23,26,33,.09);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 2px 6px rgba(23,26,33,.04), 0 16px 40px rgba(23,26,33,.05);
+    opacity: 0; transform: translateY(18px);
+    animation: rise .65s cubic-bezier(.2,.7,.2,1) forwards;
+    transition: transform .18s ease-out, box-shadow .3s ease;
+    will-change: transform;
+  }
+  .card:nth-child(1) { animation-delay: .8s; }
+  .card:nth-child(2) { animation-delay: .95s; }
+  .card:nth-child(3) { animation-delay: 1.1s; }
+  /* glow border that tracks the cursor */
+  .card::before {
+    content: ''; position: absolute; inset: -1px;
+    border-radius: 19px; padding: 1.5px;
+    background: radial-gradient(220px circle at var(--mx) var(--my),
+                var(--indigo), rgba(79,70,229,.06) 62%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: 0; transition: opacity .3s ease;
+    pointer-events: none;
+  }
+  .card:hover::before { opacity: 1; }
+  .card:hover { box-shadow: 0 6px 14px rgba(23,26,33,.06), 0 26px 60px rgba(23,26,33,.1); }
+
+  .card .n {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.3em; height: 2.3em; border-radius: 10px;
+    font-family: var(--f-mono); font-weight: 500;
+    font-size: clamp(12px, .95vw, 15px);
+    color: #fff; background: linear-gradient(135deg, var(--indigo), var(--violet));
+    margin-bottom: 1.1em;
+  }
+  .card:nth-child(2) .n { background: linear-gradient(135deg, var(--violet), var(--peach)); }
+  .card:nth-child(3) .n { background: linear-gradient(135deg, #0EA5A0, var(--mint)); }
+  .card h2 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(20px, 1.7vw, 28px); letter-spacing: -.015em;
+    margin-bottom: .45em;
+  }
+  .card p { font-size: clamp(14px, 1.05vw, 17px); line-height: 1.55; color: var(--grey); }
+
+  .byline {
+    margin-top: 4.5vh;
+    font-size: clamp(13px, 1vw, 16px); color: var(--grey);
+    opacity: 0; animation: rise .6s cubic-bezier(.2,.7,.2,1) 1.35s forwards;
+  }
+
+  @keyframes rise    { to { opacity: 1; transform: none; } }
+  @keyframes pulse   { 0% { box-shadow: 0 0 0 0 rgba(52,211,153,.5); } 80%,100% { box-shadow: 0 0 0 12px rgba(52,211,153,0); } }
+  @keyframes flow    { to { stroke-dashoffset: -140; } }
+  @keyframes drift-a { to { transform: translate(9vw, 7vh)  scale(1.12); } }
+  @keyframes drift-b { to { transform: translate(-7vw, 9vh) scale(.92); } }
+  @keyframes drift-c { to { transform: translate(6vw, -6vh) scale(1.08); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; animation-delay: 0ms !important; transition: none !important; }
+    .blob, .circuit path.flow, .eyebrow .pulse { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob a" aria-hidden="true"></div>
+<div class="blob b" aria-hidden="true"></div>
+<div class="blob c" aria-hidden="true"></div>
+<div class="lattice" aria-hidden="true"></div>
+
+<main class="stage">
+  <span class="eyebrow"><span class="pulse"></span> A field method for working with AI coding agents</span>
+
+  <h1>Agentic<br><span class="grad">Engineering</span></h1>
+
+  <p class="lede">Working with AI coding agents as an <b>engineering discipline</b> — structured, verifiable, and independent of any single tool.</p>
+
+  <div class="deck">
+    <svg class="circuit" viewBox="0 0 1200 34" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M20 32 L 20 14 L 590 14 L 600 14 L 1180 14 L 1180 32"/>
+      <path class="flow" d="M20 32 L 20 14 L 590 14 L 600 14 L 1180 14 L 1180 32"/>
+      <circle cx="20" cy="32" r="3.5"/><circle cx="600" cy="14" r="3.5"/><circle cx="1180" cy="32" r="3.5"/>
+    </svg>
+    <div class="cards">
+      <div class="card">
+        <span class="n">01</span>
+        <h2>Foundations</h2>
+        <p>What an agent is, the primitives every tool shares, and where to draw trust boundaries.</p>
+      </div>
+      <div class="card">
+        <span class="n">02</span>
+        <h2>Spec-Driven Development</h2>
+        <p>A workflow built on four artifacts and human gates — from spec to verified result.</p>
+      </div>
+      <div class="card">
+        <span class="n">03</span>
+        <h2>Best Practices</h2>
+        <p>Ten disciplines from daily practice, applicable from Monday morning.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="byline">Siavash Saki · 2026</p>
+</main>
+
+<script>
+  // cursor-tracked glow border + a gentle 3D tilt toward the pointer
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      card.style.setProperty('--mx', `${x}px`);
+      card.style.setProperty('--my', `${y}px`);
+      const rx = ((y / r.height) - .5) * -5;
+      const ry = ((x / r.width)  - .5) *  5;
+      card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+    });
+    card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+  });
+</script>
+</body>
+</html>

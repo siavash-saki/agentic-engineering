@@ -1,0 +1,118 @@
+/* Base layer: element defaults, and the three chrome components the deck uses.
+ *
+ * Load order: fonts.css → tokens.css → THIS FILE → core/styles.css →
+ * theme-field-guide.css → core/slide-kit.css.
+ *
+ * Scope is the point. A slide deck reaches almost none of what a general base
+ * stylesheet carries — there is no form, no site footer, no hero, no card
+ * library, because a slide that wants a card gets it from the slide kit. So
+ * this file holds the element layer every slide inherits, plus the container,
+ * the brand lockup and the button, which are the only components in the shell
+ * chrome. Nothing here is unreachable; if a rule stops being used it comes out.
+ *
+ * Colours, typefaces and shape resolve from the theme. Sizes and spacing
+ * resolve from the slide scale in core/styles.css. This file states structure
+ * and lets both of those decide how it looks.
+ */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--ae-bg);
+  color: var(--ae-text);
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-body);
+  line-height: var(--ae-lh-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Block display on svg matters more here than it looks: slides draw diagrams
+ * inline, and an inline svg sits on the text baseline and carries descender
+ * space, which shows up as a few unexplained pixels under every figure. */
+img, svg { display: block; max-width: 100%; height: auto; }
+
+a {
+  color: var(--ae-text-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--ae-dur-fast) var(--ae-ease);
+}
+a:hover { color: var(--ae-text-link-hover); }
+
+/* ===== Typography =====
+ * The deck uses three heading levels and no more. h4 and below are absent from
+ * all thirty slides, so they are absent here; a slide that needs one adds it. */
+h1, h2, h3 {
+  margin: 0;
+  font-family: var(--ae-font-head);
+  color: var(--ae-text-strong);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+h1 { font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); font-weight: 900; }
+h2 { font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2); }
+h3 { font-size: var(--ae-fs-h3); line-height: var(--ae-lh-h3); }
+
+p { margin: 0 0 var(--ae-space-4); }
+
+/* ===== Layout ===== */
+.ae-container {
+  width: 100%;
+  max-width: var(--ae-container);
+  margin: 0 auto;
+  padding: 0 var(--ae-gutter);
+}
+
+/* ===== Brand lockup ===== */
+.ae-header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ae-space-3);
+  text-decoration: none;
+}
+
+/* ===== Buttons =====
+ * Shell chrome only. No slide carries a button, and the nav bar re-sizes these
+ * to its own scale — what lives here is the shape, the state colours and the
+ * focus ring. */
+.ae-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ae-space-2);
+  background: var(--ae-red);
+  color: #fff;
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-body);
+  font-weight: 700;
+  line-height: 1.25;
+  padding: 12px 24px;
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--ae-radius);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--ae-dur-fast) var(--ae-ease);
+}
+.ae-btn:hover { background: var(--ae-red-600); color: #fff; text-decoration: none; }
+.ae-btn:active { background: var(--ae-red-700); }
+.ae-btn:focus-visible { outline: 3px solid var(--ae-info); outline-offset: 2px; }
+
+.ae-btn--secondary {
+  background: #fff;
+  color: var(--ae-cool-gray-700);
+  border: 2px solid var(--ae-cool-gray-700);
+  padding: 10px 22px; /* compensate for the 2px border */
+}
+.ae-btn--secondary:hover { background: var(--ae-cool-gray-100); color: var(--ae-cool-gray-700); }
+
+.ae-btn--small {
+  min-height: 36px;
+  padding: 8px 16px;
+  font-size: var(--ae-fs-small);
+}

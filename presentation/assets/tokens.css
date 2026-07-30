@@ -1,0 +1,31 @@
+/* Base tokens.
+ *
+ * Deliberately tiny. Almost every value the deck uses is defined further down
+ * the load order: core/styles.css owns the type scale, the line heights, the
+ * spacing steps from 3 up and the gutter, because all of those are tied to
+ * viewport height and belong with the slide scale that derives them.
+ * theme-field-guide.css owns colour, typeface, shape and elevation.
+ *
+ * What is left here is the handful of values that belong to neither — fixed
+ * quantities with no relationship to the viewport and no part in the deck's
+ * identity. If a value in this file starts wanting an opinion, it belongs in
+ * the theme instead.
+ */
+
+:root {
+  /* ===== Motion =====
+   * One easing curve for the whole deck. The slide kit layers its own
+   * durations on top; this is the shape they all share. */
+  --ae-ease: cubic-bezier(0.2, 0, 0, 1);
+  --ae-dur-fast: 160ms;
+
+  /* ===== Hairline spacing =====
+   * Steps 3 and up scale with viewport height and live in core/styles.css.
+   * These two do not scale: they are gaps between adjacent glyphs and icons,
+   * where growing with the room would read as a mistake rather than as scale. */
+  --ae-space-1: 4px;
+  --ae-space-2: 8px;
+
+  /* ===== Layout ===== */
+  --ae-container: 1296px;
+}

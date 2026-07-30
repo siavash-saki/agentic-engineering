@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10 · Field Guide, drawn — title page prototype</title>
+<!-- Prototype only. EN only, one slide, throwaway code. The Field Guide palette,
+     type and rules are kept exactly; what is added is motion: hairlines that
+     draw themselves, the mint highlight sweeping in, cards that answer hover
+     with the deck's own answer-ring device. -->
+<link rel="stylesheet" href="../presentation/assets/fonts.css">
+<style>
+  :root {
+    --paper:   #F5F7F3;
+    --card:    #FFFFFF;
+    --mint:    #E7F2E2;
+    --ink:     #16211C;
+    --body:    #333F39;
+    --muted:   #4F5C56;
+    --faint:   #646F6A;
+    --hair:    #D8E0D4;
+    --green:   #0E7734;
+    --green-d: #094B21;
+    --d1: 0 1px 2px rgba(22,33,28,.05);
+    --d3: 0 4px 8px rgba(22,33,28,.07), 0 18px 44px rgba(22,33,28,.10);
+    --ring: inset 0 0 0 2px rgba(14,119,52,.28);
+    --f-disp: 'Bricolage Grotesque', system-ui, sans-serif;
+    --f-body: 'Inter', system-ui, sans-serif;
+    --f-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --ease: cubic-bezier(.2,.7,.2,1);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--f-body); color: var(--ink); background: var(--paper);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+
+  /* ───── deck chrome, unchanged in spirit ───── */
+  header, footer {
+    flex: none; display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px; font-size: 14px;
+  }
+  header { border-bottom: 1px solid var(--hair); }
+  footer { border-top: 1px solid var(--hair); color: var(--faint); }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .brand .chev {
+    width: 22px; height: 22px; border-radius: 6px; background: var(--green);
+    color: #fff; display: grid; place-items: center; font-weight: 700;
+  }
+  .lang { display: flex; border: 1px solid var(--hair); border-radius: 100px; overflow: hidden; }
+  .lang span { padding: 4px 12px; font-size: 12px; font-weight: 600; }
+  .lang .on { background: var(--green); color: #fff; }
+  .pills { display: flex; gap: 8px; }
+  .pill {
+    padding: 5px 14px; border: 1px solid var(--hair); border-radius: 100px;
+    font-size: 12px; font-weight: 600; color: var(--muted); background: var(--card);
+  }
+  .pill.on { background: var(--green); border-color: var(--green); color: #fff; }
+
+  /* ───── the slide ───── */
+  .stage {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 0 7vw; max-width: 1440px; width: 100%; margin: 0 auto;
+  }
+
+  /* a hairline that draws itself, then its label fades in — the deck's own
+     hairline device, given a pulse of life */
+  .rule {
+    position: relative; height: 1px; background: var(--hair);
+    transform: scaleX(0); transform-origin: left;
+    animation: grow .8s var(--ease) .1s forwards;
+    margin-bottom: 3.6vh; width: min(520px, 42vw);
+  }
+  .rule .lbl {
+    position: absolute; left: 0; top: 10px;
+    font-size: 13px; font-weight: 600; letter-spacing: .02em; color: var(--faint);
+    opacity: 0; animation: fade .5s var(--ease) .7s forwards;
+  }
+
+  h1 {
+    font-family: var(--f-disp); font-weight: 800;
+    font-size: clamp(56px, 8vw, 124px);
+    line-height: 1.02; letter-spacing: -.025em;
+    margin-bottom: 3vh;
+    opacity: 0; animation: rise .7s var(--ease) .35s forwards;
+  }
+  /* the mint baseline highlight — the deck's one flourish — now sweeps in */
+  .mark { position: relative; white-space: nowrap; }
+  .mark::before {
+    content: ''; position: absolute; left: -.05em; right: -.05em;
+    top: 38%; bottom: 6%;
+    background: var(--mint); z-index: -1; border-radius: .06em;
+    transform: scaleX(0); transform-origin: left;
+    animation: grow .7s var(--ease) 1.05s forwards;
+  }
+
+  .lede {
+    font-size: clamp(17px, 1.4vw, 23px); line-height: 1.5; color: var(--body);
+    max-width: 50ch; margin-bottom: 5.5vh;
+    opacity: 0; animation: rise .6s var(--ease) .6s forwards;
+  }
+  .lede b { color: var(--green-d); font-weight: 600; }
+
+  /* ───── cards joined by a drawing path ───── */
+  .deck { position: relative; }
+  .wire {
+    position: absolute; left: 3%; right: 3%; top: -3vh; height: 3vh;
+    width: 94%; overflow: visible; pointer-events: none;
+  }
+  .wire path {
+    fill: none; stroke: var(--green); stroke-width: 1.5; opacity: .55;
+    stroke-dasharray: 2600; stroke-dashoffset: 2600;
+    animation: draw 1.3s var(--ease) 1.15s forwards;
+  }
+  .wire circle { fill: var(--green); opacity: 0; animation: fade .3s var(--ease) forwards; }
+  .wire circle:nth-of-type(1) { animation-delay: 1.35s; }
+  .wire circle:nth-of-type(2) { animation-delay: 1.75s; }
+  .wire circle:nth-of-type(3) { animation-delay: 2.15s; }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8vw; }
+  .card {
+    background: var(--card); border-radius: 14px;
+    padding: clamp(20px, 2vw, 30px);
+    box-shadow: var(--d1);
+    opacity: 0; transform: translateY(16px);
+    animation: rise .6s var(--ease) forwards;
+    transition: transform .28s var(--ease), box-shadow .28s var(--ease);
+    cursor: default;
+  }
+  .card:nth-child(1) { animation-delay: 1.25s; }
+  .card:nth-child(2) { animation-delay: 1.4s; }
+  .card:nth-child(3) { animation-delay: 1.55s; }
+  /* hover = the deck's own answer device: deep elevation + accent ring */
+  .card:hover { transform: translateY(-6px); box-shadow: var(--d3), var(--ring); }
+  .card:hover h2 { color: var(--green-d); }
+  .card .n {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(15px, 1.15vw, 19px); color: var(--green);
+    font-variant-numeric: tabular-nums;
+    display: block; margin-bottom: .9em;
+  }
+  .card h2 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(20px, 1.65vw, 27px); letter-spacing: -.015em;
+    margin-bottom: .45em; transition: color .28s;
+  }
+  .card p { font-size: clamp(14px, 1.05vw, 17px); line-height: 1.55; color: var(--body); }
+
+  .byline {
+    margin-top: 4.5vh; font-size: clamp(13px, 1vw, 16px); color: var(--faint);
+    opacity: 0; animation: fade .6s var(--ease) 2s forwards;
+  }
+
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @keyframes fade { to { opacity: 1; } }
+  @keyframes grow { to { transform: scaleX(1); } }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; animation-delay: 0ms !important; transition: none !important; }
+    .rule, .mark::before { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand"><span class="chev">›</span> Agentic&nbsp;Engineering</span>
+  <span style="color: var(--faint)">Title &amp; Overview</span>
+  <span class="lang"><span class="on">EN</span><span>DE</span></span>
+</header>
+
+<main class="stage">
+  <div class="rule"><span class="lbl">30 slides · EN / DE · runs with no network</span></div>
+
+  <h1>Agentic <span class="mark">Engineering</span></h1>
+
+  <p class="lede">Working with AI coding agents as an <b>engineering discipline</b> — structured, verifiable, and independent of any single tool.</p>
+
+  <div class="deck">
+    <svg class="wire" viewBox="0 0 1200 30" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M8 28 L 8 12 L 596 12 L 604 12 L 1192 12 L 1192 28"/>
+      <circle cx="8" cy="28" r="3.5"/><circle cx="600" cy="12" r="3.5"/><circle cx="1192" cy="28" r="3.5"/>
+    </svg>
+    <div class="cards">
+      <div class="card">
+        <span class="n">01</span>
+        <h2>Foundations</h2>
+        <p>What an agent is, the primitives every tool shares, and where to draw trust boundaries.</p>
+      </div>
+      <div class="card">
+        <span class="n">02</span>
+        <h2>Spec-Driven Development</h2>
+        <p>A workflow built on four artifacts and human gates — from spec to verified result.</p>
+      </div>
+      <div class="card">
+        <span class="n">03</span>
+        <h2>Best Practices</h2>
+        <p>Ten disciplines from daily practice, applicable from Monday morning.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="byline">Siavash Saki · 2026</p>
+</main>
+
+<footer>
+  <span class="pill">← Back</span>
+  <span class="pills">
+    <span class="pill on">Start</span><span class="pill">Primitives</span>
+    <span class="pill">SDD</span><span class="pill">Tips</span><span class="pill">Practice</span>
+  </span>
+  <span>1 / 30</span>
+  <span class="pill on">Next →</span>
+</footer>
+
+</body>
+</html>

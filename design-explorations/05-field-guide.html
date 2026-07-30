@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Direction 05 — Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════════
+   DIRECTION 05 — FIELD GUIDE  ·  revision 2
+   The friendly, high-trust reading of the same content: a practical
+   handbook rather than a spec.
+
+   What changed in this revision
+   1. Sticker chips removed entirely — slides carry a plain text eyebrow
+      rail instead (chapter left, position right).
+   2. No coloured edge bar on the "answer" card. Depth now does the work:
+      deepest shadow + a hairline green ring + a green heading.
+   3. Monospace is reserved for things that are literally code — file
+      paths, hex values. Labels, eyebrows and captions are Inter.
+   4. The mint baseline highlight stays. It is the one flourish.
+   5. Every size stepped up — 16px document base, larger slide scale.
+   6. Greys darkened so secondary text reads as secondary, not disabled.
+   ══════════════════════════════════════════════════════════════════════ */
+
+:root{
+  --paper:   #F5F7F3;
+  --card:    #FFFFFF;
+  --ink:     #16211C;
+  --body:    #333F39;   /* was #3E4A44 — darker */
+  --muted:   #4F5C56;   /* was #63706A — darker, no longer reads "disabled" */
+  --faint:   #6B7772;   /* only for genuinely tertiary text */
+  --hair:    #D8E0D4;   /* was #E2E8DE — a visible rule */
+  --green:   #0E7734;
+  --green-d: #094B21;
+  --mint:    #E7F2E2;
+  --navy:    #17324B;
+  --clay:    #B4552C;
+
+  --sh-1: 0 1px 2px rgba(22,33,28,.05);
+  --sh-2: 0 2px 4px rgba(22,33,28,.05), 0 8px 20px rgba(22,33,28,.06);
+  --sh-3: 0 4px 8px rgba(22,33,28,.07), 0 18px 44px rgba(22,33,28,.10);
+
+  --f-display:"Bricolage Grotesque", system-ui, sans-serif;
+  --f-body:   "Inter", system-ui, sans-serif;
+  --f-mono:   "IBM Plex Mono", ui-monospace, monospace;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--body);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.shell{max-width:1240px;margin:0 auto;padding:56px 40px 120px}
+
+/* ───────── page shell ───────── */
+.doc-head{margin-bottom:64px}
+.doc-head .meta{font-size:12.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;gap:22px;flex-wrap:wrap;margin-bottom:20px}
+.doc-head .meta b{color:var(--green);font-weight:600}
+.doc-head h1{font-family:var(--f-display);font-weight:700;font-size:clamp(40px,6.2vw,66px);letter-spacing:-.03em;line-height:1.02;margin:0 0 18px;color:var(--ink)}
+/* highlight sits on the baseline, clear of descenders */
+.doc-head h1 mark{background:linear-gradient(180deg,transparent 34%,var(--mint) 34%,var(--mint) 88%,transparent 88%);color:inherit;padding:0 .06em}
+.doc-head p{max-width:64ch;font-size:18px;margin:0 0 28px}
+.verdict{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.verdict div{background:var(--card);border-radius:14px;padding:17px 21px;box-shadow:var(--sh-1)}
+.verdict dt{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+.verdict dd{margin:0;font-size:15px;line-height:1.5}
+
+h2.sec{font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--hair);padding-bottom:11px;margin:80px 0 30px;display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+h2.sec span{font-weight:400;letter-spacing:0;text-transform:none;font-size:15px;color:var(--muted)}
+
+/* ───────── palette ───────── */
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px}
+.sw{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--sh-1)}
+.sw .chip{height:76px}
+.sw .lbl{padding:11px 14px 15px}
+.sw .lbl b{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+/* a hex value is code — mono earns its place here */
+.sw .lbl span{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+
+/* ───────── type ───────── */
+.type-row{display:grid;grid-template-columns:170px 1fr;gap:26px;padding:24px 0;border-bottom:1px solid var(--hair);align-items:baseline}
+.type-row .k{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.sp-display{font-family:var(--f-display);font-weight:700;font-size:48px;letter-spacing:-.032em;line-height:1.04;color:var(--ink)}
+.sp-h2{font-family:var(--f-display);font-weight:600;font-size:29px;letter-spacing:-.022em;color:var(--ink)}
+.sp-lede{font-size:20px;line-height:1.55}
+.sp-body{font-size:16px}
+.sp-mono{font-family:var(--f-mono);font-size:14px;color:var(--green-d)}
+.sp-label{font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--green)}
+
+/* ───────── components ───────── */
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:34px}
+.part>.cap{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:13px}
+
+/* the eyebrow rail — replaces the sticker chip */
+.fg-eyebrow{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid var(--hair);padding-bottom:9px;margin-bottom:10px}
+.fg-eyebrow .ch{font-size:13.5px;font-weight:600;letter-spacing:.04em;color:var(--green)}
+.fg-eyebrow.navy .ch{color:var(--navy)}
+.fg-eyebrow.clay .ch{color:var(--clay)}
+.fg-eyebrow .pos{font-size:13px;font-weight:500;color:var(--faint)}
+
+.fg-card{background:var(--card);border-radius:18px;padding:21px 23px;box-shadow:var(--sh-2)}
+/* depth 3 = the answer. Deepest shadow + a hairline ring. No edge bar. */
+.fg-card.answer{box-shadow:var(--sh-3),inset 0 0 0 1px rgba(14,119,52,.18)}
+.fg-card h4{font-family:var(--f-display);font-weight:600;font-size:21px;letter-spacing:-.022em;color:var(--ink);margin:0 0 7px}
+.fg-card.answer h4{color:var(--green-d)}
+.fg-card p{margin:0;font-size:15px}
+
+.fg-rows{margin:0;background:var(--card);border-radius:14px;padding:7px 17px;box-shadow:var(--sh-1)}
+.fg-rows .r{display:grid;grid-template-columns:118px 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--hair)}
+.fg-rows .r:last-child{border-bottom:0}
+.fg-rows dt{font-size:14px;font-weight:500;color:var(--muted)}
+.fg-rows dd{margin:0;font-family:var(--f-mono);font-size:13.5px;color:var(--green-d)}
+
+.fg-note{background:var(--mint);border-radius:14px;padding:16px 20px;font-size:15px;display:flex;gap:12px;color:var(--green-d)}
+.fg-note::before{content:"→";color:var(--green);font-weight:600;flex:none}
+.fg-note b{font-weight:600}
+.fg-note code{font-family:var(--f-mono);font-size:.92em}
+
+.fg-nav{display:flex;gap:8px;flex-wrap:wrap}
+.fg-nav b,.fg-nav i{font-size:13px;font-style:normal;font-weight:500;padding:7px 15px;border-radius:999px;background:var(--card);color:var(--muted);box-shadow:var(--sh-1)}
+.fg-nav b{background:var(--green);color:#fff;font-weight:600;box-shadow:var(--sh-2)}
+
+/* ═══════════ SLIDES ═══════════ */
+.frame{container-type:inline-size;aspect-ratio:16/9;width:100%;margin:0 0 26px;background:var(--paper);border-radius:14px;box-shadow:var(--sh-2);position:relative;overflow:hidden}
+.frame-cap{font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 11px}
+
+.slide{
+  --fs-display:4.7cqw; --fs-h1:3.35cqw; --fs-h2:2cqw;    --fs-h3:1.6cqw;
+  --fs-lede:1.6cqw;    --fs-body:1.28cqw; --fs-small:1.14cqw; --fs-micro:1.02cqw;
+  --r-card:1.15cqw;
+  position:absolute;inset:0;padding:2.8cqw 3.4cqw 3cqw;display:flex;flex-direction:column;font-size:var(--fs-body);
+}
+
+/* eyebrow rail: chapter left, position right, one hairline under it */
+.s-eyebrow{display:flex;align-items:baseline;justify-content:space-between;gap:2cqw;
+  border-bottom:1px solid var(--hair);padding-bottom:.8cqw;margin-bottom:1.9cqw}
+.s-eyebrow .ch{font-size:var(--fs-small);font-weight:600;letter-spacing:.03em;color:var(--green)}
+.s-eyebrow.navy .ch{color:var(--navy)}
+.s-eyebrow.clay .ch{color:var(--clay)}
+.s-eyebrow .pos{font-size:var(--fs-small);font-weight:500;color:var(--faint)}
+
+.s-title{font-family:var(--f-display);font-weight:700;letter-spacing:-.032em;line-height:1.04;margin:0 0 1.1cqw;font-size:var(--fs-h1);color:var(--ink)}
+.s-title.big{font-size:var(--fs-display)}
+.s-title mark{background:linear-gradient(180deg,transparent 34%,var(--mint) 34%,var(--mint) 88%,transparent 88%);color:inherit;padding:0 .07em;border-radius:.1em}
+.s-lede{font-size:var(--fs-lede);line-height:1.5;color:var(--body);max-width:54ch;margin:0}
+.s-lede b{color:var(--green-d);font-weight:600}
+.s-foot{margin-top:1.6cqw;padding-top:1.2cqw;border-top:1px solid var(--hair);font-size:var(--fs-micro);color:var(--faint);display:flex;justify-content:space-between;gap:2cqw}
+
+/* slide 1 */
+.takeaways{margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqw}
+.tk{background:var(--card);border-radius:var(--r-card);padding:1.5cqw 1.6cqw;box-shadow:var(--sh-2);display:flex;flex-direction:column;gap:.6cqw}
+.tk .n{font-size:var(--fs-micro);font-weight:600;letter-spacing:.03em;color:var(--green)}
+.tk .t{font-size:calc(var(--fs-body)*1.08);line-height:1.4;color:var(--ink)}
+.tk .t b{font-weight:600}
+
+/* slide 2 */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqw;margin-top:1.9cqw;flex:1;min-height:0}
+.pn{background:var(--card);border-radius:var(--r-card);padding:1.6cqw 1.8cqw;box-shadow:var(--sh-1);display:flex;flex-direction:column}
+/* depth carries the meaning — no edge bar */
+.pn.answer{box-shadow:var(--sh-3),inset 0 0 0 1px rgba(14,119,52,.18)}
+.pn h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:var(--fs-h3);letter-spacing:-.024em;color:var(--ink)}
+.pn.answer h3{color:var(--green-d)}
+.pn .say{font-size:var(--fs-small);font-style:italic;color:var(--muted);margin:.4cqw 0 1.15cqw;padding-bottom:1.05cqw;border-bottom:1px solid var(--hair)}
+.pn dl{margin:0;display:grid;gap:.85cqw}
+.pn dt{font-size:var(--fs-micro);font-weight:600;letter-spacing:.02em;color:var(--faint)}
+.pn dd{margin:.15cqw 0 0;font-size:var(--fs-body);line-height:1.35}
+.pn.answer dd{color:var(--ink);font-weight:500}
+.pn.answer dd b{color:var(--green);font-weight:600}
+
+/* slide 3 */
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5cqw;margin-top:1.9cqw;flex:1;min-height:0}
+.c3{background:var(--card);border-radius:var(--r-card);padding:1.5cqw 1.6cqw;box-shadow:var(--sh-2);display:flex;flex-direction:column}
+.c3 .hd{display:flex;align-items:center;gap:.75cqw;margin-bottom:.75cqw}
+.c3 .hd .dot{width:2.1cqw;height:2.1cqw;border-radius:.6cqw;background:var(--mint);color:var(--green-d);font-size:var(--fs-micro);font-weight:600;display:flex;align-items:center;justify-content:center;flex:none}
+.c3 h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:var(--fs-h3);letter-spacing:-.024em;color:var(--ink)}
+.c3 .blurb{margin:0 0 1.1cqw;font-size:var(--fs-small);line-height:1.5}
+.c3 .map{margin:0 0 auto;background:var(--paper);border-radius:.7cqw;padding:.8cqw 1cqw;font-size:var(--fs-micro);line-height:1.85}
+.c3 .map .r{display:flex;justify-content:space-between;gap:.7cqw}
+.c3 .map .r span:first-child{color:var(--muted);font-weight:500}
+/* the right column is a real file path — mono */
+.c3 .map .r span:last-child{font-family:var(--f-mono);color:var(--green-d);text-align:right}
+.c3 .why{margin:1.05cqw 0 0;font-size:var(--fs-small);line-height:1.4;color:var(--green-d);font-weight:500;display:flex;gap:.5cqw}
+.c3 .why::before{content:"→";color:var(--green);flex:none}
+.c3 .why code{font-family:var(--f-mono);font-size:.94em}
+
+/* slide 4 */
+.ten{display:grid;grid-template-columns:1fr 1fr;gap:.85cqw 1.4cqw;margin-top:2cqw;flex:1;align-content:space-between}
+.ten .d{display:flex;align-items:center;gap:1cqw;background:var(--card);border-radius:.8cqw;padding:.8cqw 1.2cqw;box-shadow:var(--sh-1)}
+.ten .n{font-size:var(--fs-micro);font-weight:600;color:var(--green);font-variant-numeric:tabular-nums;flex:none}
+.ten .t{font-family:var(--f-display);font-weight:500;font-size:calc(var(--fs-body)*1.06);color:var(--ink);letter-spacing:-.016em}
+
+@media(max-width:760px){.shell{padding:32px 18px 80px}.type-row{grid-template-columns:1fr;gap:10px}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="doc-head">
+    <div class="meta"><span>Direction 05 of 05</span><span>Agentic Engineering deck</span><b>Field Guide</b></div>
+    <h1>A handbook people<br>would actually <mark>keep</mark>.</h1>
+    <p>The warmest of the five, and the closest to where the deck already stands — but disciplined where the
+       current version is loose. Three fixed elevation levels, used to mean something: flat paper for ground,
+       one card depth for peers, a deeper depth reserved for the answer in any comparison. Navigation is a
+       plain eyebrow rail — chapter on the left, position on the right — so every slide is placeable without
+       a heavy header. Monospace appears only where the content is literally code.</p>
+    <dl class="verdict">
+      <div><dt>Best for</dt><dd>A mixed audience — engineers plus leads. Approachable, low-drama, easy to hand out as a PDF afterwards.</dd></div>
+      <div><dt>Costs you</dt><dd>The least distinctive. It reads as a very good deck rather than as a memorable one.</dd></div>
+      <div><dt>Risk taken</dt><dd>The smallest. Depth carries meaning instead of decoration — that is the whole discipline here.</dd></div>
+    </dl>
+  </header>
+
+  <h2 class="sec">Palette <span>Cool paper, green accent, two chapter markers</span></h2>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#F5F7F3"></div><div class="lbl"><b>Paper</b><span>#F5F7F3</span></div></div>
+    <div class="sw"><div class="chip" style="background:#FFFFFF;box-shadow:inset 0 0 0 1px #D8E0D4"></div><div class="lbl"><b>Card</b><span>#FFFFFF</span></div></div>
+    <div class="sw"><div class="chip" style="background:#16211C"></div><div class="lbl"><b>Ink</b><span>#16211C</span></div></div>
+    <div class="sw"><div class="chip" style="background:#333F39"></div><div class="lbl"><b>Body</b><span>#333F39</span></div></div>
+    <div class="sw"><div class="chip" style="background:#4F5C56"></div><div class="lbl"><b>Muted</b><span>#4F5C56</span></div></div>
+    <div class="sw"><div class="chip" style="background:#0E7734"></div><div class="lbl"><b>Green</b><span>#0E7734</span></div></div>
+    <div class="sw"><div class="chip" style="background:#E7F2E2"></div><div class="lbl"><b>Mint</b><span>#E7F2E2</span></div></div>
+    <div class="sw"><div class="chip" style="background:#17324B"></div><div class="lbl"><b>Navy</b><span>#17324B</span></div></div>
+    <div class="sw"><div class="chip" style="background:#B4552C"></div><div class="lbl"><b>Clay</b><span>#B4552C</span></div></div>
+  </div>
+
+  <h2 class="sec">Type <span>Bricolage for display, Inter for everything spoken, Plex Mono only for code</span></h2>
+  <div>
+    <div class="type-row"><div class="k">Display / Bricolage 700</div><div class="sp-display">Code with AI like you mean it</div></div>
+    <div class="type-row"><div class="k">Section / Bricolage 600</div><div class="sp-h2">Memory · Skills · MCP</div></div>
+    <div class="type-row"><div class="k">Lede / Inter 400</div><div class="sp-lede">Same model. Both ship code. Only one of them survives past the weekend project.</div></div>
+    <div class="type-row"><div class="k">Body / Inter 400</div><div class="sp-body">A markdown file of standing instructions the agent reads at every session start.</div></div>
+    <div class="type-row"><div class="k">Label / Inter 600</div><div class="sp-label">Building blocks · part 1</div></div>
+    <div class="type-row"><div class="k">Path or code / Plex Mono</div><div class="sp-mono">.claude/skills/&lt;name&gt;/SKILL.md</div></div>
+  </div>
+
+  <h2 class="sec">Components <span>Three depths, used consistently</span></h2>
+  <div class="parts">
+    <div class="part"><div class="cap">Eyebrow rail — replaces the chip</div>
+      <div class="fg-eyebrow"><span class="ch">Two ways to work</span><span class="pos">03 / 30</span></div>
+      <div class="fg-eyebrow navy"><span class="ch">Building blocks · part 1</span><span class="pos">05 / 30</span></div>
+      <div class="fg-eyebrow clay"><span class="ch">Best practices</span><span class="pos">19 / 30</span></div>
+    </div>
+    <div class="part"><div class="cap">Chapter nav</div><div class="fg-nav"><b>Context</b><i>Primitives</i><i>Spec-driven</i><i>Practices</i></div></div>
+    <div class="part"><div class="cap">Note</div><div class="fg-note"><span>One file: <b><code>AGENTS.md</code></b> — the rest symlink or import it.</span></div></div>
+    <div class="part"><div class="cap">Card — peer (depth 2)</div><div class="fg-card"><h4>Vibe Coding</h4><p>A gut-feel prompt, whatever context the model happens to have, and hope.</p></div></div>
+    <div class="part"><div class="cap">Card — answer (depth 3)</div><div class="fg-card answer"><h4>Agentic Engineering</h4><p>A specification, loaded context, and a review pass on every diff.</p></div></div>
+    <div class="part"><div class="cap">Data rows</div>
+      <dl class="fg-rows">
+        <div class="r"><dt>Claude Code</dt><dd>CLAUDE.md</dd></div>
+        <div class="r"><dt>Copilot</dt><dd>AGENTS.md</dd></div>
+        <div class="r"><dt>Cursor</dt><dd>.cursor/rules/</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <h2 class="sec">Slides <span>Rendered at 16 : 9</span></h2>
+
+  <p class="frame-cap">Opening</p>
+  <div class="frame"><div class="slide">
+    <div class="s-eyebrow"><span class="ch">Agentic Engineering</span><span class="pos">01 / 30</span></div>
+    <h1 class="s-title big">Code with AI<br><mark>like you mean it</mark></h1>
+    <p class="s-lede">Most of us use AI coding tools every day. Few of us use them well. This talk is about the gap between the two — and the engineering practice that closes it.</p>
+    <div class="takeaways">
+      <div class="tk"><span class="n">01 · Distinction</span><span class="t"><b>Vibe Coding</b> vs <b>Agentic Engineering</b></span></div>
+      <div class="tk"><span class="n">02 · Model</span><span class="t">The framework-agnostic concepts behind every AI coding tool</span></div>
+      <div class="tk"><span class="n">03 · Practice</span><span class="t">A workflow you can apply from Monday morning</span></div>
+    </div>
+    <div class="s-foot"><span>What you'll walk away with</span><span>Context</span></div>
+  </div></div>
+
+  <p class="frame-cap">Comparison — the thesis slide</p>
+  <div class="frame"><div class="slide">
+    <div class="s-eyebrow"><span class="ch">Two ways to work</span><span class="pos">03 / 30</span></div>
+    <h1 class="s-title">Vibe Coding vs. Agentic Engineering</h1>
+    <p class="s-lede">Same model. Both ship code. Only one of them survives past the weekend project.</p>
+    <div class="pair">
+      <div class="pn">
+        <h3>Vibe Coding</h3>
+        <p class="say">"Real quick, let me just …"</p>
+        <dl>
+          <div><dt>Input</dt><dd>A gut-feel prompt</dd></div>
+          <div><dt>Context</dt><dd>Whatever the model happens to know</dd></div>
+          <div><dt>Workflow</dt><dd>"Let's see what comes out"</dd></div>
+          <div><dt>Review</dt><dd>Accept the suggestion</dd></div>
+          <div><dt>Repeatability</dt><dd>One-shot — different next time</dd></div>
+          <div><dt>Scales to …</dt><dd>Toy problems</dd></div>
+        </dl>
+      </div>
+      <div class="pn answer">
+        <h3>Agentic Engineering</h3>
+        <p class="say">"Before I touch a key …"</p>
+        <dl>
+          <div><dt>Input</dt><dd>A clear <b>specification</b></dd></div>
+          <div><dt>Context</dt><dd>Memory, Skills, MCP</dd></div>
+          <div><dt>Workflow</dt><dd>Plan → Code → Review</dd></div>
+          <div><dt>Review</dt><dd>Checked diff by diff</dd></div>
+          <div><dt>Repeatability</dt><dd>Repeatable</dd></div>
+          <div><dt>Scales to …</dt><dd>Production code</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div></div>
+
+  <p class="frame-cap">Dense reference — three primitives</p>
+  <div class="frame"><div class="slide">
+    <div class="s-eyebrow navy"><span class="ch">Building blocks · part 1</span><span class="pos">05 / 30</span></div>
+    <h1 class="s-title">Memory · Skills · MCP</h1>
+    <p class="s-lede">Three framework-agnostic building blocks. The same concepts in every tool — and increasingly even under the <b>same file names</b>.</p>
+    <div class="cards3">
+      <div class="c3">
+        <div class="hd"><span class="dot">01</span><h3>Memory</h3></div>
+        <p class="blurb">Standing instructions the agent reads at every session start — build commands, standards, decisions.</p>
+        <div class="map">
+          <div class="r"><span>Claude</span><span>CLAUDE.md</span></div>
+          <div class="r"><span>Copilot</span><span>AGENTS.md</span></div>
+          <div class="r"><span>Codex</span><span>AGENTS.md</span></div>
+          <div class="r"><span>Cursor</span><span>.cursor/rules/</span></div>
+        </div>
+        <p class="why">One file: <code>AGENTS.md</code> — the rest symlink it.</p>
+      </div>
+      <div class="c3">
+        <div class="hd"><span class="dot">02</span><h3>Skills</h3></div>
+        <p class="blurb">Reusable, named procedures — a release playbook, a review checklist. Loaded on demand.</p>
+        <div class="map">
+          <div class="r"><span>Claude</span><span>.claude/skills/</span></div>
+          <div class="r"><span>Copilot</span><span>.github/skills/</span></div>
+          <div class="r"><span>Codex</span><span>.agents/skills/</span></div>
+          <div class="r"><span>Cursor</span><span>.cursor/skills/</span></div>
+        </div>
+        <p class="why">Tribal knowledge becomes code.</p>
+      </div>
+      <div class="c3">
+        <div class="hd"><span class="dot">03</span><h3>MCP</h3></div>
+        <p class="blurb">An open standard that lets agents talk to Jira, Postgres, GitHub, an internal knowledge hub.</p>
+        <div class="map">
+          <div class="r"><span>Claude</span><span>.mcp.json</span></div>
+          <div class="r"><span>Copilot</span><span>.vscode/mcp.json</span></div>
+          <div class="r"><span>Codex</span><span>config.toml</span></div>
+          <div class="r"><span>Cursor</span><span>.cursor/mcp.json</span></div>
+        </div>
+        <p class="why">One server, every tool. Reversible.</p>
+      </div>
+    </div>
+    <div class="s-foot"><span>Tool mappings verified against official docs</span><span>July 2026</span></div>
+  </div></div>
+
+  <p class="frame-cap">List slide — ten disciplines</p>
+  <div class="frame"><div class="slide">
+    <div class="s-eyebrow clay"><span class="ch">Best practices</span><span class="pos">19 / 30</span></div>
+    <h1 class="s-title">Ten <mark>disciplines</mark></h1>
+    <p class="s-lede">The workflow won't carry itself. Ten practices that decide whether your AI coding tool earns its keep — or quietly burns your hours.</p>
+    <div class="ten">
+      <div class="d"><span class="n">01</span><span class="t">Make the agent ask</span></div>
+      <div class="d"><span class="n">06</span><span class="t">Commit small, early, often</span></div>
+      <div class="d"><span class="n">02</span><span class="t">Give it a feedback loop</span></div>
+      <div class="d"><span class="n">07</span><span class="t">Do it twice? Make it a Skill</span></div>
+      <div class="d"><span class="n">03</span><span class="t">One session per mental context</span></div>
+      <div class="d"><span class="n">08</span><span class="t">Project rules, kept alive</span></div>
+      <div class="d"><span class="n">04</span><span class="t">Confused? Fresh session</span></div>
+      <div class="d"><span class="n">09</span><span class="t">The right tier for the job</span></div>
+      <div class="d"><span class="n">05</span><span class="t">Review every diff</span></div>
+      <div class="d"><span class="n">10</span><span class="t">Use them all</span></div>
+    </div>
+  </div></div>
+
+</div>
+</body>
+</html>

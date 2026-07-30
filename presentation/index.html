@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agentic Engineering</title>
+<!-- Self-hosted fonts. No CDN link and nothing fetched at load time: the deck
+     has to render in a conference room with hostile wifi, and CLAUDE.md
+     forbids CDN dependencies. Regenerate with `node scripts/fetch-fonts.mjs`. -->
+<link rel="stylesheet" href="assets/fonts.css?v=5">
+<link rel="stylesheet" href="assets/tokens.css?v=5">
+<link rel="stylesheet" href="assets/base.css?v=5">
+<link rel="stylesheet" href="core/styles.css?v=5">
+<!-- Field Guide theme: gives the base tokens this deck's palette, type and
+     three-elevation shadow set. Loaded after the base so it wins. -->
+<link rel="stylesheet" href="assets/theme-field-guide.css?v=5">
+<!-- Slide kit: the recurring devices of the design language — the three
+     elevations, the title highlight, data rows, badges. Loaded last so a
+     slide can lean on it instead of redefining it locally. -->
+<link rel="stylesheet" href="core/slide-kit.css?v=5">
+</head>
+<body>
+
+<header id="header">
+  <div class="ae-container header-inner">
+    <a href="#1" class="ae-header__brand" aria-label="Agentic Engineering">
+      <span class="brand-logo" aria-hidden="true">&rsaquo;</span>
+      <span class="brand-name">Agentic&nbsp;Engineering</span>
+    </a>
+    <span class="page-title">Agentic Engineering</span>
+    <span class="header-right">
+      <div class="lang-toggle" role="group" aria-label="Language / Sprache">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<footer id="nav">
+  <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-prev">&larr; Back</button>
+  <div id="chapters"></div>
+  <span id="counter">1 / 30</span>
+  <button class="ae-btn ae-btn--small" id="btn-next">Next &rarr;</button>
+  <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-fullscreen" type="button" title="Fullscreen (F)" aria-label="Fullscreen"></button>
+</footer>
+
+<script type="module" src="core/presentation.js?v=5"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+Agentic Engineering
+Copyright 2026 Siavash Saki
+
+This product includes the slide deck in presentation/, the method described in
+AGENTS.md, the Spec-Driven Development artifacts in sdd/, and the adoption kit
+in adoption-kit/.
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+The prose of the slides lives inside the same source files as the code that
+renders it — each slide component holds its English and German text in a map at
+the top of the file — so the writing and the code cannot be separated by
+directory. Attribution under section 4(d) of the License therefore covers both.
+
+The License grants no permission to use the author's name or the title of the
+talk. See section 6.
+
+Tool, product and company names appearing in the deck — including Claude Code,
+GitHub Copilot, OpenAI Codex, Amazon Kiro and Cursor — are the trademarks of
+their respective owners. They are used nominatively, to identify the tools the
+deck compares, and imply no affiliation with or endorsement by those owners.
+
+
+THIRD-PARTY COMPONENTS
+======================
+
+The typefaces in presentation/assets/fonts/ are NOT covered by the Apache
+License. Each is licensed under the SIL Open Font License, Version 1.1, and its
+full licence text ships beside the font files:
+
+  Bricolage Grotesque
+    Copyright 2022 The Bricolage Grotesque Project Authors
+    https://github.com/ateliertriay/bricolage
+    presentation/assets/fonts/OFL-Bricolage-Grotesque.txt
+    Ships as latin + latin-ext subsets.
+
+  Inter
+    Copyright 2016 The Inter Project Authors
+    https://github.com/rsms/inter
+    presentation/assets/fonts/OFL-Inter.txt
+    Ships as latin + latin-ext subsets.
+
+  IBM Plex Mono
+    Copyright 2017 IBM Corp., with Reserved Font Name "Plex"
+    https://github.com/IBM/plex
+    presentation/assets/fonts/OFL-IBM-Plex-Mono.txt
+    Ships complete and unmodified, byte-identical to IBM's release. A subset
+    would be a Modified Version, which the OFL does not permit to carry a
+    Reserved Font Name.
+
+No other third-party material is included.
+
+
+GENERATED MATERIAL
+==================
+
+  presentation/assets/vibe-vs-eng.png
+
+    The deck's only image, and its only binary that is not a font. The author's
+    own concept — the contrast the deck itself argues, drawn — rendered with
+    OpenAI's ChatGPT image model in July 2026. Covered by the Apache License
+    along with the rest of this work. No third party holds rights in it and it
+    restates no one else's diagram; it is recorded here because generated
+    material has a provenance a reviewer may reasonably want stated.
+
+    Unlike the image it replaces, this file carries no C2PA manifest, so the
+    generator is recorded on the author's statement rather than checkable
+    against the bytes.
