@@ -1,6 +1,11 @@
 /* Section 1 — Title.
-   States the subject and the loop, nothing else. The agenda is the six
-   chapters, in order, so the audience knows the shape before it starts. */
+   The route device from the v1 deck: the talk's shape drawn as a path
+   with stops, rather than listed as cards. What sits on the stops here is
+   not the chapter list but the loop itself — this deck has one spine, and
+   the title slide makes that argument before a word is spoken.
+
+   The seven chapters are still reachable from the footer chips, so
+   nothing is lost by not enumerating them here. */
 
 import { getLang } from '../core/i18n.js';
 
@@ -8,46 +13,37 @@ const TAG = 's01-title';
 
 const CONTENT = {
   en: {
-    kicker: 'Building software with coding agents',
-    h1: 'Agentic <span class="fg-mark fg-mark--sweep">Engineering</span>',
-    lede: `One loop, three steps. It applies whether the agent writes a
-           migration script or a payment service. What changes is how much
-           of it you write down.`,
-    loop: ['Plan', 'Build', 'Review'],
-    author: 'Dr. Siavash Saki',
-    year: '2026',
-    agendaLabel: 'What follows',
-    agenda: [
-      { n: '1', t: 'Start',    d: 'Two prompts, and the difference between them.' },
-      { n: '2', t: 'The Loop', d: 'The three steps, and the two agreements.' },
-      { n: '3', t: 'Plan',     d: 'Read, ask, converge, write it down.' },
-      { n: '4', t: 'Build',    d: 'Small steps, and what the agent knows.' },
-      { n: '5', t: 'Review',   d: 'Two questions, and why one model is not enough.' },
-      { n: '6', t: 'Practice', d: 'How much of this, for which work.' },
-      { n: '7', t: 'SDD',      d: 'The same loop at full weight, with every artifact.' },
+    h1a: 'Agentic',
+    h1b: 'Engineering',
+    sub: `One loop, three steps. It applies whether the agent writes a
+          migration script or a payment service. What changes is how much
+          of it you write down.`,
+    stops: [
+      { n: '01', t: 'Plan',   d: 'Read, ask, converge, write it down.' },
+      { n: '02', t: 'Build',  d: 'Small steps, and what the agent knows.' },
+      { n: '03', t: 'Review', d: 'Two questions, and why one model is not enough.' },
     ],
+    meta: 'Dr. Siavash Saki  ·  2026',
   },
   de: {
-    kicker: 'Software bauen mit Coding-Agenten',
-    h1: 'Agentic <span class="fg-mark fg-mark--sweep">Engineering</span>',
-    lede: `Ein Loop, drei Schritte. Er gilt für ein Migrationsskript genauso
-           wie für einen Zahlungsdienst. Unterschiedlich ist nur, wie viel
-           davon schriftlich festgehalten wird.`,
-    loop: ['Plan', 'Build', 'Review'],
-    author: 'Dr. Siavash Saki',
-    year: '2026',
-    agendaLabel: 'Ablauf',
-    agenda: [
-      { n: '1', t: 'Start',    d: 'Zwei Prompts, und der Unterschied dazwischen.' },
-      { n: '2', t: 'Der Loop', d: 'Die drei Schritte und die zwei Freigaben.' },
-      { n: '3', t: 'Plan',     d: 'Lesen, fragen, klären, aufschreiben.' },
-      { n: '4', t: 'Build',    d: 'Kleine Schritte, und was der Agent weiß.' },
-      { n: '5', t: 'Review',   d: 'Zwei Fragen, und warum ein Modell nicht reicht.' },
-      { n: '6', t: 'Praxis',   d: 'Wie viel davon, für welche Arbeit.' },
-      { n: '7', t: 'SDD',      d: 'Derselbe Loop mit vollem Gewicht, mit allen Artefakten.' },
+    h1a: 'Agentic',
+    h1b: 'Engineering',
+    sub: `Ein Loop, drei Schritte. Er gilt für ein Migrationsskript genauso
+          wie für einen Zahlungsdienst. Unterschiedlich ist nur, wie viel
+          davon schriftlich festgehalten wird.`,
+    stops: [
+      { n: '01', t: 'Plan',   d: 'Lesen, fragen, klären, aufschreiben.' },
+      { n: '02', t: 'Build',  d: 'Kleine Schritte, und was der Agent weiß.' },
+      { n: '03', t: 'Review', d: 'Zwei Fragen, und warum ein Modell nicht reicht.' },
     ],
+    meta: 'Dr. Siavash Saki  ·  2026',
   },
 };
+
+/* The route curve passes exactly through the three column centres of a
+   1200-wide frame (x = 200, 600, 1000); each stop's height on the curve is
+   carried per column as --ny (in the path's 120-unit coordinate space). */
+const NODE_Y = [68, 40, 58];
 
 class Section01 extends HTMLElement {
   connectedCallback() {
@@ -55,151 +51,141 @@ class Section01 extends HTMLElement {
     this.innerHTML = `
       <style>
         ${TAG} {
-          display: flex !important;
+          display: block;
+          padding: var(--ae-space-7) var(--ae-gutter);
+          overflow: auto;
+          background: var(--fg-paper);
+        }
+        ${TAG} .fg-wrap {
+          max-width: 1200px;
+          height: 100%;
+          display: flex;
           flex-direction: column;
           justify-content: center;
-          padding: var(--ae-space-6) var(--ae-gutter);
-          background: var(--fg-paper);
-          overflow: auto;
-        }
-        ${TAG} .grid {
-          display: grid;
-          grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-          gap: var(--ae-space-8);
-          align-items: center;
-        }
-        ${TAG} .kicker {
-          font-size: var(--ae-fs-caption);
-          line-height: var(--ae-lh-caption);
-          font-weight: 600;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          color: var(--fg-muted);
-          margin: 0 0 var(--ae-space-3);
         }
         ${TAG} h1 {
           margin: 0 0 var(--ae-space-5);
-          font-size: var(--ae-fs-h1);
-          line-height: var(--ae-lh-h1);
+          font-size: calc(var(--ae-fs-display) * 1.12);
+          line-height: var(--ae-lh-display);
           color: var(--fg-ink);
         }
-        ${TAG} .fg-lede { margin-bottom: var(--ae-space-6); }
+        /* No local override of the title highlight: the kit's .fg-mark is
+           already the deeper band, and one rule deck-wide is the point. */
+        ${TAG} .sub {
+          font-size: var(--ae-fs-lead);
+          line-height: var(--ae-lh-lead);
+          color: var(--fg-body);
+          max-width: 62ch;
+          margin: 0 0 var(--ae-space-6);
+        }
 
-        /* The loop, stated once on the title slide so the deck's spine is
-           visible before a single argument is made. */
-        ${TAG} .loop {
+        /* ── The route: a drawn path with the three steps as stops ── */
+        ${TAG} .route { --route-h: clamp(90px, 13vh, 150px); }
+        ${TAG} .route .line {
+          position: absolute;
+          left: 0; right: 0; top: 0;
+          width: 100%;
+          height: var(--route-h);
+        }
+        ${TAG} .route {
+          position: relative;
+          margin-bottom: var(--ae-space-6);
+        }
+        ${TAG} .cols {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: var(--ae-space-5);
+        }
+        ${TAG} .rcol {
+          position: relative;
+          padding-top: calc(var(--route-h) + var(--ae-space-3));
+          text-align: center;
+        }
+        /* The stop: the step's ordinal, sitting on the curve itself. */
+        ${TAG} .node {
+          position: absolute;
+          top: calc(var(--ny) / 120 * var(--route-h));
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: clamp(40px, 5.4vh, 52px);
+          height: clamp(40px, 5.4vh, 52px);
+          border-radius: 50%;
+          background: var(--fg-paper);
+          border: 2px solid var(--fg-green);
           display: flex;
           align-items: center;
-          gap: var(--ae-space-3);
-          flex-wrap: wrap;
+          justify-content: center;
+          font-size: var(--ae-fs-small);
+          font-weight: 700;
+          font-variant-numeric: tabular-nums;
+          color: var(--fg-green);
+          transition: background 220ms var(--ae-ease), color 220ms var(--ae-ease),
+                      transform 220ms var(--ae-ease);
         }
-        ${TAG} .loop .step {
+        ${TAG} .rcol:hover .node {
+          background: var(--fg-green);
+          color: #fff;
+          transform: translate(-50%, -50%) scale(1.08);
+        }
+        ${TAG} .rcol .t {
           font-family: var(--ae-font-head);
           font-size: var(--ae-fs-h3);
-          line-height: 1.1;
+          line-height: var(--ae-lh-h3);
           font-weight: 700;
           letter-spacing: -0.022em;
           color: var(--fg-ink);
+          margin-bottom: var(--ae-space-2);
+          transition: color 220ms var(--ae-ease);
         }
-        ${TAG} .loop .arrow {
-          color: var(--fg-green);
-          font-weight: 700;
-          font-size: var(--ae-fs-h4);
-        }
-
-        /* The byline sits under the loop, on its own hairline: it is
-           attribution, not part of the argument, so it takes the muted
-           weight rather than competing with the three steps above it. */
-        ${TAG} .byline {
-          display: flex;
-          align-items: baseline;
-          gap: var(--ae-space-3);
-          margin: var(--ae-space-6) 0 0;
-          padding-top: var(--ae-space-4);
-          border-top: 1px solid var(--fg-hair);
-        }
-        ${TAG} .byline .name {
-          font-family: var(--ae-font-head);
-          font-size: var(--ae-fs-h5);
-          line-height: 1.2;
-          font-weight: 600;
-          color: var(--fg-ink);
-        }
-        ${TAG} .byline .year {
-          font-size: var(--ae-fs-small);
-          line-height: 1.2;
-          color: var(--fg-faint);
-          font-variant-numeric: tabular-nums;
-        }
-
-        ${TAG} .agenda { margin: 0; }
-        ${TAG} .agenda .label { margin-bottom: var(--ae-space-3); }
-        ${TAG} .agenda ol {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-        }
-        ${TAG} .agenda li {
-          display: grid;
-          grid-template-columns: auto minmax(0, 1fr);
-          gap: var(--ae-space-3);
-          align-items: baseline;
-          padding: var(--ae-space-3) 0;
-          border-bottom: 1px solid var(--fg-hair);
-        }
-        ${TAG} .agenda li:last-child { border-bottom: 0; }
-        ${TAG} .agenda .t {
-          font-family: var(--ae-font-head);
-          font-weight: 600;
-          font-size: var(--ae-fs-h5);
-          line-height: 1.25;
-          color: var(--fg-ink);
-        }
-        ${TAG} .agenda .d {
-          display: block;
+        ${TAG} .rcol:hover .t { color: var(--fg-green-d); }
+        ${TAG} .rcol .d {
           font-size: var(--ae-fs-small);
           line-height: var(--ae-lh-small);
           color: var(--fg-muted);
-          margin-top: 2px;
+          max-width: 34ch;
+          margin: 0 auto;
         }
-
-        @media (max-width: 1000px) {
-          ${TAG} .grid { grid-template-columns: 1fr; gap: var(--ae-space-6); }
+        ${TAG} .meta {
+          font-family: var(--ae-font-head);
+          font-size: calc(var(--ae-fs-small) * 1.60);
+          font-weight: 600;
+          letter-spacing: -0.01em;
+          color: var(--fg-body);
+          margin: var(--ae-space-9) 0 0 var(--ae-space-5);
+        }
+        @media (max-width: 768px) {
+          ${TAG} { padding: var(--ae-space-6) var(--ae-gutter); }
+          ${TAG} .meta { margin-left: 0; }
+          ${TAG} .route .line { display: none; }
+          ${TAG} .cols { grid-template-columns: 1fr; gap: var(--ae-space-3); }
+          ${TAG} .rcol { padding-top: 0; text-align: left; }
+          ${TAG} .rcol .node { display: none; }
+          ${TAG} .rcol .d { margin: 0; }
         }
       </style>
-      <div class="fg-wrap grid">
-        <div>
-          <p class="kicker fg-in" style="--fg-at: 1">${t.kicker}</p>
-          <h1 class="fg-in" style="--fg-at: 1">${t.h1}</h1>
-          <p class="fg-lede fg-in" style="--fg-at: 2">${t.lede}</p>
-          <div class="loop">
-            ${t.loop.map((s, i) => `
-              ${i ? `<span class="arrow fg-in" style="--fg-at: ${3 + i * 2 - 1}" aria-hidden="true">→</span>` : ''}
-              <span class="step fg-in" style="--fg-at: ${3 + i * 2}">${s}</span>
+      <div class="fg-wrap">
+        <h1 class="fg-in" style="--fg-at: 1">${t.h1a} <span class="fg-mark fg-mark--sweep" style="--fg-at: 5">${t.h1b}</span></h1>
+        <p class="sub fg-in" style="--fg-at: 2">${t.sub}</p>
+
+        <div class="route">
+          <svg class="line fg-wire" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+            <path pathLength="100" style="--fg-at: 3; --fg-dur-draw: 1200ms"
+              d="M 20 86 C 90 80, 140 72, 200 68 C 340 58, 460 44, 600 40 C 740 36, 870 50, 1000 58 C 1070 62, 1120 55, 1180 48"/>
+            <polygon points="1180,40 1196,48 1180,56" fill="var(--fg-green)" opacity="0.7"
+              style="animation: fg-appear 300ms var(--ae-ease) both; animation-delay: calc(60ms + 8 * var(--fg-beat))"/>
+          </svg>
+          <div class="cols">
+            ${t.stops.map((c, i) => `
+              <div class="rcol" style="--ny: ${NODE_Y[i]}">
+                <span class="node" style="animation: fg-appear 300ms var(--ae-ease) both; animation-delay: calc(60ms + ${4 + i} * var(--fg-beat))">${c.n}</span>
+                <div class="t fg-in" style="--fg-at: ${5 + i}">${c.t}</div>
+                <p class="d fg-in" style="--fg-at: ${5 + i}">${c.d}</p>
+              </div>
             `).join('')}
           </div>
-          <p class="byline fg-in" style="--fg-at: 9">
-            <span class="name">${t.author}</span>
-            <span class="year">${t.year}</span>
-          </p>
         </div>
 
-        <div class="agenda fg-in" style="--fg-at: 4">
-          <p class="fg-label label">${t.agendaLabel}</p>
-          <ol>
-            ${t.agenda.map((a, i) => `
-              <li class="fg-in" style="--fg-at: ${5 + i}">
-                <span class="fg-badge">${a.n}</span>
-                <span>
-                  <span class="t">${a.t}</span>
-                  <span class="d">${a.d}</span>
-                </span>
-              </li>
-            `).join('')}
-          </ol>
-        </div>
+        <p class="meta fg-in" style="--fg-at: 9">${t.meta}</p>
       </div>
     `;
   }
