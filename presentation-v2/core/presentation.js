@@ -39,7 +39,7 @@ const sections = [
   { tag: 's03-compare',            title: { en: 'Vibe Coding vs. Agentic Engineering', de: 'Vibe Coding vs. Agentic Engineering' } },
   { tag: 's04-drawn',              title: { en: 'The Same Thing, Drawn',               de: 'Dasselbe, gezeichnet' } },
   { tag: 's05-loop',               title: { en: 'Plan → Build → Review',               de: 'Plan → Build → Review' } },
-  { tag: 's06-changed',            title: { en: 'What It Buys You',                    de: 'Was es bringt' } },
+  { tag: 's06-changed',            title: { en: 'Why It Is Written Down',              de: 'Warum es aufgeschrieben wird' } },
   { tag: 's07-gate',               title: { en: 'Two Agreements',                      de: 'Zwei Freigaben' } },
   { tag: 's08-plan',               title: { en: 'Plan',                                de: 'Plan' } },
   { tag: 's09-plan-explore',       title: { en: 'Plan · Read First',                   de: 'Plan · Erst lesen' } },

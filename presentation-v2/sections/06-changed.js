@@ -9,8 +9,9 @@ const TAG = 's06-changed';
 
 const CONTENT = {
   en: {
-    h1: 'The agent builds <span class="fg-mark fg-mark--sweep">what you asked for</span>',
-    lede: `Not something next to it. That is the whole return on the first step.`,
+    h1: 'Why it is <span class="fg-mark fg-mark--sweep">written down</span>',
+    lede: `The agent reads only what is written. Everything that is not written,
+           it decides itself.`,
     points: [
       { t: 'No guessing',      d: 'Every blank you leave, the model fills in — plausibly, and silently.' },
       { t: 'No drifting',      d: 'It builds against a written plan, not against its memory of the chat.' },
@@ -19,8 +20,9 @@ const CONTENT = {
     cost: 'The price is one conversation before the first line of code.',
   },
   de: {
-    h1: 'Der Agent baut, <span class="fg-mark fg-mark--sweep">was du willst</span>',
-    lede: `Nicht irgendwas daneben. Das ist der ganze Ertrag des ersten Schritts.`,
+    h1: 'Warum es <span class="fg-mark fg-mark--sweep">aufgeschrieben</span> wird',
+    lede: `Der Agent liest nur, was dasteht. Alles, was nicht dasteht,
+           entscheidet er selbst.`,
     points: [
       { t: 'Kein Raten',          d: 'Jede Lücke, die du lässt, füllt das Modell — plausibel und lautlos.' },
       { t: 'Kein Abdriften',      d: 'Er baut gegen einen geschriebenen Plan, nicht gegen sein Gedächtnis vom Chat.' },
