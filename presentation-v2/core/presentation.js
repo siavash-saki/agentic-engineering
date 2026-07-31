@@ -75,6 +75,10 @@ const CHAPTERS = [
   { label: { en: 'Review',   de: 'Review' },   index: 17, key: 'r'  },
   { label: { en: 'Practice', de: 'Praxis' },   index: 23, key: 'x'  },
   { label: { en: 'SDD',      de: 'SDD' },      index: 25, key: 's'  },
+  /* The close is its own stop rather than the tail of SDD: it is where
+     the links live, and it is the one slide a viewer wants to reach
+     directly from anywhere in the deck. */
+  { label: { en: 'End',      de: 'Ende' },     index: 30, key: 'e'  },
 ];
 
 /* The chapter a slide belongs to: the last one that starts at or before it.
