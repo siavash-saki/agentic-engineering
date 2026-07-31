@@ -12,7 +12,7 @@ const CONTENT = {
     thanks: 'Thank you',
     loop: ['Plan', 'Build', 'Review'],
     tagline: 'Write the plan down. Agree it. Build in small steps. Have something else read the diff.',
-    who: 'Siavash Saki',
+    who: 'Dr. Siavash Saki',
     linksLabel: 'Everything from this talk',
     links: [
       { t: 'The deck and the adoption kit',
@@ -31,7 +31,7 @@ const CONTENT = {
     thanks: 'Danke',
     loop: ['Plan', 'Build', 'Review'],
     tagline: 'Plan aufschreiben. Freigeben. In kleinen Schritten bauen. Den Diff von etwas anderem lesen lassen.',
-    who: 'Siavash Saki',
+    who: 'Dr. Siavash Saki',
     linksLabel: 'Alles aus diesem Vortrag',
     links: [
       { t: 'Die Folien und das Adoption-Kit',
