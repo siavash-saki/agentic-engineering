@@ -14,14 +14,14 @@ const CONTENT = {
            dashboard you throw away.`,
     left: {
       label: 'Prompt A',
-      prompt: 'Here is the data. Build me a dashboard.',
+      prompt: 'Here\'s the inventory data. Build me a dashboard.',
       outLabel: 'What happens',
       out: 'The agent picks the charts, the metrics and the colours. All of it is a guess, and all of it looks finished.',
       verdict: 'Vibe coding',
     },
     right: {
       label: 'Prompt B',
-      prompt: 'Here is the data. Before you build anything: what should be in this dashboard? What makes sense to show? What should the colours be? Ask me until you know.',
+      prompt: 'Here\'s the inventory data. I want a dashboard. Before you write any code: read it, then let\'s talk. What KPIs matter? What should the charts show? What do we leave out? Ask me until you know.',
       outLabel: 'What happens',
       steps: [
         'It asks. You answer.',
@@ -41,14 +41,14 @@ const CONTENT = {
            produziert ein Dashboard, das man wegwirft.`,
     left: {
       label: 'Prompt A',
-      prompt: 'Hier sind die Daten. Bau mir ein Dashboard.',
+      prompt: 'Hier sind die Inventardaten. Bau mir ein Dashboard.',
       outLabel: 'Was passiert',
       out: 'Der Agent wählt Diagramme, Kennzahlen und Farben. Alles davon ist geraten, und alles davon sieht fertig aus.',
       verdict: 'Vibe Coding',
     },
     right: {
       label: 'Prompt B',
-      prompt: 'Hier sind die Daten. Bevor du etwas baust: Was gehört in dieses Dashboard? Was ist sinnvoll darzustellen? Welche Farben? Frag mich, bis du es weißt.',
+      prompt: 'Hier sind die Inventardaten. Ich will ein Dashboard. Bevor du Code schreibst: sieh sie dir an, dann reden wir. Welche KPIs zählen? Was sollen die Charts zeigen? Was lassen wir weg? Frag mich, bis du es weißt.',
       outLabel: 'Was passiert',
       steps: [
         'Er fragt. Du antwortest.',
