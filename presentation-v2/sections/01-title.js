@@ -15,26 +15,22 @@ const CONTENT = {
   en: {
     h1a: 'Agentic',
     h1b: 'Engineering',
-    sub: `One loop, three steps. It applies whether the agent writes a
-          migration script or a payment service. What changes is how much
-          of it you write down.`,
+    sub: `How to build production software with coding agents.`,
     stops: [
       { n: '01', t: 'Plan',   d: 'Read, ask, converge, write it down.' },
       { n: '02', t: 'Build',  d: 'Small steps, and what the agent knows.' },
-      { n: '03', t: 'Review', d: 'Two questions, and why one model is not enough.' },
+      { n: '03', t: 'Review', d: 'The quality gate: check, prove, accept.' },
     ],
     meta: 'Dr. Siavash Saki  ·  2026',
   },
   de: {
     h1a: 'Agentic',
     h1b: 'Engineering',
-    sub: `Ein Loop, drei Schritte. Er gilt für ein Migrationsskript genauso
-          wie für einen Zahlungsdienst. Unterschiedlich ist nur, wie viel
-          davon schriftlich festgehalten wird.`,
+    sub: `Wie du mit Coding-Agenten produktionsreife Software baust.`,
     stops: [
       { n: '01', t: 'Plan',   d: 'Lesen, fragen, klären, aufschreiben.' },
       { n: '02', t: 'Build',  d: 'Kleine Schritte, und was der Agent weiß.' },
-      { n: '03', t: 'Review', d: 'Zwei Fragen, und warum ein Modell nicht reicht.' },
+      { n: '03', t: 'Review', d: 'Das Qualitätsgate: prüfen, belegen, abnehmen.' },
     ],
     meta: 'Dr. Siavash Saki  ·  2026',
   },
