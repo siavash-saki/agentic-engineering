@@ -3,9 +3,11 @@
    is called done. Drawn as a pipeline so the positions are unambiguous —
    a gate is a point on the line, not a card next to it.
 
-   The plan is shown as the file it is. Gate 1 is an approval of
-   something; leaving that something abstract is what lets an audience
-   hear "process" instead of "one short markdown file". */
+   The Plan step carries a document hanging off the line, the same device
+   the SDD chapter uses. It says the plan is a file that gets written and
+   kept, and deliberately says nothing about what goes in it — that is the
+   Plan chapter's job, and prescribing a structure here would be exactly
+   the ceremony this deck argues against. */
 
 import { getLang } from '../core/i18n.js';
 
@@ -17,68 +19,42 @@ const CONTENT = {
     lede: `A gate is a point where the work stops and a person decides. There are
            two, and both of them are yours.`,
     steps: ['Plan', 'Build', 'Review'],
+    docKind: 'writes',
+    docName: 'PLAN.md',
     gates: [
       { n: '1', label: 'Before the code',   desc: 'A person agrees the plan' },
       { n: '2', label: 'Before it is done', desc: 'A person accepts the result' },
     ],
-    docLabel: 'What gate 1 approves — the whole file',
-    docName: 'PLAN.md',
-    doc: [
-      { h: '# Rate limiting for the public API' },
-      { h: '## What it should do' },
-      { p: 'Requests over 100 per minute for one API key are' },
-      { p: 'rejected with 429 and a Retry-After header.' },
-      { p: 'Internal service calls are exempt.' },
-      { h: '## Done when' },
-      { li: 'A client under the limit is served normally' },
-      { li: 'A client over it gets 429 and a Retry-After' },
-      { li: 'Internal calls pass regardless' },
-      { h: '## Not now' },
-      { p: 'Per-endpoint limits. Billing.' },
-    ],
     cards: [
       { t: 'Gate 1 — before Build',
-        d: 'The agent may not cross it alone, however obvious the next step looks.' },
+        d: 'Without it you did not plan, you wrote a longer prompt. The agent may not cross it alone, however obvious the next step looks.' },
       { t: 'Gate 2 — after Review',
-        d: 'An agent reporting its own success is not this gate.' },
+        d: 'The evidence is checked and the work is accepted, or it is not. An agent reporting its own success is not this gate.' },
     ],
-    note: `Eleven lines, committed next to the code. <b>That is the whole
-           minimum</b> — everything beyond it is a choice about how much the work
-           is worth.`,
+    note: `The plan is a file, committed next to the code — that is what gate 1
+           approves. <b>Everything else — how formal, how many files, who
+           signs — is yours to choose.</b>`,
   },
   de: {
     h1: 'Zwei Freigaben',
     lede: `Ein Gate ist ein Punkt, an dem die Arbeit stoppt und ein Mensch
            entscheidet. Es gibt zwei, und beide gehören dir.`,
     steps: ['Plan', 'Build', 'Review'],
+    docKind: 'schreibt',
+    docName: 'PLAN.md',
     gates: [
       { n: '1', label: 'Vor dem Code',   desc: 'Ein Mensch gibt den Plan frei' },
       { n: '2', label: 'Vor dem Fertig', desc: 'Ein Mensch nimmt das Ergebnis ab' },
     ],
-    docLabel: 'Was Gate 1 freigibt — die ganze Datei',
-    docName: 'PLAN.md',
-    doc: [
-      { h: '# Rate-Limiting für die öffentliche API' },
-      { h: '## Was es tun soll' },
-      { p: 'Requests über 100 pro Minute je API-Key werden mit' },
-      { p: '429 und Retry-After-Header abgelehnt.' },
-      { p: 'Interne Service-Aufrufe sind ausgenommen.' },
-      { h: '## Fertig, wenn' },
-      { li: 'Ein Client unter dem Limit normal bedient wird' },
-      { li: 'Ein Client darüber 429 und Retry-After bekommt' },
-      { li: 'Interne Aufrufe in jedem Fall durchgehen' },
-      { h: '## Jetzt nicht' },
-      { p: 'Limits je Endpoint. Abrechnung.' },
-    ],
     cards: [
       { t: 'Gate 1 — vor Build',
-        d: 'Der Agent darf es nicht allein überschreiten, so naheliegend der nächste Schritt auch aussieht.' },
+        d: 'Ohne das hast du nicht geplant, sondern nur länger geprompted. Der Agent darf es nicht allein überschreiten, so naheliegend der nächste Schritt auch aussieht.' },
       { t: 'Gate 2 — nach Review',
-        d: 'Ein Agent, der seinen eigenen Erfolg meldet, ist nicht dieses Gate.' },
+        d: 'Die Belege werden geprüft und die Arbeit abgenommen — oder eben nicht. Ein Agent, der seinen eigenen Erfolg meldet, ist nicht dieses Gate.' },
     ],
-    note: `Elf Zeilen, neben dem Code eingecheckt. <b>Das ist das ganze
-           Minimum</b> — alles darüber hinaus ist eine Entscheidung darüber, was
-           die Arbeit wert ist.`,
+    note: `Der Plan ist eine Datei, neben dem Code eingecheckt — genau die gibt
+           Gate 1 frei. <b>Alles Weitere — wie formell, wie viele Dateien, wer
+           unterschreibt — wählst du selbst.</b>`,
   },
 };
 
@@ -90,58 +66,57 @@ const GATE_COLS = [2, 6];
 class Section07 extends HTMLElement {
   connectedCallback() {
     const t = CONTENT[getLang()] ?? CONTENT.en;
-    const line = row => row.h ? `<div class="h">${row.h}</div>`
-      : row.li ? `<div class="li">- ${row.li}</div>`
-      : `<div class="p">${row.p}</div>`;
     this.innerHTML = `
       <style>
         ${TAG} {
           display: flex !important;
           flex-direction: column;
           justify-content: center;
-          padding: var(--ae-space-4) var(--ae-gutter);
+          padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
         }
         ${TAG} h1 {
-          margin: 0 0 var(--ae-space-2);
+          margin: 0 0 var(--ae-space-3);
           font-size: var(--ae-fs-h2);
           line-height: var(--ae-lh-h2);
           color: var(--fg-ink);
         }
-        ${TAG} .fg-lede { margin-bottom: var(--ae-space-4); font-size: var(--ae-fs-body); }
+        ${TAG} .fg-lede { margin-bottom: var(--ae-space-5); }
 
         ${TAG} .pipe {
           display: grid;
           grid-template-columns: 1fr 128px 1fr 40px 1fr 128px;
-          grid-template-rows: auto 30px auto;
-          margin-bottom: var(--ae-space-4);
+          grid-template-rows: auto 32px auto;
+          margin-bottom: var(--ae-space-5);
         }
+        /* Row 1 — the steps, standing on the line via a short tick. */
         ${TAG} .st {
           grid-row: 1;
           position: relative;
           align-self: end;
           text-align: center;
-          padding-bottom: 18px;
+          padding-bottom: 20px;
         }
         ${TAG} .st::after {
           content: '';
           position: absolute;
           left: 50%; bottom: 0;
-          height: 15px;
+          height: 17px;
           border-left: 1.5px solid var(--fg-hair);
         }
         ${TAG} .st h3 {
           margin: 0;
-          font-size: var(--ae-fs-h4);
+          font-size: var(--ae-fs-h3);
           line-height: 1.15;
           color: var(--fg-ink);
         }
+        /* Row 2 — the line, its stops and the gates standing on it. */
         ${TAG} .track { grid-row: 2; grid-column: 1 / -1; width: 100%; height: 100%; }
         ${TAG} .nd {
           grid-row: 2;
           align-self: center; justify-self: center;
-          width: 12px; height: 12px;
+          width: 13px; height: 13px;
           border-radius: 50%;
           background: var(--fg-green);
           border: 2.5px solid var(--fg-paper);
@@ -150,7 +125,7 @@ class Section07 extends HTMLElement {
         ${TAG} .gate {
           grid-row: 2;
           align-self: center; justify-self: center;
-          width: 30px; height: 30px;
+          width: 34px; height: 34px;
           border-radius: 50%;
           background: var(--fg-green);
           color: #fff;
@@ -160,8 +135,9 @@ class Section07 extends HTMLElement {
         }
         ${TAG} .gd {
           grid-row: 3;
-          padding-top: 10px;
+          padding-top: 12px;
           text-align: center;
+          align-self: start;
         }
         ${TAG} .gd .l {
           font-size: var(--ae-fs-caption);
@@ -176,54 +152,54 @@ class Section07 extends HTMLElement {
           color: var(--fg-muted);
         }
 
-        /* ── the plan, as the file it is ── */
-        ${TAG} .lower {
-          display: grid;
-          grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-          gap: var(--ae-space-5);
-          align-items: start;
-          margin-bottom: var(--ae-space-3);
+        /* Row 3 — the plan, hanging off the line as the document it is.
+           Same device as the SDD chapter, so a viewer who sees it there
+           recognises it here. */
+        ${TAG} .doc {
+          grid-row: 3;
+          position: relative;
+          justify-self: center;
+          align-self: start;
+          margin-top: 22px;
+          width: min(100%, 24ch);
         }
-        ${TAG} .doc { padding: 0; overflow: hidden; }
-        ${TAG} .doc .bar {
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-          gap: var(--ae-space-3);
-          padding: var(--ae-space-2) var(--ae-space-4);
-          background: var(--ae-cool-gray-100);
-          border-bottom: 1px solid var(--fg-hair);
+        ${TAG} .doc::before {
+          content: '';
+          position: absolute;
+          top: -22px; left: 50%;
+          height: 22px;
+          border-left: 1.5px dashed var(--fg-green);
+          opacity: 0.6;
         }
-        ${TAG} .doc .name {
+        ${TAG} .doc .card {
+          background: var(--fg-card);
+          border: 1px solid var(--fg-hair);
+          border-radius: var(--ae-radius-md);
+          box-shadow: var(--fg-d1);
+          padding: var(--ae-space-3) var(--ae-space-4);
+          text-align: center;
+        }
+        ${TAG} .doc .kind {
+          font-size: var(--ae-fs-caption);
+          line-height: var(--ae-lh-caption);
+          font-weight: 600;
+          color: var(--fg-green);
+        }
+        ${TAG} .doc .file {
           font-family: var(--ae-font-mono);
           font-size: calc(var(--ae-fs-caption) * 0.96);
+          line-height: var(--ae-lh-caption);
+          color: var(--ae-text-strong);
           font-weight: 700;
-          color: var(--fg-green-d);
         }
-        ${TAG} .doc .body {
-          padding: var(--ae-space-3) var(--ae-space-4);
-          font-family: var(--ae-font-mono);
-          font-size: calc(var(--ae-fs-caption) * 0.94);
-          line-height: 1.45;
-        }
-        ${TAG} .doc .h  { color: var(--fg-green-d); font-weight: 700; margin-top: 6px; }
-        ${TAG} .doc .h:first-child { margin-top: 0; }
-        ${TAG} .doc .p  { color: var(--fg-body); }
-        ${TAG} .doc .li { color: var(--fg-ink); padding-left: var(--ae-space-3); }
 
-        ${TAG} .cards { display: flex; flex-direction: column; gap: var(--ae-space-3); }
-        ${TAG} .cards h3 {
-          margin: 0 0 2px;
-          font-size: var(--ae-fs-h5);
-          line-height: 1.25;
-          color: var(--fg-ink);
+        ${TAG} .cards {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: var(--ae-space-5);
+          margin-bottom: var(--ae-space-4);
         }
-        ${TAG} .cards p {
-          margin: 0;
-          font-size: var(--ae-fs-small);
-          line-height: var(--ae-lh-small);
-          color: var(--fg-body);
-        }
+        ${TAG} .cards p { margin: 0; font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body); }
 
         @media (max-width: 1100px) {
           ${TAG} .pipe {
@@ -238,7 +214,9 @@ class Section07 extends HTMLElement {
           ${TAG} .st::after { display: none; }
           ${TAG} .gate { justify-self: start; }
           ${TAG} .gd { text-align: left; padding-top: 0; }
-          ${TAG} .lower { grid-template-columns: 1fr; }
+          ${TAG} .doc { margin-top: 0; justify-self: start; }
+          ${TAG} .doc::before { display: none; }
+          ${TAG} .cards { grid-template-columns: 1fr; }
         }
       </style>
       <div class="fg-wrap">
@@ -252,43 +230,40 @@ class Section07 extends HTMLElement {
             </div>
           `).join('')}
 
-          <svg class="track fg-wire" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
-            <path pathLength="100" d="M 0 15 L 100 15" style="--fg-at: 3; --fg-dur-draw: 1100ms"/>
+          <svg class="track fg-wire" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true">
+            <path pathLength="100" d="M 0 16 L 100 16" style="--fg-at: 3; --fg-dur-draw: 1100ms"/>
           </svg>
 
           ${t.steps.map((s, i) => `
             <span class="nd" style="grid-column: ${STEP_COLS[i]}; animation: fg-appear 300ms var(--ae-ease) both; animation-delay: calc(60ms + ${4 + i} * var(--fg-beat))" aria-hidden="true"></span>
           `).join('')}
 
+          <div class="doc fg-in" style="grid-column: 1; --fg-at: 6">
+            <div class="card">
+              <div class="kind">${t.docKind}</div>
+              <div class="file">${t.docName}</div>
+            </div>
+          </div>
+
           ${t.gates.map((g, i) => `
-            <div class="gate fg-in" style="grid-column: ${GATE_COLS[i]}; --fg-at: ${6 + i}">${g.n}</div>
-            <div class="gd fg-in" style="grid-column: ${GATE_COLS[i]}; --fg-at: ${6 + i}">
+            <div class="gate fg-in" style="grid-column: ${GATE_COLS[i]}; --fg-at: ${7 + i}">${g.n}</div>
+            <div class="gd fg-in" style="grid-column: ${GATE_COLS[i]}; --fg-at: ${7 + i}">
               <div class="l">${g.label}</div>
               <div class="d">${g.desc}</div>
             </div>
           `).join('')}
         </div>
 
-        <div class="lower">
-          <div class="doc fg-card fg-in" style="--fg-at: 8">
-            <div class="bar">
-              <span class="name">${t.docName}</span>
-              <span class="fg-label">${t.docLabel}</span>
+        <div class="cards">
+          ${t.cards.map((c, i) => `
+            <div class="fg-card fg-hover fg-in" style="--fg-at: ${9 + i}">
+              <h3 class="fg-card__title fg-hover-title">${c.t}</h3>
+              <p>${c.d}</p>
             </div>
-            <div class="body">${t.doc.map(line).join('')}</div>
-          </div>
-
-          <div class="cards fg-in" style="--fg-at: 9">
-            ${t.cards.map(c => `
-              <div>
-                <h3>${c.t}</h3>
-                <p>${c.d}</p>
-              </div>
-            `).join('')}
-          </div>
+          `).join('')}
         </div>
 
-        <p class="fg-note fg-in" style="--fg-at: 11"><span>${t.note}</span></p>
+        <p class="fg-note fg-in" style="--fg-at: 12"><span>${t.note}</span></p>
       </div>
     `;
   }
