@@ -1,0 +1,174 @@
+/* FIELD GUIDE — the deck's design language.
+ *
+ * Load order: fonts.css → tokens.css → base.css → core/styles.css →
+ * THIS FILE → core/slide-kit.css.
+ *
+ * The base layer states structure and holds no opinion: what a heading is, what
+ * a button is, which quantities are fixed. This file is where the deck decides
+ * how all of that looks. The split is deliberate — it is what lets a value
+ * change here and reach base components, shell chrome and all 30 slides at
+ * once, without any of them naming a colour directly.
+ *
+ * One name is a fossil: the accent scale is still called `red`, from the deck's
+ * first skin, and every value in it is this deck's green. Renaming it is
+ * mechanical and has not been done.
+ *
+ * Three ideas the rest of the deck depends on:
+ *
+ *   1. THREE ELEVATIONS, EACH MEANING SOMETHING. Paper is the ground. One card
+ *      depth marks items that are peers of each other. A deeper depth is
+ *      reserved for the answer in a comparison — the option the audience should
+ *      leave with. Nothing else gets a shadow. This is why coloured edge bars
+ *      are gone: depth carries the emphasis, so it survives greyscale and a
+ *      projector with the contrast turned down.
+ *
+ *   2. MONOSPACE MEANS CODE. --ae-font-mono is for file paths, file names,
+ *      commands, hex values, and the literal source of a file — the SDD slides
+ *      render spec.md and friends as documents, and prose inside a markdown
+ *      file is still that file's source (see .fg-source in the slide kit).
+ *      Labels, captions, footers and table headers use the body face, even
+ *      inside a source panel. Never set mono in all caps.
+ *
+ *   3. SECONDARY TEXT IS SECONDARY, NOT DISABLED. Every foreground here clears
+ *      WCAG AA (4.5:1) on both paper and card. --fg-faint is deliberately
+ *      darker than the design exploration's value, which measured 4.32:1.
+ *      --ae-text-disabled is the only grey allowed to fail, because "disabled"
+ *      is the one thing it should look like.
+ */
+
+:root {
+  /* ═══════════ The palette, named for what it is ═══════════ */
+  --fg-paper:   #F5F7F3;   /* the ground every slide sits on */
+  --fg-card:    #FFFFFF;   /* anything raised off the paper */
+  --fg-mint:    #E7F2E2;   /* accent wash: notes, badges */
+  /* The title highlight is its own, deeper value. At --fg-mint the marker
+     washed out at projector brightness and read as a printing artefact
+     rather than a deliberate mark. Ink on it measures 12.9:1. */
+  --fg-mint-deep: #C5E2BB;
+
+  --fg-ink:     #16211C;   /* headings */
+  --fg-body:    #333F39;   /* body copy */
+  --fg-muted:   #4F5C56;   /* labels, secondary copy         6.50:1 on paper */
+  --fg-faint:   #646F6A;   /* slide position, footers        4.84:1 on paper */
+  --fg-hair:    #D8E0D4;   /* rules and hairlines — visible, not a suggestion */
+
+  --fg-green:   #0E7734;   /* the accent. One accent.        5.26:1 on paper */
+  --fg-green-d: #094B21;   /* accent text on mint, emphasis */
+  --fg-navy:    #17324B;   /* chapter marker */
+  /* The accent, for use ON DARK surfaces. The terminal and tree mock-ups are
+   * near-black, where #0E7734 measures 2.9:1 — a fail. 7.4:1 here. */
+  --fg-green-light: #6FBE89;
+  --fg-clay:    #B4552C;   /* chapter marker                 4.56:1 on paper */
+
+  /* ═══════════ The three elevations ═══════════
+   * Shadows are tinted with the ink hue, not black: a neutral-black shadow on
+   * warm-green paper reads as grey dirt. */
+  /* Depths tuned at the 0003 pilot gate: the original d1 was so shallow that
+   * a card read as a bare white rectangle. Each depth now has a soft contact
+   * shadow plus ambient falloff; the card device adds a hairline edge. */
+  --fg-d1: 0 1px 2px rgba(22, 33, 28, .07), 0 4px 12px rgba(22, 33, 28, .07);
+  --fg-d2: 0 2px 4px rgba(22, 33, 28, .07), 0 10px 24px rgba(22, 33, 28, .09);
+  --fg-d3: 0 4px 8px rgba(22, 33, 28, .08), 0 18px 44px rgba(22, 33, 28, .12);
+  /* The answer's accent ring. Composed with --fg-d3, never used alone.
+   * 2px at .28, not a hairline: the ring has to carry the "this is the answer"
+   * signal in greyscale, where the accent hue is gone and only the outline and
+   * the shadow remain. A 1px ring at .18 measured invisible in that test.
+   * It is a full outline on all four sides — the coloured single-edge bar this
+   * replaces is what the spec forbids. */
+  --fg-ring: inset 0 0 0 2px rgba(14, 119, 52, .28);
+
+  /* ═══════════ Remap: brand ═══════════
+   * The base layer references --ae-red everywhere it means "accent". The
+   * whole scale moves to green so untouched components recolour on their own. */
+  --ae-red:     #0E7734;
+  --ae-red-100: #E7F2E2;
+  --ae-red-200: #CFE7C6;
+  --ae-red-300: #A9DD8A;
+  --ae-red-400: #4E9E5C;
+  --ae-red-500: #0E7734;
+  --ae-red-600: #0B5E29;   /* hover  */
+  --ae-red-700: #094B21;   /* active */
+  --ae-red-800: #063517;
+
+  /* ═══════════ Remap: neutrals ═══════════ */
+  --ae-cool-gray-100: #EEF3EC;   /* faint mint-neutral: rows, wells */
+  --ae-cool-gray-200: #D8E0D4;
+  --ae-cool-gray-300: #B6C1B2;
+  /* 400 is darker than an even ramp would put it, because nine slides use it as
+   * a TEXT colour for muted diagram labels and glyphs. At #8B978F those
+   * measured 2.81:1 on paper — a fail. The scale does not need to be
+   * perceptually even; the text on it needs to be readable. */
+  --ae-cool-gray-400: #646F6A;
+  --ae-cool-gray-500: #646F6A;
+  --ae-cool-gray-600: #4F5C56;
+  --ae-cool-gray-700: #333F39;
+  --ae-cool-gray-800: #16211C;
+
+  /* ═══════════ Remap: surfaces ═══════════
+   * --ae-bg is the paper, not white. Cards raise off it via --ae-surface, which
+   * is what makes a single card depth legible at all. */
+  --ae-bg:            #F5F7F3;
+  --ae-bg-subtle:     #EEF3EC;
+  --ae-bg-muted:      #D8E0D4;
+  --ae-surface:       #FFFFFF;
+  --ae-border:        #D8E0D4;
+  --ae-border-strong: #B6C1B2;
+
+  /* ═══════════ Remap: text ═══════════ */
+  --ae-text:          #333F39;
+  --ae-text-strong:   #16211C;
+  --ae-text-muted:    #4F5C56;
+  --ae-text-subtle:   #646F6A;
+  --ae-text-disabled: #A3AEA8;   /* the only grey allowed to look switched off */
+  --ae-text-inverse:  #FFFFFF;
+  --ae-text-link:     #333F39;
+  --ae-text-link-hover: #0E7734;
+
+  /* ═══════════ Remap: semantic ═══════════ */
+  --ae-success: #0E7734;
+  --ae-error:   #B4552C;
+  --ae-warning: #B4552C;
+  --ae-info:    #17324B;
+
+  /* ═══════════ Remap: typography ═══════════
+   * Bricolage for display, Inter for everything spoken, Plex Mono for code.
+   * Roboto, Poppins and JetBrains Mono are retired. */
+  --ae-font:      "Inter", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ae-font-head: "Bricolage Grotesque", "Inter", system-ui, Helvetica, Arial, sans-serif;
+  --ae-font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ═══════════ Remap: shape ═══════════ */
+  --ae-radius-sm: 6px;
+  --ae-radius:    10px;
+  --ae-radius-md: 14px;
+  --ae-radius-lg: 18px;
+
+  /* ═══════════ Remap: elevation ═══════════
+   * The base scale is wired to the three meaningful depths, so a component that
+   * asks for a shadow gets one of the three and no fourth exists. */
+  --ae-shadow-sm: var(--fg-d1);
+  --ae-shadow-md: var(--fg-d2);
+  --ae-shadow-lg: var(--fg-d3);
+}
+
+/* ═══════════ Headings ═══════════
+ * Bricolage is a display face: it wants tighter tracking than the neutral
+ * grotesque it replaces, and one weight step down from black. */
+h1, h2, h3, h4, h5 {
+  font-family: var(--ae-font-head);
+  letter-spacing: -0.022em;
+}
+h1 { font-weight: 700; letter-spacing: -0.032em; }
+h2 { font-weight: 700; }
+h3, h4, h5 { font-weight: 600; }
+
+/* ═══════════ Buttons ═══════════
+ * Pills are kept for shell chrome — they read as controls, which is exactly
+ * what they are. The slides carry no pills at all. */
+.ae-btn {
+  border-radius: 100px;
+  font-family: var(--ae-font);
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+.ae-btn--secondary { border-radius: 100px; }

@@ -3,8 +3,8 @@
    and agentic engineering = the discipline of directing that loop. Keeps
    novices on board without slowing experts down.
 
-   Redesigned under 0003 v2: the formula is drawn as the machine it describes —
-   model and tools feed a loop that visibly runs. Words unchanged. */
+   Redesigned under 0003 v2: the formula is drawn as the machine it describes,
+   model and tools feeding a loop that visibly runs. */
 
 import { getLang } from '../core/i18n.js';
 
@@ -14,28 +14,28 @@ const CONTENT = {
   en: {
     h1: 'Agent = <b>Model + Tools + Loop</b>',
     lede: `A chat model answers once. An agent acts: it reads files, runs
-          commands, sees the result — and adjusts, until the task is done.`,
+          commands, sees the result and adjusts, until the task is done.`,
     parts: [
       { name: 'Model', body: 'The reasoning engine. Decides the next step.' },
-      { name: 'Tools', body: 'Read, write, run — files, shell, browser, your systems.' },
+      { name: 'Tools', body: 'Read, write, run: files, shell, browser, your systems.' },
       { name: 'Loop',  body: 'Act → observe → adjust. Repeat until done.' },
     ],
     defLabel: 'Agentic Engineering',
-    definition: `Directing that loop <b>deliberately</b> — with context, a
+    definition: `Directing that loop <b>deliberately</b>, with context, a
           workflow, and verification. That discipline is this talk.`,
   },
   de: {
     h1: 'Agent = <b>Modell + Tools + Loop</b>',
     lede: `Ein Chat-Modell antwortet einmal. Ein Agent handelt: Er liest Dateien,
-          führt Befehle aus, sieht das Ergebnis — und korrigiert, bis die
+          führt Befehle aus, sieht das Ergebnis und korrigiert, bis die
           Aufgabe erledigt ist.`,
     parts: [
       { name: 'Modell', body: 'Die Denk-Engine. Entscheidet den nächsten Schritt.' },
-      { name: 'Tools',  body: 'Lesen, Schreiben, Ausführen — Dateien, Shell, Browser, eure Systeme.' },
+      { name: 'Tools',  body: 'Lesen, Schreiben, Ausführen: Dateien, Shell, Browser, eure Systeme.' },
       { name: 'Loop',   body: 'Handeln → Beobachten → Anpassen. Wiederholen, bis es fertig ist.' },
     ],
     defLabel: 'Agentic Engineering',
-    definition: `Diese Schleife <b>bewusst</b> steuern — mit Kontext, einem
+    definition: `Diese Schleife <b>bewusst</b> steuern, mit Kontext, einem
           Workflow und Verifikation. Um diese Disziplin geht es in diesem Vortrag.`,
   },
 };

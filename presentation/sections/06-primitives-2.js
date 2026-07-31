@@ -9,8 +9,6 @@ const TAG = 's06-primitives-2';
 const CONTENT = {
   en: {
     h1: 'Hooks · Subagents · Scope',
-    lede: `The last three primitives — and the principle that organizes them all:
-          everything lives <b>in the project</b> or <b>in your home directory</b>.`,
     primitives: [
       {
         num: '04',
@@ -54,8 +52,6 @@ const CONTENT = {
   },
   de: {
     h1: 'Hooks · Subagents · Scope',
-    lede: `Die letzten drei Bausteine — und das organisierende Prinzip dahinter:
-          alles existiert <b>im Projekt</b> oder <b>im Home-Verzeichnis</b>.`,
     primitives: [
       {
         num: '04',
@@ -117,16 +113,14 @@ class Section06 extends HTMLElement {
           margin: 0 auto;
           width: 100%;
         }
+        /* No lede on this slide: the heading carries straight into the cards,
+           so the heading owns the gap the lede used to hold open. */
         ${TAG} h1 {
-          margin: 0 0 var(--ae-space-3);
+          margin: 0 0 var(--ae-space-5);
           font-size: var(--ae-fs-h2);
           line-height: var(--ae-lh-h2);
         }
         ${TAG} h1 { color: var(--fg-ink); }
-        ${TAG} .fg-lede {
-          max-width: 76ch;
-          margin: 0 0 var(--ae-space-5);
-        }
         ${TAG} .cards {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -225,9 +219,6 @@ class Section06 extends HTMLElement {
       </style>
       <div class="fg-wrap">
         <h1 class="fg-in" style="--fg-at: 1">${t.h1}</h1>
-        <p class="fg-lede fg-in" style="--fg-at: 2">
-          ${t.lede}
-        </p>
         <div class="cards">
           ${t.primitives.map((p, ci) => `
             <div class="card fg-card fg-hover fg-in" style="--fg-at: ${3 + ci}">

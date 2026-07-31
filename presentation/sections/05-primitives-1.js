@@ -9,8 +9,6 @@ const TAG = 's05-primitives-1';
 const CONTENT = {
   en: {
     h1: 'Memory · Skills · MCP',
-    lede: `Three framework-agnostic building blocks. The same concepts in every
-          tool — and increasingly even under the <b>same file names</b>.`,
     primitives: [
       {
         num: '01',
@@ -56,8 +54,6 @@ const CONTENT = {
   },
   de: {
     h1: 'Memory · Skills · MCP',
-    lede: `Drei framework-unabhängige Bausteine. Dieselben Konzepte in jedem Tool —
-          inzwischen sogar zunehmend unter <b>denselben Dateinamen</b>.`,
     primitives: [
       {
         num: '01',
@@ -116,15 +112,13 @@ class Section05 extends HTMLElement {
           background: var(--fg-paper);
           overflow: auto;
         }
+        /* No lede on this slide: the heading carries straight into the cards,
+           so the heading owns the gap the lede used to hold open. */
         ${TAG} h1 {
-          margin: 0 0 var(--ae-space-3);
+          margin: 0 0 var(--ae-space-5);
           font-size: var(--ae-fs-h2);
           line-height: var(--ae-lh-h2);
           color: var(--fg-ink);
-        }
-        ${TAG} .fg-lede {
-          max-width: 76ch;
-          margin: 0 0 var(--ae-space-5);
         }
         /* Three primitives, no hierarchy between them: peers at one depth.
            The mapping rows land in sync ACROSS the cards — row by row, not
@@ -178,7 +172,7 @@ class Section05 extends HTMLElement {
           transition: background 180ms var(--ae-ease);
         }
         /* Hover a tool anywhere and the same tool lights up in every card:
-           the lede's claim — same concepts in every tool — made touchable. */
+           the slide's claim, that every tool has all three, made touchable. */
         ${TAG} .map div.hl { background: var(--fg-mint); }
         ${TAG} .map div.hl dt { color: var(--fg-green-d); }
         ${TAG} .map dt {
@@ -222,9 +216,6 @@ class Section05 extends HTMLElement {
       </style>
       <div class="fg-wrap">
         <h1 class="fg-in" style="--fg-at: 1">${t.h1}</h1>
-        <p class="fg-lede fg-in" style="--fg-at: 2">
-          ${t.lede}
-        </p>
         <div class="cards">
           ${t.primitives.map((p, ci) => `
             <div class="card fg-card fg-hover fg-in" style="--fg-at: ${3 + ci}">

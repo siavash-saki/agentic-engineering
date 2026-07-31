@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 3 — design prototypes</title>
+
+<!-- The real deck stylesheets, so these prototypes are judged in the actual
+     design language: same fonts, same tokens, same three elevations, same
+     motion devices. Nothing here is wired into the deck. -->
+<link rel="stylesheet" href="presentation/assets/fonts.css">
+<link rel="stylesheet" href="presentation/assets/tokens.css">
+<link rel="stylesheet" href="presentation/assets/base.css">
+<link rel="stylesheet" href="presentation/core/styles.css">
+<link rel="stylesheet" href="presentation/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay {
+  font-size: 12.5px; padding: 5px 12px; min-height: 0;
+}
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: safe center;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper);
+  overflow: auto;
+}
+
+/* ══════════════ SHARED ══════════════ */
+.proto h1 {
+  margin: 0 0 var(--ae-space-3);
+  font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2);
+  color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0 0 var(--ae-space-6); }
+
+/* Step chips: the workflow row rendered as what it is — a sequence.
+   Two beads against five is the whole argument, drawn instead of typed. */
+.steps { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.steps .st {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--fg-card); border: 1px solid var(--fg-hair);
+  font-size: calc(var(--ae-fs-caption) * 1.02); line-height: 1.35;
+  font-weight: 500; color: var(--fg-body); white-space: nowrap;
+}
+.steps .ar { color: var(--ae-cool-gray-300); font-size: 0.95em; }
+.steps--a .st { background: var(--fg-mint); border-color: transparent; color: var(--fg-green-d); font-weight: 600; }
+.steps--a .ar { color: var(--fg-green); opacity: .6; }
+
+/* Directional entrances. The deck's .fg-in rises; a comparison reads better
+   when each side arrives from its own side of the spine. Delay comes from the
+   slide kit's one rule, so --fg-at still works. */
+.in-l { animation: in-left  var(--fg-dur-rise) var(--ae-ease) both;
+        animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat)); }
+.in-r { animation: in-right var(--fg-dur-rise) var(--ae-ease) both;
+        animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat)); }
+@keyframes in-left  { from { opacity: 0; transform: translateX(-18px); } }
+@keyframes in-right { from { opacity: 0; transform: translateX( 18px); } }
+
+/* ══════════════════════════════════════════════════════════
+   A — THE LADDER
+   One shared spine. The dimension is asked ONCE, in the middle,
+   and the two answers hang off it left and right. The current
+   slide asks all six questions twice; that is what makes the eye
+   ping-pong. Hovering a rung focuses it and recedes the rest.
+   ══════════════════════════════════════════════════════════ */
+.pA .ladder { position: relative; --spine: clamp(120px, 13vw, 190px); }
+.pA .spine {
+  position: absolute; top: 0; bottom: 0; left: 50%;
+  width: 2px; margin-left: -1px;
+  background: var(--fg-hair);
+  transform-origin: top center;
+  animation: spine-draw 820ms var(--ae-ease) both;
+  animation-delay: calc(60ms + var(--fg-at, 3) * var(--fg-beat));
+}
+@keyframes spine-draw { from { transform: scaleY(0); } }
+
+.pA .lrow, .pA .lhead {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) var(--spine) minmax(0,1fr);
+  align-items: center;
+  gap: var(--ae-space-4);
+}
+.pA .lhead { margin-bottom: var(--ae-space-4); }
+.pA .lhead .side { text-align: right; }
+.pA .lhead .side.a { text-align: left; }
+.pA .lhead h2 {
+  margin: 0; font-size: var(--ae-fs-h4); line-height: var(--ae-lh-h4);
+  font-weight: 600; color: var(--fg-ink);
+}
+.pA .lhead .a h2 { color: var(--fg-green-d); font-weight: 700; }
+.pA .lhead .tag {
+  margin: 2px 0 0; font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-style: italic; color: var(--fg-muted);
+}
+/* The spine's cap: a bead the line grows out of. */
+.pA .lhead .cap { justify-self: center; }
+.pA .lhead .cap span {
+  display: block; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--fg-green); position: relative; z-index: 2;
+}
+
+.pA .lrow { padding: var(--ae-space-3) 0; }
+.pA .cell { font-size: var(--ae-fs-body); line-height: var(--ae-lh-body); color: var(--fg-body); }
+.pA .cell.v { text-align: right; }
+.pA .cell.v .steps { justify-content: flex-end; }
+.pA .cell.a { color: var(--fg-ink); font-weight: 500; }
+
+.pA .rung { justify-self: center; position: relative; z-index: 2; }
+.pA .rung b {
+  display: block;
+  padding: 5px 12px; border-radius: 999px;
+  background: var(--fg-paper); border: 1px solid var(--fg-hair);
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600; letter-spacing: .01em; color: var(--fg-muted);
+  text-align: center; white-space: nowrap;
+  transition: background 200ms var(--ae-ease), border-color 200ms var(--ae-ease),
+              color 200ms var(--ae-ease);
+}
+
+/* Focus, not judgment: the recede only exists while a pointer is on a rung. */
+.pA .ladder:hover .lrow:not(:hover) { opacity: .38; }
+.pA .lrow { transition: opacity 220ms var(--ae-ease); }
+.pA .lrow::before {
+  content: ''; position: absolute; inset: 0 calc(var(--ae-space-4) * -1);
+  border-radius: var(--ae-radius-md);
+  background: var(--fg-card);
+  box-shadow: var(--fg-d1);
+  opacity: 0; transition: opacity 200ms var(--ae-ease);
+  z-index: 0; pointer-events: none;
+}
+.pA .lrow:hover::before { opacity: 1; }
+.pA .lrow > * { position: relative; z-index: 1; }
+.pA .lrow:hover .rung b {
+  background: var(--fg-mint); border-color: transparent; color: var(--fg-green-d);
+}
+.pA .lrow:hover .cell.v .st { background: var(--fg-paper); }
+
+.pA .foot {
+  margin-top: var(--ae-space-5); padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-caption); color: var(--fg-faint);
+}
+
+@media (max-width: 900px) {
+  .pA .lrow, .pA .lhead { grid-template-columns: 1fr; }
+  .pA .spine { display: none; }
+  .pA .cell.v, .pA .lhead .side { text-align: left; }
+  .pA .cell.v .steps { justify-content: flex-start; }
+  .pA .rung { justify-self: start; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   B — FOCUS
+   One question on screen at a time, at twice the type size.
+   Six dimensions is a table; a table is read, not presented.
+   Click a rung, or ← → , or 1–6.
+   ══════════════════════════════════════════════════════════ */
+.pB .rail {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: var(--ae-space-5);
+}
+.pB .rail button {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px 6px 8px; border-radius: 999px;
+  border: 1px solid var(--fg-hair); background: var(--fg-card);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 500;
+  color: var(--fg-muted); cursor: pointer;
+  transition: all 200ms var(--ae-ease);
+}
+.pB .rail button .n {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.7em; height: 1.7em; border-radius: 999px;
+  background: var(--ae-cool-gray-100); color: var(--fg-faint);
+  font-weight: 700; font-variant-numeric: tabular-nums;
+  transition: all 200ms var(--ae-ease);
+}
+.pB .rail button:hover { border-color: var(--ae-cool-gray-300); color: var(--fg-ink); }
+.pB .rail button.on {
+  background: var(--fg-card); border-color: var(--fg-green);
+  color: var(--fg-ink); font-weight: 600;
+  box-shadow: var(--fg-d1);
+}
+.pB .rail button.on .n { background: var(--fg-green); color: #fff; }
+
+.pB .ask {
+  display: flex; align-items: baseline; gap: var(--ae-space-3);
+  margin: 0 0 var(--ae-space-4);
+}
+.pB .ask h2 {
+  margin: 0; font-size: var(--ae-fs-h3); line-height: var(--ae-lh-h3);
+  color: var(--fg-ink);
+}
+.pB .ask .of {
+  font-size: var(--ae-fs-caption); color: var(--fg-faint);
+  font-variant-numeric: tabular-nums;
+}
+.pB .bar { height: 2px; background: var(--fg-hair); margin-bottom: var(--ae-space-5); }
+.pB .bar i {
+  display: block; height: 100%; background: var(--fg-green);
+  transition: width 320ms var(--ae-ease);
+}
+
+.pB .panels {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: var(--ae-space-5); align-items: stretch;
+}
+.pB .panel {
+  border-radius: var(--ae-radius-lg);
+  padding: var(--ae-space-5) var(--ae-space-6);
+  display: flex; flex-direction: column; gap: var(--ae-space-3);
+}
+/* The losing side is not greyed out — its TEXT stays at full body contrast.
+   Only the container differs: paper, dashed edge, no lift. */
+.pB .panel.v { background: var(--fg-paper); border: 1px dashed var(--ae-cool-gray-300); }
+.pB .panel.a { background: var(--fg-card); box-shadow: var(--fg-d3), var(--fg-ring); border: 1px solid var(--fg-hair); }
+.pB .panel h3 {
+  margin: 0; font-size: var(--ae-fs-h5); line-height: var(--ae-lh-h5);
+  font-weight: 600; color: var(--fg-ink);
+}
+.pB .panel.a h3 { color: var(--fg-green-d); font-weight: 700; }
+.pB .panel .tag {
+  margin: 0; font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-style: italic; color: var(--fg-muted);
+}
+.pB .panel .ans {
+  margin: var(--ae-space-2) 0 0;
+  font-size: var(--ae-fs-lead); line-height: var(--ae-lh-lead);
+  color: var(--fg-body);
+}
+.pB .panel.a .ans { color: var(--fg-ink); font-weight: 500; }
+.pB .vs {
+  align-self: center;
+  display: flex; align-items: center; justify-content: center;
+  width: 2.6em; height: 2.6em; border-radius: 50%;
+  background: var(--fg-card); border: 1px solid var(--fg-hair);
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-caption);
+  font-weight: 700; color: var(--fg-faint);
+}
+.pB .hint {
+  margin-top: var(--ae-space-5);
+  font-size: var(--ae-fs-caption); color: var(--fg-faint);
+}
+.pB .hint kbd {
+  font-family: var(--ae-font); font-size: .95em; font-weight: 600;
+  padding: 1px 6px; border: 1px solid var(--fg-hair); border-radius: 5px;
+  background: var(--fg-card); color: var(--fg-muted);
+}
+.swap { animation: swap-in 420ms var(--ae-ease) both; animation-delay: calc(var(--i, 0) * 70ms); }
+@keyframes swap-in { from { opacity: 0; transform: translateY(10px); } }
+
+@media (max-width: 900px) {
+  .pB .panels { grid-template-columns: 1fr; }
+  .pB .vs { display: none; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   C — THE SWITCH
+   One card, one toggle. The six questions never move; only the
+   answers change under them — which is the lede made literal
+   ("same model, both ship code"). The card's own chrome morphs
+   with the mode: flat and dashed for vibe, deepest elevation
+   plus the answer ring for agentic.
+   ══════════════════════════════════════════════════════════ */
+/* inline-grid with 1fr columns, not flex: both halves must be exactly the
+   same width or the sliding thumb stops lining up with the label under it. */
+.pC .switch {
+  position: relative; display: inline-grid;
+  grid-auto-flow: column; grid-auto-columns: 1fr;
+  padding: 4px; border-radius: 999px;
+  background: var(--ae-cool-gray-100); border: 1px solid var(--fg-hair);
+  margin-bottom: var(--ae-space-3);
+}
+.pC .switch .thumb {
+  position: absolute; top: 4px; bottom: 4px; left: 4px;
+  width: calc(50% - 4px); border-radius: 999px;
+  background: var(--fg-card); box-shadow: var(--fg-d1);
+  transition: transform 420ms var(--ae-ease), background 420ms var(--ae-ease);
+}
+.pC .switch[data-mode="agentic"] .thumb {
+  transform: translateX(100%); background: var(--fg-green);
+}
+.pC .switch button {
+  position: relative; z-index: 1;
+  padding: 9px 24px; border: 0; background: none; cursor: pointer;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h5); line-height: 1.2;
+  font-weight: 600; letter-spacing: -.01em; color: var(--fg-muted);
+  white-space: nowrap;
+  transition: color 300ms var(--ae-ease);
+}
+.pC .switch[data-mode="vibe"]    button[data-mode="vibe"]    { color: var(--fg-ink); }
+.pC .switch[data-mode="agentic"] button[data-mode="agentic"] { color: #fff; }
+
+.pC .cap {
+  margin: 0 0 var(--ae-space-5);
+  font-size: var(--ae-fs-caption); color: var(--fg-faint);
+}
+.pC .cap kbd {
+  font-family: var(--ae-font); font-size: .95em; font-weight: 600;
+  padding: 1px 6px; border: 1px solid var(--fg-hair); border-radius: 5px;
+  background: var(--fg-card); color: var(--fg-muted);
+}
+
+.pC .morph {
+  border-radius: var(--ae-radius-lg);
+  padding: var(--ae-space-5) var(--ae-space-6);
+  background: var(--fg-card);
+  border: 1px solid var(--fg-hair);
+  box-shadow: var(--fg-d1);
+  transition: box-shadow 460ms var(--ae-ease), border-color 460ms var(--ae-ease);
+}
+.pC .morph[data-mode="agentic"] { box-shadow: var(--fg-d3), var(--fg-ring); }
+
+.pC .mhead {
+  display: flex; align-items: baseline; gap: var(--ae-space-3); flex-wrap: wrap;
+  padding-bottom: var(--ae-space-4); margin-bottom: var(--ae-space-4);
+  border-bottom: 1px solid var(--fg-hair);
+}
+.pC .mhead h2 {
+  margin: 0; font-size: var(--ae-fs-h4); line-height: var(--ae-lh-h4);
+  font-weight: 600; color: var(--fg-ink);
+  transition: color 460ms var(--ae-ease);
+}
+.pC .morph[data-mode="agentic"] .mhead h2 { color: var(--fg-green-d); font-weight: 700; }
+.pC .mhead .tag {
+  margin: 0; font-size: var(--ae-fs-caption); font-style: italic; color: var(--fg-muted);
+}
+
+.pC .mgrid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--ae-space-4) var(--ae-space-7);
+}
+.pC .mrow { display: block; min-width: 0; }
+.pC .mrow dt {
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600; letter-spacing: .02em; color: var(--fg-faint);
+  margin-bottom: 3px;
+}
+.pC .mrow .val {
+  margin: 0; min-height: 2.9em;
+  font-size: var(--ae-fs-body); line-height: var(--ae-lh-body);
+  color: var(--fg-body);
+  transition: color 460ms var(--ae-ease);
+}
+.pC .morph[data-mode="agentic"] .val { color: var(--fg-ink); font-weight: 500; }
+
+@media (max-width: 900px) {
+  .pC .mgrid { grid-template-columns: 1fr; }
+  .pC .switch { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Prototype">
+        <button type="button" data-p="A">A · Ladder</button>
+        <button type="button" data-p="B">B · Focus</button>
+        <button type="button" data-p="C">C · Switch</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* ───────────────────────── content ─────────────────────────
+   Verbatim from presentation/sections/03-vibe-vs-agentic.js, plus two
+   things the prototypes need: a short label for the rail, and the
+   workflow row split into its steps so it can be drawn instead of typed. */
+const C = {
+  en: {
+    title: 'Vibe Coding vs. Agentic Engineering',
+    lede: 'Same model. Both ship code. Only one of them survives past the weekend project.',
+    vibeTitle: 'Vibe Coding',   vibeTag: '"Real quick, let me just …"',
+    agenticTitle: 'Agentic Engineering', agenticTag: '"Before I touch a key …"',
+    of: 'of', hint: 'Click a dimension, or press <kbd>←</kbd> <kbd>→</kbd> · <kbd>1</kbd>–<kbd>6</kbd>',
+    capC: 'Same six questions. Watch the answers change. <kbd>Space</kbd> to flip.',
+    footA: 'Hover a row to focus it.',
+    rows: [
+      { dim: 'Core action', short: 'Action',
+        vibe: 'Casual prompting: describe the outcome, accept what comes back',
+        agentic: 'Systematic planning: write an explicit spec, then direct autonomous agents' },
+      { dim: 'Who works this way', short: 'Who',
+        vibe: 'Non-engineers and hobbyists',
+        agentic: 'Software engineers acting as system architects' },
+      { dim: 'Workflow', short: 'Workflow',
+        vibe: 'Idea → Build', agentic: 'Idea → Spec → Plan → Build → Review',
+        vibeSteps: ['Idea','Build'],
+        agenticSteps: ['Idea','Spec','Plan','Build','Review'] },
+      { dim: 'Context and tools', short: 'Tools',
+        vibe: 'Whatever the system happens to reach on its own',
+        agentic: 'Memory, Skills, MCP, subagents, hooks' },
+      { dim: 'Quality and testing', short: 'Quality',
+        vibe: 'Review and tests skipped',
+        agentic: 'Human review for security, scalability, long-term system health' },
+      { dim: 'Best used for', short: 'Best for',
+        vibe: 'Quick personal experiments, throwaway mockups, low-stakes prototypes',
+        agentic: 'Production-grade applications, enterprise codebases, scalable software' },
+    ],
+  },
+  de: {
+    title: 'Vibe Coding vs. Agentic Engineering',
+    lede: 'Dasselbe Modell. Beide schreiben Code. Nur eines überlebt das Wochenend-Projekt.',
+    vibeTitle: 'Vibe Coding',   vibeTag: '„Mal eben schnell …"',
+    agenticTitle: 'Agentic Engineering', agenticTag: '„Bevor ich loslege …"',
+    of: 'von', hint: 'Dimension anklicken oder <kbd>←</kbd> <kbd>→</kbd> · <kbd>1</kbd>–<kbd>6</kbd>',
+    capC: 'Dieselben sechs Fragen. Nur die Antworten wechseln. <kbd>Leertaste</kbd> zum Umschalten.',
+    footA: 'Zeile überfahren, um sie hervorzuheben.',
+    rows: [
+      { dim: 'Kernvorgehen', short: 'Vorgehen',
+        vibe: 'Locker prompten: Ergebnis beschreiben, Output übernehmen',
+        agentic: 'Systematisch planen: explizite Spec, Agenten gezielt steuern' },
+      { dim: 'Wer so arbeitet', short: 'Wer',
+        vibe: 'Nicht-Entwickler und Hobbyisten',
+        agentic: 'Software-Engineers in der Rolle von System-Architekten' },
+      { dim: 'Workflow', short: 'Workflow',
+        vibe: 'Idee → Bauen', agentic: 'Idee → Spec → Plan → Bauen → Review',
+        vibeSteps: ['Idee','Bauen'],
+        agenticSteps: ['Idee','Spec','Plan','Bauen','Review'] },
+      { dim: 'Kontext und Tools', short: 'Tools',
+        vibe: 'Worauf das System zufällig Zugriff hat',
+        agentic: 'Memory, Skills, MCP, Subagenten, Hooks' },
+      { dim: 'Qualität und Tests', short: 'Qualität',
+        vibe: 'Review und Tests entfallen',
+        agentic: 'Menschliches Review für Sicherheit, Skalierbarkeit und langfristige Systemgesundheit' },
+      { dim: 'Am besten für', short: 'Wofür',
+        vibe: 'Schnelle Experimente, Wegwerf-Mockups, unkritische Prototypen',
+        agentic: 'Produktionsreife Anwendungen, Enterprise-Codebases, skalierbare Software' },
+    ],
+  },
+};
+
+const SUB = {
+  A: 'A · The Ladder — one shared spine, the question asked once',
+  B: 'B · Focus — one dimension at a time, at twice the size',
+  C: 'C · The Switch — one card, one toggle, the answers morph',
+};
+
+/* value for one cell: steps get drawn as chips, everything else is prose */
+function cellHTML(row, side) {
+  const steps = side === 'vibe' ? row.vibeSteps : row.agenticSteps;
+  if (!steps) return row[side];
+  const mod = side === 'agentic' ? ' steps--a' : '';
+  return '<span class="steps' + mod + '">' + steps
+    .map(s => '<span class="st">' + s + '</span>')
+    .join('<span class="ar">→</span>') + '</span>';
+}
+
+/* ───────────────────────── A ───────────────────────── */
+function renderA(t) {
+  return '' +
+  '<section class="proto pA">' +
+    '<div class="fg-wrap">' +
+      '<h1 class="fg-in" style="--fg-at:1">' + t.title + '</h1>' +
+      '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>' +
+      '<div class="ladder">' +
+        '<div class="spine" style="--fg-at:3"></div>' +
+        '<div class="lhead">' +
+          '<div class="side v in-l" style="--fg-at:3">' +
+            '<h2>' + t.vibeTitle + '</h2><p class="tag">' + t.vibeTag + '</p></div>' +
+          '<div class="cap fg-in" style="--fg-at:3"><span></span></div>' +
+          '<div class="side a in-r" style="--fg-at:3">' +
+            '<h2>' + t.agenticTitle + '</h2><p class="tag">' + t.agenticTag + '</p></div>' +
+        '</div>' +
+        t.rows.map(function (r, i) {
+          return '<div class="lrow">' +
+            '<div class="cell v in-l" style="--fg-at:' + (4 + i) + '">' + cellHTML(r, 'vibe') + '</div>' +
+            '<div class="rung fg-in" style="--fg-at:' + (4 + i) + '"><b>' + r.dim + '</b></div>' +
+            '<div class="cell a in-r" style="--fg-at:' + (4 + i) + '">' + cellHTML(r, 'agentic') + '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>' +
+      '<p class="foot fg-in" style="--fg-at:11">' + t.footA + '</p>' +
+    '</div>' +
+  '</section>';
+}
+
+/* ───────────────────────── B ───────────────────────── */
+function renderB(t) {
+  return '' +
+  '<section class="proto pB">' +
+    '<div class="fg-wrap">' +
+      '<h1 class="fg-in" style="--fg-at:1">' + t.title + '</h1>' +
+      '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>' +
+      '<div class="rail fg-in" style="--fg-at:3">' +
+        t.rows.map(function (r, i) {
+          return '<button type="button" data-i="' + i + '">' +
+            '<span class="n">' + (i + 1) + '</span>' + r.short + '</button>';
+        }).join('') +
+      '</div>' +
+      '<div class="ask fg-in" style="--fg-at:4">' +
+        '<h2 id="bAsk"></h2><span class="of" id="bOf"></span>' +
+      '</div>' +
+      '<div class="bar fg-in" style="--fg-at:4"><i id="bBar"></i></div>' +
+      '<div class="panels">' +
+        '<div class="panel v fg-in" style="--fg-at:5">' +
+          '<h3>' + t.vibeTitle + '</h3><p class="tag">' + t.vibeTag + '</p>' +
+          '<p class="ans" id="bV"></p></div>' +
+        '<div class="vs fg-in" style="--fg-at:6">vs</div>' +
+        '<div class="panel a fg-in" style="--fg-at:6">' +
+          '<h3>' + t.agenticTitle + '</h3><p class="tag">' + t.agenticTag + '</p>' +
+          '<p class="ans" id="bA"></p></div>' +
+      '</div>' +
+      '<p class="hint fg-in" style="--fg-at:8">' + t.hint + '</p>' +
+    '</div>' +
+  '</section>';
+}
+
+let bIdx = 0;
+function paintB(t, i, animate) {
+  bIdx = (i + t.rows.length) % t.rows.length;
+  const r = t.rows[bIdx];
+  document.getElementById('bAsk').textContent = r.dim;
+  document.getElementById('bOf').textContent = (bIdx + 1) + ' ' + t.of + ' ' + t.rows.length;
+  document.getElementById('bBar').style.width = ((bIdx + 1) / t.rows.length * 100) + '%';
+  const v = document.getElementById('bV'), a = document.getElementById('bA');
+  v.innerHTML = cellHTML(r, 'vibe');
+  a.innerHTML = cellHTML(r, 'agentic');
+  if (animate) {
+    [v, a].forEach(function (el, k) {
+      el.style.setProperty('--i', k);
+      el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap');
+    });
+  }
+  document.querySelectorAll('.pB .rail button').forEach(function (b, k) {
+    b.classList.toggle('on', k === bIdx);
+  });
+}
+
+/* ───────────────────────── C ───────────────────────── */
+function renderC(t) {
+  return '' +
+  '<section class="proto pC">' +
+    '<div class="fg-wrap">' +
+      '<h1 class="fg-in" style="--fg-at:1">' + t.title + '</h1>' +
+      '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>' +
+      '<div class="switch fg-in" style="--fg-at:3" data-mode="vibe" id="cSwitch">' +
+        '<span class="thumb"></span>' +
+        '<button type="button" data-mode="vibe">' + t.vibeTitle + '</button>' +
+        '<button type="button" data-mode="agentic">' + t.agenticTitle + '</button>' +
+      '</div>' +
+      '<p class="cap fg-in" style="--fg-at:4">' + t.capC + '</p>' +
+      '<div class="morph fg-in" style="--fg-at:5" data-mode="vibe" id="cCard">' +
+        '<div class="mhead"><h2 id="cName"></h2><p class="tag" id="cTag"></p></div>' +
+        '<dl class="mgrid">' +
+          t.rows.map(function (r) {
+            return '<div class="mrow"><dt>' + r.dim + '</dt><dd class="val"></dd></div>';
+          }).join('') +
+        '</dl>' +
+      '</div>' +
+    '</div>' +
+  '</section>';
+}
+
+let cMode = 'vibe';
+function paintC(t, mode, animate) {
+  cMode = mode;
+  document.getElementById('cSwitch').dataset.mode = mode;
+  const card = document.getElementById('cCard');
+  card.dataset.mode = mode;
+  const name = document.getElementById('cName'), tag = document.getElementById('cTag');
+  name.textContent = mode === 'vibe' ? t.vibeTitle : t.agenticTitle;
+  tag.textContent  = mode === 'vibe' ? t.vibeTag   : t.agenticTag;
+  card.querySelectorAll('.val').forEach(function (dd, i) {
+    dd.innerHTML = cellHTML(t.rows[i], mode);
+    if (animate) {
+      dd.style.setProperty('--i', i);
+      dd.classList.remove('swap'); void dd.offsetWidth; dd.classList.add('swap');
+    }
+  });
+}
+
+/* ───────────────────────── harness ───────────────────────── */
+let lang = 'en', proto = 'A';
+const stage = document.getElementById('stage');
+
+function mount() {
+  const t = C[lang];
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = proto === 'A' ? renderA(t) : proto === 'B' ? renderB(t) : renderC(t);
+  if (proto === 'B') paintB(t, bIdx, false);
+  if (proto === 'C') paintC(t, cMode, false);
+  document.querySelectorAll('#tabs button').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.p === proto);
+  });
+  document.querySelectorAll('#langs button').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.l === lang);
+  });
+}
+
+document.getElementById('tabs').addEventListener('click', function (e) {
+  const b = e.target.closest('button'); if (!b) return;
+  proto = b.dataset.p; mount();
+});
+document.getElementById('langs').addEventListener('click', function (e) {
+  const b = e.target.closest('button'); if (!b) return;
+  lang = b.dataset.l; mount();
+});
+document.getElementById('btn-replay').addEventListener('click', mount);
+
+stage.addEventListener('click', function (e) {
+  const rail = e.target.closest('.pB .rail button');
+  if (rail) { paintB(C[lang], +rail.dataset.i, true); return; }
+  const sw = e.target.closest('.pC .switch button');
+  if (sw) { paintC(C[lang], sw.dataset.mode, true); return; }
+});
+
+document.addEventListener('keydown', function (e) {
+  if (proto === 'B') {
+    if (e.key === 'ArrowRight') { paintB(C[lang], bIdx + 1, true); e.preventDefault(); }
+    if (e.key === 'ArrowLeft')  { paintB(C[lang], bIdx - 1, true); e.preventDefault(); }
+    if (/^[1-6]$/.test(e.key))  { paintB(C[lang], +e.key - 1, true); }
+  }
+  if (proto === 'C') {
+    if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      paintC(C[lang], cMode === 'vibe' ? 'agentic' : 'vibe', true); e.preventDefault();
+    }
+  }
+});
+
+mount();
+</script>
+</body>
+</html>

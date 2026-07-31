@@ -25,7 +25,7 @@ const CONTENT = {
       { n: '03', t: 'Best Practices',
         d: 'Ten disciplines from daily practice, applicable from Monday morning.' },
     ],
-    meta: 'Siavash Saki · 2026',
+    meta: 'Dr. Siavash Saki  ·  2026',
   },
   de: {
     h1a: 'Agentic',
@@ -40,7 +40,7 @@ const CONTENT = {
       { n: '03', t: 'Best Practices',
         d: 'Zehn Disziplinen aus der täglichen Praxis, anwendbar ab Montagmorgen.' },
     ],
-    meta: 'Siavash Saki · 2026',
+    meta: 'Dr. Siavash Saki  ·  2026',
   },
 };
 
@@ -72,6 +72,18 @@ class Section01 extends HTMLElement {
           font-size: calc(var(--ae-fs-display) * 1.12);
           line-height: var(--ae-lh-display);
           color: var(--fg-ink);
+        }
+        /* The title highlight, pitched one notch above the kit default:
+           a taller band in a deeper mint. Title slide only — the kit's
+           .fg-mark stays as it is everywhere else. The bottom stop keeps
+           its 88%, which is what holds the band clear of the "g". */
+        ${TAG} h1 .fg-mark {
+          --mark: color-mix(in srgb, var(--fg-mint) 65%, var(--fg-green-light));
+          background-image: linear-gradient(180deg,
+            transparent 26%, var(--fg-mint) 26%, var(--fg-mint) 88%, transparent 88%);
+          background-image: linear-gradient(180deg,
+            transparent 26%, var(--mark) 26%, var(--mark) 88%, transparent 88%);
+          padding: 0 0.12em;
         }
         ${TAG} .sub {
           font-size: var(--ae-fs-lead);
@@ -148,12 +160,16 @@ class Section01 extends HTMLElement {
           margin: 0 auto;
         }
         ${TAG} .meta {
-          font-size: var(--ae-fs-small);
-          color: var(--fg-faint);
-          margin: 0;
+          font-family: var(--ae-font-head);
+          font-size: calc(var(--ae-fs-small) * 1.60);
+          font-weight: 600;
+          letter-spacing: -0.01em;
+          color: var(--fg-body);
+          margin: var(--ae-space-9) 0 0 var(--ae-space-5);
         }
         @media (max-width: 768px) {
           ${TAG} { padding: var(--ae-space-6) var(--ae-gutter); }
+          ${TAG} .meta { margin-left: 0; }
           ${TAG} .route .line { display: none; }
           ${TAG} .cols { grid-template-columns: 1fr; gap: var(--ae-space-3); }
           ${TAG} .rcol { padding-top: 0; text-align: left; }

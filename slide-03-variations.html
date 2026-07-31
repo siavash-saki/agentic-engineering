@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 3 — Ladder, three variations</title>
+
+<!-- The real deck stylesheets, so these are judged in the actual design
+     language: same fonts, tokens, elevations, motion. Nothing is wired in. -->
+<link rel="stylesheet" href="presentation/assets/fonts.css">
+<link rel="stylesheet" href="presentation/assets/tokens.css">
+<link rel="stylesheet" href="presentation/assets/base.css">
+<link rel="stylesheet" href="presentation/core/styles.css">
+<link rel="stylesheet" href="presentation/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: safe center;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper);
+  overflow: auto;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SHARED — THE LADDER
+   One shared spine of dimensions down the middle: the question
+   is asked ONCE and the two answers hang off it, instead of the
+   six questions being asked twice in two parallel lists.
+
+   Three rules hold across all three variations:
+     · No hover effects. The slide is complete at rest.
+     · All answer text is ink. No green in running text —
+       the accent only appears in furniture, never in a value.
+     · The dimension pill in the middle carries a mint ground,
+       so the spine reads as a column of labels and not as
+       stray text floating between the two answers.
+   ══════════════════════════════════════════════════════════ */
+.proto h1 {
+  margin: 0 0 var(--ae-space-3);
+  font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2);
+  color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0 0 var(--ae-space-6); }
+
+.lad {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--spine) minmax(0, 1fr);
+  /* The rows must be EXPLICIT: a decorative item spanning `1 / -1` resolves
+     against the explicit grid, and with implicit rows only it collapses to
+     the header. One line per header + six dimensions. */
+  grid-template-rows: repeat(7, auto);
+  column-gap: var(--ae-space-5);
+  align-items: center;
+  --spine: clamp(150px, 15.5vw, 226px);
+}
+.lad > * { position: relative; z-index: 1; }
+.lad > .decor { z-index: 0; align-self: stretch; }
+
+/* ── the two column names ── */
+.hd { padding-bottom: var(--ae-space-4); }
+.hd.v { text-align: right; }
+.hd h2 {
+  margin: 0;
+  font-family: var(--ae-font-head);
+  font-size: var(--ae-fs-h3); line-height: var(--ae-lh-h3);
+  font-weight: 700; letter-spacing: -0.022em;
+  color: var(--fg-ink);
+}
+.hd .tag {
+  margin: 4px 0 0;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-style: italic; color: var(--fg-muted);
+}
+
+/* ── an answer ── */
+.cell {
+  font-size: var(--ae-fs-body); line-height: var(--ae-lh-body);
+  color: var(--fg-ink);
+  padding: var(--ae-space-4);
+}
+.cell.v { text-align: right; font-weight: 400; }
+.cell.a { text-align: left;  font-weight: 500; }
+
+/* ── the dimension, asked once ── */
+.rung { justify-self: center; padding: var(--ae-space-2) 0; }
+.rung b {
+  display: block;
+  padding: 7px 15px; border-radius: 999px;
+  background: var(--fg-mint);
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600; letter-spacing: 0.01em;
+  color: var(--fg-ink);
+  text-align: center; white-space: nowrap;
+}
+
+/* ── the workflow row, drawn instead of typed ──
+   Two beads against five is the argument the slide is making; as a
+   sentence it is a sentence, as a sequence it is the point. */
+.steps { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.cell.v .steps { justify-content: flex-end; }
+.steps .st {
+  display: inline-flex; align-items: center;
+  padding: 4px 11px; border-radius: 999px;
+  background: var(--fg-card); border: 1px solid var(--fg-hair);
+  font-size: calc(var(--ae-fs-caption) * 1.02); line-height: 1.35;
+  font-weight: 500; color: var(--fg-ink); white-space: nowrap;
+}
+.steps--a .st { background: var(--fg-mint); border-color: transparent; font-weight: 600; }
+.steps .ar { color: var(--ae-cool-gray-300); font-size: 0.95em; }
+
+/* ── entrances: each side arrives from its own side of the spine ── */
+.in-l { animation: in-left  var(--fg-dur-rise) var(--ae-ease) both;
+        animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat)); }
+.in-r { animation: in-right var(--fg-dur-rise) var(--ae-ease) both;
+        animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat)); }
+@keyframes in-left  { from { opacity: 0; transform: translateX(-18px); } }
+@keyframes in-right { from { opacity: 0; transform: translateX( 18px); } }
+
+@media (max-width: 900px) {
+  .lad { grid-template-columns: 1fr; }
+  .lad > .decor { display: none; }
+  .hd.v, .cell.v { text-align: left; }
+  .cell.v .steps { justify-content: flex-start; }
+  .rung { justify-self: start; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   V1 — ROWS
+   Every row is its own white card, so the two answers to one
+   question are physically one object. The spine survives in the
+   gaps between the cards, which turns it into a beaded chain
+   rather than a ruled table.
+   ══════════════════════════════════════════════════════════ */
+.v1 .lad { row-gap: var(--ae-space-3); }
+.v1 .spine {
+  position: absolute; left: 50%; width: 2px; margin-left: -1px;
+  top: 0; bottom: 0;
+  background: var(--fg-hair);
+  transform-origin: top center;
+  animation: spine-draw 820ms var(--ae-ease) both;
+  animation-delay: calc(60ms + var(--fg-at, 3) * var(--fg-beat));
+}
+@keyframes spine-draw { from { transform: scaleY(0); } }
+.v1 .rowbg {
+  grid-column: 1 / -1;
+  background: var(--fg-card);
+  border: 1px solid var(--fg-hair);
+  border-radius: var(--ae-radius-lg);
+  box-shadow: var(--fg-d1);
+}
+/* The answer half carries a mint ground. Depth marks the answer in the
+   deck's language; here the row is one card, so the mark moves to the
+   half of it that is the answer. No accent enters the text itself. */
+.v1 .abg {
+  grid-column: 3; background: var(--fg-mint);
+  border-radius: 0 var(--ae-radius-lg) var(--ae-radius-lg) 0;
+}
+.v1 .cap { justify-self: center; align-self: end; padding-bottom: var(--ae-space-3); }
+.v1 .cap i { display: block; width: 10px; height: 10px; border-radius: 50%; background: var(--fg-green); }
+.v1 .steps--a .st { background: var(--fg-card); border-color: var(--fg-hair); }
+.v1 .cell.v .st { background: var(--fg-paper); }
+
+/* ══════════════════════════════════════════════════════════
+   V2 — PANELS
+   The two ways of working are two standing objects, and the
+   dimensions run down the aisle between them. This is the only
+   variation that keeps the deck's answer device intact: the
+   agentic panel sits at the deepest elevation with the accent
+   ring; the vibe panel is flat paper with a dashed edge.
+   ══════════════════════════════════════════════════════════ */
+.v2 .lad { row-gap: 0; margin: 0 16px; }
+.v2 .panel {
+  grid-row: 1 / -1;
+  border-radius: var(--ae-radius-lg);
+  margin: -16px;
+}
+.v2 .panel.v { grid-column: 1; background: var(--fg-paper); border: 1px dashed var(--ae-cool-gray-300); }
+.v2 .panel.a { grid-column: 3; background: var(--fg-card); border: 1px solid var(--fg-hair);
+               box-shadow: var(--fg-d3), var(--fg-ring); }
+.v2 .hd { padding: var(--ae-space-3) var(--ae-space-4) var(--ae-space-4); }
+/* hairlines between rows, inside each panel only */
+.v2 .cell { border-top: 1px solid var(--fg-hair); }
+.v2 .cell.v { border-top-color: var(--ae-cool-gray-200); }
+.v2 .cell.v .st { background: var(--fg-card); }
+.v2 .cell.a .st { background: var(--fg-paper); }
+.v2 .steps--a .st { background: var(--fg-mint); }
+
+/* ══════════════════════════════════════════════════════════
+   V3 — EDITORIAL
+   No cards at all. Full-bleed hairlines separate the rows, the
+   column names sit over a heavy ink rule, and the mint pills
+   are the only filled shapes on the slide. The lightest of the
+   three and the one that prints best.
+   ══════════════════════════════════════════════════════════ */
+.v3 .lad { row-gap: 0; }
+.v3 .hd { padding-bottom: var(--ae-space-3); }
+.v3 .hd .bar {
+  display: block; height: 3px; margin-top: var(--ae-space-3);
+  background: var(--fg-ink);
+  transform-origin: right center;
+  animation: bar-draw 700ms var(--ae-ease) both;
+  animation-delay: calc(60ms + var(--fg-at, 3) * var(--fg-beat));
+}
+.v3 .hd.a .bar { transform-origin: left center; }
+@keyframes bar-draw { from { transform: scaleX(0); } }
+.v3 .rule {
+  grid-column: 1 / -1; align-self: start;
+  height: 1px; background: var(--fg-hair);
+  transform-origin: center;
+  animation: bar-draw 700ms var(--ae-ease) both;
+  animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat));
+}
+.v3 .cell { padding: var(--ae-space-5) var(--ae-space-4); }
+.v3 .rung { padding: var(--ae-space-5) 0; }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Rows</button>
+        <button type="button" data-p="v2">2 · Panels</button>
+        <button type="button" data-p="v3">3 · Editorial</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Content verbatim from presentation/sections/03-vibe-vs-agentic.js, plus the
+   workflow row split into its steps so it can be drawn rather than typed. */
+const C = {
+  en: {
+    title: 'Vibe Coding vs. Agentic Engineering',
+    lede: 'Same model. Both ship code. Only one of them survives past the weekend project.',
+    vibeTitle: 'Vibe Coding',            vibeTag: '"Real quick, let me just …"',
+    agenticTitle: 'Agentic Engineering', agenticTag: '"Before I touch a key …"',
+    rows: [
+      { dim: 'Core action',
+        vibe: 'Casual prompting: describe the outcome, accept what comes back',
+        agentic: 'Systematic planning: write an explicit spec, then direct autonomous agents' },
+      { dim: 'Who works this way',
+        vibe: 'Non-engineers and hobbyists',
+        agentic: 'Software engineers acting as system architects' },
+      { dim: 'Workflow',
+        vibe: 'Idea → Build', agentic: 'Idea → Spec → Plan → Build → Review',
+        vibeSteps: ['Idea','Build'],
+        agenticSteps: ['Idea','Spec','Plan','Build','Review'] },
+      { dim: 'Context and tools',
+        vibe: 'Whatever the system happens to reach on its own',
+        agentic: 'Memory, Skills, MCP, subagents, hooks' },
+      { dim: 'Quality and testing',
+        vibe: 'Review and tests skipped',
+        agentic: 'Human review for security, scalability, long-term system health' },
+      { dim: 'Best used for',
+        vibe: 'Quick personal experiments, throwaway mockups, low-stakes prototypes',
+        agentic: 'Production-grade applications, enterprise codebases, scalable software' },
+    ],
+  },
+  de: {
+    title: 'Vibe Coding vs. Agentic Engineering',
+    lede: 'Dasselbe Modell. Beide schreiben Code. Nur eines überlebt das Wochenend-Projekt.',
+    vibeTitle: 'Vibe Coding',            vibeTag: '„Mal eben schnell …"',
+    agenticTitle: 'Agentic Engineering', agenticTag: '„Bevor ich loslege …"',
+    rows: [
+      { dim: 'Kernvorgehen',
+        vibe: 'Locker prompten: Ergebnis beschreiben, Output übernehmen',
+        agentic: 'Systematisch planen: explizite Spec, Agenten gezielt steuern' },
+      { dim: 'Wer so arbeitet',
+        vibe: 'Nicht-Entwickler und Hobbyisten',
+        agentic: 'Software-Engineers in der Rolle von System-Architekten' },
+      { dim: 'Workflow',
+        vibe: 'Idee → Bauen', agentic: 'Idee → Spec → Plan → Bauen → Review',
+        vibeSteps: ['Idee','Bauen'],
+        agenticSteps: ['Idee','Spec','Plan','Bauen','Review'] },
+      { dim: 'Kontext und Tools',
+        vibe: 'Worauf das System zufällig Zugriff hat',
+        agentic: 'Memory, Skills, MCP, Subagenten, Hooks' },
+      { dim: 'Qualität und Tests',
+        vibe: 'Review und Tests entfallen',
+        agentic: 'Menschliches Review für Sicherheit, Skalierbarkeit und langfristige Systemgesundheit' },
+      { dim: 'Am besten für',
+        vibe: 'Schnelle Experimente, Wegwerf-Mockups, unkritische Prototypen',
+        agentic: 'Produktionsreife Anwendungen, Enterprise-Codebases, skalierbare Software' },
+    ],
+  },
+};
+
+const SUB = {
+  v1: '1 · Rows — one card per row, the spine beaded through the gaps',
+  v2: '2 · Panels — two standing panels, dimensions down the aisle',
+  v3: '3 · Editorial — no cards, hairline bands, one heavy rule per column',
+};
+
+function cellHTML(row, side) {
+  const steps = side === 'vibe' ? row.vibeSteps : row.agenticSteps;
+  if (!steps) return row[side];
+  const mod = side === 'agentic' ? ' steps--a' : '';
+  return '<span class="steps' + mod + '">' + steps
+    .map(function (s) { return '<span class="st">' + s + '</span>'; })
+    .join('<span class="ar">→</span>') + '</span>';
+}
+
+/* One grid, seven rows: the header plus six dimensions. Every variation
+   places the same cells and differs only in the decorative grid items it
+   puts behind them — which is why they stay comparable. */
+function render(v, t) {
+  const R = t.rows;
+  let decor = '';
+
+  if (v === 'v1') {
+    decor += '<div class="spine decor" style="--fg-at:3"></div>';
+    decor += R.map(function (_, i) {
+      return '<div class="decor rowbg fg-in" style="grid-row:' + (i + 2) + '; --fg-at:' + (4 + i) + '"></div>' +
+             '<div class="decor abg fg-in"   style="grid-row:' + (i + 2) + '; --fg-at:' + (4 + i) + '"></div>';
+    }).join('');
+  }
+  if (v === 'v2') {
+    decor += '<div class="decor panel v fg-in" style="--fg-at:3"></div>' +
+             '<div class="decor panel a fg-in" style="--fg-at:3"></div>';
+  }
+  if (v === 'v3') {
+    decor += R.map(function (_, i) {
+      return i === 0 ? '' :
+        '<div class="decor rule" style="grid-row:' + (i + 2) + '; --fg-at:' + (4 + i) + '"></div>';
+    }).join('');
+  }
+
+  const bar = v === 'v3' ? '<i class="bar" style="--fg-at:3"></i>' : '';
+  const cap = v === 'v1'
+    ? '<div class="cap fg-in" style="grid-row:1; grid-column:2; --fg-at:3"><i></i></div>' : '';
+
+  return '' +
+  '<section class="proto ' + v + '">' +
+    '<div class="fg-wrap">' +
+      '<h1 class="fg-in" style="--fg-at:1">' + t.title + '</h1>' +
+      '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>' +
+      '<div class="lad">' +
+        decor +
+        '<div class="hd v in-l" style="grid-row:1; grid-column:1; --fg-at:3">' +
+          '<h2>' + t.vibeTitle + '</h2><p class="tag">' + t.vibeTag + '</p>' + bar + '</div>' +
+        cap +
+        '<div class="hd a in-r" style="grid-row:1; grid-column:3; --fg-at:3">' +
+          '<h2>' + t.agenticTitle + '</h2><p class="tag">' + t.agenticTag + '</p>' + bar + '</div>' +
+        R.map(function (r, i) {
+          const at = 4 + i, row = i + 2;
+          return '' +
+            '<div class="cell v in-l" style="grid-row:' + row + '; grid-column:1; --fg-at:' + at + '">' +
+              cellHTML(r, 'vibe') + '</div>' +
+            '<div class="rung fg-in" style="grid-row:' + row + '; grid-column:2; --fg-at:' + at + '">' +
+              '<b>' + r.dim + '</b></div>' +
+            '<div class="cell a in-r" style="grid-row:' + row + '; grid-column:3; --fg-at:' + at + '">' +
+              cellHTML(r, 'agentic') + '</div>';
+        }).join('') +
+      '</div>' +
+    '</div>' +
+  '</section>';
+}
+
+/* ── harness ── */
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  document.querySelectorAll('#tabs button').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.p === proto);
+  });
+  document.querySelectorAll('#langs button').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.l === lang);
+  });
+}
+
+document.getElementById('tabs').addEventListener('click', function (e) {
+  const b = e.target.closest('button'); if (!b) return;
+  proto = b.dataset.p; mount();
+});
+document.getElementById('langs').addEventListener('click', function (e) {
+  const b = e.target.closest('button'); if (!b) return;
+  lang = b.dataset.l; mount();
+});
+document.getElementById('btn-replay').addEventListener('click', mount);
+
+mount();
+</script>
+</body>
+</html>
