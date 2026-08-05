@@ -12,25 +12,24 @@ const TAG = 's24-setup-kit';
 const CONTENT = {
   en: {
     h1: 'Five things you give it — three of them <span class="fg-mark fg-mark--sweep">standard</span>',
-    lede: `You have already met four. The memory file, skills and MCP each had a
-           slide in Build; and the second model that read the diff in Review was
-           a subagent. Here is the whole set, and the line that decides how much
-           of it travels with you.`,
+    lede: `You have met four already — the memory file, skills and MCP in Build,
+           and the subagent that read the diff in Review. Here is the whole set,
+           and the line that decides how much of it travels with you.`,
     groups: [
       {
         label: 'Portable',
         h: 'One spelling, every tool',
         items: [
           { t: 'Memory',
-            d: 'The project’s standing brief: the stack, the conventions, what is out of scope. Read at the start of every session.',
-            std: 'AGENTS.md',
+            d: 'The project’s standing brief: stack, conventions, what is out of scope. Read at every session start.',
+            std: 'AGENTS.md', mono: true,
             keeper: 'Agentic AI Foundation, Linux Foundation' },
           { t: 'Skills',
-            d: 'A procedure the model loads only once it becomes relevant. Written once, used by any agent that reads the format.',
-            std: 'SKILL.md',
+            d: 'A procedure the model loads only when it becomes relevant. Written once, read by any agent.',
+            std: 'SKILL.md', mono: true,
             keeper: 'Open standard, published spec at agentskills.io' },
           { t: 'MCP',
-            d: 'The systems it is allowed to reach: the tracker, the database, the docs, the design tool.',
+            d: 'The systems it may reach: the tracker, the database, the docs.',
             std: 'Model Context Protocol',
             keeper: 'Agentic AI Foundation, Linux Foundation' },
         ],
@@ -40,9 +39,9 @@ const CONTENT = {
         h: 'A different spelling in each',
         items: [
           { t: 'Hooks',
-            d: 'A command that fires on an event — before a tool call, on stop — every time, whatever the model decides. Policy it cannot talk its way around.' },
+            d: 'Fires on an event, every time, whatever the model decides. Policy it cannot talk its way around.' },
           { t: 'Subagents',
-            d: 'A second agent with its own context window and a narrower job. Its work never enters yours; you get the result.' },
+            d: 'A second agent, its own context, a narrower job. You get the result, not its reading.' },
         ],
         mapLabel: 'The same feature, three spellings',
         map: [
@@ -59,25 +58,24 @@ const CONTENT = {
   },
   de: {
     h1: 'Fünf Dinge, die du ihm gibst — drei davon <span class="fg-mark fg-mark--sweep">Standard</span>',
-    lede: `Vier davon sind dir schon begegnet. Memory-Datei, Skills und MCP hatten
-           je eine Folie in Build; und das zweite Modell, das im Review den Diff
-           gelesen hat, war ein Subagent. Hier ist der ganze Satz — und die Linie,
-           die entscheidet, wie viel davon mitreist.`,
+    lede: `Vier sind dir schon begegnet — Memory-Datei, Skills und MCP in Build,
+           und der Subagent, der im Review den Diff gelesen hat. Hier ist der
+           ganze Satz, und die Linie, die entscheidet, wie viel davon mitreist.`,
     groups: [
       {
         label: 'Portabel',
         h: 'Eine Schreibweise, jedes Tool',
         items: [
           { t: 'Memory',
-            d: 'Der ständige Auftrag des Projekts: der Stack, die Konventionen, was nicht dazugehört. Wird zu Beginn jeder Session gelesen.',
-            std: 'AGENTS.md',
+            d: 'Der ständige Auftrag des Projekts: Stack, Konventionen, was nicht dazugehört. Bei jedem Start gelesen.',
+            std: 'AGENTS.md', mono: true,
             keeper: 'Agentic AI Foundation, Linux Foundation' },
           { t: 'Skills',
-            d: 'Ein Ablauf, den das Modell erst lädt, wenn er relevant wird. Einmal geschrieben, von jedem Agenten nutzbar, der das Format liest.',
-            std: 'SKILL.md',
+            d: 'Ein Ablauf, den das Modell lädt, wenn er relevant wird. Einmal geschrieben, von jedem Agenten lesbar.',
+            std: 'SKILL.md', mono: true,
             keeper: 'Offener Standard, Spezifikation auf agentskills.io' },
           { t: 'MCP',
-            d: 'Die Systeme, die er erreichen darf: Ticket-System, Datenbank, Doku, Design-Tool.',
+            d: 'Die Systeme, die er erreichen darf: Ticket-System, Datenbank, Doku.',
             std: 'Model Context Protocol',
             keeper: 'Agentic AI Foundation, Linux Foundation' },
         ],
@@ -87,9 +85,9 @@ const CONTENT = {
         h: 'In jedem Tool anders geschrieben',
         items: [
           { t: 'Hooks',
-            d: 'Ein Befehl, der bei einem Ereignis feuert — vor einem Tool-Call, beim Stop — jedes Mal, unabhängig davon, was das Modell entscheidet. Policy, die es nicht aushebeln kann.' },
+            d: 'Feuert bei einem Ereignis, jedes Mal. Policy, die das Modell nicht aushebeln kann.' },
           { t: 'Subagents',
-            d: 'Ein zweiter Agent mit eigenem Kontextfenster und engerem Auftrag. Seine Arbeit landet nie in deiner; du bekommst das Ergebnis.' },
+            d: 'Ein zweiter Agent, eigener Kontext, engerer Auftrag. Du bekommst nur das Ergebnis.' },
         ],
         mapLabel: 'Dasselbe Feature, drei Schreibweisen',
         map: [
@@ -99,9 +97,9 @@ const CONTENT = {
         ],
       },
     ],
-    note: `Und Plugins — ein installierbares Bündel aus den fünf, damit ein Team
-           sein Setup ausliefert statt es im README zu beschreiben. <b>Auch dafür
-           gibt es kein gemeinsames Format.</b>`,
+    note: `Und Plugins — ein installierbares Bündel aus den fünf, mit dem ein Team
+           sein Setup ausliefert statt es zu beschreiben. <b>Auch dafür kein
+           gemeinsames Format.</b>`,
     foot: 'Governance geprüft August 2026 · Tool-Pfade Juli 2026 — vor Gebrauch erneut prüfen.',
   },
 };
@@ -115,17 +113,21 @@ class Section24 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: center;
-          padding: var(--ae-space-5) var(--ae-gutter);
+          /* The densest slide in the deck: five items, a mapping well, a note
+             and a stamp. The vertical rhythm is one step tighter than the
+             deck's default throughout, which is what buys it a 720px stage
+             without an internal scrollbar. Measured, not guessed. */
+          padding: var(--ae-space-2) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
         }
         ${TAG} h1 {
-          margin: 0 0 var(--ae-space-3);
+          margin: 0 0 var(--ae-space-2);
           font-size: var(--ae-fs-h2);
           line-height: var(--ae-lh-h2);
           color: var(--fg-ink);
         }
-        ${TAG} .fg-lede { margin-bottom: var(--ae-space-5); }
+        ${TAG} .fg-lede { margin-bottom: var(--ae-space-3); }
 
         /* The portable group is the wider one: it carries a standard name and
            a keeper per item, and it is the half the audience should leave
@@ -137,9 +139,9 @@ class Section24 extends HTMLElement {
           gap: var(--ae-space-4);
           align-items: start;
         }
-        ${TAG} .grp { display: flex; flex-direction: column; }
+        ${TAG} .grp { display: flex; flex-direction: column; padding: var(--ae-space-3) var(--ae-space-4); }
         ${TAG} .grp > h2 {
-          margin: 2px 0 var(--ae-space-4);
+          margin: 2px 0 var(--ae-space-3);
           font-family: var(--ae-font-head);
           font-size: var(--ae-fs-h4);
           line-height: var(--ae-lh-h4);
@@ -149,7 +151,7 @@ class Section24 extends HTMLElement {
 
         ${TAG} .items { margin: 0; padding: 0; list-style: none; }
         ${TAG} .items li {
-          padding: var(--ae-space-3) 0;
+          padding: var(--ae-space-2) 0;
           border-bottom: 1px solid var(--fg-hair);
         }
         ${TAG} .items li:first-child { padding-top: 0; }
@@ -170,11 +172,19 @@ class Section24 extends HTMLElement {
         /* The standard's name is a file name or a protocol name, so it takes
            the code face; who keeps it is prose and does not. */
         ${TAG} .std {
-          margin-top: 6px;
+          margin-top: 4px;
           display: flex;
           flex-wrap: wrap;
           align-items: baseline;
           gap: var(--ae-space-2) var(--ae-space-3);
+        }
+        /* A file name takes the code face; a protocol name is prose and does
+           not, however much it wants to sit in the same column. */
+        ${TAG} .std-name {
+          font-size: var(--ae-fs-caption);
+          line-height: var(--ae-lh-caption);
+          font-weight: 600;
+          color: var(--fg-green-d);
         }
         ${TAG} .keeper {
           font-size: var(--ae-fs-caption);
@@ -182,10 +192,11 @@ class Section24 extends HTMLElement {
           color: var(--fg-muted);
         }
 
-        ${TAG} .evidence { margin-top: var(--ae-space-4); }
+        ${TAG} .evidence { margin-top: var(--ae-space-3); }
         ${TAG} .evidence .fg-label { display: block; margin-bottom: var(--ae-space-2); }
 
-        ${TAG} .fg-note { margin-top: var(--ae-space-5); }
+        ${TAG} .fg-note { margin-top: var(--ae-space-3); padding: var(--ae-space-3) var(--ae-space-4); }
+        ${TAG} .fg-foot { margin-top: var(--ae-space-2); }
 
         @media (max-width: 1000px) {
           ${TAG} .cols { grid-template-columns: 1fr; }
@@ -207,7 +218,7 @@ class Section24 extends HTMLElement {
                     <p>${it.d}</p>
                     ${it.std ? `
                       <div class="std">
-                        <span class="fg-code">${it.std}</span>
+                        <span class="${it.mono ? 'fg-code' : 'std-name'}">${it.std}</span>
                         <span class="keeper">${it.keeper}</span>
                       </div>
                     ` : ''}
