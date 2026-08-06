@@ -107,7 +107,12 @@ class Section07 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
-          padding: var(--ae-space-6) var(--ae-gutter);
+          gap: var(--ae-space-4);
+          /* space-5, not space-6: German runs the two gate cards to an extra
+             line, and with the head/body/foot gaps added that puts the slide
+             6px over a 610px stage. The frame gives it back without touching
+             the pipeline's geometry, which is tuned to the pixel. */
+          padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
         }
@@ -120,7 +125,7 @@ class Section07 extends HTMLElement {
            (No backticks in here: this comment sits inside a JS template
            literal, and a backtick would end the string. It did.) */
         ${TAG} .body { flex: none; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-4); }
+        ${TAG} .foot { flex: none; }
 
         ${TAG} h1 {
           margin: 0 0 var(--ae-space-2);

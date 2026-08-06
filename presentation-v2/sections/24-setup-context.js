@@ -176,6 +176,7 @@ class Section24 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-4) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -191,7 +192,7 @@ class Section24 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-3); }
+        ${TAG} .foot { flex: none; }
 
         ${TAG} h1 {
           margin: 0 0 var(--ae-space-3);

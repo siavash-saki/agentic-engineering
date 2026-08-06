@@ -158,6 +158,7 @@ class Section23 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -174,7 +175,7 @@ class Section23 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-4); }
+        ${TAG} .foot { flex: none; }
 
         ${TAG} h1 {
           margin: 0 0 var(--ae-space-2);
@@ -314,7 +315,7 @@ class Section23 extends HTMLElement {
            puts the chip on two lines again. */
         @media (max-width: 1100px) {
           ${TAG} { padding: var(--ae-space-3) var(--ae-space-6); }
-          ${TAG} .foot { margin-top: var(--ae-space-3); }
+          ${TAG} .foot { }
           ${TAG} .fg-foot { margin-top: var(--ae-space-2); padding-top: var(--ae-space-2); }
           ${TAG} .crate { padding-left: var(--ae-space-3); padding-right: var(--ae-space-3); }
           ${TAG} .crate__name { left: var(--ae-space-4); }

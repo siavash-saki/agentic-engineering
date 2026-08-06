@@ -88,7 +88,7 @@ class Section02 extends HTMLElement {
         ${TAG} .pair {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: var(--ae-space-5);
+          gap: var(--ae-space-4);
           align-items: stretch;
           margin-bottom: var(--ae-space-5);
         }

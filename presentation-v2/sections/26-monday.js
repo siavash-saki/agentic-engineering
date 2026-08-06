@@ -112,6 +112,7 @@ class Section26 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -125,7 +126,7 @@ class Section26 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-4); }
+        ${TAG} .foot { flex: none; }
 
         ${TAG} h1 {
           margin: 0 0 var(--ae-space-2);
@@ -225,7 +226,7 @@ class Section26 extends HTMLElement {
         /* Below this width six columns stop being a run and start being
            six slivers, so the drawing gives up and the steps stack. */
         @media (max-width: 1000px) {
-          ${TAG} .run { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--ae-space-5); }
+          ${TAG} .run { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--ae-space-4); }
           ${TAG} .rail, ${TAG} .band { display: none; }
           ${TAG} .disc { grid-row: auto; }
           ${TAG} .nm, ${TAG} .ds { grid-row: auto; }

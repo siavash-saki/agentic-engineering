@@ -126,6 +126,7 @@ class Section22 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -250,7 +251,7 @@ class Section22 extends HTMLElement {
         }
         ${TAG} .four {
           display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-          column-gap: var(--ae-space-5);
+          column-gap: var(--ae-space-4);
         }
         ${TAG} .cls h3 {
           display: flex; gap: 8px; align-items: baseline;
@@ -264,7 +265,7 @@ class Section22 extends HTMLElement {
         @media print { ${TAG} .rail { animation: none !important; } }
 
         @media (max-width: 1000px) {
-          ${TAG} .four { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--ae-space-5); }
+          ${TAG} .four { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--ae-space-4); }
           ${TAG} .pass { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
           ${TAG} .rail, ${TAG} .head-r, ${TAG} .stem, ${TAG} .wl, ${TAG} .drop { display: none; }
           ${TAG} .mkcell, ${TAG} .cap, ${TAG} .rl { grid-row: auto; grid-column: 1; }

@@ -138,6 +138,7 @@ class Section13 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -152,7 +153,7 @@ class Section13 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-5); }
+        ${TAG} .foot { flex: none; }
         /* The kit gives every p a bottom margin, and .fg-note is one.
            The body may not shrink here, so that margin would be blank
            paid for out of the drawing's budget. */

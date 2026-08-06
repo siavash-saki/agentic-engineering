@@ -149,6 +149,7 @@ class Section29 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -163,7 +164,7 @@ class Section29 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-5); }
+        ${TAG} .foot { flex: none; }
 
         /* The three chapter hues, named as classes and never as literal
            colours — the same three slide 5 taught. */
@@ -331,10 +332,10 @@ class Section29 extends HTMLElement {
         @media print { ${TAG} .rail, ${TAG} .arc { animation: none !important; } }
 
         @media (max-width: 900px) {
-          ${TAG} .run { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+          ${TAG} .run { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
           ${TAG} .rail, ${TAG} .arc, ${TAG} .gate { display: none; }
           ${TAG} .spine { padding-bottom: 0; }
-          ${TAG} .band { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+          ${TAG} .band { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
         }
       </style>
       <div class="fg-wrap head">

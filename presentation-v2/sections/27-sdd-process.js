@@ -192,6 +192,7 @@ class Section27 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -205,7 +206,7 @@ class Section27 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-4); }
+        ${TAG} .foot { flex: none; }
 
         /* Grey, not green: this is a metadata label, and green is now the
            Build hue and is spent on the Build ring. */
@@ -349,14 +350,14 @@ class Section27 extends HTMLElement {
            more. */
         ${TAG} .fine {
           display: grid; grid-template-columns: minmax(0, 13ch) minmax(0, 1fr);
-          column-gap: var(--ae-space-5);
+          column-gap: var(--ae-space-4);
           margin-top: var(--ae-space-5); padding-top: var(--ae-space-3);
           border-top: 1px solid var(--fg-hair);
         }
         ${TAG} .fine .lbl { margin: 0; }
         ${TAG} .fine .row {
           display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-          column-gap: var(--ae-space-5);
+          column-gap: var(--ae-space-4);
         }
         ${TAG} .fine p {
           margin: 0; font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);

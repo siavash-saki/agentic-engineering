@@ -156,6 +156,7 @@ class Section15 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -165,7 +166,7 @@ class Section15 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-3); }
+        ${TAG} .foot { flex: none; }
 
         /* See the header comment: the wrap is wider here because the type
            scale grows with viewport height and this cap does not. */
@@ -269,7 +270,7 @@ class Section15 extends HTMLElement {
         @media (max-height: 780px) {
           ${TAG} { padding-top: var(--ae-space-3); padding-bottom: var(--ae-space-3); }
           ${TAG} .fg-lede { line-height: 1.38; }
-          ${TAG} .foot { margin-top: var(--ae-space-3); }
+          ${TAG} .foot { }
         }
 
         /* THE NAV-WRAP BAND. Between the narrow stack and 1280px the

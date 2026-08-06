@@ -83,6 +83,7 @@ class Section08 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -92,7 +93,7 @@ class Section08 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-4); }
+        ${TAG} .foot { flex: none; }
 
         ${TAG} .title {
           display: flex; align-items: flex-end; justify-content: space-between;
@@ -130,7 +131,7 @@ class Section08 extends HTMLElement {
         /* ── the two questions ── */
         ${TAG} .qs {
           display: grid; grid-template-columns: 1fr auto 1fr;
-          align-items: stretch; column-gap: var(--ae-space-5);
+          align-items: stretch; column-gap: var(--ae-space-4);
         }
         ${TAG} .q {
           padding: var(--ae-space-4) var(--ae-space-6);
@@ -242,7 +243,7 @@ class Section08 extends HTMLElement {
 
         @media (max-width: 900px) {
           ${TAG} .qs { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
-          ${TAG} .run { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+          ${TAG} .run { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
           ${TAG} .rail, ${TAG} .out .tail, ${TAG} .out .head { display: none; }
         }
       </style>

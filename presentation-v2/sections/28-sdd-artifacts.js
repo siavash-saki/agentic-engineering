@@ -495,6 +495,7 @@ class Section28 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -507,7 +508,7 @@ class Section28 extends HTMLElement {
           flex: none; min-height: 0;
           display: grid; align-items: stretch;
           grid-template-columns: minmax(252px, 0.315fr) minmax(0, 1fr);
-          gap: var(--ae-space-5);
+          gap: var(--ae-space-4);
         }
 
         /* The four documents share one grid cell, so the cell is as tall as

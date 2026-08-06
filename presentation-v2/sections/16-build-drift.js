@@ -139,7 +139,13 @@ class Section16 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
-          padding: var(--ae-space-6) var(--ae-gutter);
+          gap: var(--ae-space-4);
+          /* space-5, not the deck's usual space-6: this board carries a run,
+             an arc over the top of it and a drift along the floor, and with
+             the head/body/foot gaps added it sits 2px over a 610px stage at
+             space-6. The frame gives the two pixels back more cheaply than
+             the drawing can. */
+          padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
         }
@@ -152,7 +158,7 @@ class Section16 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-3); }
+        ${TAG} .foot { flex: none; }
         ${TAG} .foot .fg-note { margin: 0; }
 
         ${TAG} h1 {

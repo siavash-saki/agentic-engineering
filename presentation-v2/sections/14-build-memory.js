@@ -119,6 +119,7 @@ class Section14 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -277,7 +278,7 @@ class Section14 extends HTMLElement {
            the connectors are the first thing to go, because a lane that
            no longer runs anywhere is worse than no lane. */
         @media (max-width: 980px) {
-          ${TAG} .board { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+          ${TAG} .board { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
           ${TAG} .trunk, ${TAG} .collector, ${TAG} .stub { display: none; }
           ${TAG} .rows { grid-template-columns: minmax(0, 1fr); }
           ${TAG} .margin > .lbl { margin-left: 0; }

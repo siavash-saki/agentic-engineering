@@ -120,7 +120,7 @@ class Section03 extends HTMLElement {
         ${TAG} .row {
           display: grid;
           grid-template-columns: minmax(0, 1fr) var(--spine) minmax(0, 1fr);
-          column-gap: var(--ae-space-5);
+          column-gap: var(--ae-space-4);
           align-items: center;
           --spine: clamp(150px, 15.5vw, 226px);
         }

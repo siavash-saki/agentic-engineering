@@ -61,6 +61,7 @@ class Section05 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -149,7 +150,7 @@ class Section05 extends HTMLElement {
         @media print { ${TAG} .rail, ${TAG} .loopback { animation: none !important; } }
 
         @media (max-width: 900px) {
-          ${TAG} .run { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+          ${TAG} .run { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
           ${TAG} .rail, ${TAG} .loopback { display: none; }
           ${TAG} .spine { padding-bottom: 0; }
         }

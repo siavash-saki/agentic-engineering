@@ -114,6 +114,7 @@ class Section10 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -130,7 +131,7 @@ class Section10 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-3); }
+        ${TAG} .foot { flex: none; }
 
         ${TAG} h1 {
           margin: 0 0 var(--ae-space-2);
@@ -188,7 +189,7 @@ class Section10 extends HTMLElement {
         ${TAG} .back { margin-top: var(--ae-space-2); }
         ${TAG} .ties {
           display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-          column-gap: var(--ae-space-5);
+          column-gap: var(--ae-space-4);
           height: clamp(22px, 3.4vh, 34px);
         }
         ${TAG} .tie {
@@ -224,7 +225,7 @@ class Section10 extends HTMLElement {
 
         ${TAG} .cols {
           display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-          column-gap: var(--ae-space-5); align-items: stretch;
+          column-gap: var(--ae-space-4); align-items: stretch;
         }
         ${TAG} .col {
           display: flex; flex-direction: column; gap: var(--ae-space-3);

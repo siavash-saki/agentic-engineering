@@ -260,6 +260,7 @@ class Section20 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -278,7 +279,7 @@ class Section20 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-3); }
+        ${TAG} .foot { flex: none; }
         /* The kit sets a bottom margin on every p, and .fg-note is one.
            Everywhere else the body absorbs it because the body may shrink;
            here it may not (see above), so it was 11px of blank paid for out

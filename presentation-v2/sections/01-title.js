@@ -90,7 +90,7 @@ class Section01 extends HTMLElement {
         ${TAG} .cols {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: var(--ae-space-5);
+          gap: var(--ae-space-4);
         }
         ${TAG} .rcol {
           position: relative;

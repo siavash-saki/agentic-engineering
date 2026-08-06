@@ -136,6 +136,7 @@ class Section25 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
+          gap: var(--ae-space-4);
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -149,7 +150,7 @@ class Section25 extends HTMLElement {
           flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
-        ${TAG} .foot { flex: none; margin-top: var(--ae-space-3); }
+        ${TAG} .foot { flex: none; }
 
         /* Between h2 and h1, the same compromise slide 7 makes on its
            step names. At full h1 the title alone cost 40px of the stage
@@ -258,7 +259,7 @@ class Section25 extends HTMLElement {
           border-top: 1px solid var(--fg-hair);
           display: grid;
           grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.4fr);
-          column-gap: var(--ae-space-5); row-gap: 5px;
+          column-gap: var(--ae-space-4); row-gap: 5px;
           align-items: center;
           font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
         }
