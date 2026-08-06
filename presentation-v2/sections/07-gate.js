@@ -107,12 +107,8 @@ class Section07 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
-          gap: var(--ae-space-4);
-          /* space-5, not space-6: German runs the two gate cards to an extra
-             line, and with the head/body/foot gaps added that puts the slide
-             6px over a 610px stage. The frame gives it back without touching
-             the pipeline's geometry, which is tuned to the pixel. */
-          padding: var(--ae-space-5) var(--ae-gutter);
+          gap: var(--ae-space-7);
+          padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
         }

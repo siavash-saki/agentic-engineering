@@ -134,7 +134,7 @@ class Section09 extends HTMLElement {
           display: flex !important;
           flex-direction: column;
           justify-content: safe center;
-          gap: var(--ae-space-4);
+          gap: var(--ae-space-7);
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
