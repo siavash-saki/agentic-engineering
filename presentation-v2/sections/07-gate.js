@@ -106,6 +106,7 @@ class Section07 extends HTMLElement {
         ${TAG} {
           display: flex !important;
           flex-direction: column;
+          justify-content: safe center;
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -118,7 +119,7 @@ class Section07 extends HTMLElement {
            "safe" falls back to flex-start instead of overflowing upward.
            (No backticks in here: this comment sits inside a JS template
            literal, and a backtick would end the string. It did.) */
-        ${TAG} .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+        ${TAG} .body { flex: none; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
         ${TAG} .foot { flex: none; margin-top: var(--ae-space-4); }
 
         ${TAG} h1 {

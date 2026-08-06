@@ -455,9 +455,23 @@ function legend(t, d) {
   + '</div>';
 }
 
-function sheet(t, art, d) {
-  return '<div class="sheet" id="' + TAG + '-sheet" role="tabpanel" tabindex="0"'
-    + ' aria-labelledby="' + TAG + '-tab-' + art + '">'
+/* All four documents are rendered, stacked in one grid cell, and only the
+   open one is visible. That is what makes the sheet exactly as tall as the
+   LONGEST artifact rather than as tall as whichever is showing — so the
+   slide does not change height when a card is clicked. Sizing it to the
+   open document instead would shift the whole slide by up to 15px per
+   click, which is the jump this design was picked to avoid.
+
+   Doing it this way rather than with a min-height in vh means the height is
+   correct at every viewport and in both languages by construction, with no
+   number that has to be re-verified when a string grows. */
+function sheet(t, art, d, isOpen) {
+  return '<div class="sheet' + (isOpen ? ' is-open' : '') + '"'
+    + (isOpen
+        ? ' id="' + TAG + '-sheet" role="tabpanel" tabindex="0"'
+          + ' aria-labelledby="' + TAG + '-tab-' + art + '"'
+        : ' aria-hidden="true"')
+    + '>'
     + bar(t, art) + fm(art) + srcGrid(d, art) + legend(t, d)
   + '</div>';
 }
@@ -480,6 +494,7 @@ class Section28 extends HTMLElement {
         ${TAG} {
           display: flex !important;
           flex-direction: column;
+          justify-content: safe center;
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -489,10 +504,20 @@ class Section28 extends HTMLElement {
         /* Two columns: the contents, and the document it opens. The rail
            column is sized by its longest German line, not by proportion. */
         ${TAG} .body {
-          flex: 1; min-height: 0;
+          flex: none; min-height: 0;
           display: grid; align-items: stretch;
           grid-template-columns: minmax(252px, 0.315fr) minmax(0, 1fr);
           gap: var(--ae-space-5);
+        }
+
+        /* The four documents share one grid cell, so the cell is as tall as
+           the tallest and the visible one stretches to it. "visibility",
+           not "display: none": a hidden document must still occupy the cell
+           or it cannot contribute its height. */
+        ${TAG} .sheets { display: grid; align-items: stretch; min-width: 0; }
+        ${TAG} .sheets > .sheet { grid-area: 1 / 1; min-width: 0; }
+        ${TAG} .sheets > .sheet:not(.is-open) {
+          visibility: hidden; pointer-events: none;
         }
 
         /* ── the artifact's loop hue ── */
@@ -605,11 +630,20 @@ class Section28 extends HTMLElement {
         /* Anchored to the FOOT of the column, not floated under the list:
            the column is pinned top and bottom and the air falls between
            the contents and its footnote, where air belongs. */
-        ${TAG} .tk--mar {
+        /* The four captions stack in one cell for the same reason the four
+           documents do: verification's runs to six lines and spec's to
+           four, and the mast is what the sheet stretches to. Sized to the
+           open caption, the whole slide would move 3px on every click. The
+           rule and the space above belong to the wrapper, not to a caption
+           that might be the hidden one. */
+        ${TAG} .caps {
           flex: none; margin-top: auto;
           padding-top: var(--ae-space-3);
           border-top: 1px solid var(--fg-hair);
+          display: grid;
         }
+        ${TAG} .caps > .tk { grid-area: 1 / 1; }
+        ${TAG} .caps > .tk:not(.is-open) { visibility: hidden; }
 
         /* ── the sheet ── */
         ${TAG} .sheet {
@@ -798,9 +832,16 @@ class Section28 extends HTMLElement {
         + '<p class="kicker fg-in" style="--fg-at: 1">' + t.kicker + '</p>'
         + '<h1 class="fg-in" style="--fg-at: 1">' + t.title + '</h1>'
         + rail(t, art)
-        + '<span class="tk tk--mar fg-in" style="--fg-at: 11">' + d.caption + '</span>'
+        + '<div class="caps fg-in" style="--fg-at: 11">'
+          + ORDER.map(a =>
+              '<span class="tk' + (a === art ? ' is-open' : '') + '"'
+              + (a === art ? '' : ' aria-hidden="true"') + '>'
+              + t.docs[a].caption + '</span>').join('')
+        + '</div>'
       + '</div>'
-      + sheet(t, art, d);
+      + '<div class="sheets">'
+        + ORDER.map(a => sheet(t, a, t.docs[a], a === art)).join('')
+      + '</div>';
   }
 
   /* Re-rendering throws away the element that was focused, so focus is

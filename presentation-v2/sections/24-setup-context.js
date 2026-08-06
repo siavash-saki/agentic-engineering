@@ -175,6 +175,7 @@ class Section24 extends HTMLElement {
         ${TAG} {
           display: flex !important;
           flex-direction: column;
+          justify-content: safe center;
           padding: var(--ae-space-4) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -187,7 +188,7 @@ class Section24 extends HTMLElement {
            broken. Leaving the automatic minimum in place turns that silent
            overlap into an honest scrollbar. */
         ${TAG} .body {
-          flex: 1; display: flex; flex-direction: column;
+          flex: none; display: flex; flex-direction: column;
           justify-content: safe center;
         }
         ${TAG} .foot { flex: none; margin-top: var(--ae-space-3); }

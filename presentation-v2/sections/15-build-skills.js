@@ -155,13 +155,14 @@ class Section15 extends HTMLElement {
         ${TAG} {
           display: flex !important;
           flex-direction: column;
+          justify-content: safe center;
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
         }
         ${TAG} .head { flex: none; }
         ${TAG} .body {
-          flex: 1; display: flex; flex-direction: column;
+          flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
         ${TAG} .foot { flex: none; margin-top: var(--ae-space-3); }

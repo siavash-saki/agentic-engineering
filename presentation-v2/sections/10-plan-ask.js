@@ -113,6 +113,7 @@ class Section10 extends HTMLElement {
         ${TAG} {
           display: flex !important;
           flex-direction: column;
+          justify-content: safe center;
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -126,7 +127,7 @@ class Section10 extends HTMLElement {
            turns that into an honest scroll, and at the sizes this is
            actually shown at the body has spare room, so nothing moves. */
         ${TAG} .body {
-          flex: 1 0 auto; display: flex; flex-direction: column;
+          flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
         ${TAG} .foot { flex: none; margin-top: var(--ae-space-3); }

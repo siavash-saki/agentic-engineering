@@ -60,6 +60,7 @@ class Section05 extends HTMLElement {
         ${TAG} {
           display: flex !important;
           flex-direction: column;
+          justify-content: safe center;
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -68,7 +69,7 @@ class Section05 extends HTMLElement {
            makes the slide fill: the drawing is given the frame, rather than
            being centred inside a band of it. */
         ${TAG} .head { flex: none; }
-        ${TAG} .body { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+        ${TAG} .body { flex: none; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
         ${TAG} .foot { flex: none; }
 
         ${TAG} h1 {

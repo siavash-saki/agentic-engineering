@@ -125,6 +125,7 @@ class Section22 extends HTMLElement {
         ${TAG} {
           display: flex !important;
           flex-direction: column;
+          justify-content: safe center;
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -135,7 +136,7 @@ class Section22 extends HTMLElement {
            this is the deck's densest slide. Plain centring overflows in
            BOTH directions and hides the rail under the lede. */
         ${TAG} .body {
-          flex: 1; display: flex; flex-direction: column;
+          flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
 

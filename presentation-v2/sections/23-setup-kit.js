@@ -157,6 +157,7 @@ class Section23 extends HTMLElement {
         ${TAG} {
           display: flex !important;
           flex-direction: column;
+          justify-content: safe center;
           padding: var(--ae-space-5) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -170,7 +171,7 @@ class Section23 extends HTMLElement {
            Leaving the automatic minimum in place turns that silent overlap
            into an honest scrollbar on a stage too short to hold the slide. */
         ${TAG} .body {
-          flex: 1; display: flex; flex-direction: column;
+          flex: none; display: flex; flex-direction: column;
           justify-content: safe center;
         }
         ${TAG} .foot { flex: none; margin-top: var(--ae-space-4); }

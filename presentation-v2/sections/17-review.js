@@ -125,6 +125,7 @@ class Section17 extends HTMLElement {
         ${TAG} {
           display: flex !important;
           flex-direction: column;
+          justify-content: safe center;
           padding: var(--ae-space-6) var(--ae-gutter);
           background: var(--fg-paper);
           overflow: auto;
@@ -137,7 +138,7 @@ class Section17 extends HTMLElement {
            past its own box, so scrollHeight still equals clientHeight and
            the overflow check passes on a slide that is visibly broken. */
         ${TAG} .body {
-          flex: 1 0 auto; display: flex; flex-direction: column;
+          flex: none; display: flex; flex-direction: column;
           justify-content: safe center; min-height: 0;
         }
         ${TAG} .foot { flex: none; margin-top: var(--ae-space-4); }
