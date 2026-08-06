@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 17 — Drift, three variations</title>
+
+<!-- The real deck stylesheets, so these are judged in the actual design
+     language: same fonts, tokens, elevations, motion, palette. Nothing
+     here is wired into the deck. -->
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+/* Harness only. With five tabs the title column is narrow enough that
+   a long subtitle wraps, the header grows 15px and the stage shrinks —
+   which made two variations look 2% fuller than the three they are
+   being compared with. Clip it instead, so the frame is one number. */
+/* justify-self: center sizes the title to fit-content, which can be
+   wider than its track and then paints over the tabs. Stretch it, so
+   the deck's own ellipsis does the work. */
+#header #subtitle { justify-self: stretch; text-align: center; max-width: none; min-width: 0; }
+#tabs button, #btn-replay, #btn-grey { white-space: nowrap; }
+/* The deck header is "1fr auto 1fr" and the middle column is the title;
+   with the title unwrapped it took its full width and pushed the tabs
+   under it. Let the title be the column that gives. */
+#header .header-inner { grid-template-columns: auto minmax(0, 1fr) auto; }
+#header .header-right { justify-self: end; }
+
+/* ══════════════════════════════════════════════════════════════════
+   SHARED
+
+   THIS SLIDE IS A FORK, AND THE DECK HAS NO FORK DEVICE YET. Three
+   were built for slide 2 and none were kept, so nothing is being
+   reused here — whichever of these three is picked becomes the
+   deck's fork.
+
+   What separates drift from an ordinary two-column comparison is
+   TIME. Drift is not a choice between two options standing side by
+   side; it is one path that slowly stops matching the thing it was
+   supposed to follow, in increments small enough that nobody calls
+   it. So in all three the divergence is GEOMETRY — a gap that opens
+   along a run, a barrier walked around, a step of the loop skipped —
+   and never two coloured labels next to each other.
+
+   COLOUR. Build chapter, so green. Clay is the drift, and it always
+   travels with a BROKEN LINE: solid vs dashed is the pairing slide 6
+   already established for "what you wrote" against "what you did
+   not", and it is the half of the distinction that survives
+   greyscale. Ink is the human — here it is spent on exactly one act,
+   the person who stops Build and re-agrees the plan, because that
+   act is the whole slide.
+
+   THE SAME TICK, TWICE. Both paths end in a review that passes. One
+   ✓ sits on a solid green disc; the other sits inside a broken clay
+   ring. "It will pass, and it will mean nothing" is the sharpest
+   line in the slide's own text, and it is drawn rather than only
+   stated.
+   ══════════════════════════════════════════════════════════════════ */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-3); }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 72ch; }
+.proto .fg-note { margin: 0; }
+.proto .lbl { margin: 0 0 var(--ae-space-2); }
+
+/* ── CAST: the plan, as a file. Slide 7's document device, unchanged:
+      a white box with an ink edge, kind above, filename below. ── */
+.doc {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: var(--ae-space-3) var(--ae-space-5);
+  border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1.5px solid var(--fg-ink);
+  box-shadow: var(--fg-d1); white-space: nowrap;
+}
+.doc .kind { font-size: var(--ae-fs-caption); line-height: 1.2; color: var(--fg-muted); }
+.doc .file {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-small);
+  line-height: 1.2; font-weight: 600; color: var(--fg-ink);
+}
+
+/* ── CAST: the verdict. Same glyph, two rings. ── */
+.vd {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: none; width: clamp(30px, 4.0vh, 38px); height: clamp(30px, 4.0vh, 38px);
+  border-radius: 999px; font-size: 16px; font-weight: 700; line-height: 1;
+}
+.vd--real { background: var(--fg-build); color: #fff; box-shadow: var(--fg-d1); }
+.vd--hollow {
+  background: var(--fg-card); color: var(--fg-fail-d);
+  border: 2px dashed var(--fg-fail);
+}
+
+/* ── CAST: nodes on a path. Hollow ring = a machine step. Filled ink
+      disc = a person. Dashed ring = a step on the path that left. ── */
+.nd {
+  display: block; flex: none; box-sizing: border-box;
+  width: 18px; height: 18px; border-radius: 999px;
+  background: var(--fg-card); border: 3px solid var(--fg-build);
+}
+.nd--human {
+  width: 26px; height: 26px;
+  background: var(--fg-ink); border: 3px solid var(--fg-ink);
+  box-shadow: var(--fg-d1);
+}
+.nd--drift { border: 2px dashed var(--fg-fail); }
+
+/* ── captions on the drawing ── */
+.cap {
+  margin: 0; font-size: var(--ae-fs-small); line-height: 1.34; color: var(--fg-ink);
+}
+.cap--drift { color: var(--fg-fail-d); }
+.cap i {
+  font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums;
+  margin-right: 0.4em; color: var(--fg-faint);
+}
+/* One value for the drop between a drifting line and the captions
+   hanging under it, and for the ring that has to sit back ON that
+   line. It scales, because the verdict disc it has to clear scales:
+   at a fixed 15px the disc's lower half reached into the caption row
+   on a 900px-tall screen. */
+.dcaps { --capdrop: clamp(16px, 2.4vh, 27px); }
+.cap--drift i { color: var(--fg-fail); }
+
+/* ── the two costs. Each carries a sample of its own line, so the row
+      is bound to its path by form and not only by hue. ── */
+.costs { display: grid; row-gap: var(--ae-space-2); margin-top: var(--ae-space-3); }
+.cost {
+  margin: 0;
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--ae-space-4); align-items: start;
+  font-size: var(--ae-fs-small); line-height: 1.4;
+}
+.cost .swatch { display: block; width: 30px; margin-top: 0.62em; height: 0; }
+.cost--right { color: var(--fg-build-d); font-weight: 500; }
+.cost--right .swatch { border-top: 2.5px solid var(--fg-build); }
+.cost--wrong { color: var(--fg-fail-d); }
+.cost--wrong .swatch { border-top: 2.5px dashed var(--fg-fail); }
+
+/* ── lane names ── */
+.lane {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h5); line-height: 1.12;
+}
+.lane--right { color: var(--fg-ink); }
+.lane--wrong { color: var(--fg-fail-d); }
+
+/* ── motion: lines draw, boxes fade. A connector must never RISE into
+      place — it would land short of the thing it connects to. ── */
+.dx { transform-origin: left center; animation: dx 620ms var(--ae-ease) both; }
+@keyframes dx { from { transform: scaleX(0); } }
+.dy { transform-origin: center top; animation: dy 380ms var(--ae-ease) both; }
+@keyframes dy { from { transform: scaleY(0); } }
+.ap { animation: fg-appear 420ms var(--ae-ease) both; }
+.dx, .dy, .ap { animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat)); }
+@media print { .dx, .dy, .ap { animation: none !important; } }
+
+/* ══════════════════════════════════════════════════════════════════
+   V1 — THE GAP
+   The plan is one ink rule across the whole slide: the datum. Both
+   answers start from the same point on it, and the only difference
+   the drawing states is DISTANCE FROM THAT RULE over time.
+
+   The corrected path keeps its distance constant, and it does that
+   by touching the rule once — one ink disc, one ink riser, one cut
+   mark on the plan. The other path leaves in three steps and each
+   one drops it further; the gap at the right edge is three times the
+   gap at the first step. Nothing about the descent is dramatic,
+   which is the point.
+
+   EVERY LEVEL IS A GRID ROW, so a drop is a row's own height and a
+   corner lands on a column edge by construction. No percentages, no
+   angles: German wraps a caption to two lines and the staircase does
+   not move.
+   ══════════════════════════════════════════════════════════════════ */
+.v1 .canvas {
+  --lvl:  clamp(35px, 4.9vh, 54px);   /* one drift step's drop */
+  /* Sized for a TWO-LINE caption, which is what German gives you:
+     "Der Plan wird korrigiert und erneut freigegeben." wraps, and at
+     the one-line height its second line crossed the drifting line. */
+  --lvl0: clamp(68px, 9.6vh, 104px);  /* the corrected path's row */
+  /* Wide enough that the ink riser and the 26px human disc are both
+     visible inside it. At the first value the disc filled the gap and
+     the riser could not be seen at all, which lost the one mark that
+     says the corrected path touched the plan. */
+  --gap0: clamp(28px, 3.9vh, 46px);   /* plan rule → corrected path */
+  display: grid;
+  grid-template-columns:
+    [lane] clamp(112px, 13vw, 176px)
+    [c1] minmax(0, 1fr) [c2] minmax(0, 1fr) [c3] minmax(0, 1fr)
+    [out] auto;
+  grid-template-rows:
+    [r-lab] auto [r-rail] 0px [r-gap] var(--gap0)
+    [r-ok] var(--lvl0) [r-d1] var(--lvl) [r-d2] var(--lvl) [r-d3] var(--lvl) [r-end];
+}
+.v1 .moment {
+  grid-row: r-lab; grid-column: c1 / -1; align-self: end;
+  margin: 0 0 6px; padding-left: 14px;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600; color: var(--fg-faint);
+}
+.v1 .plan {
+  grid-row: r-lab / r-gap; grid-column: lane;
+  justify-self: end; align-self: end; transform: translateY(50%);
+  padding-right: var(--ae-space-4); z-index: 2;
+}
+.v1 .rail {
+  grid-row: r-rail; grid-column: c1 / -1; align-self: start;
+  height: 0; border-top: 2.5px solid var(--fg-ink);
+}
+/* Where the plan was re-cut. A short ink bar ACROSS the rule, not a
+   dot on it — the same "a gate is drawn across the line" grammar
+   slide 7 uses, at annotation size. */
+.v1 .cut {
+  grid-row: r-rail; grid-column: c2; justify-self: center; align-self: center;
+  width: 3px; height: 18px; background: var(--fg-ink); z-index: 2;
+}
+.v1 .tick {
+  grid-row: r-gap; grid-column: c1; justify-self: start;
+  width: 0; border-left: 2px dotted var(--ae-cool-gray-400);
+}
+.v1 .riser {
+  grid-row: r-gap; grid-column: c2; justify-self: center;
+  width: 0; border-left: 2.5px solid var(--fg-ink);
+}
+.v1 .okseg {
+  grid-row: r-ok; grid-column: c1 / -1; align-self: start;
+  height: 0; border-top: 2.5px solid var(--fg-build);
+}
+.v1 .ok {
+  grid-row: r-ok; position: relative;
+  padding: 22px var(--ae-space-4) 0; text-align: center;
+}
+.v1 .ok .nd { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); }
+.v1 .origin {
+  grid-row: r-ok; grid-column: c1; justify-self: start; align-self: start;
+  width: 11px; height: 11px; border-radius: 999px; background: var(--fg-ink);
+  transform: translate(-50%, -50%); z-index: 2;
+}
+/* Each drop spans exactly one row, so it starts on the level above
+   and ends on the level below with nothing to tune. */
+.v1 .drop { justify-self: start; width: 0; border-left: 2px dashed var(--fg-fail); }
+.v1 .dseg { align-self: start; height: 0; border-top: 2px dashed var(--fg-fail); }
+.v1 .dnd {
+  justify-self: start; align-self: start;
+  transform: translate(-50%, -50%); z-index: 2;
+}
+.v1 .dcap { align-self: start; margin-top: 7px; padding-left: 16px; }
+.v1 .vd--real   { grid-row: r-ok; grid-column: out; justify-self: end; align-self: start; transform: translateY(-50%); }
+.v1 .vd--hollow { grid-row: r-d3; grid-column: out; justify-self: end; align-self: start; transform: translateY(-50%); }
+.v1 .lane {
+  grid-column: lane; justify-self: end; text-align: right;
+  padding-right: var(--ae-space-4);
+}
+.v1 .lane--right { grid-row: r-ok; align-self: center; }
+.v1 .lane--wrong { grid-row: r-d2; align-self: center; }
+
+/* ══════════════════════════════════════════════════════════════════
+   V2 — THE STOP
+   The moment, magnified instead of the run. Build meets a hard ink
+   stop; the plan hangs above it, which is what the stop is for.
+
+   The three answers on each side are POSITIONS in one drawing rather
+   than list items: Build stops AT the bar, the plan is corrected
+   ABOVE it, Build continues AFTER it. And the other three read off
+   the shape of the other line — it leaves before the bar, goes
+   UNDER it, and never comes back up. "The agent works around it" is
+   the slide's own sentence; here it is the picture.
+
+   The bypass is ONE element: a box with a dashed left and bottom
+   edge and one rounded corner. Slide 5's return arc is built the
+   same way, and for the same reason — a border corner cannot smear
+   the way a stretched SVG corner does.
+   ══════════════════════════════════════════════════════════════════ */
+.v2 .canvas {
+  --gh:  clamp(58px, 8.1vh, 90px);     /* the stop bar */
+  --dip: clamp(76px, 10.6vh, 124px);   /* how far under it the bypass goes */
+  display: grid;
+  grid-template-columns:
+    [c0] minmax(0, 0.52fr) [cb] minmax(0, 0.34fr) [g] auto
+    [c1] minmax(0, 0.55fr) [c2] minmax(0, 0.55fr) [out] auto;
+  grid-template-rows:
+    [r-doc] auto [r-lead] var(--ae-space-5) [r-cap] auto
+    [r-rail] var(--gh) [r-dip] calc(var(--dip) - var(--gh) / 2) [r-dcap] auto;
+}
+/* A zero-width cell so the document can be centred over a 34px bar
+   without the bar's column growing to the document's width. */
+.v2 .over { justify-self: center; width: 0; display: flex; justify-content: center; }
+.v2 .over > * { flex: none; }
+.v2 .docwrap { position: relative; }
+/* Hung off the document itself, not off a grid column. The chip
+   overflows its zero-width cell by half its own width, and that half
+   is 10px wider in German — a caption placed in the neighbouring
+   column was run over by it. Anchored to the chip, the clearance is
+   the same in every language. */
+.v2 .doc-cap {
+  position: absolute; right: calc(100% + var(--ae-space-5)); top: 50%;
+  transform: translateY(-50%);
+  width: clamp(190px, 22vw, 300px); text-align: right; margin: 0;
+}
+.v2 .lead {
+  grid-row: r-lead; grid-column: g; justify-self: center;
+  width: 0; border-left: 2px dotted var(--ae-cool-gray-400);
+}
+.v2 .cap-stop  { grid-row: r-cap; grid-column: c0 / g; align-self: end; text-align: right; padding: 0 var(--ae-space-4) 8px 0; }
+.v2 .cap-after { grid-row: r-cap; grid-column: c1 / -1; align-self: end; padding: 0 0 8px var(--ae-space-4); }
+.v2 .rail-in {
+  grid-row: r-rail; grid-column: c0 / g; align-self: center;
+  height: 0; border-top: 3px solid var(--ae-cool-gray-300);
+}
+.v2 .rail-out {
+  grid-row: r-rail; grid-column: c1 / -1; align-self: center;
+  height: 0; border-top: 3px solid var(--fg-build);
+}
+.v2 .gate {
+  grid-row: r-rail; grid-column: g; justify-self: center; align-self: center;
+  width: clamp(26px, 3.2vh, 34px); height: var(--gh);
+  border-radius: 9px; background: var(--fg-ink); box-shadow: var(--fg-d2); z-index: 3;
+}
+/* Bottom-anchored and exactly --dip tall, so its top edge lands on the
+   rail's centre line whatever the two rows measure. */
+.v2 .bypass {
+  grid-row: r-rail / r-dcap; grid-column: cb / -1;
+  align-self: end; height: var(--dip);
+  border-left: 2px dashed var(--fg-fail);
+  border-bottom: 2px dashed var(--fg-fail);
+  border-radius: 0 0 0 18px;
+}
+.v2 .vd--real   { grid-row: r-rail; grid-column: out; justify-self: end; align-self: center; }
+.v2 .vd--hollow { grid-row: r-dip;  grid-column: out; justify-self: end; align-self: end; transform: translateY(50%); }
+.v2 .dcaps {
+  grid-row: r-dcap; grid-column: cb / -1;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--ae-space-5); padding-top: var(--capdrop);
+}
+.v2 .dcell { position: relative; padding-left: 15px; }
+.v2 .dcell .nd { position: absolute; top: calc(-1 * var(--capdrop)); left: 0; transform: translate(-50%, -50%); }
+
+/* ══════════════════════════════════════════════════════════════════
+   V3 — THE STEP THAT GETS SKIPPED
+   The only one that draws what drift costs the METHOD rather than
+   the feature. The deck's own loop is on the board; the contradiction
+   happens inside Build, and the question is whether Plan is visited
+   again before Review.
+
+   The corrected answer is the arc back to Plan — the loop, used the
+   way the loop was meant to be used. The other answer skips it: a
+   dashed line that leaves Build, runs UNDER Review without touching
+   it, and still comes out the far side with a tick. A step that is
+   never entered cannot fail, and that is precisely why the failure
+   is silent.
+
+   THREE CHAPTER HUES APPEAR HERE. That is more than a content slide
+   is allowed, and it is allowed because they are structure, not
+   content: this is the loop from slide 5, and slide 7 already spends
+   all three plus clay on one board.
+   ══════════════════════════════════════════════════════════════════ */
+.v3 .canvas {
+  /* Sized by the longest step name, not by taste: "Review" has to sit
+     INSIDE the ring. At the first value it did not, and the word hung
+     over both edges of its own node. */
+  --nd:  clamp(72px, 10.1vh, 104px);   /* loop node diameter */
+  --arc: clamp(46px, 6.5vh, 74px);     /* how high the loop back rises */
+  --dip: clamp(76px, 10.6vh, 120px);   /* how far under Review the drift runs */
+  display: grid;
+  grid-template-columns:
+    [p] auto [a] minmax(0, 0.6fr) [b] auto [c] minmax(0, 1.5fr) [rv] auto
+    [j] clamp(24px, 3.2vw, 56px) [out] auto;
+  grid-template-rows:
+    [r-cap] auto [r-arc] var(--arc) [r-node] var(--nd)
+    [r-dip] calc(var(--dip) - var(--nd) / 2) [r-dcap] auto;
+}
+.v3 .s-plan   { --hue: var(--fg-plan);   --hue-d: var(--fg-plan-d); }
+.v3 .s-build  { --hue: var(--fg-build);  --hue-d: var(--fg-build-d); }
+.v3 .s-review { --hue: var(--fg-review); --hue-d: var(--fg-review-d); }
+.v3 .step {
+  grid-row: r-node; justify-self: center; align-self: center;
+  width: var(--nd); height: var(--nd); border-radius: 999px;
+  background: var(--fg-card); border: 4px solid var(--hue);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-caption); line-height: 1.05;
+  color: var(--hue-d); text-align: center; z-index: 2;
+  padding: 0 3px; box-sizing: border-box;
+}
+.v3 .seg { grid-row: r-node; align-self: center; height: 0; }
+.v3 .seg--in  { grid-column: p / b;  border-top: 3px solid var(--ae-cool-gray-300); }
+.v3 .seg--out { grid-column: b / rv; border-top: 3px solid var(--fg-build); }
+.v3 .seg--vd  { grid-column: j; border-top: 3px solid var(--fg-build); }
+/* The loop back: up out of Build, left across, down into Plan, with a
+   head on the Plan end. Ink — a person stops Build and re-agrees.
+   Both ends are pulled by half a node so they meet the two CENTRES;
+   at the column edges the head landed on the rim of Plan rather than
+   on the step itself. */
+.v3 .arc {
+  grid-row: r-arc / r-node; grid-column: p / b;
+  align-self: end; height: var(--arc);
+  margin: 0 calc(var(--nd) / -2) 0 calc(var(--nd) / 2);
+  border: 2.5px solid var(--fg-ink); border-bottom: 0;
+  border-radius: 14px 14px 0 0; position: relative;
+}
+.v3 .arc::after {
+  content: ''; position: absolute; left: -8px; bottom: -1px;
+  border-left: 8px solid transparent; border-right: 8px solid transparent;
+  border-top: 11px solid var(--fg-ink);
+}
+/* Leaves Build, runs under Review, never touches it. */
+.v3 .skip {
+  grid-row: r-node / r-dcap; grid-column: b / -1;
+  align-self: end; height: var(--dip); margin-left: calc(var(--nd) / 2);
+  border-left: 2px dashed var(--fg-fail);
+  border-bottom: 2px dashed var(--fg-fail);
+  border-radius: 0 0 0 18px;
+}
+.v3 .caps {
+  grid-row: r-cap; grid-column: p / -1;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--ae-space-6); padding-bottom: var(--ae-space-3);
+}
+/* Shifted by half a node for the same reason the skip line is: the
+   column edge is Build's LEFT edge, and the first ring has to sit on
+   the corner the line actually turns at, not beside it. */
+.v3 .dcaps {
+  grid-row: r-dcap; grid-column: b / -1; margin-left: calc(var(--nd) / 2);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--ae-space-3); padding-top: var(--capdrop);
+}
+.v3 .dcell { position: relative; padding-left: 15px; }
+.v3 .dcell .nd { position: absolute; top: calc(-1 * var(--capdrop)); left: 0; transform: translate(-50%, -50%); }
+.v3 .vd--real   { grid-row: r-node; grid-column: out; justify-self: end; align-self: center; }
+.v3 .vd--hollow { grid-row: r-dip;  grid-column: out; justify-self: end; align-self: end; transform: translateY(50%); }
+
+/* ══════════════════════════════════════════════════════════════════
+   V4 · V5 — THE FORK AFTER BUILD  (everything both share)
+
+   V3 with the moment put back on the board. The loop runs Plan ·
+   Build · Review; a hard ink post stands on the line just after
+   Build, and it is labelled with the sentence the lede opens with.
+   Every other mark on the slide hangs off that post.
+
+   WHY A POST. The deck spends ink on the human and on nothing else,
+   and this is the one human act the slide is about: someone stops
+   Build. So the stop is drawn the way slide 7 draws a gate — a solid
+   ink body standing ACROSS the run, not a dot beside it — and it is
+   exactly as tall as the three step rings, so the two paths that
+   leave it can leave from its top and its foot and be seen to.
+
+   TWO PATHS, TWO STROKES. The corrected path is ink and SOLID; the
+   drift is clay and DASHED, and it is the same dashed run V3 already
+   had, moved so that it now starts at the post instead of at Build.
+   Solid against dashed is slide 6's landed pairing and it is the
+   half of the distinction that survives greyscale.
+
+   THREE BEADS. The corrected path carries the three right-hand steps
+   as small filled ink discs. They cannot be confused with the loop's
+   own steps: those are 72-104px hollow rings with a word inside,
+   these are 14px solid discs with a paper halo. Filled against
+   hollow, and a 6x difference in size.
+
+   THE NUMBERS RUN 3 · 2 · 1 FROM THE LEFT. The corrected path
+   travels right to left — it is a RETURN — so the numerals, not the
+   x-order, carry the reading order, and the arrowhead into Plan
+   agrees with them.
+
+   HUES. Same three chapter hues as V3, and the same argument: they
+   are the loop, which is structure, not this slide's content. Every
+   mark added here is ink, clay or paper — no new hue enters.
+   ══════════════════════════════════════════════════════════════════ */
+.vf .canvas {
+  --nd:  clamp(72px, 10.1vh, 104px);   /* loop node diameter */
+  --gw:  clamp(13px, 1.7vh, 17px);     /* the stop post's width */
+  display: grid;
+  /* The post sits CLOSE to Build — "after Build", not halfway to
+     Review — and that is a measurement, not a taste: everything to
+     its right is the drift's caption band, and at the balance V3
+     used, three German captions in it wrapped to four lines. */
+  grid-template-columns:
+    [p] auto [a] minmax(0, 0.55fr) [b] auto [g1] minmax(0, 0.3fr)
+    [f] 0px [g2] minmax(0, 0.95fr) [rv] auto
+    [j] clamp(24px, 3.2vw, 56px) [out] auto;
+}
+.vf .s-plan   { --hue: var(--fg-plan);   --hue-d: var(--fg-plan-d); }
+.vf .s-build  { --hue: var(--fg-build);  --hue-d: var(--fg-build-d); }
+.vf .s-review { --hue: var(--fg-review); --hue-d: var(--fg-review-d); }
+.vf .step {
+  grid-row: r-node; justify-self: center; align-self: center;
+  width: var(--nd); height: var(--nd); border-radius: 999px;
+  background: var(--fg-card); border: 4px solid var(--hue);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-caption); line-height: 1.05;
+  color: var(--hue-d); text-align: center; z-index: 2;
+  padding: 0 3px; box-sizing: border-box;
+}
+.vf .seg { grid-row: r-node; align-self: center; height: 0; }
+.vf .seg--in   { grid-column: p / b;  border-top: 3px solid var(--ae-cool-gray-300); }
+.vf .seg--out  { grid-column: b / f;  border-top: 3px solid var(--fg-build); }
+/* The run past the post. It is only ever travelled once the plan has
+   been re-agreed, which is why the tick at its end is the real one. */
+.vf .seg--cont { grid-column: f / rv; border-top: 3px solid var(--fg-build); }
+.vf .seg--vd   { grid-column: j;      border-top: 3px solid var(--fg-build); }
+
+.vf .stop {
+  grid-row: r-node; grid-column: f; justify-self: center; align-self: center;
+  width: var(--gw); height: var(--nd); border-radius: 4px;
+  background: var(--fg-ink); box-shadow: var(--fg-d1); z-index: 4;
+}
+/* Bottom-aligned to a fixed distance ABOVE the line rather than to
+   the top of the node row, so a one-line English label and a
+   two-line German one both sit the same 9px clear of the run. */
+.vf .forklab {
+  grid-row: r-node; grid-column: f / rv; align-self: stretch;
+  display: flex; align-items: flex-end;
+  margin: 0; padding: 0 var(--ae-space-3) calc(var(--nd) / 2 + 9px) 16px;
+  font-size: var(--ae-fs-small); line-height: 1.28;
+  font-weight: 600; color: var(--fg-ink);
+}
+/* The drift, unchanged from V3 except for where it starts: it now
+   leaves the post's foot rather than Build's centre. Stretch plus a
+   top margin of one node puts its top edge on the post's foot with
+   no arithmetic to get wrong. */
+.vf .skip {
+  grid-column: f / -1; align-self: stretch; margin-top: var(--nd);
+  border-left: 2px dashed var(--fg-fail);
+  border-bottom: 2px dashed var(--fg-fail);
+  border-radius: 0 0 0 18px;
+}
+/* Tighter gutters than V3 used, because the drift now starts at the
+   post rather than at Build and its caption band is a third narrower
+   for it. At V3's gap "Niemand aktualisiert die Datei." had 2px of
+   slack on its first line, which is not slack. */
+.vf .dcaps {
+  grid-row: r-dcap; grid-column: f / -1;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--ae-space-2); padding-top: var(--capdrop);
+}
+/* Keeps a hyphenated compound whole. Without it English breaks "re-
+   agreed." across two lines directly under a bead, which reads as a
+   word that ran out of room rather than as a step. */
+.vf .nb { white-space: nowrap; }
+.vf .dcell { position: relative; padding-left: 15px; }
+.vf .dcell .nd { position: absolute; top: calc(-1 * var(--capdrop)); left: 0; transform: translate(-50%, -50%); }
+.vf .vd--real { grid-row: r-node; grid-column: out; justify-self: end; align-self: center; }
+
+/* A step on the corrected path. Small, solid, ink, with a paper halo
+   so it reads as a bead ON the line and not as a thickening of it. */
+.vf .snd {
+  width: 14px; height: 14px; border-radius: 999px; flex: none;
+  background: var(--fg-ink); box-shadow: 0 0 0 3px var(--fg-paper);
+}
+.vf .stem { width: 0; border-left: 2.5px solid var(--fg-ink); }
+/* The corrected file. Same document device as slide 7; only the kind
+   line changes, because this is the plan AFTER the correction. */
+.vf .doc--fixed { border-color: var(--fg-ink); }
+
+/* ══════════════════════════════════════════════════════════════════
+   V4 — THE RETURN OVER THE TOP
+   The correction is drawn as height. It springs off the top of the
+   post, clears the whole run, and comes down into Plan; the drift
+   drops out of the same post's foot and runs along the floor. The
+   slide reads top to bottom as: what it costs to go back, the loop,
+   what it costs not to.
+
+   The three beads sit ON the arc, which is the claim that the
+   correction is not three things you do somewhere else — it is the
+   path itself, and each bead is a place on it.
+
+   plan.md hangs under Plan on an ink stem, in the band the drift
+   line never reaches. It costs no height at all: the space under the
+   first two columns was empty in V3 as well.
+   ══════════════════════════════════════════════════════════════════ */
+.v4 .canvas {
+  --arc:  clamp(50px, 7vh, 78px);   /* how high the return rises */
+  --dipb: clamp(50px, 6.9vh, 76px); /* how far under the run the drift goes */
+  grid-template-rows:
+    [r-cap] auto [r-arc] var(--arc) [r-node] var(--nd)
+    [r-dip] var(--dipb) [r-dcap] auto;
+}
+/* Captions and beads share ONE span and ONE set of thirds, so a
+   caption is centred on its bead by construction rather than by a
+   number that has to be re-tuned when the node size changes.
+   column-gap would break that — with a gap the outer thirds move
+   inward by a third of it — so the breathing room is per-cell
+   padding instead. */
+.v4 .caps {
+  grid-row: r-cap; grid-column: p / f; margin-left: calc(var(--nd) / 2);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 0; padding-bottom: var(--ae-space-3);
+}
+.v4 .caps .cap { padding: 0 var(--ae-space-3); text-align: center; }
+.v4 .caps .cap i { color: var(--fg-ink); }
+/* A wrapper whose box IS the span, so a bead at 50% and a caption at
+   50% are the same x. The arc is painted inside it. */
+.v4 .arcwrap {
+  grid-row: r-arc; grid-column: p / f;
+  margin-left: calc(var(--nd) / 2); position: relative;
+}
+.v4 .arc {
+  position: absolute; inset: 0;
+  border: 2.5px solid var(--fg-ink); border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+}
+/* -10.5px = half the head, plus the 2.5px left border, so the head's
+   own centre lands on Plan's centre and not 2.5px right of it. */
+.v4 .arc::after {
+  content: ''; position: absolute; left: -10.5px; bottom: -1px;
+  border-left: 8px solid transparent; border-right: 8px solid transparent;
+  border-top: 11px solid var(--fg-ink);
+}
+.v4 .arcwrap .snd { position: absolute; top: 1.25px; transform: translate(-50%, -50%); }
+.v4 .skip { grid-row: r-node / r-dcap; }
+.v4 .vd--hollow {
+  grid-row: r-dip; grid-column: out; justify-self: end;
+  align-self: end; transform: translateY(50%);
+}
+.v4 .planwrap {
+  grid-row: r-node / -1; grid-column: p / b; align-self: start;
+  margin-top: var(--nd);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+/* Left-flush with the canvas, not centred under Plan: a 150px chip
+   centred on a node whose centre is 45px from the edge hangs off the
+   slide. The stem carries the alignment instead. */
+.v4 .planwrap .stem {
+  height: clamp(13px, 1.9vh, 21px);
+  margin-left: calc(var(--nd) / 2 - 1.25px);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   V5 — THE CORRECTION UNDERNEATH
+   Both answers are drawn below the run, one above the other, and the
+   comparison is which of the two gets back to Plan. The corrected
+   path is the short one: it turns round almost at once, touches
+   plan.md and climbs back in. The drift is the long one that never
+   turns at all. Solid and dashed are stacked with nothing between
+   them, which is the harshest greyscale test on the slide.
+
+   The two paths leave the post's two SIDES — back off the left,
+   onward off the right — so the fork is a fork and not two lines
+   sharing a stretch of the same descent.
+
+   The beads HANG off the line here rather than sitting in it, and
+   plan.md hangs the other way off the middle one. That middle stem
+   is the whole point: the step that updates the file is drawn as the
+   step that touches the file.
+   ══════════════════════════════════════════════════════════════════ */
+.v5 .canvas {
+  /* Floor set by what has to fit between the run and the return: the
+     document plus its stem plus clearance. */
+  --retb: clamp(70px, 10vh, 108px);
+  --hang: clamp(10px, 1.5vh, 16px);   /* bead stem */
+  --gapx: clamp(13px, 2vh, 26px);     /* correction captions → drift line */
+  grid-template-rows:
+    [r-node] var(--nd) [r-ret] var(--retb) [r-rcap] auto
+    [r-gap] var(--gapx) [r-dcap] auto;
+}
+.v5 .retwrap {
+  grid-row: r-node / r-rcap; grid-column: p / f; align-self: stretch;
+  margin: var(--nd) calc(var(--gw) / 2) 0 calc(var(--nd) / 2);
+  position: relative;
+}
+.v5 .ret {
+  position: absolute; inset: 0;
+  border: 2.5px solid var(--fg-ink); border-top: 0;
+  border-radius: 0 0 16px 16px;
+}
+/* Head pointing UP into Plan's underside — slide 5's return arc,
+   in ink because this one is a person's doing. */
+.v5 .ret::before {
+  content: ''; position: absolute; left: -10.5px; top: -1px;
+  border-left: 8px solid transparent; border-right: 8px solid transparent;
+  border-bottom: 11px solid var(--fg-ink);
+}
+.v5 .hang {
+  position: absolute; top: 100%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+}
+.v5 .hang .stem { height: var(--hang); }
+.v5 .pdoc {
+  position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+}
+.v5 .pdoc .stem { height: var(--hang); }
+.v5 .rcaps {
+  grid-row: r-rcap; grid-column: p / f;
+  margin-left: calc(var(--nd) / 2); margin-right: calc(var(--gw) / 2);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Stem, then a 14px bead inside a 3px paper halo, then air. */
+  column-gap: 0; padding-top: calc(var(--hang) + 20px);
+}
+.v5 .rcaps .cap { padding: 0 var(--ae-space-3); text-align: center; }
+.v5 .rcaps .cap i { color: var(--fg-ink); }
+.v5 .skip { grid-row: r-node / r-dcap; margin-left: calc(var(--gw) / 2); }
+.v5 .dcaps { margin-left: calc(var(--gw) / 2); }
+.v5 .vd--hollow {
+  grid-row: r-gap; grid-column: out; justify-self: end;
+  align-self: end; transform: translateY(50%);
+}
+
+@media (max-width: 980px) {
+  .v1 .canvas, .v2 .canvas, .v3 .canvas,
+  .v4 .canvas, .v5 .canvas { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · The gap</button>
+        <button type="button" data-p="v2">2 · The stop</button>
+        <button type="button" data-p="v3">3 · The step skipped</button>
+        <button type="button" data-p="v4">4 · Over the top</button>
+        <button type="button" data-p="v5">5 · Underneath</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/17-build-drift.js. The only new
+   strings are labels the DRAWING needs and the prose does not supply:
+   the moment at which the paths part, the plan file's own chip, and the
+   three loop names — which slide 5 already carries in both languages. */
+const C = {
+  en: {
+    h1: 'When reality contradicts the plan, the plan changes',
+    lede: 'Halfway through Build, something turns out to be untrue. The existing cache cannot do sliding windows. The endpoint has a second caller nobody remembered. This is normal. What happens next decides whether the rest of the loop still works.',
+    pathsLabel: 'Two responses',
+    moment: 'Something turns out to be untrue',
+    planKind: 'as written',
+    planKindFixed: 'corrected',
+    planFile: 'PLAN.md',
+    loop: ['Plan', 'Build', 'Review'],
+    wrong: {
+      tag: 'What usually happens',
+      steps: ['The agent works around it.', 'The code diverges from the plan.', 'Nobody updates the file.'],
+      cost: 'Review now measures the code against a document that describes a different feature. It will pass, and it will mean nothing.',
+    },
+    right: {
+      tag: 'What should happen',
+      steps: ['Build stops.', 'The plan is corrected, and re-agreed.', 'Build continues from the corrected plan.'],
+      cost: 'Cost: one short conversation. The plan is still the yardstick, so Review still works.',
+    },
+    note: 'A plan that is allowed to go stale does not fail loudly. <b>It quietly turns Review into a formality.</b>',
+  },
+  de: {
+    h1: 'Widerspricht die Realität dem Plan, ändert sich der Plan',
+    lede: 'Mitten im Build stellt sich etwas als unzutreffend heraus. Der bestehende Cache kann keine gleitenden Fenster. Der Endpunkt hat einen zweiten Aufrufer, an den niemand gedacht hat. Das ist normal. Was danach passiert, entscheidet, ob der Rest des Loops noch trägt.',
+    pathsLabel: 'Zwei Reaktionen',
+    moment: 'Etwas stellt sich als unzutreffend heraus',
+    planKind: 'wie geschrieben',
+    planKindFixed: 'korrigiert',
+    planFile: 'PLAN.md',
+    loop: ['Plan', 'Build', 'Review'],
+    wrong: {
+      tag: 'Was meistens passiert',
+      steps: ['Der Agent baut drumherum.', 'Der Code weicht vom Plan ab.', 'Niemand aktualisiert die Datei.'],
+      cost: 'Das Review misst den Code jetzt an einem Dokument, das ein anderes Feature beschreibt. Es wird bestehen, und es wird nichts bedeuten.',
+    },
+    right: {
+      tag: 'Was passieren sollte',
+      steps: ['Build hält an.', 'Der Plan wird korrigiert und erneut freigegeben.', 'Build läuft mit dem korrigierten Plan weiter.'],
+      cost: 'Kosten: ein kurzes Gespräch. Der Plan bleibt der Maßstab, also funktioniert das Review weiter.',
+    },
+    note: 'Ein Plan, den man veralten lässt, scheitert nicht laut. <b>Er macht das Review still zur Formsache.</b>',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the gap: one plan rule, and the distance from it over three steps',
+  v2: 'Variation 2 — the stop: through the barrier, or under it',
+  v3: 'Variation 3 — the step skipped: the loop, with Plan visited or not',
+  v4: 'Variation 4 — over the top: a stop after Build, the correction arcing back to Plan',
+  v5: 'Variation 5 — underneath: the short way back to Plan above the long way round',
+};
+
+function docHTML(t, fixed) {
+  return '<span class="doc' + (fixed ? ' doc--fixed' : '') + '">'
+       + '<span class="kind">' + (fixed ? t.planKindFixed : t.planKind) + '</span>'
+       + '<span class="file">' + t.planFile + '</span></span>';
+}
+function costs(t) {
+  return '<div class="costs">'
+    + '<p class="cost cost--wrong ap" style="--fg-at:10"><i class="swatch"></i><span>' + t.wrong.cost + '</span></p>'
+    + '<p class="cost cost--right ap" style="--fg-at:10"><i class="swatch"></i><span>' + t.right.cost + '</span></p>'
+  + '</div>';
+}
+
+/* ── V1 · THE GAP ───────────────────────────────────────────────── */
+function V1(t) {
+  const COL = ['c1', 'c2', 'c3'];
+  let h = '<div class="canvas">';
+
+  h += '<p class="moment ap" style="--fg-at:3">' + t.moment + '</p>';
+  h += '<div class="plan ap" style="--fg-at:3">' + docHTML(t) + '</div>';
+  h += '<i class="rail dx" style="--fg-at:3"></i>';
+  h += '<i class="tick dy" style="--fg-at:4"></i>';
+  h += '<i class="origin ap" style="--fg-at:4"></i>';
+
+  /* the corrected path */
+  h += '<i class="okseg dx" style="--fg-at:5"></i>';
+  h += '<i class="riser dy" style="--fg-at:6"></i>';
+  h += '<i class="cut ap" style="--fg-at:6"></i>';
+  h += '<span class="lane lane--right ap" style="--fg-at:5">' + t.right.tag + '</span>';
+  t.right.steps.forEach(function (s, i) {
+    h += '<div class="ok ok--' + (i + 1) + ' ap" style="grid-column:' + COL[i] + '; --fg-at:' + (5 + i) + '">'
+       + '<i class="nd' + (i === 1 ? ' nd--human' : '') + '"></i>'
+       + '<p class="cap">' + s + '</p></div>';
+  });
+  h += '<span class="vd vd--real ap" style="--fg-at:8">✓</span>';
+
+  /* the path that leaves — one row per level, one drop per column edge */
+  h += '<span class="lane lane--wrong ap" style="--fg-at:6">' + t.wrong.tag + '</span>';
+  t.wrong.steps.forEach(function (s, i) {
+    const lvl = 'r-d' + (i + 1);
+    const prev = i === 0 ? 'r-ok' : 'r-d' + i;
+    h += '<i class="drop dy" style="grid-row:' + prev + '; grid-column:' + COL[i] + '; --fg-at:' + (6 + i) + '"></i>';
+    h += '<i class="dseg dx" style="grid-row:' + lvl + '; grid-column:' + COL[i] + (i === 2 ? ' / -1' : '') + '; --fg-at:' + (6 + i) + '"></i>';
+    h += '<i class="nd nd--drift dnd ap" style="grid-row:' + lvl + '; grid-column:' + COL[i] + '; --fg-at:' + (6 + i) + '"></i>';
+    /* The caption stops at its own column; only the LINE runs on into
+       the verdict. Spanning to the end put the last caption's box
+       under the hollow tick. */
+    h += '<p class="cap cap--drift dcap ap" style="grid-row:' + lvl + '; grid-column:' + COL[i] + '; --fg-at:' + (6 + i) + '">' + s + '</p>';
+  });
+  h += '<span class="vd vd--hollow ap" style="--fg-at:9">✓</span>';
+
+  h += '</div>' + costs(t);
+  return h;
+}
+
+/* ── V2 · THE STOP ──────────────────────────────────────────────── */
+function V2(t) {
+  let h = '<div class="canvas">';
+  h += '<div class="over ap" style="grid-row:r-doc; grid-column:g; --fg-at:4">'
+     + '<div class="docwrap">' + docHTML(t)
+     + '<p class="cap doc-cap"><i>2</i>' + t.right.steps[1] + '</p></div></div>';
+  h += '<i class="lead dy" style="--fg-at:5"></i>';
+  h += '<p class="cap cap-stop ap" style="--fg-at:5"><i>1</i>' + t.right.steps[0] + '</p>';
+  h += '<p class="cap cap-after ap" style="--fg-at:7"><i>3</i>' + t.right.steps[2] + '</p>';
+  h += '<i class="rail-in dx" style="--fg-at:3"></i>';
+  h += '<i class="gate ap" style="--fg-at:4"></i>';
+  h += '<i class="rail-out dx" style="--fg-at:7"></i>';
+  h += '<span class="vd vd--real ap" style="--fg-at:8">✓</span>';
+  h += '<i class="bypass ap" style="--fg-at:6"></i>';
+  h += '<span class="vd vd--hollow ap" style="--fg-at:9">✓</span>';
+  h += '<div class="dcaps">'
+     + t.wrong.steps.map(function (s, i) {
+         return '<div class="dcell ap" style="--fg-at:' + (6 + i) + '">'
+              + '<i class="nd nd--drift"></i>'
+              + '<p class="cap cap--drift"><i>' + (i + 1) + '</i>' + s + '</p></div>';
+       }).join('')
+     + '</div>';
+  h += '</div>' + costs(t);
+  return h;
+}
+
+/* ── V3 · THE STEP THAT GETS SKIPPED ────────────────────────────── */
+function V3(t) {
+  const HUE = ['s-plan', 's-build', 's-review'];
+  const AT = ['p', 'b', 'rv'];
+  let h = '<div class="canvas">';
+
+  h += '<div class="caps">'
+     + t.right.steps.map(function (s, i) {
+         return '<p class="cap ap" style="--fg-at:' + (6 + i) + '"><i>' + (i + 1) + '</i>' + s + '</p>';
+       }).join('')
+     + '</div>';
+  h += '<i class="seg seg--in dx" style="--fg-at:3"></i>';
+  h += '<i class="seg seg--out dx" style="--fg-at:7"></i>';
+  h += '<i class="seg seg--vd dx" style="--fg-at:8"></i>';
+  t.loop.forEach(function (s, i) {
+    h += '<span class="step ' + HUE[i] + ' ap" style="grid-column:' + AT[i] + '; --fg-at:' + (3 + i) + '">' + s + '</span>';
+  });
+  h += '<i class="arc ap" style="--fg-at:6"></i>';
+  h += '<span class="vd vd--real ap" style="--fg-at:8">✓</span>';
+  h += '<i class="skip ap" style="--fg-at:6"></i>';
+  h += '<span class="vd vd--hollow ap" style="--fg-at:9">✓</span>';
+  h += '<div class="dcaps">'
+     + t.wrong.steps.map(function (s, i) {
+         return '<div class="dcell ap" style="--fg-at:' + (6 + i) + '">'
+              + '<i class="nd nd--drift"></i>'
+              + '<p class="cap cap--drift"><i>' + (i + 1) + '</i>' + s + '</p></div>';
+       }).join('')
+     + '</div>';
+  h += '</div>' + costs(t);
+  return h;
+}
+
+/* ── V4 · V5 — shared pieces ─────────────────────────────────────
+   The board and the drift are identical in both; only the corrected
+   path differs, which is the whole point of offering two. */
+function driftCaps(t) {
+  return '<div class="dcaps">'
+    + t.wrong.steps.map(function (s, i) {
+        return '<div class="dcell ap" style="--fg-at:' + (6 + i) + '">'
+             + '<i class="nd nd--drift"></i>'
+             + '<p class="cap cap--drift"><i>' + (i + 1) + '</i>' + s + '</p></div>';
+      }).join('')
+    + '</div>';
+}
+function forkBoard(t) {
+  const HUE = ['s-plan', 's-build', 's-review'];
+  const AT  = ['p', 'b', 'rv'];
+  let h = '';
+  h += '<i class="seg seg--in dx" style="--fg-at:3"></i>';
+  h += '<i class="seg seg--out dx" style="--fg-at:3"></i>';
+  h += '<i class="seg seg--cont dx" style="--fg-at:4"></i>';
+  h += '<i class="seg seg--vd dx" style="--fg-at:4"></i>';
+  t.loop.forEach(function (s, i) {
+    h += '<span class="step ' + HUE[i] + ' ap" style="grid-column:' + AT[i] + '; --fg-at:' + (3 + i) + '">' + s + '</span>';
+  });
+  h += '<i class="stop ap" style="--fg-at:5"></i>';
+  h += '<p class="forklab ap" style="--fg-at:5">' + t.moment + '</p>';
+  h += '<span class="vd vd--real ap" style="--fg-at:9">✓</span>';
+  h += '<i class="skip ap" style="--fg-at:6"></i>';
+  h += '<span class="vd vd--hollow ap" style="--fg-at:9">✓</span>';
+  h += driftCaps(t);
+  return h;
+}
+/* Left to right the corrected steps run 3 · 2 · 1, because the path
+   they sit on runs right to left. The numerals carry the order. */
+const RTL = [2, 1, 0];
+const THIRDS = ['16.667%', '50%', '83.333%'];
+const nb = s => s.replace(/(\w+-\w+)/g, '<span class="nb">$1</span>');
+function rightCaps(t, cls) {
+  return '<div class="' + cls + '">'
+    + RTL.map(function (i) {
+        return '<p class="cap ap" style="--fg-at:' + (6 + i) + '"><i>' + (i + 1) + '</i>' + nb(t.right.steps[i]) + '</p>';
+      }).join('')
+    + '</div>';
+}
+
+/* ── V4 · THE RETURN OVER THE TOP ───────────────────────────────── */
+function V4(t) {
+  let h = '<div class="canvas">';
+  h += rightCaps(t, 'caps');
+  h += '<div class="arcwrap"><i class="arc ap" style="--fg-at:6"></i>'
+     + RTL.map(function (i, k) {
+         return '<b class="snd ap" style="left:' + THIRDS[k] + '; --fg-at:' + (6 + i) + '"></b>';
+       }).join('')
+     + '</div>';
+  h += forkBoard(t);
+  h += '<div class="planwrap ap" style="--fg-at:8"><i class="stem"></i>' + docHTML(t, true) + '</div>';
+  h += '</div>' + costs(t);
+  return h;
+}
+
+/* ── V5 · THE CORRECTION UNDERNEATH ─────────────────────────────── */
+function V5(t) {
+  let h = '<div class="canvas">';
+  h += '<div class="retwrap"><i class="ret ap" style="--fg-at:6"></i>'
+     + RTL.map(function (i, k) {
+         return '<span class="hang ap" style="left:' + THIRDS[k] + '; --fg-at:' + (6 + i) + '">'
+              + '<i class="stem"></i><b class="snd"></b></span>';
+       }).join('')
+     + '<span class="pdoc ap" style="--fg-at:8">' + docHTML(t, true) + '<i class="stem"></i></span>'
+     + '</div>';
+  h += rightCaps(t, 'rcaps');
+  h += forkBoard(t);
+  h += '</div>' + costs(t);
+  return h;
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3, v4: V4, v5: V5 };
+const FORK = { v4: 1, v5: 1 };
+
+function render(v, t) {
+  return ''
+  + '<section class="proto ' + v + (FORK[v] ? ' vf' : '') + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">'
+      + '<p class="fg-label lbl fg-in" style="--fg-at:3">' + t.pathsLabel + '</p>'
+      + BODY[v](t)
+    + '</div>'
+    + '<div class="fg-wrap foot">'
+      + '<p class="fg-note fg-in" style="--fg-at:11"><span>' + t.note + '</span></p>'
+    + '</div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3','4','5'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

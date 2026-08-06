@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 10 — Make it ask, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+/* space-5, not space-6: this is a tier C slide carrying a real artifact,
+   and it takes the tighter frame padding the other exhibit slides use.
+   The landed section sets its own padding, so this is the slide's value
+   and not a harness artefact. */
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-5) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   Slide 10 is an EXCHANGE: you say one thing, it asks back. DESIGN.md
+   puts it in tier C and says redraw. The current layout is a card, a
+   list and a card — nothing in it alternates, which is the one thing
+   the slide is about.
+
+   THE PROSE STAYS THE CONTENT. Slide 2 had three diagram variations
+   rejected because the prompt text WAS the content and a picture
+   competed with it. The same trap is live here: the four questions are
+   the exhibit. So the drawing never illustrates them — it only draws
+   the STRUCTURE around them, which is whose turn it is.
+
+   THE TWO SIDES, AND THE ASYMMETRY:
+     the human's turn — a 1.5px INK edge and a filled ink marker. Hard,
+       definite, uncoloured, exactly as slide 7 draws a gate.
+     the machine's turn — a blue tint wash and a hollow blue ring. Soft
+       plumbing, given real area because the questions are where the
+       requirements turn out to be hiding, but never given the ink.
+
+   The wash is a wash and never a coloured edge bar: the 0002 spec
+   forbids the bar and the slide kit says so.
+
+   Blue is the Plan chapter's hue. Only V2 spends a second hue — clay,
+   on the answer the agent would have reached for silently, which is
+   the same job clay does on slide 6 ("plausibly and silently").
+   ══════════════════════════════════════════════════════════════════ */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-3); }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 64ch; line-height: 1.4; }
+
+/* ── the two markers, shared by all three variations ──
+   Filled ink disc = a person. Hollow hued ring = the machine. The pair
+   is already taught on slide 7 and it survives greyscale, which is the
+   whole reason the deck owns it. */
+.mk { flex: none; width: 16px; height: 16px; border-radius: 999px; }
+.mk--you   { background: var(--fg-ink); }
+.mk--agent { background: var(--fg-paper); border: 4px solid var(--fg-plan); }
+
+/* A speaker line: who is talking, then what this block is. */
+.spk { display: flex; align-items: center; gap: var(--ae-space-3); }
+.spk .who {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 700;
+  letter-spacing: 0.04em; color: var(--fg-ink);
+}
+.spk .who--agent { color: var(--fg-plan-d); }
+.spk .bar { width: 1px; height: 13px; background: var(--fg-hair); }
+.spk .lb {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 600;
+  letter-spacing: 0.02em; color: var(--fg-muted);
+}
+
+/* Capped measure. Unbounded, the instruction ran to 130 monospace
+   characters and left one word alone on the second line — a long line
+   of mono is also the hardest thing on the slide to read from the back
+   of a room. */
+.prompt {
+  margin: var(--ae-space-3) 0 0; max-width: 100ch;
+  font-family: var(--ae-font-mono);
+  font-size: calc(var(--ae-fs-small) * 0.94);
+  line-height: 1.5; color: var(--fg-ink);
+}
+
+/* The human's box: white, ink-edged. The same object as the doc and the
+   gate panels on slide 7, so every hard-edged thing in the deck is one
+   family. */
+.inkbox {
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card);
+  border: 1.5px solid var(--fg-ink);
+  box-shadow: var(--fg-d1);
+  padding: var(--ae-space-3) var(--ae-space-5);
+}
+
+/* The closing line: not a footnote in grey. Same device as the price
+   line on slide 6 — a tag word, then the sentence at reading size. */
+.whyline {
+  display: flex; gap: var(--ae-space-4); align-items: baseline;
+  font-size: var(--ae-fs-body); line-height: 1.4; color: var(--fg-body);
+}
+.whyline .tagword {
+  flex: none;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE THREAD
+   Turn-taking drawn as a thread: one grey time axis down the left
+   and three markers on it, ink → blue ring → ink. Your turns sit
+   flush against the axis; the agent's steps out to the right on a
+   short tie, so the alternation is a shape before it is a colour.
+
+   The agent's block is the tallest thing on the slide and it is
+   the only washed one. That is the asymmetry the slide argues:
+   you spent one sentence, it came back with four decisions.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .thread {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  column-gap: var(--ae-space-4);
+  row-gap: var(--ae-space-3);
+  align-items: start;
+}
+/* Both ends of the axis are DERIVED, not eyeballed. It spans rows 1–2
+   as a grid item and is then pulled to the centre of the first and the
+   last marker: a marker is 16px with a 7px offset, so its centre is
+   15px into its row, and row 3 begins one row-gap after row 2 ends. An
+   axis that stopped at the row edge would float short of the marker it
+   is supposed to connect — the same join slide 7 had to get exact.
+   Every cell is placed by hand, because an item spanning column 1
+   would otherwise push the markers out of it. */
+.v1 .axis {
+  grid-column: 1; grid-row: 1 / 3;
+  justify-self: center; align-self: stretch;
+  margin-top: 15px;
+  margin-bottom: calc(-1 * (var(--ae-space-3) + 15px));
+  width: 2px; border-radius: 2px; background: var(--ae-cool-gray-300);
+  transform-origin: top center;
+  animation: v1axis 760ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 3 * var(--fg-beat));
+}
+@keyframes v1axis { from { transform: scaleY(0); } }
+.v1 .mk { grid-column: 1; margin-top: 7px; z-index: 1; }
+.v1 .turn { grid-column: 2; position: relative; }
+
+/* The step out. The tie is the same grey as the axis, so the offset
+   reads as "this one is on the other side of the exchange" rather
+   than as a stray indent. */
+.v1 .turn--agent { margin-left: var(--ae-space-6); }
+.v1 .turn--agent::before {
+  content: ''; position: absolute;
+  left: calc(-1 * var(--ae-space-6)); top: 13px;
+  width: var(--ae-space-6); height: 2px;
+  background: var(--ae-cool-gray-300);
+}
+/* Your turns are the short ones, and they are drawn short: both ink
+   boxes stop before the right edge that the agent's block runs out to.
+   The inset also stops the mono line from running to 130 characters
+   and leaving one orphaned word on line two. */
+.v1 .turn--you { margin-right: 7%; }
+.v1 .heard {
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-plan-tint);
+  border: 1px solid var(--fg-hair);
+  padding: var(--ae-space-3) var(--ae-space-5);
+}
+.v1 .qs { margin: var(--ae-space-2) 0 0; padding: 0; list-style: none; }
+.v1 .qs li {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--ae-space-3); align-items: start;
+  padding: 4px 0;
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small);
+  color: var(--fg-ink);
+}
+.v1 .qs li + li { border-top: 1px solid rgba(29, 90, 140, 0.16); }
+.v1 .ring {
+  flex: none; width: 22px; height: 22px; border-radius: 999px;
+  border: 2px solid var(--fg-plan); color: var(--fg-plan);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; line-height: 1;
+}
+.v1 .why p {
+  margin: var(--ae-space-2) 0 0;
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE FOUR DECISIONS
+   The exchange collapsed to what it bought. Every question is set
+   against the answer the agent would have reached for on its own,
+   and the pairing is the drawing: four rows, two columns, one
+   dashed clay enclosure holding the whole silent set.
+
+   The right column's list is not new text. It is the em-dash list
+   already inside "Why this matters" — "per IP, fixed window, plain
+   429, internal calls included" — lifted out of the sentence and
+   placed next to the question each item answers, which is the one
+   thing prose cannot do.
+
+   The enclosure is drawn ONCE, behind all four rows, as a grid item
+   spanning them. Four separate dashed boxes would read as four
+   failures; there is one silent set, and it has an edge.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .pairs {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  column-gap: var(--ae-space-5);
+  align-items: stretch;
+  margin-top: var(--ae-space-4);
+}
+/* EVERY cell here is placed by hand. Left to auto-placement the four
+   silent answers landed in rows 6 to 9 — under the questions instead of
+   beside them — because the enclosure had already claimed column 2 and
+   "grid-row: 2 / -1" means nothing in a grid whose rows are all
+   implicit. The pairing IS the drawing, so the pairing is explicit.
+
+   Question and answer share a grid ROW, so a question that wraps to
+   three lines takes its answer down with it: no percentage to drift
+   when the German wraps differently. */
+.v2 .dbox {
+  grid-column: 2;
+  background: var(--fg-fail-tint);
+  border: 1.5px dashed var(--fg-fail);
+  border-radius: var(--ae-radius);
+}
+.v2 .ph {
+  grid-row: 1; padding-bottom: var(--ae-space-2);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.v2 .ph--q { grid-column: 1; color: var(--fg-plan-d); }
+.v2 .ph--d { grid-column: 2; color: var(--fg-fail-d); padding-left: var(--ae-space-4); }
+.v2 .q {
+  grid-column: 1;
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--ae-space-3); align-items: start;
+  padding: var(--ae-space-4) var(--ae-space-4) var(--ae-space-4) 0;
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small);
+  color: var(--fg-ink);
+}
+.v2 .q + .q { border-top: 1px solid var(--fg-hair); }
+.v2 .ring {
+  flex: none; width: 22px; height: 22px; border-radius: 999px;
+  border: 2px solid var(--fg-plan); color: var(--fg-plan);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; line-height: 1;
+}
+.v2 .d {
+  grid-column: 2; z-index: 1;
+  display: flex; align-items: start; gap: var(--ae-space-3);
+  padding: var(--ae-space-4);
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small);
+  color: var(--fg-fail-d);
+}
+.v2 .d + .d { border-top: 1px solid rgba(180, 85, 44, 0.28); }
+/* Never hue alone. The mark is the question's ring again, same size and
+   same position, drawn DASHED and empty: the slot the question would
+   have opened, closed by the machine on its own. A short dashed rule
+   was tried here first and read as three typed hyphens rather than as
+   a mark. */
+.v2 .d i {
+  flex: none; width: 22px; height: 22px; border-radius: 999px;
+  border: 2px dashed var(--fg-fail);
+}
+.v2 .whyline { margin-top: var(--ae-space-5); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — ASKS BACK
+   The one drawing here that states the direction. Your sentence is
+   a single ink-edged bar across the top; under it stand the four
+   questions, each on a connector that points UP into the bar. The
+   arrows run against the reading direction on purpose — the slide's
+   verb is "asks back", and nothing else on the slide says so.
+
+   Arrowheads are CSS borders, not SVG markers. A stretched viewBox
+   turns a rounded corner into an ellipse and an arrowhead into a
+   smear; a border triangle cannot distort at any width.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .back { margin-top: var(--ae-space-2); }
+.v3 .ties {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--ae-space-5);
+  height: clamp(22px, 3.4vh, 34px);
+}
+.v3 .tie {
+  position: relative; justify-self: center;
+  width: 2px; height: 100%; background: var(--ae-cool-gray-300);
+  animation: v3tie 420ms var(--ae-ease) both;
+  transform-origin: bottom center;
+}
+@keyframes v3tie { from { transform: scaleY(0); } }
+/* The head's apex lands one pixel inside the ink edge, so the return
+   arrives at the box rather than stopping just short of it. */
+.v3 .tie::before {
+  content: ''; position: absolute; left: -4px; top: -9px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 9px solid var(--ae-cool-gray-300);
+}
+.v3 .backlbl {
+  display: flex; align-items: center; gap: var(--ae-space-3);
+  margin: var(--ae-space-3) 0 var(--ae-space-3);
+}
+.v3 .backlbl .who {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 700;
+  letter-spacing: 0.04em; color: var(--fg-plan-d);
+}
+.v3 .backlbl .rule { flex: 1; height: 1px; background: var(--fg-hair); }
+.v3 .backlbl .lb {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 600; color: var(--fg-muted);
+}
+.v3 .cols {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--ae-space-5); align-items: stretch;
+}
+.v3 .col {
+  display: flex; flex-direction: column; gap: var(--ae-space-3);
+  padding: var(--ae-space-4);
+  border-radius: var(--ae-radius);
+  background: var(--fg-plan-tint);
+  border: 1px solid var(--fg-hair);
+}
+.v3 .ring {
+  flex: none; width: 24px; height: 24px; border-radius: 999px;
+  border: 2px solid var(--fg-plan); color: var(--fg-plan);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; line-height: 1;
+}
+.v3 .col p {
+  margin: 0; font-size: var(--ae-fs-small); line-height: var(--ae-lh-small);
+  color: var(--fg-ink);
+}
+.v3 .whyline { margin-top: var(--ae-space-5); }
+
+@media print {
+  .v1 .axis, .v3 .tie { animation: none !important; }
+}
+
+@media (max-width: 1000px) {
+  .v2 .pairs { grid-template-columns: 1fr; }
+  .v2 .dbox { display: none; }
+  .v3 .ties { display: none; }
+  .v3 .cols { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v1 .turn--agent { margin-left: 0; }
+  .v1 .turn--agent::before { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Thread</button>
+        <button type="button" data-p="v2">2 · Four decisions</button>
+        <button type="button" data-p="v3">3 · Asks back</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/10-plan-ask.js, except:
+   - you / agent / turnYou / turnBack — the speaker names the exchange
+     needs in order to be drawn as an exchange at all;
+   - defaultsLabel / defaults — the em-dash list already inside "answer",
+     lifted out so each item can stand next to the question it answers.
+     V2 is the only variation that uses them, and it is the only one
+     that shortens "answer" (to answerShort) to avoid saying the list
+     twice. V1 and V3 carry "answer" word for word. */
+const C = {
+  en: {
+    h1: 'Make it ask',
+    lede: 'A model that does not ask will guess, and a guess comes back looking exactly like an answer. So require the questions.',
+    you: 'You',
+    agent: 'The agent',
+    turnYou: 'Your turn',
+    turnBack: 'It asks back',
+    instrLabel: 'The instruction',
+    instr: 'We need rate limiting on the public API. Do not write anything yet. Ask me every question you need answered to write the plan without guessing.',
+    qLabel: 'What comes back',
+    questions: [
+      'Per API key, per IP address, or per authenticated user?',
+      'A fixed window or a sliding one? The existing cache supports both.',
+      'What should a rejected request return — 429 with a Retry-After, or a queued response?',
+      'Do internal service calls count against the same limit?',
+    ],
+    defaultsLabel: 'What it would have picked, silently',
+    defaults: [
+      'Per IP address',
+      'A fixed window',
+      'A plain 429',
+      'Internal calls included',
+    ],
+    answerLabel: 'Why this matters',
+    answer: 'Four questions, four decisions. Without them the agent picks one answer for each — per IP, fixed window, plain 429, internal calls included — and all four are defensible, and none of them are yours.',
+    answerShort: 'Four questions, four decisions. Without them the agent picks one answer for each, and all four are defensible, and none of them are yours.',
+    note: 'The questions are where the requirements actually are. <b>You do not know what you left out until something asks.</b>',
+  },
+  de: {
+    h1: 'Fragen lassen',
+    lede: 'Ein Modell, das nicht fragt, rät — und ein geratener Wert kommt zurück und sieht aus wie eine Antwort. Also verlang die Fragen.',
+    you: 'Du',
+    agent: 'Der Agent',
+    turnYou: 'Dein Zug',
+    turnBack: 'Er fragt zurück',
+    instrLabel: 'Die Anweisung',
+    instr: 'Wir brauchen Rate-Limiting auf der öffentlichen API. Schreib noch nichts. Stell mir jede Frage, die du beantwortet brauchst, um den Plan ohne Raten zu schreiben.',
+    qLabel: 'Was zurückkommt',
+    questions: [
+      'Pro API-Key, pro IP-Adresse oder pro authentifiziertem Nutzer?',
+      'Festes Zeitfenster oder gleitendes? Der bestehende Cache kann beides.',
+      'Was gibt ein abgelehnter Request zurück — 429 mit Retry-After oder eine Queue-Antwort?',
+      'Zählen interne Service-Aufrufe gegen dasselbe Limit?',
+    ],
+    defaultsLabel: 'Was er still gewählt hätte',
+    defaults: [
+      'Pro IP-Adresse',
+      'Festes Fenster',
+      'Ein schlichtes 429',
+      'Interne Aufrufe zählen mit',
+    ],
+    answerLabel: 'Warum das zählt',
+    answer: 'Vier Fragen, vier Entscheidungen. Ohne sie wählt der Agent je eine Antwort — pro IP, festes Fenster, schlichtes 429, interne Aufrufe inbegriffen — und alle vier sind vertretbar, und keine davon ist deine.',
+    answerShort: 'Vier Fragen, vier Entscheidungen. Ohne sie wählt der Agent je eine Antwort, und alle vier sind vertretbar, und keine davon ist deine.',
+    note: 'In den Fragen stecken die Anforderungen. <b>Was fehlt, merkt man erst, wenn etwas nachfragt.</b>',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the thread: one time axis, three markers, ink → blue ring → ink',
+  v2: 'Variation 2 — four decisions: every question against the answer it stopped',
+  v3: 'Variation 3 — asks back: your sentence on top, four questions pointing up into it',
+};
+
+/* The marker is drawn once per turn and never twice. V1 puts it on the
+   thread axis, so its speaker lines ask for mark=false; V2 and V3 have
+   no axis, so the marker rides on the speaker line instead. */
+function spk(who, cls, label, mark) {
+  return '<div class="spk">'
+    + (mark === false ? '' : '<span class="mk mk--' + cls + '"></span>')
+    + '<span class="who' + (cls === 'agent' ? ' who--agent' : '') + '">' + who + '</span>'
+    + '<i class="bar"></i>'
+    + '<span class="lb">' + label + '</span>'
+  + '</div>';
+}
+
+/* ── V1 ── */
+function V1(t) {
+  return '<div class="thread">'
+    + '<i class="axis"></i>'
+
+    + '<span class="mk mk--you fg-in" style="grid-row:1; --fg-at:3"></span>'
+    + '<div class="turn turn--you fg-in" style="grid-row:1; --fg-at:3">'
+      + '<div class="inkbox said">'
+        + spk(t.you, 'you', t.instrLabel, false)
+        + '<p class="prompt">' + t.instr + '</p>'
+      + '</div>'
+    + '</div>'
+
+    + '<span class="mk mk--agent fg-in" style="grid-row:2; --fg-at:4"></span>'
+    + '<div class="turn turn--agent fg-in" style="grid-row:2; --fg-at:4">'
+      + '<div class="heard">'
+        + spk(t.agent, 'agent', t.qLabel, false)
+        + '<ul class="qs">'
+          + t.questions.map(function (q, i) {
+              return '<li class="fg-in" style="--fg-at:' + (5 + i) + '">'
+                + '<span class="ring">?</span><span>' + q + '</span>'
+              + '</li>';
+            }).join('')
+        + '</ul>'
+      + '</div>'
+    + '</div>'
+
+    + '<span class="mk mk--you fg-in" style="grid-row:3; --fg-at:9"></span>'
+    + '<div class="turn turn--you fg-in" style="grid-row:3; --fg-at:9">'
+      + '<div class="inkbox why">'
+        + spk(t.you, 'you', t.answerLabel, false)
+        + '<p>' + t.answer + '</p>'
+      + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  return ''
+  + '<div class="inkbox said fg-in" style="--fg-at:3">'
+    + spk(t.you, 'you', t.instrLabel)
+    + '<p class="prompt">' + t.instr + '</p>'
+  + '</div>'
+  + '<div class="pairs">'
+    + '<i class="dbox fg-in" style="grid-row: 2 / ' + (2 + t.questions.length) + '; --fg-at:5"></i>'
+    + '<div class="ph ph--q fg-in" style="--fg-at:4">' + t.qLabel + '</div>'
+    + '<div class="ph ph--d fg-in" style="--fg-at:5">' + t.defaultsLabel + '</div>'
+    + t.questions.map(function (q, i) {
+        return '<div class="q fg-in" style="grid-row:' + (2 + i) + '; --fg-at:' + (4 + i) + '">'
+          + '<span class="ring">?</span><span>' + q + '</span>'
+        + '</div>';
+      }).join('')
+    + t.defaults.map(function (d, i) {
+        return '<div class="d fg-in" style="grid-row:' + (2 + i) + '; --fg-at:' + (5 + i) + '">'
+          + '<i></i><span>' + d + '</span>'
+        + '</div>';
+      }).join('')
+  + '</div>'
+  + '<p class="whyline fg-in" style="--fg-at:9">'
+    + '<span class="tagword">' + t.answerLabel + '</span>'
+    + '<span>' + t.answerShort + '</span>'
+  + '</p>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  return ''
+  + '<div class="inkbox said fg-in" style="--fg-at:3">'
+    + spk(t.you, 'you', t.turnYou + ' · ' + t.instrLabel)
+    + '<p class="prompt">' + t.instr + '</p>'
+  + '</div>'
+  + '<div class="back">'
+    + '<div class="ties">'
+      + t.questions.map(function (q, i) {
+          return '<i class="tie" style="animation-delay: calc(60ms + ' + (5 + i) + ' * var(--fg-beat))"></i>';
+        }).join('')
+    + '</div>'
+    + '<div class="backlbl fg-in" style="--fg-at:5">'
+      + '<span class="mk mk--agent"></span>'
+      + '<span class="who">' + t.turnBack + '</span>'
+      + '<span class="lb">' + t.qLabel + '</span>'
+      + '<i class="rule"></i>'
+    + '</div>'
+    + '<div class="cols">'
+      + t.questions.map(function (q, i) {
+          return '<div class="col fg-in" style="--fg-at:' + (6 + i) + '">'
+            + '<span class="ring">?</span>'
+            + '<p>' + q + '</p>'
+          + '</div>';
+        }).join('')
+    + '</div>'
+  + '</div>'
+  + '<p class="whyline fg-in" style="--fg-at:10">'
+    + '<span class="tagword">' + t.answerLabel + '</span>'
+    + '<span>' + t.answer + '</span>'
+  + '</p>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+
+function render(v, t) {
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:11"><span>' + t.note + '</span></p></div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

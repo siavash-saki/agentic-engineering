@@ -60,6 +60,69 @@
   --fg-green-light: #6FBE89;
   --fg-clay:    #B4552C;   /* chapter marker                 4.56:1 on paper */
 
+  /* ═══════════ THE TWO COLOUR SYSTEMS ═══════════
+   * See DESIGN.md, pass 4. One rule governs the whole set:
+   *
+   *   COLOUR ON THE FRAME SAYS WHERE YOU ARE.
+   *   COLOUR IN THE CONTENT SAYS WHAT IT MEANS.
+   *
+   * Structure hues (plan/build/review) live on chapter openers, nav chips,
+   * step nodes and spine rules — NEVER on body text. State hues (fail/wait)
+   * live on verdicts, paths and outcomes — NEVER on structure.
+   *
+   * THE HUMAN IS THE ONE THING THAT IS NOT COLOURED. Every human decision —
+   * a gate, an approval, an acceptance — is --fg-ink, filled. Everything the
+   * machine does is coloured and soft. That is the deck's loudest contrast
+   * and it is spent on the deck's most important act.
+   *
+   * All five hues sit in a 6-POINT LIGHTNESS BAND (8–16 of 100). That is what
+   * makes them harmonise, and it is also why NO DISTINCTION MAY REST ON HUE
+   * ALONE: they are one grey in print, on a tired projector, and to a viewer
+   * with a colour vision deficiency. Every coloured distinction carries a form
+   * cue too — solid vs broken line, filled disc vs hollow ring, ✓ vs ◦ vs ✕.
+   * Desaturate the deck and everything must still read. That is the test.
+   *
+   * Ratios below are against paper #F5F7F3, verified — not estimated. Each
+   * family is base (strokes, labels) · deep (text on the tint) · tint (a wash
+   * behind text) · light (for the near-black terminal and tree mock-ups,
+   * measured against #16211C).
+   */
+
+  /* ── Plan · blue. The step where nothing is built yet. ── */
+  --fg-plan:        #1D5A8C;   /* 6.73:1  */
+  --fg-plan-d:      #123A5C;   /* 10.91:1 */
+  --fg-plan-tint:   #E2EDF5;
+  --fg-plan-light:  #7FB3D9;   /* 7.37:1 on ink */
+
+  /* ── Build · green. The deck's existing accent, given one job. ── */
+  --fg-build:       var(--fg-green);
+  --fg-build-d:     var(--fg-green-d);
+  --fg-build-tint:  var(--fg-mint);
+  --fg-build-light: var(--fg-green-light);
+
+  /* ── Review · plum. ── */
+  --fg-review:       #7A3B6B;  /* 7.31:1  */
+  --fg-review-d:     #4F2545;  /* 11.58:1 */
+  --fg-review-tint:  #F2E6EF;
+  --fg-review-light: #C08FB4;  /* 6.17:1 on ink */
+
+  /* ── Failure · clay. The thing that goes wrong, usually silently.
+   *    Not emphasis. A third of this talk is failure modes and the deck had
+   *    no way to say "this is the wrong one". ALWAYS with a broken line or a
+   *    ✕, never hue alone. ── */
+  --fg-fail:        var(--fg-clay); /* 4.56:1 */
+  --fg-fail-d:      #7C3819;        /* 7.99:1 */
+  --fg-fail-tint:   #F7E9E1;
+  --fg-fail-light:  #E09B74;        /* 7.18:1 on ink */
+
+  /* ── Unverified · ochre. Claimed but not evidenced. NOT failure — the deck
+   *    argues a truthful "not verified" beats a convincing "pass", so it needs
+   *    its own colour and gets one. Third verdict: ✓ green · ◦ ochre · ✕ clay. ── */
+  --fg-wait:        #8A6410;   /* 4.98:1 */
+  --fg-wait-d:      #5C4209;   /* 8.70:1 */
+  --fg-wait-tint:   #F5EEDC;
+  --fg-wait-light:  #D4B361;   /* 8.21:1 on ink */
+
   /* ═══════════ The three elevations ═══════════
    * Shadows are tinted with the ink hue, not black: a neutral-black shadow on
    * warm-green paper reads as grey dirt. */

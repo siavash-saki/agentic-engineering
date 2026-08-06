@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 5 — The loop, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper);
+  overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* Layers — DESIGN.md pass 2. */
+[data-l="1"], [data-l="2"] { display: none; }
+.proto[data-at="1"] [data-l="1"],
+.proto[data-at="2"] [data-l="1"],
+.proto[data-at="2"] [data-l="2"] { display: revert; }
+
+/* ══════════════ SHARED ══════════════
+   This slide is 74 words in a frame that is half empty. The fix is scale,
+   not more content — so every variation is built to FILL, and the head
+   block is deliberately small to leave the loop the room.
+
+   It is also where the three chapter hues are taught. From here on, blue
+   is Plan wherever it appears, green is Build, plum is Review — on the
+   chapter openers, on the gate pipeline, on the closing slide. Nothing
+   else in the deck gets to use them. */
+.proto .head { flex: none; }
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 64ch; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+.proto .fg-note { flex: none; margin-top: var(--ae-space-5); }
+
+/* The step names carry their chapter's hue. That is chapter identity, not
+   emphasis — the name IS the label for the hue, which is why it is the one
+   piece of text allowed to take it. Descriptions stay ink. */
+.s-plan   { --hue: var(--fg-plan);   --hue-d: var(--fg-plan-d);   --tint: var(--fg-plan-tint); }
+.s-build  { --hue: var(--fg-build);  --hue-d: var(--fg-build-d);  --tint: var(--fg-build-tint); }
+.s-review { --hue: var(--fg-review); --hue-d: var(--fg-review-d); --tint: var(--fg-review-tint); }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE RING
+   The chapter is called "The Loop", so draw a loop. Three arcs,
+   one per step, each ending in an arrowhead that points into the
+   next. The return from Review to Plan is not a special case here;
+   it is just the third arrow, which is the whole argument for a
+   ring over a line.
+   ══════════════════════════════════════════════════════════════ */
+/* The wrap has to be taller than the ring by a full label's height at top
+   and bottom, or the Plan description lands on the blue arc. */
+.v1 .ring-wrap {
+  position: relative; margin: 0 auto;
+  width: min(100%, 1000px); height: min(66vh, 530px);
+}
+.v1 .ring {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(40vh, 330px); height: min(40vh, 330px);
+}
+.v1 .ring svg { width: 100%; height: 100%; overflow: visible; }
+.v1 .ring path { fill: none; stroke-width: 13; stroke-linecap: round; }
+.v1 .ring .a-plan   { stroke: var(--fg-plan); }
+.v1 .ring .a-build  { stroke: var(--fg-build); }
+.v1 .ring .a-review { stroke: var(--fg-review); }
+.v1 .ring .tip-plan   { fill: var(--fg-plan); }
+.v1 .ring .tip-build  { fill: var(--fg-build); }
+.v1 .ring .tip-review { fill: var(--fg-review); }
+/* Arcs draw themselves, in order, like everything else in the deck. */
+.v1 .ring path { stroke-dasharray: 100; animation: draw 620ms var(--ae-ease) both;
+  animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat)); }
+@keyframes draw { from { stroke-dashoffset: 100; } }
+
+/* The ring centre is left empty on purpose. An earlier draft put a line of
+   copy there; it was text this slide does not contain, and it touched both
+   arcs. The ring says "these three, and it comes back round" without help. */
+.v1 .lbl { position: absolute; width: min(28vw, 270px); }
+.v1 .lbl--plan   { left: 50%; top: 0; transform: translateX(-50%); text-align: center; }
+.v1 .lbl--build  { right: 0; bottom: 2%; text-align: left; }
+.v1 .lbl--review { left: 0; bottom: 2%; text-align: right; }
+.v1 .lbl .n {
+  display: block; font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; letter-spacing: 0.08em; color: var(--fg-faint);
+  font-variant-numeric: tabular-nums;
+}
+.v1 .lbl .t {
+  display: block; margin-top: 2px;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.06; letter-spacing: -0.024em;
+  color: var(--hue-d);
+}
+.v1 .lbl .d {
+  margin: var(--ae-space-2) 0 0;
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE POSTER
+   Tier A from DESIGN.md pass 5: the one slide in the deck that
+   should read as a poster. Three fields, full height, the names at
+   display size. No cards, no thread — the columns are the slide.
+   It is the loudest possible way to teach three hues, and it is the
+   only variation that can be read from the back of a large room.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .poster { display: flex; align-items: stretch; gap: var(--ae-space-3); height: 100%; min-height: 0; }
+/* `center`, not `space-between`. Pinning the name to the top and the line
+   to the bottom of a full-height field opened a dead void down the middle
+   of every column — the field was filling the frame, the content was not. */
+.v2 .col {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+  padding: var(--ae-space-6) var(--ae-space-5);
+  border-radius: var(--ae-radius-lg);
+  background: var(--tint);
+  min-width: 0;
+}
+.v2 .col .n {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1; color: var(--hue);
+  font-variant-numeric: tabular-nums; opacity: 0.75;
+}
+.v2 .col .t {
+  margin: var(--ae-space-4) 0 0;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-display); line-height: 0.98; letter-spacing: -0.034em;
+  color: var(--hue-d);
+}
+.v2 .col .d {
+  margin: var(--ae-space-4) 0 0;
+  font-size: var(--ae-fs-lead); line-height: 1.34; color: var(--fg-ink);
+  max-width: 22ch;
+}
+.v2 .arw {
+  flex: none; align-self: center; padding: 0 2px;
+  font-size: var(--ae-fs-h1); line-height: 1; color: var(--ae-cool-gray-300);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE SPINE
+   Faithful to the headline, which is linear: three large nodes on
+   one rule, in the order the words are written. The return arc is
+   a hairline underneath — present, unlabelled, and quiet, because
+   this slide's text never claims the loop repeats. Slide 17 is
+   where that gets said.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .spine { position: relative; padding-bottom: clamp(38px, 6vh, 72px); }
+.v3 .run { display: grid; grid-template-columns: repeat(3, 1fr); align-items: start; position: relative; }
+/* The rule runs behind the nodes, from the first centre to the last. */
+.v3 .rail {
+  position: absolute; left: 16.66%; right: 16.66%; top: clamp(30px, 4.2vh, 48px);
+  height: 3px; background: var(--fg-hair); border-radius: 2px;
+  transform-origin: left center;
+  animation: rail 760ms var(--ae-ease) both; animation-delay: calc(60ms + 2 * var(--fg-beat));
+}
+@keyframes rail { from { transform: scaleX(0); } }
+.v3 .st { position: relative; text-align: center; padding: 0 var(--ae-space-4); }
+.v3 .dot {
+  width: clamp(72px, 10vh, 118px); height: clamp(72px, 10vh, 118px);
+  margin: 0 auto; border-radius: 999px;
+  background: var(--hue); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--fg-d2);
+}
+.v3 .t {
+  margin: var(--ae-space-4) 0 0;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.02; letter-spacing: -0.03em;
+  color: var(--hue-d);
+}
+.v3 .d {
+  margin: var(--ae-space-3) auto 0; max-width: 26ch;
+  font-size: var(--ae-fs-lead); line-height: 1.36; color: var(--fg-ink);
+}
+/* Drawn in CSS borders, not SVG. A `preserveAspectRatio="none"` viewBox
+   stretches to the slide's width, which turns a round corner into an
+   ellipse and an arrowhead into a smear — visible in the first pass. A
+   border-radius corner cannot distort, whatever the aspect ratio. */
+.v3 .loopback {
+  position: absolute; left: 16.66%; right: 16.66%; bottom: 0;
+  height: clamp(30px, 4.6vh, 56px);
+  border: 1.5px solid var(--ae-cool-gray-300); border-top: 0;
+  border-radius: 0 0 16px 16px;
+  animation: fg-rise 620ms var(--ae-ease) both; animation-delay: calc(60ms + 9 * var(--fg-beat));
+}
+/* The head sits on the left end, pointing back up into Plan. */
+.v3 .loopback::before {
+  content: ''; position: absolute; left: -5.5px; top: -1px;
+  border-left: 5.5px solid transparent; border-right: 5.5px solid transparent;
+  border-bottom: 8px solid var(--ae-cool-gray-300);
+}
+
+@media (max-width: 900px) {
+  .v2 .poster { flex-direction: column; }
+  .v2 .arw { transform: rotate(90deg); }
+  .v3 .run { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v3 .rail, .v3 .loopback { display: none; }
+  .v1 .ring-wrap { height: auto; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Ring</button>
+        <button type="button" data-p="v2">2 · Poster</button>
+        <button type="button" data-p="v3">3 · Spine</button>
+      </div>
+      <div class="lang-toggle" id="layers" role="group" aria-label="Layer">
+        <button type="button" data-a="0">L0</button>
+        <button type="button" data-a="1">L1</button>
+        <button type="button" data-a="2">L2</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Every word is verbatim from presentation-v2/sections/05-loop.js. Nothing
+   added, nothing cut — this slide's problem was never its text. */
+const C = {
+  en: {
+    h1: 'Plan → Build → Review',
+    lede: 'The whole method. Everything after this slide is one of these three steps, done more carefully.',
+    mid: 'Three steps. One task at a time.',
+    steps: [
+      { n: '1', t: 'Plan',   d: 'Decide what it should do. Write it down.' },
+      { n: '2', t: 'Build',  d: 'Small steps. One step, one commit.' },
+      { n: '3', t: 'Review', d: 'Check it against the plan. Then let another model read it.' },
+    ],
+    note: 'Not new. It has been the advice since long before agents existed. <b>What changed is why it has to be written down.</b>',
+  },
+  de: {
+    h1: 'Plan → Build → Review',
+    lede: 'Die ganze Methode. Alles nach dieser Folie ist einer dieser drei Schritte, sorgfältiger ausgeführt.',
+    mid: 'Drei Schritte. Eine Aufgabe nach der anderen.',
+    steps: [
+      { n: '1', t: 'Plan',   d: 'Entscheiden, was es tun soll. Aufschreiben.' },
+      { n: '2', t: 'Build',  d: 'Kleine Schritte. Ein Schritt, ein Commit.' },
+      { n: '3', t: 'Review', d: 'Gegen den Plan prüfen. Dann ein anderes Modell lesen lassen.' },
+    ],
+    note: 'Nicht neu. Das ist der Rat, seit es Software gibt. <b>Neu ist, warum es aufgeschrieben wird.</b>',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the ring: the return to Plan is just the third arrow',
+  v2: 'Variation 2 — the poster: the one slide in the deck that should be readable from the back row',
+  v3: 'Variation 3 — the spine: faithful to a headline that is linear, with a quiet return underneath',
+};
+const KEY = ['s-plan', 's-build', 's-review'];
+
+/* ── V1 ── Arcs of a 110-radius circle at (150,150), 105° each with 15°
+   gaps, so the gap itself reads as the hand-off. Endpoints are computed
+   once here rather than typed, because a mistyped arc is invisible until
+   it is on a projector. */
+function polar(deg) {
+  const r = 110, a = deg * Math.PI / 180;
+  return [150 + r * Math.cos(a), 150 + r * Math.sin(a)];
+}
+function arc(fromDeg, toDeg, cls, at) {
+  const [x1, y1] = polar(fromDeg), [x2, y2] = polar(toDeg);
+  /* The arrowhead sits at the arc's end, rotated to the tangent. */
+  const tan = toDeg + 90;
+  return '<path class="' + cls + '" pathLength="100" style="--fg-at:' + at + '" '
+    + 'd="M ' + x1.toFixed(1) + ' ' + y1.toFixed(1)
+    + ' A 110 110 0 0 1 ' + x2.toFixed(1) + ' ' + y2.toFixed(1) + '"/>'
+    + '<polygon class="tip-' + cls.slice(2) + '" points="-11,-8 11,0 -11,8" '
+    + 'transform="translate(' + x2.toFixed(1) + ',' + y2.toFixed(1) + ') rotate(' + tan.toFixed(1) + ')" '
+    + 'style="animation: fg-appear 260ms var(--ae-ease) both; animation-delay: calc(60ms + ' + (at + 1) + ' * var(--fg-beat))"/>';
+}
+function V1(t) {
+  const L = t.steps;
+  return ''
+  + '<div class="ring-wrap">'
+    + '<div class="ring">'
+      + '<svg viewBox="0 0 300 300" aria-hidden="true">'
+        + arc(217.5, 322.5, 'a-plan',   3)
+        + arc(337.5,  82.5, 'a-build',  5)
+        + arc( 97.5, 202.5, 'a-review', 7)
+      + '</svg>'
+    + '</div>'
+    + L.map(function (s, i) {
+        const pos = ['plan', 'build', 'review'][i];
+        return '<div class="lbl lbl--' + pos + ' ' + KEY[i] + ' fg-in" style="--fg-at:' + (3 + i * 2) + '">'
+          + '<span class="n">' + s.n + '</span>'
+          + '<span class="t">' + s.t + '</span>'
+          + '<p class="d" data-l="1">' + s.d + '</p>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  return '<div class="poster">'
+    + t.steps.map(function (s, i) {
+        return (i ? '<span class="arw fg-in" style="--fg-at:' + (3 + i * 2) + '">→</span>' : '')
+        + '<div class="col ' + KEY[i] + ' fg-in" style="--fg-at:' + (3 + i * 2) + '">'
+          + '<div>'
+            + '<span class="n">0' + s.n + '</span>'
+            + '<h2 class="t">' + s.t + '</h2>'
+          + '</div>'
+          + '<p class="d" data-l="1">' + s.d + '</p>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  return '<div class="spine">'
+    + '<div class="run">'
+      + '<i class="rail"></i>'
+      + t.steps.map(function (s, i) {
+          return '<div class="st ' + KEY[i] + ' fg-in" style="--fg-at:' + (3 + i * 2) + '">'
+            + '<div class="dot">' + s.n + '</div>'
+            + '<h2 class="t">' + s.t + '</h2>'
+            + '<p class="d" data-l="1">' + s.d + '</p>'
+          + '</div>';
+        }).join('')
+    + '</div>'
+    + '<i class="loopback" aria-hidden="true"></i>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+
+function render(v, t, at) {
+  return ''
+  + '<section class="proto ' + v + '" data-at="' + at + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap"><p class="fg-note" data-l="2"><span>' + t.note + '</span></p></div>'
+  + '</section>';
+}
+
+/* ── harness ── */
+let lang = 'en', proto = 'v1', at = 2;
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang], at);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang); sync('#layers', 'a', at);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('layers').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; at = +b.dataset.a; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' && at < 2) { at++; mount(); }
+  if (e.key === 'ArrowLeft'  && at > 0) { at--; mount(); }
+  if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); }
+});
+mount();
+</script>
+</body>
+</html>

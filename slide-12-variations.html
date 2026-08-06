@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 12 — Four ways a plan fails, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   DESIGN.md's Pass 1 verdict for this slide is "agrees — leave the cards":
+   the idea is an UNORDERED SET OF FOUR and a card row is the right shape
+   for an unordered set of four. So V1 is the existing slide improved, not
+   replaced, and V2 and V3 exist to be compared against it rather than to
+   win by default.
+
+   WHAT ALL THREE FIX, whatever the shape:
+
+   1. THE LEDE MAKES A SPLIT THE SLIDE NEVER DRAWS. "Three of them are
+      found only at review, and the fourth is never found at all." Today
+      all four render identically, so the sharpest sentence on the slide
+      is carried by prose alone. Every variation draws it.
+
+   2. THE FAILURE HAS NO COLOUR. Four failure modes rendered in the deck's
+      one green-and-grey. Clay is now the failure colour, and the "why"
+      line — the consequence, the sharpest line in each card — takes the
+      device slide 7 already established: clay text with a leading ✕, so
+      the hue is never the only carrier.
+
+   3. GREEN IS GONE FROM THE CONTENT. Green means Build now. The only
+      green left on the slide is the shared .fg-note device, which the
+      three landed slides (5, 6, 7) still use as-is; recolouring it to the
+      chapter tint is a deck-wide decision, not this slide's to take.
+
+   HUE BUDGET. V1 and V3: clay plus ink and greys — no chapter hue, the
+   same restraint slide 6 exercises deliberately. V2: clay plus blue,
+   because it draws PLAN.md itself and blue travels with that name.
+   ══════════════════════════════════════════════════════════════ */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-5); }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-3);
+  font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1);
+  color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 68ch; }
+
+/* The consequence line, shared by all three variations. Slide 7's .pn__not,
+   unchanged: a hairline above it, clay text, a leading ✕. The ✕ is what
+   survives greyscale; the clay is what makes it findable in colour. */
+.why {
+  display: flex; gap: var(--ae-space-2); align-items: baseline;
+  margin: 0; padding-top: var(--ae-space-2);
+  border-top: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  color: var(--fg-fail-d);
+}
+.why::before { content: '\2715'; flex: none; font-weight: 700; }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE SET
+   The current slide, kept. Three things change.
+
+   THE ROW IS SPLIT WHERE THE LEDE SPLITS IT. Cards 1–3 sit under
+   "found at review"; card 4 sits alone under "never found", with a
+   real gap column between them. The grid now states the claim the
+   lede makes, and the band labels mean the numbering is no longer
+   the only thing tying "the fourth" to a card.
+
+   CARD 4 IS DRAWN AS THE ONE THAT NEVER SURFACES: clay tint, dashed
+   edge, no shadow — the same device slide 6 uses for what you did
+   not write and the model decided silently. Dashed, not merely
+   clay: in greyscale the broken edge is the half that survives.
+
+   THE BADGE STOPS BEING GREY FURNITURE. It was cool-gray on
+   cool-gray, which said "list item". Clay says "failure", and the
+   ✕ on the why line says it again without hue.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .traps {
+  display: grid;
+  /* Four content columns and one real gap column, so the split between
+     "found at review" and "never found" is structural — the band labels
+     span grid columns rather than being positioned by a percentage that
+     drifts the moment the German wraps differently. */
+  grid-template-columns: repeat(3, minmax(0, 1fr)) clamp(12px, 1.8vw, 30px) minmax(0, 1fr);
+  column-gap: var(--ae-space-4);
+  row-gap: var(--ae-space-4);
+  align-items: stretch;
+}
+.v1 .band {
+  grid-row: 1;
+  padding-bottom: var(--ae-space-2);
+  border-bottom: 1px solid var(--fg-hair);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.v1 .band--a { grid-column: 1 / 4; }
+.v1 .band--b {
+  grid-column: 5; color: var(--fg-fail-d);
+  border-bottom-style: dashed; border-bottom-color: var(--fg-fail);
+}
+.v1 .tr {
+  grid-row: 2;
+  display: flex; flex-direction: column; gap: var(--ae-space-3);
+  padding: var(--ae-space-5);
+}
+.v1 .tr--hidden {
+  background: var(--fg-fail-tint);
+  border: 1.5px dashed var(--fg-fail);
+  box-shadow: none;
+}
+.v1 .head-row { display: flex; align-items: center; gap: var(--ae-space-3); }
+.v1 .mk {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 1.9em; height: 1.9em; border-radius: var(--ae-radius-sm);
+  background: var(--fg-fail-tint); color: var(--fg-fail-d);
+  border: 1px solid var(--fg-fail);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1;
+}
+/* On the tinted card the tinted badge would vanish, so it takes the card
+   ground instead. Same border, same text colour — one device, two grounds. */
+.v1 .tr--hidden .mk { background: var(--fg-card); }
+/* The deck's neutral hairline is invisible on the clay wash, so on the
+   tinted card the why's rule takes the light clay instead. Same device,
+   readable ground — it was drawn at hairline strength and vanished. */
+.v1 .tr--hidden .why { border-top-color: var(--fg-fail-light); }
+.v1 .tr h3 {
+  margin: 0; font-size: var(--ae-fs-h4); line-height: 1.18; color: var(--fg-ink);
+}
+.v1 .tr .d {
+  margin: 0; font-size: var(--ae-fs-body); line-height: 1.42;
+  color: var(--fg-body);
+}
+/* The why is pinned to the bottom of the card, so the four consequence
+   lines share a baseline band across the row however the titles wrap. */
+.v1 .tr .why { margin-top: auto; padding-top: var(--ae-space-3); }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE MARKED FILE
+   The four traps are not four abstract nouns; they are four things
+   that happen to one document. So one PLAN.md is drawn and the
+   four marks sit on it — two inside its text, two in its life.
+
+   THE TWO KINDS OF DEFECT ARE HONESTLY DIFFERENT, and the drawing
+   says so rather than hiding it. Traps 2 and 3 are visible IN the
+   file: code where behaviour should be, a criteria heading with
+   nothing under it. Traps 1 and 4 are not in the text at all —
+   they are facts about when it was written and whether it was ever
+   read again. Those two take meta strips above and below the body,
+   set in the body face on a clay wash, so they read as facts about
+   the file rather than as lines of it.
+
+   BLUE IS EARNED HERE. The exhibit is the Plan chapter's own
+   artifact and the hue travels with the name PLAN.md, which is the
+   condition Pass 4 sets for spending a chapter hue at all.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .board {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.28fr);
+  column-gap: var(--ae-space-7);
+  align-items: center;
+}
+.v2 .file {
+  border-radius: var(--ae-radius-md);
+  background: var(--fg-card);
+  border: 1px solid var(--fg-hair);
+  border-top: 3px solid var(--fg-plan);
+  box-shadow: var(--fg-d2);
+  overflow: hidden;
+}
+.v2 .fname {
+  display: flex; align-items: baseline; gap: var(--ae-space-2);
+  padding: 7px var(--ae-space-5);
+  border-bottom: 1px solid var(--fg-hair);
+}
+.v2 .fname b {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-small);
+  line-height: 1.2; font-weight: 600; color: var(--fg-plan-d);
+}
+.v2 .fname span {
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  color: var(--fg-faint);
+}
+
+/* One gutter, one text column. Every mark lands in the gutter, so a
+   marked line and an unmarked line share a left edge and the marks form
+   a column the eye can run down. */
+.v2 .ln {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  column-gap: var(--ae-space-3);
+  align-items: center;
+}
+.v2 .body-lines { padding: var(--ae-space-3) var(--ae-space-5); }
+.v2 .body-lines .ln + .ln { margin-top: 6px; }
+.v2 .mk {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 22px; height: 22px; border-radius: 999px;
+  background: var(--fg-fail); color: #fff;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1;
+}
+.v2 .src {
+  font-family: var(--ae-font-mono);
+  font-size: calc(var(--ae-fs-caption) * 1.02);
+  line-height: 1.5; color: var(--fg-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.v2 .src--bad { color: var(--fg-fail-d); font-weight: 500; }
+/* Clay alone marks the code lines only in colour: desaturated, clay text
+   and muted text land within three greyscale points of each other. The
+   wash is the form cue — a banded region survives the Greyscale button,
+   which the recolouring on its own did not. Bled to the panel edges with
+   a negative margin, so the gutter column still aligns. */
+.v2 .codeblock {
+  background: var(--fg-fail-tint);
+  margin: 6px calc(-1 * var(--ae-space-5));
+  padding: 5px var(--ae-space-5);
+}
+.v2 .codeblock .ln + .ln { margin-top: 4px; }
+.v2 .bar {
+  display: block; height: 9px; border-radius: 5px;
+  background: var(--ae-cool-gray-200);
+}
+.v2 .empty {
+  display: flex; align-items: center;
+  height: clamp(28px, 3.6vh, 40px);
+  padding: 0 var(--ae-space-3);
+  border: 1.5px dashed var(--fg-fail); border-radius: var(--ae-radius-sm);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  color: var(--fg-fail-d);
+}
+/* The two facts that are not in the text. Body face, not mono: they are
+   statements ABOUT the file, and mono here would claim they are lines of
+   it. Clay wash, hairline separated from the source. */
+.v2 .meta {
+  padding: 7px var(--ae-space-5);
+  background: var(--fg-fail-tint);
+}
+.v2 .meta--top { border-bottom: 1px solid var(--fg-hair); }
+.v2 .meta--bot { border-top: 1px solid var(--fg-hair); }
+.v2 .meta .txt {
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600; color: var(--fg-fail-d);
+}
+
+.v2 .notes {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--ae-space-5); row-gap: var(--ae-space-4);
+}
+.v2 .an { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--ae-space-3); align-content: start; }
+.v2 .an .mk { grid-row: 1; }
+.v2 .an .t {
+  grid-row: 1; align-self: center;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h5); line-height: 1.2; color: var(--fg-ink);
+}
+.v2 .an .rest { grid-row: 2; grid-column: 2; margin-top: var(--ae-space-2); }
+.v2 .an .d {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — ONE LINE, FOUR CORRECTIONS
+   Not four panels: ONE BOARD WITH ONE RULE ACROSS IT. Above the
+   rule, in clay, the four ways it goes wrong. Below it, in ink,
+   the move that removes each. The rule is continuous and labelled,
+   which is slide 6's device at slide scale, and it is what lets
+   the note's claim — "the fix for all four is the same" — be true
+   of a picture rather than only of a sentence: one line separates
+   all four failures from all four corrections.
+
+   INK BELOW THE LINE, NOT GREEN OR BLUE. A correction is something
+   a person decides, and the human is the one thing that is not
+   coloured. Clay above, ink below, and the ✕ / → pair carries the
+   same distinction with no hue at all.
+
+   THE PRICE OF THIS SHAPE is four sentences the slide does not
+   currently contain, plus the rule's two-word label. They are not
+   new claims: each correction is the note's aggregate fix spelled
+   out for one trap, and corrections 2 and 3 restate that card's
+   own "why" in the imperative.
+
+   The trap blocks stretch to a common height by grid default, so
+   all four meet the rule exactly — the join is structural rather
+   than four heights that happen to agree in English.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--ae-space-4);
+}
+.v3 .trap {
+  grid-row: 1;
+  display: flex; flex-direction: column; gap: var(--ae-space-3);
+  padding: var(--ae-space-5);
+  background: var(--fg-fail-tint);
+  border-radius: var(--ae-radius-lg) var(--ae-radius-lg) 0 0;
+}
+.v3 .head-row { display: flex; align-items: center; gap: var(--ae-space-3); }
+.v3 .mk {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 1.9em; height: 1.9em; border-radius: var(--ae-radius-sm);
+  background: var(--fg-card); color: var(--fg-fail-d);
+  border: 1px solid var(--fg-fail);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1;
+}
+.v3 .trap h3 { margin: 0; font-size: var(--ae-fs-h5); line-height: 1.2; color: var(--fg-ink); }
+.v3 .trap .d {
+  margin: 0; font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body);
+}
+/* On the clay wash the deck's neutral hairline disappears, so the why's
+   rule takes the light clay instead. Same device, readable ground. */
+.v3 .trap .why { margin-top: auto; border-top-color: var(--fg-fail-light); }
+/* The heaviest mark on the slide, and the argument itself. Height 0 with
+   a border rather than a filled bar: a bar has to be positioned, a border
+   sits exactly on the grid line the blocks above it end on. */
+.v3 .rule {
+  grid-row: 2; grid-column: 1 / -1;
+  position: relative; height: 0;
+  border-top: 2.5px solid var(--fg-ink);
+  margin-bottom: var(--ae-space-6);
+  /* The pill straddles the line, so half of it sits inside the row above.
+     The trap blocks are later siblings and painted over it until this
+     stacking context was raised — the label read as clipped, which looked
+     like a padding bug and was not one. */
+  z-index: 2;
+}
+.v3 .rule span {
+  position: absolute; left: 50%; top: 0; transform: translate(-50%, -50%);
+  padding: 3px 14px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  /* The rule is an <i>, so the label inherits italic unless told otherwise. */
+  font-style: normal;
+  font-weight: 600; white-space: nowrap;
+}
+.v3 .fix {
+  grid-row: 3; margin: 0;
+  display: flex; gap: var(--ae-space-2); align-items: baseline;
+  font-size: var(--ae-fs-body); line-height: 1.4;
+  font-weight: 600; color: var(--fg-ink);
+}
+.v3 .fix::before { content: '\2192'; flex: none; font-weight: 700; }
+
+/* ══════════════ NARROW ══════════════ */
+@media (max-width: 1100px) {
+  .v1 .traps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--ae-space-4); }
+  .v1 .band { display: none; }
+  .v1 .tr { grid-row: auto !important; grid-column: auto !important; }
+  .v2 .board { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v2 .notes { grid-template-columns: 1fr; }
+  .v3 .board { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v3 .trap, .v3 .fix { grid-row: auto !important; grid-column: auto !important; }
+  .v3 .trap { border-radius: var(--ae-radius-lg); }
+  .v3 .rule { display: none; }
+  .v3 .fix {
+    margin-top: calc(-1 * var(--ae-space-4)); padding-top: var(--ae-space-3);
+    border-top: 2.5px solid var(--fg-ink);
+  }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Set</button>
+        <button type="button" data-p="v2">2 · Marked file</button>
+        <button type="button" data-p="v3">3 · Corrections</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/12-plan-traps.js — h1, lede, the
+   four traps and the note are unchanged.
+
+   New strings, and why each exists:
+   - bandA / bandB      the lede's own split, rendered as two labels.
+   - fix[1..4]          V3 only. The note's aggregate fix, per trap.
+   - ex.*               V2 only. The exhibit's own labels and its file
+                        source. "nothing that can be checked" is trap 3's
+                        description word for word, not a new claim. */
+const C = {
+  en: {
+    h1: 'Four ways a plan fails',
+    lede: 'All four produce a file that looks correct. Three of them are found only at review, and the fourth is never found at all.',
+    bandA: 'Found at review',
+    bandB: 'Never found',
+    traps: [
+      { n: '1', t: 'Written afterwards',
+        d: 'The code came first, the plan was written to match it.',
+        why: 'That is documentation. The agent built with no constraint, and the file now certifies whatever it did.',
+        fix: 'Write it before the first line of code.' },
+      { n: '2', t: 'Written as pseudo-code',
+        d: 'The plan names functions, files and data structures.',
+        why: 'It has locked in decisions the model would have made better, and there is nothing left to check the result against.',
+        fix: 'Say what it must do. Leave the how to the model.' },
+      { n: '3', t: 'No acceptance criteria',
+        d: 'The plan describes the feature but nothing that can be checked.',
+        why: 'It reads as complete and tests nothing. Review has no rows to walk.',
+        fix: 'Write down what review will walk through.' },
+      { n: '4', t: 'Orphaned',
+        d: 'Written once, then never referenced again while building.',
+        why: 'The file and the code drift apart silently. This is the common one, and it leaves no trace.',
+        fix: 'Keep the file in the prompt while building.' },
+    ],
+    note: 'The fix for all four is the same: <b>the plan is written first, kept short, and stays in the prompt.</b>',
+    ruleLabel: 'the fix',
+    ex: {
+      file: 'PLAN.md', kind: 'the plan',
+      before: 'written after the code',
+      after: 'never opened again while building',
+      head: '## Search filter',
+      crit: '## Acceptance criteria',
+      nothing: 'nothing that can be checked',
+    },
+  },
+  de: {
+    h1: 'Vier Fehlformen des Plans',
+    lede: 'Alle vier erzeugen eine Datei, die korrekt aussieht. Drei davon fallen erst im Review auf, die vierte gar nicht.',
+    bandA: 'Fällt im Review auf',
+    bandB: 'Fällt nie auf',
+    traps: [
+      { n: '1', t: 'Nachträglich geschrieben',
+        d: 'Der Code kam zuerst, der Plan wurde passend dazu verfasst.',
+        why: 'Das ist Dokumentation. Der Agent hat ohne Vorgabe gebaut, und die Datei bescheinigt jetzt genau das.',
+        fix: 'Vor der ersten Zeile Code schreiben.' },
+      { n: '2', t: 'Als Pseudo-Code geschrieben',
+        d: 'Der Plan nennt Funktionen, Dateien und Datenstrukturen.',
+        why: 'Er hat Entscheidungen festgelegt, die das Modell besser getroffen hätte, und es bleibt nichts, woran man das Ergebnis prüfen könnte.',
+        fix: 'Sagen, was es tun soll. Das Wie bleibt beim Modell.' },
+      { n: '3', t: 'Ohne Akzeptanzkriterien',
+        d: 'Der Plan beschreibt das Feature, aber nichts Prüfbares.',
+        why: 'Er liest sich vollständig und testet nichts. Dem Review fehlen die Zeilen zum Durchgehen.',
+        fix: 'Aufschreiben, was das Review durchgeht.' },
+      { n: '4', t: 'Verwaist',
+        d: 'Einmal geschrieben und beim Bauen nie wieder herangezogen.',
+        why: 'Datei und Code laufen still auseinander. Das ist der häufigste Fall, und er hinterlässt keine Spur.',
+        fix: 'Die Datei beim Bauen im Prompt behalten.' },
+    ],
+    note: 'Die Abhilfe ist bei allen vieren dieselbe: <b>Der Plan entsteht zuerst, bleibt kurz und bleibt im Prompt.</b>',
+    ruleLabel: 'die Abhilfe',
+    ex: {
+      file: 'PLAN.md', kind: 'der Plan',
+      before: 'nach dem Code geschrieben',
+      after: 'beim Bauen nie wieder geöffnet',
+      head: '## Suchfilter',
+      crit: '## Akzeptanzkriterien',
+      nothing: 'nichts Prüfbares',
+    },
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the set: the current cards, split where the lede splits them',
+  v2: 'Variation 2 — the marked file: four defects of one PLAN.md, annotated',
+  v3: 'Variation 3 — corrections: each trap paired with the move that removes it',
+};
+
+function esc(s) { return s; }
+
+/* ── V1 ── */
+function V1(t) {
+  var out = '<div class="traps">'
+    + '<div class="band band--a fg-in" style="--fg-at:3">' + t.bandA + '</div>'
+    + '<div class="band band--b fg-in" style="--fg-at:3">' + t.bandB + '</div>';
+  t.traps.forEach(function (tr, i) {
+    var hidden = i === 3;
+    var col = 'grid-column:' + (i === 3 ? 5 : i + 1) + ';';
+    out += '<div class="tr fg-card fg-hover fg-in' + (hidden ? ' tr--hidden' : '') + '"'
+      + ' style="' + col + ' --fg-at:' + (4 + i) + '">'
+      + '<div class="head-row">'
+        + '<span class="mk">' + tr.n + '</span>'
+        + '<h3 class="fg-hover-title">' + tr.t + '</h3>'
+      + '</div>'
+      + '<p class="d">' + tr.d + '</p>'
+      + '<p class="why">' + tr.why + '</p>'
+    + '</div>';
+  });
+  return out + '</div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  var x = t.ex;
+  var file = '<div class="file fg-in" style="--fg-at:3">'
+    + '<div class="fname"><b>' + x.file + '</b><span>' + x.kind + '</span></div>'
+    + '<div class="meta meta--top ln"><span class="mk">1</span><span class="txt">' + x.before + '</span></div>'
+    + '<div class="body-lines">'
+      + '<div class="ln"><i></i><span class="src">' + x.head + '</span></div>'
+      + '<div class="ln"><i></i><i class="bar" style="width:92%"></i></div>'
+      + '<div class="ln"><i></i><i class="bar" style="width:70%"></i></div>'
+      + '<div class="codeblock">'
+        + '<div class="ln"><span class="mk">2</span><span class="src src--bad">queryLayer(cat) {</span></div>'
+        + '<div class="ln"><i></i><span class="src src--bad">&nbsp;&nbsp;return rows.filter(…)</span></div>'
+        + '<div class="ln"><i></i><span class="src src--bad">}</span></div>'
+      + '</div>'
+      + '<div class="ln"><i></i><span class="src">' + x.crit + '</span></div>'
+      + '<div class="ln"><span class="mk">3</span><span class="empty">' + x.nothing + '</span></div>'
+    + '</div>'
+    + '<div class="meta meta--bot ln"><span class="mk">4</span><span class="txt">' + x.after + '</span></div>'
+  + '</div>';
+
+  var notes = '<div class="notes">' + t.traps.map(function (tr, i) {
+    return '<div class="an fg-in" style="--fg-at:' + (4 + i) + '">'
+      + '<span class="mk">' + tr.n + '</span>'
+      + '<span class="t">' + tr.t + '</span>'
+      + '<div class="rest">'
+        + '<p class="d">' + tr.d + '</p>'
+        + '<p class="why">' + tr.why + '</p>'
+      + '</div>'
+    + '</div>';
+  }).join('') + '</div>';
+
+  return '<div class="board">' + file + notes + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  /* Trap and correction are emitted as a PAIR and placed by explicit grid
+     row/column, so the wide layout is two bands and the narrow fallback —
+     where the explicit placement is dropped — is trap, correction, trap,
+     correction in reading order. Emitting all four traps and then all four
+     corrections would have stacked wrong on a narrow screen.
+     The four corrections share one slot: they are one row under one line,
+     and the slide's claim is that they arrive together. */
+  var out = '<div class="board">'
+    + '<i class="rule fg-in" style="--fg-at:7"><span>' + t.ruleLabel + '</span></i>';
+  t.traps.forEach(function (tr, i) {
+    out += '<div class="trap fg-in" style="grid-row:1; grid-column:' + (i + 1) + '; --fg-at:' + (3 + i) + '">'
+      + '<div class="head-row"><span class="mk">' + tr.n + '</span><h3>' + tr.t + '</h3></div>'
+      + '<p class="d">' + tr.d + '</p>'
+      + '<p class="why">' + tr.why + '</p>'
+    + '</div>'
+    + '<p class="fix fg-in" style="grid-row:3; grid-column:' + (i + 1) + '; --fg-at:8">' + tr.fix + '</p>';
+  });
+  return out + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+
+function render(v, t) {
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:10"><span>' + t.note + '</span></p></div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

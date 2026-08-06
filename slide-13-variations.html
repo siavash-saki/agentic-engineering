@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 13 — Build, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   The Build opener. Today it carries 150 words in three cards plus a
+   context paragraph — a content slide wearing a title, exactly as the
+   Plan opener was.
+
+   THIS IS WHERE GREEN OWNS THE SLIDE. Slide 5 taught the hue, slide 7
+   spent it on one node; here it is the chapter's own colour and it may
+   be loud. Plan and Review get the same treatment in their openers, so
+   the deck gains three coloured landmarks in a 33-slide run that
+   currently has none.
+
+   All three variations carry the LOCATOR — the loop with this step
+   lit — copied device-for-device from slide 8, because the three
+   openers have to read as siblings and the locator is the piece that
+   makes the set legible as a set.
+
+   THE SHAPE QUESTION THIS SLIDE ASKS. Plan is four moves in order, so
+   its opener is a run. Build is a SET OF THREE WITH A FOUNDATION UNDER
+   THEM: only the checklist is genuinely first, and the other two rules
+   hold at every moment of the step. V1 draws it as a run anyway, for
+   sibling-hood with slide 8. V2 and V3 draw the shape the content
+   actually has.
+
+   ── ROUND TWO: V4, V5, V6 ───────────────────────────────────────────
+   V1, V2 and V3 were all rejected. The stated reason was V1's terminal:
+   it ended the run in a box reading "ticks off / tasks.md", and a
+   chapter opener should not be naming a file the chapter has not
+   explained yet. The wider read is that all three tried to carry the
+   chapter's OUTPUTS, and an opener's job is where you are and what this
+   step is about.
+
+   So the second three drop the document entirely. None of them names a
+   file, and none of them ends in one.
+
+   WHAT BUILD'S ARGUMENT ACTUALLY IS. Plan's argument is that it produces
+   a written artifact, which is why slide 8 can end in PLAN.md and have
+   the document earn its place. Build's argument is SIZE AND ATTENTION —
+   "the agent can produce a thousand lines before you finish reading the
+   first hundred" — which is not an artifact claim at all. Nothing here
+   should terminate in an object.
+
+   V4 draws the loop and opens this node. V5 draws the run once and reads
+   it three times, one register per rule. V6 draws nothing: it tests
+   whether the three openers can rhyme through kicker, the chapter word
+   at display size, the locator and the hue alone. */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-5); }
+
+.kicker {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--fg-build); margin: 0 0 var(--ae-space-2);
+}
+.chapter-h1 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-display); line-height: 1; letter-spacing: -0.035em;
+  color: var(--fg-build-d);
+}
+.proto .fg-lede { margin: var(--ae-space-3) 0 0; max-width: 62ch; }
+
+/* ── the locator: the loop, with this step lit ──
+   Same geometry as slide 8; only the hue and the lit index change. */
+.loc { display: flex; align-items: center; gap: var(--ae-space-2); }
+.loc .dot {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 600; color: var(--ae-text-disabled);
+}
+.loc .dot::before {
+  content: ''; width: 10px; height: 10px; border-radius: 999px;
+  background: var(--ae-cool-gray-200);
+}
+.loc .dot.on { color: var(--fg-build-d); font-weight: 700; }
+.loc .dot.on::before { background: var(--fg-build); box-shadow: 0 0 0 4px var(--fg-build-tint); }
+.loc .sep { width: 18px; height: 2px; background: var(--fg-hair); }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE RUN
+   The direct green translation of slide 8's variation 4: kicker,
+   the chapter word at display size, the locator, the lede; then the
+   chapter's moves as hued discs on a rail, ending in an arrowhead
+   into the file the chapter produces. Same devices, same geometry,
+   different hue and different content.
+
+   THE ARROW IS BUILT THE WAY SLIDE 8 ENDED UP BUILDING IT. The rail
+   and the head are cool-gray-300, the CONNECTOR value, not
+   cool-gray-200, which is the deck's hairline value and reads as a
+   separator rather than as a line the eye travels along. The head is
+   13px x 18px against a 3px rail, and the tail bridges the column gap
+   so rail, tail, head and file are one continuous stroke.
+
+   THREE COLUMNS, NOT FOUR, so the same devices are drawn one size
+   up: at slide 8's metrics a three-column run leaves the frame half
+   empty, which is the defect this tier change exists to fix.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .run {
+  display: grid;
+  padding-right: var(--ae-space-3);
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  grid-template-rows: auto auto auto;
+  align-items: start; column-gap: var(--ae-space-5);
+}
+.v1 .rail {
+  grid-row: 1; grid-column: 1 / 4; align-self: center;
+  height: 3px; border-radius: 2px 0 0 2px; background: var(--ae-cool-gray-300);
+  transform-origin: left center;
+  animation: rail 760ms var(--ae-ease) both; animation-delay: calc(60ms + 4 * var(--fg-beat));
+}
+@keyframes rail { from { transform: scaleX(0); } }
+/* "display: contents" lets each move place its three parts into the three
+   shared rows, so names and prose align across columns. */
+.v1 .mv { display: contents; }
+.v1 .mv > * { text-align: center; }
+.v1 .mv__n {
+  grid-row: 1;   /* explicit: with display:contents the discs auto-place
+                    into the first free row, which is not row 1. */
+  /* Centred in the row, not start-aligned. Row 1 is as tall as the FILE
+     box, which is taller than a disc, so a start-aligned disc sits a few
+     pixels above the rail and the line visibly misses the circles it is
+     supposed to thread. Measured, not eyeballed: 4.2px at 1080. */
+  align-self: center;
+  width: clamp(50px, 6.8vh, 78px); height: clamp(50px, 6.8vh, 78px);
+  margin: 0 auto; border-radius: 999px;
+  background: var(--fg-build); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h2); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--fg-d2); position: relative; z-index: 1;
+}
+.v1 .mv__t {
+  grid-row: 2; display: block; margin-top: var(--ae-space-5);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-build-d);
+}
+.v1 .mv__d {
+  grid-row: 3; margin: var(--ae-space-4) auto 0; max-width: 30ch;
+  font-size: var(--ae-fs-lead); line-height: 1.4; color: var(--fg-body);
+}
+/* The tail bridges the column gap so the rail and its head are one
+   continuous line rather than two marks with air between them. */
+.v1 .out {
+  grid-row: 1; grid-column: 4; align-self: center;
+  display: flex; align-items: center;
+  margin-left: calc(-1 * var(--ae-space-5));
+}
+.v1 .out .tail {
+  flex: none; width: clamp(16px, 2.2vw, 38px); height: 3px;
+  background: var(--ae-cool-gray-300);
+}
+.v1 .out .head {
+  flex: none; width: 0; height: 0;
+  border-left: 13px solid var(--ae-cool-gray-300);
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  margin-right: var(--ae-space-4);
+}
+.v1 .doc {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: var(--ae-space-4) var(--ae-space-5); border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1.5px solid var(--fg-ink); box-shadow: var(--fg-d1);
+}
+.v1 .doc .kind { font-size: var(--ae-fs-caption); line-height: 1.2; color: var(--fg-muted); }
+.v1 .doc .file {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-small);
+  line-height: 1.2; font-weight: 600; color: var(--fg-ink);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE FLOOR
+   Build is not a sequence. Only the checklist is genuinely first;
+   "one step, one commit" and "the plan stays in the prompt" hold at
+   every moment of the step, so a rail between them asserts an order
+   the content does not have.
+
+   So: three things STANDING, each on its own leg, on one slab that
+   runs under all three. The slab is the chapter's other half — what
+   the agent knows before it writes anything — and the next three
+   slides are its contents. The vertical relation is the claim, and
+   it is drawn rather than stated by a paragraph called "underneath".
+
+   The slab's three items are SQUARES and the rules' markers are
+   DISCS, so the two kinds of thing are told apart by form and not
+   only by where they sit.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .stand {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--ae-space-6);
+}
+.v2 .setlbl { grid-column: 1 / -1; margin: 0 0 var(--ae-space-4); }
+.v2 .col { grid-row: 2; text-align: center; padding: 0 var(--ae-space-2); }
+.v2 .col .n {
+  width: clamp(46px, 6.2vh, 72px); height: clamp(46px, 6.2vh, 72px);
+  margin: 0 auto; border-radius: 999px;
+  background: var(--fg-build); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h3); font-weight: 700;
+  font-variant-numeric: tabular-nums; box-shadow: var(--fg-d2);
+}
+.v2 .col .t {
+  display: block; margin-top: var(--ae-space-4);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-build-d);
+}
+.v2 .col .d {
+  margin: var(--ae-space-3) auto 0; max-width: 34ch;
+  font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body);
+}
+/* The leg is what turns three blocks above a band into three things
+   standing ON it. Solid, at connector strength — a dotted line in this
+   deck means "attached to", and this one means "carried by". */
+.v2 .leg {
+  grid-row: 3; justify-self: center; width: 0;
+  height: var(--ae-space-7);
+  border-left: 2px solid var(--ae-cool-gray-300);
+}
+.v2 .slab {
+  grid-row: 4; grid-column: 1 / -1;
+  padding: var(--ae-space-4) var(--ae-space-6) var(--ae-space-5);
+  background: var(--fg-build-tint);
+  border: 1px solid var(--fg-hair);
+  border-top: 3px solid var(--fg-build);
+  border-radius: 3px 3px var(--ae-radius-lg) var(--ae-radius-lg);
+}
+.v2 .slab .lead {
+  display: flex; align-items: baseline; gap: var(--ae-space-4);
+  flex-wrap: wrap; margin: 0 0 var(--ae-space-3);
+}
+.v2 .slab .lead .fg-label { color: var(--fg-build-d); flex: none; }
+.v2 .slab .lead p { margin: 0; font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-body); }
+.v2 .slab .items {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ae-space-3);
+}
+.v2 .chip {
+  display: flex; align-items: center; gap: var(--ae-space-3);
+  padding: var(--ae-space-3) var(--ae-space-4);
+  border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-small); line-height: 1.3; color: var(--fg-ink);
+}
+.v2 .chip::before {
+  content: ''; flex: none; width: 10px; height: 10px; border-radius: 2px;
+  background: var(--fg-build-d);
+}
+.v2 .slab .tail {
+  margin: var(--ae-space-3) 0 0;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  color: var(--fg-muted);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE GAP
+   The lede is not a list, it is a MEASUREMENT: a thousand lines
+   produced against a hundred read. Drawn to scale, that gap is the
+   whole reason the chapter exists, and it is the only thing on this
+   slide an audience will still be able to state an hour later.
+
+   Green is what the machine produced; ink is what the human got
+   through, because ink is the human everywhere else in this deck.
+   The unread remainder is hatched and cut by a dashed clay rule —
+   hatch and dash both survive greyscale, so the distinction is never
+   carried by hue alone.
+
+   The three rules then read as what they are: the things that close
+   the gap, not three peers on a rail.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .gauge {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--ae-space-5); row-gap: var(--ae-space-5);
+  align-items: center;
+}
+.v3 .g-lab { grid-column: 1; text-align: right; max-width: 26ch; }
+.v3 .g-lab b {
+  display: block; font-family: var(--ae-font); font-weight: 600;
+  font-size: var(--ae-fs-small); line-height: 1.3; color: var(--fg-ink);
+}
+.v3 .g-lab span {
+  display: block; margin-top: 2px;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); color: var(--fg-muted);
+}
+.v3 .g-track { grid-column: 2; position: relative; height: clamp(28px, 3.8vh, 50px); }
+.v3 .bar { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 4px; }
+.v3 .bar--out { width: 100%; background: var(--fg-build); }
+/* The unread remainder: hatched, so it is not the same object as the
+   part that was read even with the colour stripped out. */
+.v3 .bar--out i {
+  position: absolute; left: 10%; right: 0; top: 0; bottom: 0;
+  border-radius: 0 4px 4px 0;
+  background-image: repeating-linear-gradient(
+    45deg, rgba(255,255,255,.48) 0 5px, rgba(255,255,255,0) 5px 11px);
+}
+.v3 .bar--read { width: 10%; background: var(--fg-ink); }
+/* One grid item spanning both track rows, so the cut is a single
+   unbroken rule rather than two marks that have to be lined up. */
+.v3 .marker { grid-column: 2; grid-row: 1 / 3; align-self: stretch; position: relative; z-index: 2; }
+.v3 .marker i {
+  position: absolute; left: 10%; top: -7px; bottom: -7px;
+  border-left: 2px dashed var(--fg-fail);
+}
+.v3 .gapnote {
+  grid-column: 2; margin: 0 0 0 10%;
+  display: flex; align-items: baseline; gap: var(--ae-space-2);
+  font-size: var(--ae-fs-small); line-height: 1.35; color: var(--fg-fail-d);
+}
+.v3 .gapnote::before { content: '\2715'; flex: none; font-weight: 700; }
+
+.v3 .setlbl { margin: var(--ae-space-7) 0 var(--ae-space-4); }
+.v3 .rules {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--ae-space-6);
+}
+.v3 .r { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--ae-space-3); align-items: start; }
+/* The ordinal disc is sized from the caption step rather than a fixed
+   14px: the floor is then the scale's floor, and it grows with the room
+   like everything else instead of shrinking against it on a big screen. */
+.v3 .r .n {
+  flex: none; width: 2em; height: 2em; border-radius: 999px;
+  background: var(--fg-build); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption); font-weight: 700;
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.v3 .r .t {
+  display: block; margin-top: 3px;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.1; color: var(--fg-build-d);
+}
+.v3 .r .d { margin: var(--ae-space-2) 0 0; font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body); }
+
+/* ══════════════════════════════════════════════════════════════
+   V4 — THE ZOOM
+   DESIGN.md, pass 5: "chapter openers become Tier A: the headline
+   plus the cast drawing of where that step sits in the loop." This
+   is that sentence taken literally. The locator stops being a chip
+   in the corner and becomes the slide's subject: the loop is drawn
+   at size, the middle node is lit, and a cone opens that node into
+   a panel holding what the step is made of.
+
+   THE LOCATOR IS THE DRAWING, so nothing else has to be. That is
+   the whole bet: an opener says "you are here", and here is a place
+   with three things in it.
+
+   THE LIT NODE IS FILLED, THE OTHER TWO ARE HOLLOW RINGS. Filled vs
+   hollow is the deck's own carrier for "this one" and it survives
+   greyscale, which the green would not.
+
+   THE NODES SIT IN THREE EQUAL COLUMNS, each centred, so the middle
+   node's centre is exactly 50% of the frame and the cone apex meets
+   it by construction rather than by a nudged percentage. The rail
+   runs from the first column's centre to the last — 16.667% inset
+   on both sides — for the same reason.
+
+   THE PANEL IS ONE OBJECT, NOT THREE CARDS. Three cards is what the
+   slide does today; the point of opening a node is that you are
+   looking inside one thing.
+   ══════════════════════════════════════════════════════════════ */
+.v4 .loopbig { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* Behind the nodes, and only between the outer two: a rail that ran
+   the full width would read as a line the loop sits on rather than
+   as the link between the three. */
+.v4 .loopbig .rail2 {
+  position: absolute; left: 16.667%; right: 16.667%; top: 10px;
+  height: 2px; background: var(--fg-hair);
+}
+.v4 .node {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: var(--ae-space-2);
+}
+.v4 .node i {
+  box-sizing: border-box; width: 22px; height: 22px; border-radius: 999px;
+  background: var(--fg-paper); border: 2.5px solid var(--ae-cool-gray-300);
+}
+.v4 .node span {
+  font-family: var(--ae-font-head); font-weight: 600;
+  font-size: var(--ae-fs-h4); line-height: 1.1; color: var(--fg-faint);
+}
+.v4 .node.on i {
+  background: var(--fg-build); border-color: var(--fg-build);
+  box-shadow: 0 0 0 6px var(--fg-build-tint);
+}
+.v4 .node.on span { color: var(--fg-build-d); font-weight: 700; }
+/* The cone. CSS geometry, not SVG: a clip-path polygon scales with
+   the frame without a stretched stroke anywhere in it. The apex is
+   1.8% wide, which is the node's own diameter at this measure. */
+/* 46% wide, not full width: a wedge whose base is the whole frame sits
+   at about five degrees off horizontal and reads as a mound rather than
+   as a beam. Narrowing the base steepens it to about eleven, and the
+   cone then lands ON the panel instead of becoming the panel's own
+   silhouette. */
+.v4 .cone {
+  display: block;
+  width: 46%; height: clamp(28px, 4.2vh, 54px);
+  margin: var(--ae-space-3) auto 0;
+  background: var(--fg-build-tint);
+  clip-path: polygon(48% 0, 52% 0, 100% 100%, 0 100%);
+}
+.v4 .panel {
+  padding: var(--ae-space-5) var(--ae-space-6);
+  background: var(--fg-card);
+  border: 1px solid var(--fg-hair);
+  border-top: 3px solid var(--fg-build);
+  border-radius: 3px 3px var(--ae-radius-lg) var(--ae-radius-lg);
+  box-shadow: var(--fg-d1);
+}
+.v4 .panel .plbl { margin: 0 0 var(--ae-space-3); color: var(--fg-build-d); }
+.v4 .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.v4 .cols > div { padding: 0 var(--ae-space-5); border-left: 1px solid var(--fg-hair); }
+.v4 .cols > div:first-child { border-left: 0; padding-left: 0; }
+.v4 .cols > div:last-child { padding-right: 0; }
+.v4 .cols .n {
+  display: block; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1; letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums; color: var(--fg-build);
+}
+.v4 .cols .t {
+  display: block; margin-top: var(--ae-space-2);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.1; color: var(--fg-build-d);
+}
+.v4 .cols .d { margin: var(--ae-space-3) 0 0; font-size: var(--ae-fs-small); line-height: 1.45; color: var(--fg-body); }
+
+/* ══════════════════════════════════════════════════════════════
+   V5 — THE SCORE
+   The three rules are not three peers standing in a row. They are
+   three readings of ONE run of steps: the run exists as a list, each
+   of its items is a commit, and the plan is present at every item.
+   So the run is drawn once, six positions wide, and each rule gets
+   its own register over the same six positions — a score.
+
+   THE SIX POSITIONS ALIGN ACROSS ALL THREE REGISTERS by living in
+   the same six-column grid at the same width. That vertical
+   alignment is the only thing that makes this a score rather than
+   three unrelated diagrams stacked, so no caption is ever allowed
+   to sit beside a track and shorten it; captions go underneath.
+
+   SIX, BECAUSE THE TEXT SAYS SIX. "Six six-file diffs" is the
+   chapter's own number, so the drawing counts the same way the
+   sentence does.
+
+   REGISTER 2 CARRIES THE ONE CLAY MARK ON THE SLIDE: the forty-file
+   diff, dashed and crossed, above the same total width cut into six.
+   Same width, so the claim is "the same work, in reviewable units"
+   and not "less work".
+   ══════════════════════════════════════════════════════════════ */
+.v5 .reg {
+  display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+  column-gap: var(--ae-space-6); align-items: center;
+  padding: var(--ae-space-3) 0; border-top: 1px solid var(--fg-hair);
+}
+.v5 .reg:first-child { border-top: 0; padding-top: 0; }
+.v5 .reg:last-child { padding-bottom: 0; }
+.v5 .lab { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--ae-space-4); align-items: start; }
+.v5 .lab .n {
+  width: 2.2em; height: 2.2em; border-radius: 999px;
+  background: var(--fg-build); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption); font-weight: 700;
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.v5 .lab .t {
+  display: block; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.15; color: var(--fg-build-d);
+}
+.v5 .lab .d { margin: var(--ae-space-2) 0 0; font-size: var(--ae-fs-small); line-height: 1.42; color: var(--fg-body); }
+
+.v5 .track { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.v5 .cap {
+  margin: 6px 0 0; display: flex; align-items: baseline; gap: 7px;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); color: var(--fg-muted);
+}
+.v5 .cap b { flex: none; font-weight: 700; }
+.v5 .cap--ok b   { color: var(--fg-build-d); }
+.v5 .cap--bad    { color: var(--fg-fail-d); }
+.v5 .cap--bad b  { color: var(--fg-fail-d); }
+
+/* Register 1 — the list, laid flat. Hollow boxes: the items exist
+   and are ordered, and nothing has been done to them yet. */
+.v5 .step {
+  height: clamp(26px, 3.2vh, 38px);
+  border: 2px solid var(--fg-build); border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption); font-weight: 700;
+  font-variant-numeric: tabular-nums; color: var(--fg-build-d);
+}
+/* Register 2 — one mass against the same mass cut into six.
+   HATCHED, not merely outlined. At a 1.5px dashed edge over a tint the
+   lump read as LESS than the six blocks under it, which is the opposite
+   of the claim: it is the same work, undivided. The hatch gives it mass
+   without spending a solid clay fill on it, and hatch plus dash both
+   survive greyscale. */
+.v5 .lump {
+  display: block;
+  height: clamp(20px, 2.4vh, 28px); border-radius: 5px;
+  border: 1.5px dashed var(--fg-fail);
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(180, 85, 44, .30) 0 5px, rgba(180, 85, 44, 0) 5px 11px),
+    var(--fg-fail-tint);
+}
+.v5 .piece { height: clamp(20px, 2.4vh, 28px); border-radius: 5px; background: var(--fg-build); }
+/* Two sub-blocks in one register need air between them; the gap lives
+   on the stack rather than as a margin on the caption above it, so the
+   caption stays welded to the track it describes. */
+.v5 .stack { display: grid; row-gap: var(--ae-space-2); }
+/* Register 3 — the plan, above the run, entering at every position. */
+.v5 .band {
+  padding: 4px var(--ae-space-4); border-radius: 5px;
+  background: var(--fg-build-tint); border: 1px solid var(--fg-build);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600; color: var(--fg-build-d); text-align: center;
+}
+/* The arrowhead hangs 8px below its line, so the gap under the drops is
+   margin on the drops and not row-gap on the stack — row-gap would let
+   the heads land on top of the marks they point at. */
+.v5 .drops {
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px;
+  margin: 6px 0 10px;
+}
+.v5 .drops i {
+  justify-self: center; position: relative;
+  width: 2px; height: clamp(14px, 1.9vh, 22px); background: var(--ae-cool-gray-300);
+}
+/* What the drops land on: the same six positions, one register down. */
+.v5 .mark { height: clamp(10px, 1.4vh, 15px); border-radius: 3px; background: var(--fg-build); }
+/* Arrowhead in CSS borders, not SVG — a stretched marker smears. */
+.v5 .drops i::after {
+  content: ''; position: absolute; left: 50%; bottom: -7px; transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 5px solid transparent; border-right: 5px solid transparent;
+  border-top: 8px solid var(--ae-cool-gray-300);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V6 — PLAIN
+   No drawing at all. The three openers rhyme through the kicker, the
+   chapter word at display size, the locator and the hue — and this
+   variation exists to ask whether that is already enough, because a
+   shared drawing device across Plan, Build and Review has to be
+   right for all three or it is furniture on two of them.
+
+   TIER A HERE IS CARRIED BY SCALE AND AIR, not by a picture: the
+   ordinals are set at display weight in green, so the slide is still
+   a coloured landmark from the back of a room, and the rules read as
+   an editorial list rather than as a grid of cards.
+
+   BASELINE-ALIGNED, so the big numeral sits on the same line as the
+   title it numbers instead of floating beside it.
+   ══════════════════════════════════════════════════════════════ */
+.v6 .li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 0.92fr) minmax(0, 1.55fr);
+  column-gap: var(--ae-space-6); align-items: baseline;
+  padding: var(--ae-space-4) 0; border-top: 1px solid var(--fg-hair);
+}
+.v6 .li:first-child { border-top: 0; }
+.v6 .li .n {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: clamp(40px, 6.6vh, 92px); line-height: 0.9;
+  letter-spacing: -0.04em; font-variant-numeric: tabular-nums;
+  color: var(--fg-build);
+}
+.v6 .li .t {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.12; color: var(--fg-ink);
+}
+.v6 .li .d { margin: 0; font-size: var(--ae-fs-body); line-height: 1.45; color: var(--fg-body); }
+
+/* Print shows resting states. The rail is the one device here with a
+   keyframe the slide kit does not already guard. */
+@media print { .v1 .rail { animation: none !important; } }
+
+/* ══════════════ narrow fallbacks ══════════════ */
+@media (max-width: 900px) {
+  .v1 .run { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v1 .rail, .v1 .out .tail, .v1 .out .head { display: none; }
+  .v2 .stand, .v2 .slab .items, .v3 .rules { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v2 .col, .v2 .leg, .v2 .slab { grid-row: auto; grid-column: 1; }
+  .v2 .leg { display: none; }
+  .v3 .gauge { grid-template-columns: 1fr; }
+  .v3 .g-lab { grid-column: 1; text-align: left; }
+  .v3 .g-track { grid-column: 1; }
+  .v3 .marker, .v3 .gapnote { grid-column: 1; }
+  .v4 .cols { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v4 .cols > div { border-left: 0; padding: 0; }
+  .v5 .reg { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v6 .li { grid-template-columns: auto minmax(0, 1fr); row-gap: var(--ae-space-2); }
+  .v6 .li .d { grid-column: 2; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Run</button>
+        <button type="button" data-p="v2">2 · Floor</button>
+        <button type="button" data-p="v3">3 · Gap</button>
+        <button type="button" data-p="v4">4 · Zoom</button>
+        <button type="button" data-p="v5">5 · Score</button>
+        <button type="button" data-p="v6">6 · Plain</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/13-build.js. New strings are only:
+   the locator labels (the deck's own three step names), the file Build ticks
+   off — which slide 28 already names as tasks.md — a label for the set of
+   three, and the gauge labels in V3, which are the lede's own two quantities
+   turned into labels on a drawing.
+
+   The context paragraph is unchanged in V1 and V3. In V2 it is re-formed,
+   not cut: its middle clause is a list of three, and the slab draws that
+   list as three items instead of reading it out as prose. */
+const C = {
+  en: {
+    kicker: 'Step 2 of 3',
+    h1: 'Build',
+    lede: 'The agent can produce a thousand lines before you finish reading the first hundred. Every rule in this step exists to keep the output smaller than your attention.',
+    loop: ['Plan', 'Build', 'Review'],
+    setLabel: 'Three rules, all of them about size',
+    rules: [
+      { n: '1', t: 'A checklist first',
+        d: 'The agent turns the plan into a flat list of steps and works them in order. Nobody approves this list — it exists so you can see where it is.' },
+      { n: '2', t: 'One step, one commit',
+        d: 'A commit per item, with a message that names the item. A forty-file diff is not reviewable; six six-file diffs are.' },
+      { n: '3', t: 'The plan stays in the prompt',
+        d: 'Not read once at the start. Referenced in the message that asks for each step, so the agent is building against it rather than from memory.' },
+    ],
+    docKind: 'ticks off', docName: 'tasks.md',
+    contextLabel: 'And underneath all three',
+    context: 'What the agent knows before it writes anything: the project’s memory file, the procedures you have written down, and the systems it is allowed to reach. That is the next three slides.',
+    contextLead: 'What the agent knows before it writes anything.',
+    contextItems: ['The project’s memory file', 'The procedures you have written down', 'The systems it is allowed to reach'],
+    contextTail: 'That is the next three slides.',
+    gauge: {
+      out:  { t: 'What the agent produces', v: 'a thousand lines' },
+      read: { t: 'What you have read',      v: 'the first hundred' },
+      gap:  '900 lines nobody has read',
+    },
+    /* V5 only. Captions on a drawing, not new prose: each one names a
+       quantity the rule beside it already states in words. */
+    score: {
+      steps: 'the steps, in order',
+      big:   'one diff, forty files',
+      small: 'six diffs, six files each',
+      plan:  'the plan',
+      every: 'read again at every step',
+    },
+  },
+  de: {
+    kicker: 'Schritt 2 von 3',
+    h1: 'Build',
+    lede: 'Der Agent produziert tausend Zeilen, bevor die ersten hundert gelesen sind. Jede Regel in diesem Schritt hält den Output kleiner als die eigene Aufmerksamkeit.',
+    loop: ['Plan', 'Build', 'Review'],
+    setLabel: 'Drei Regeln, alle über Größe',
+    rules: [
+      { n: '1', t: 'Zuerst eine Checkliste',
+        d: 'Der Agent macht aus dem Plan eine flache Liste von Schritten und arbeitet sie der Reihe nach ab. Niemand gibt diese Liste frei — sie zeigt nur, wo er gerade steht.' },
+      { n: '2', t: 'Ein Schritt, ein Commit',
+        d: 'Ein Commit pro Punkt, mit einer Nachricht, die den Punkt benennt. Ein Diff über vierzig Dateien ist nicht prüfbar, sechs Diffs über je sechs schon.' },
+      { n: '3', t: 'Der Plan bleibt im Prompt',
+        d: 'Nicht einmal am Anfang gelesen. In jeder Nachricht referenziert, die einen Schritt anfordert — damit dagegen gebaut wird und nicht aus dem Gedächtnis.' },
+    ],
+    docKind: 'hakt ab', docName: 'tasks.md',
+    contextLabel: 'Und unter allen dreien',
+    context: 'Was der Agent weiß, bevor er etwas schreibt: die Memory-Datei des Projekts, die aufgeschriebenen Abläufe und die Systeme, die er erreichen darf. Darum geht es auf den nächsten drei Folien.',
+    contextLead: 'Was der Agent weiß, bevor er etwas schreibt.',
+    contextItems: ['Die Memory-Datei des Projekts', 'Die aufgeschriebenen Abläufe', 'Die Systeme, die er erreichen darf'],
+    contextTail: 'Darum geht es auf den nächsten drei Folien.',
+    gauge: {
+      out:  { t: 'Was der Agent produziert', v: 'tausend Zeilen' },
+      read: { t: 'Was gelesen wurde',        v: 'die ersten hundert' },
+      gap:  '900 Zeilen, die niemand gelesen hat',
+    },
+    score: {
+      steps: 'die Schritte, der Reihe nach',
+      big:   'ein Diff, vierzig Dateien',
+      small: 'sechs Diffs, je sechs Dateien',
+      plan:  'der Plan',
+      every: 'bei jedem Schritt erneut gelesen',
+    },
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the run: slide 8 variation 4, translated to green',
+  v2: 'Variation 2 — the floor: three rules standing on the foundation the chapter is about',
+  v3: 'Variation 3 — the gap: the lede drawn to scale, and the three rules that close it',
+  v4: 'Variation 4 — the zoom: the loop at size, with this node opened into what it holds',
+  v5: 'Variation 5 — the score: one run of six steps, read three times, one register per rule',
+  v6: 'Variation 6 — plain: no drawing; the word, the locator and the hue carry the opener',
+};
+
+function loc(t) {
+  return '<div class="loc">' + t.loop.map(function (s, i) {
+    return (i ? '<i class="sep"></i>' : '') + '<span class="dot' + (i === 1 ? ' on' : '') + '">' + s + '</span>';
+  }).join('') + '</div>';
+}
+function docHTML(t) {
+  return '<span class="doc"><span class="kind">' + t.docKind + '</span><span class="file">' + t.docName + '</span></span>';
+}
+
+/* ── V1 · the run ── */
+function V1(t) {
+  return '<div class="run">'
+    + '<i class="rail" aria-hidden="true"></i>'
+    + t.rules.map(function (m, i) {
+        const c = 'grid-column:' + (i + 1) + ';';
+        return '<div class="mv">'
+          + '<span class="mv__n fg-in" style="' + c + ' --fg-at:' + (4 + i) + '">' + m.n + '</span>'
+          + '<span class="mv__t fg-in" style="' + c + ' --fg-at:' + (4 + i) + '">' + m.t + '</span>'
+          + '<p class="mv__d fg-in" style="' + c + ' --fg-at:' + (4 + i) + '">' + m.d + '</p>'
+        + '</div>';
+      }).join('')
+    + '<div class="out fg-in" style="--fg-at:8">'
+      + '<i class="tail"></i><i class="head"></i>' + docHTML(t)
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V2 · the floor ── */
+function V2(t) {
+  return '<div class="stand">'
+    + '<p class="fg-label setlbl fg-in" style="--fg-at:3">' + t.setLabel + '</p>'
+    + t.rules.map(function (m, i) {
+        const c = 'grid-column:' + (i + 1) + ';';
+        return '<div class="col fg-in" style="' + c + ' --fg-at:' + (4 + i) + '">'
+          + '<span class="n">' + m.n + '</span>'
+          + '<span class="t">' + m.t + '</span>'
+          + '<p class="d">' + m.d + '</p>'
+        + '</div>'
+        /* The floor lands first, then the legs assert what stands on it —
+           a connector draws when the relationship is asserted. */
+        + '<i class="leg fg-in" aria-hidden="true" style="' + c + ' --fg-at:8"></i>';
+      }).join('')
+    + '<div class="slab fg-in" style="--fg-at:7">'
+      + '<div class="lead">'
+        + '<span class="fg-label">' + t.contextLabel + '</span>'
+        + '<p>' + t.contextLead + '</p>'
+      + '</div>'
+      + '<div class="items">'
+        + t.contextItems.map(function (s) { return '<span class="chip">' + s + '</span>'; }).join('')
+      + '</div>'
+      + '<p class="tail">' + t.contextTail + '</p>'
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V3 · the gap ── */
+function V3(t) {
+  const g = t.gauge;
+  return ''
+  + '<div class="gauge">'
+    + '<div class="g-lab fg-in" style="grid-row:1; --fg-at:3"><b>' + g.out.t + '</b><span>' + g.out.v + '</span></div>'
+    + '<div class="g-track fg-in" style="grid-row:1; --fg-at:3"><div class="bar bar--out"><i></i></div></div>'
+    + '<div class="g-lab fg-in" style="grid-row:2; --fg-at:4"><b>' + g.read.t + '</b><span>' + g.read.v + '</span></div>'
+    + '<div class="g-track fg-in" style="grid-row:2; --fg-at:4"><div class="bar bar--read"></div></div>'
+    + '<div class="marker fg-in" aria-hidden="true" style="--fg-at:5"><i></i></div>'
+    + '<p class="gapnote fg-in" style="grid-row:3; --fg-at:5">' + g.gap + '</p>'
+  + '</div>'
+  + '<p class="fg-label setlbl fg-in" style="--fg-at:6">' + t.setLabel + '</p>'
+  + '<div class="rules">'
+    + t.rules.map(function (m, i) {
+        return '<div class="r fg-in" style="--fg-at:' + (7 + i) + '">'
+          + '<span class="n">' + m.n + '</span>'
+          + '<div><span class="t">' + m.t + '</span>'
+          + '<p class="d">' + m.d + '</p></div>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+/* ── V4 · the zoom ── */
+function V4(t) {
+  return '<div class="zoom">'
+    + '<div class="loopbig fg-in" style="--fg-at:3">'
+      + '<i class="rail2" aria-hidden="true"></i>'
+      + t.loop.map(function (s, i) {
+          return '<div class="node' + (i === 1 ? ' on' : '') + '">'
+            + '<i aria-hidden="true"></i><span>' + s + '</span>'
+          + '</div>';
+        }).join('')
+    + '</div>'
+    + '<i class="cone fg-in" aria-hidden="true" style="--fg-at:4"></i>'
+    + '<div class="panel fg-in" style="--fg-at:5">'
+      + '<p class="fg-label plbl">' + t.setLabel + '</p>'
+      + '<div class="cols">'
+        + t.rules.map(function (m, i) {
+            return '<div class="fg-in" style="--fg-at:' + (6 + i) + '">'
+              + '<span class="n">' + m.n + '</span>'
+              + '<span class="t">' + m.t + '</span>'
+              + '<p class="d">' + m.d + '</p>'
+            + '</div>';
+          }).join('')
+      + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V5 · the score ── */
+const SIX = [1, 2, 3, 4, 5, 6];
+function V5(t) {
+  const s = t.score;
+  function lab(m) {
+    return '<div class="lab"><span class="n">' + m.n + '</span>'
+      + '<div><span class="t">' + m.t + '</span><p class="d">' + m.d + '</p></div></div>';
+  }
+  function cap(kind, glyph, text) {
+    return '<p class="cap ' + kind + '"><b>' + glyph + '</b>' + text + '</p>';
+  }
+  return '<div class="score">'
+    /* Register 1 — the list exists, flat and ordered. */
+    + '<div class="reg fg-in" style="--fg-at:4">' + lab(t.rules[0]) + '<div>'
+      + '<div class="track">'
+        + SIX.map(function (n) { return '<span class="step">' + n + '</span>'; }).join('')
+      + '</div>'
+      + '<p class="cap">' + s.steps + '</p>'
+    + '</div></div>'
+    /* Register 2 — the same width, undivided and divided. */
+    + '<div class="reg fg-in" style="--fg-at:5">' + lab(t.rules[1]) + '<div class="stack">'
+      + '<div><i class="lump"></i>' + cap('cap--bad', '&#10005;', s.big) + '</div>'
+      + '<div><div class="track">'
+        + SIX.map(function () { return '<i class="piece"></i>'; }).join('')
+      + '</div>' + cap('cap--ok', '&#10003;', s.small) + '</div>'
+    + '</div></div>'
+    /* Register 3 — the plan above the run, entering at every position. */
+    + '<div class="reg fg-in" style="--fg-at:6">' + lab(t.rules[2]) + '<div>'
+      + '<div class="band">' + s.plan + '</div>'
+      + '<div class="drops" aria-hidden="true">'
+        + SIX.map(function () { return '<i></i>'; }).join('')
+      + '</div>'
+      + '<div class="track">'
+        + SIX.map(function () { return '<i class="mark"></i>'; }).join('')
+      + '</div>'
+      + cap('cap--ok', '&#10003;', s.every)
+    + '</div></div>'
+  + '</div>';
+}
+
+/* ── V6 · plain ── */
+function V6(t) {
+  return '<div class="list">'
+    + t.rules.map(function (m, i) {
+        return '<div class="li fg-in" style="--fg-at:' + (4 + i) + '">'
+          + '<span class="n">' + m.n + '</span>'
+          + '<span class="t">' + m.t + '</span>'
+          + '<p class="d">' + m.d + '</p>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6 };
+/* V2 draws the foundation as an object in the body; the rest carry it as
+   the closing band, which is where slide 8 puts its note. */
+const FOOT = { v1: true, v2: false, v3: true, v4: true, v5: true, v6: true };
+/* V4 is the one variation where the locator is the drawing rather than a
+   chip in the corner, so it does not also carry it in the title row. */
+const HEADLOC = { v1: true, v2: true, v3: true, v4: false, v5: true, v6: true };
+
+function render(v, t) {
+  const head =
+    '<div class="fg-wrap head">'
+      + '<div style="display:flex; align-items:flex-end; justify-content:space-between; gap:var(--ae-space-6); flex-wrap:wrap">'
+        + '<div>'
+          + '<p class="kicker fg-in" style="--fg-at:1">' + t.kicker + '</p>'
+          + '<h1 class="chapter-h1 fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+        + '</div>'
+        + (HEADLOC[v] ? '<div class="fg-in" style="--fg-at:2">' + loc(t) + '</div>' : '')
+      + '</div>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>';
+  const foot = FOOT[v]
+    ? '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:10"><span><b>'
+        + t.contextLabel + '.</b> ' + t.context + '</span></p></div>'
+    : '';
+  return ''
+  + '<section class="proto ' + v + '">'
+    + head
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + foot
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3','4','5','6'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

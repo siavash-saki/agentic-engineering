@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 8 — Plan, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   A chapter opener. Today it carries 130 words at 56% frame fill, which
+   is not opening anything — it is a content slide wearing a title.
+
+   THIS IS WHERE BLUE OWNS THE SLIDE. Slide 5 taught the hue, slide 7
+   spent it on one node; here it is the chapter's own colour and it can
+   be loud. Build and Review get the same treatment in their openers, so
+   the deck gains three coloured landmarks in a 33-slide run that
+   currently has none.
+
+   All three variations carry a LOCATOR: the loop with this step lit.
+   The deck removed its position indicator at the pilot gate, and that
+   was right for every content slide — but a chapter opener is exactly
+   where "you are here" is the content, not furniture. */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-4); }
+
+.kicker {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--fg-plan); margin: 0 0 var(--ae-space-2);
+}
+.chapter-h1 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-display); line-height: 1; letter-spacing: -0.035em;
+  color: var(--fg-plan-d);
+}
+.proto .fg-lede { margin: var(--ae-space-3) 0 0; max-width: 60ch; }
+
+/* ── the locator: the loop, with this step lit ── */
+.loc { display: flex; align-items: center; gap: var(--ae-space-2); }
+.loc .dot {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 600; color: var(--ae-text-disabled);
+}
+.loc .dot::before {
+  content: ''; width: 10px; height: 10px; border-radius: 999px;
+  background: var(--ae-cool-gray-200);
+}
+.loc .dot.on { color: var(--fg-plan-d); font-weight: 700; }
+.loc .dot.on::before { background: var(--fg-plan); box-shadow: 0 0 0 4px var(--fg-plan-tint); }
+.loc .sep { width: 18px; height: 2px; background: var(--fg-hair); }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE PLATE
+   The chapter name at display size on the left with the locator
+   under it; the four moves stacked on the right. The split is the
+   point: the left half is the landmark, the right half is the
+   content, and the slide stops pretending to be both at once.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .split { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); column-gap: var(--ae-space-8); align-items: center; }
+.v1 .plate .loc { margin-top: var(--ae-space-5); }
+.v1 .moves { display: grid; row-gap: var(--ae-space-5); }
+.v1 .mv { display: grid; grid-template-columns: auto 1fr; column-gap: var(--ae-space-4); align-items: start; }
+.v1 .mv__n {
+  display: flex; align-items: center; justify-content: center; flex: none;
+  width: 34px; height: 34px; border-radius: 999px;
+  background: var(--fg-plan-tint); color: var(--fg-plan-d);
+  font-family: var(--ae-font); font-size: 14px; font-weight: 700;
+}
+.v1 .mv__t {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.1; color: var(--fg-ink);
+}
+.v1 .mv__d { margin: 5px 0 0; font-size: var(--ae-fs-lead); line-height: 1.4; color: var(--fg-body); }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE RUN
+   The four moves are ordered and they PRODUCE something: the file
+   slide 7 just showed being approved. Drawn as a run ending in
+   that same document object, so the chapter opens by saying where
+   its output goes.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .top { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--ae-space-6); flex-wrap: wrap; }
+/* Three explicit rows — discs, names, prose — so the rail can align with
+   the DISCS instead of with the centre of a row the prose defines. In the
+   first pass it sat behind the descriptions at tint strength and was
+   invisible except in the gap before the first disc. */
+.v2 .run {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  grid-template-rows: auto auto auto;
+  align-items: start; column-gap: var(--ae-space-4);
+}
+.v2 .rail {
+  grid-row: 1; grid-column: 1 / -1; align-self: center;
+  height: 3px; border-radius: 2px; background: var(--ae-cool-gray-200);
+  transform-origin: left center;
+  animation: rail 760ms var(--ae-ease) both; animation-delay: calc(60ms + 3 * var(--fg-beat));
+}
+@keyframes rail { from { transform: scaleX(0); } }
+/* `display: contents` lets each move place its three parts into the three
+   shared rows, so names and prose align across columns. */
+.v2 .mv { display: contents; }
+.v2 .mv > * { text-align: center; }
+.v2 .mv__n {
+  grid-row: 1;   /* explicit: with display:contents the discs auto-placed
+                    into the first free row, which was row 3. */
+  width: clamp(44px, 6vh, 62px); height: clamp(44px, 6vh, 62px);
+  margin: 0 auto; border-radius: 999px;
+  background: var(--fg-plan); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h3); font-weight: 700;
+  box-shadow: var(--fg-d2); position: relative; z-index: 1;
+}
+.v2 .mv__t {
+  grid-row: 2; display: block; margin-top: var(--ae-space-3);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.1; color: var(--fg-plan-d);
+}
+.v2 .mv__d { grid-row: 3; margin: 6px auto 0; max-width: 24ch; font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-body); }
+.v2 .out { grid-row: 1; grid-column: 5; align-self: center; display: flex; align-items: center; gap: var(--ae-space-3); }
+.v2 .out .arw { font-size: var(--ae-fs-h3); color: var(--ae-cool-gray-300); }
+.v2 .doc {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: var(--ae-space-4) var(--ae-space-5); border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1.5px solid var(--fg-ink); box-shadow: var(--fg-d1);
+}
+.v2 .doc .kind { font-size: var(--ae-fs-caption); color: var(--fg-muted); }
+.v2 .doc .file { font-family: var(--ae-font-mono); font-size: var(--ae-fs-small); font-weight: 600; color: var(--fg-ink); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — TWO QUESTIONS
+   The lede's real claim is an ORDER, and its sharpest line is the
+   failure: answering the second one first. So the order is drawn
+   and the failure is drawn against it — the first use of clay in
+   the Plan chapter, and it is spent on the thing that goes wrong.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .qs { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; column-gap: var(--ae-space-5); }
+.v3 .q {
+  padding: var(--ae-space-5) var(--ae-space-6);
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card); border: 1.5px solid var(--fg-plan); box-shadow: var(--fg-d1);
+}
+.v3 .q .n {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-plan);
+}
+.v3 .q .t {
+  display: block; margin-top: 4px;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-ink);
+}
+.v3 .then {
+  align-self: center; font-size: var(--ae-fs-h2);
+  color: var(--fg-plan); font-weight: 700;
+}
+.v3 .wrong {
+  display: flex; align-items: baseline; gap: var(--ae-space-3);
+  margin-top: var(--ae-space-4);
+  padding: var(--ae-space-3) var(--ae-space-5);
+  border-radius: var(--ae-radius);
+  background: var(--fg-fail-tint); border: 1px dashed var(--fg-fail);
+  font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-fail-d);
+}
+.v3 .wrong::before { content: '✕'; flex: none; font-weight: 700; }
+.v3 .moves { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: var(--ae-space-5); margin-top: var(--ae-space-6); }
+.v3 .mv__t {
+  display: flex; align-items: baseline; gap: var(--ae-space-2);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.1; color: var(--fg-plan-d);
+}
+.v3 .mv__t i { font-style: normal; font-size: 0.72em; color: var(--fg-plan); font-variant-numeric: tabular-nums; }
+.v3 .mv__d { margin: 6px 0 0; font-size: var(--ae-fs-body); line-height: 1.4; color: var(--fg-body); }
+
+
+/* ══════════════════════════════════════════════════════════════
+   V4 — QUESTIONS, THEN THE RUN
+   The two questions on top, because the lede's claim is an ORDER
+   and its sharpest line is the failure. Then the four moves that
+   answer them, ending in the file. The slide reads top to bottom
+   as: what you are deciding → how you decide it → what comes out.
+
+   THE ARROW INTO PLAN.md IS REBUILT. It was a text glyph floating
+   in a gap, at a different weight from the rail it was supposed to
+   end — so it read as a stray character rather than as the line
+   arriving. It is now the rail's own head: same stroke, same grey,
+   a solid triangle, and the gap between the last move and the file
+   is bridged rather than left open.
+   ══════════════════════════════════════════════════════════════ */
+.v4 .qs {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: stretch; column-gap: var(--ae-space-5);
+}
+.v4 .q {
+  padding: var(--ae-space-4) var(--ae-space-6);
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card); border: 1.5px solid var(--fg-plan); box-shadow: var(--fg-d1);
+}
+.v4 .q .n {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-plan);
+}
+.v4 .q .t {
+  display: block; margin-top: 3px;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-ink);
+}
+.v4 .then { align-self: center; font-size: var(--ae-fs-h2); color: var(--fg-plan); font-weight: 700; }
+.v4 .wrong {
+  display: flex; align-items: baseline; gap: var(--ae-space-3);
+  margin: var(--ae-space-3) 0 0;
+  padding: var(--ae-space-3) var(--ae-space-5);
+  border-radius: var(--ae-radius);
+  background: var(--fg-fail-tint); border: 1px dashed var(--fg-fail);
+  font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-fail-d);
+}
+.v4 .wrong::before { content: '\2715'; flex: none; font-weight: 700; }
+
+.v4 .run {
+  display: grid;
+  padding-right: var(--ae-space-3);
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  grid-template-rows: auto auto auto;
+  align-items: start; column-gap: var(--ae-space-4);
+  margin-top: var(--ae-space-7);
+}
+.v4 .rail {
+  grid-row: 1; grid-column: 1 / 5; align-self: center;
+  /* cool-gray-300, not 200: 200 is the deck's HAIRLINE value, which is
+     correct for a separator and far too faint for a line the eye is
+     meant to travel along. The arrow looked weak because the whole run
+     was drawn at separator strength. */
+  height: 3px; border-radius: 2px 0 0 2px; background: var(--ae-cool-gray-300);
+  transform-origin: left center;
+  animation: rail 760ms var(--ae-ease) both; animation-delay: calc(60ms + 4 * var(--fg-beat));
+}
+.v4 .mv { display: contents; }
+.v4 .mv > * { text-align: center; }
+.v4 .mv__n {
+  grid-row: 1;
+  width: clamp(42px, 5.6vh, 58px); height: clamp(42px, 5.6vh, 58px);
+  margin: 0 auto; border-radius: 999px;
+  background: var(--fg-plan); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h3); font-weight: 700;
+  box-shadow: var(--fg-d2); position: relative; z-index: 1;
+}
+.v4 .mv__t {
+  grid-row: 2; display: block; margin-top: var(--ae-space-3);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.1; color: var(--fg-plan-d);
+}
+.v4 .mv__d {
+  grid-row: 3; margin: 5px auto 0; max-width: 25ch;
+  font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-body);
+}
+/* The tail bridges the column gap so the rail and its head are one
+   continuous line rather than two marks with air between them. */
+.v4 .out {
+  grid-row: 1; grid-column: 5; align-self: center;
+  display: flex; align-items: center;
+  margin-left: calc(-1 * var(--ae-space-4));
+}
+.v4 .out .tail {
+  flex: none; width: clamp(16px, 2.2vw, 38px); height: 3px;
+  background: var(--ae-cool-gray-300);
+}
+.v4 .out .head {
+  flex: none; width: 0; height: 0;
+  border-left: 13px solid var(--ae-cool-gray-300);
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  margin-right: var(--ae-space-4);
+}
+.v4 .doc {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: var(--ae-space-4) var(--ae-space-5); border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1.5px solid var(--fg-ink); box-shadow: var(--fg-d1);
+}
+.v4 .doc .kind { font-size: var(--ae-fs-caption); line-height: 1.2; color: var(--fg-muted); }
+.v4 .doc .file {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-small);
+  line-height: 1.2; font-weight: 600; color: var(--fg-ink);
+}
+
+@media (max-width: 900px) {
+  .v4 .qs { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v4 .run { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v4 .rail, .v4 .out .tail, .v4 .out .head { display: none; }
+}
+
+@media (max-width: 900px) {
+  .v1 .split, .v3 .qs, .v3 .moves { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v2 .run { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v2 .rail { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Plate</button>
+        <button type="button" data-p="v2">2 · Run</button>
+        <button type="button" data-p="v3">3 · Two questions</button>
+        <button type="button" data-p="v4">4 · Combination</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/08-plan.js. New strings are only
+   the two questions — which the lede already states as prose — the locator
+   labels, and PLAN.md, which is the file slide 7 just approved. */
+const C = {
+  en: {
+    kicker: 'Step 1 of 3',
+    h1: 'Plan',
+    lede: 'Two questions, in this order: what should it do, and how should it be built. Answering the second one first is the most common way this goes wrong.',
+    loop: ['Plan', 'Build', 'Review'],
+    q1: { n: 'First', t: 'What should it do?' },
+    q2: { n: 'Then', t: 'How should it be built?' },
+    wrong: 'Answering the second one first is the most common way this goes wrong.',
+    moves: [
+      { n: '1', t: 'Read',     d: 'The agent reads the code, the patterns and the tests before it proposes anything.' },
+      { n: '2', t: 'Ask',      d: 'It asks until it can write the plan without guessing. The questions are where the requirements are.' },
+      { n: '3', t: 'Converge', d: 'Options and trade-offs, decided by a person. This is a conversation, not a hand-off.' },
+      { n: '4', t: 'Write',    d: 'The agreed answers go in a file. That file is what Build reads and what Review measures against.' },
+    ],
+    docKind: 'produces', docName: 'PLAN.md',
+    note: 'In this step you are <b>a participant</b>. In the next two you are a judge. That difference is the whole reason this step takes the longest.',
+  },
+  de: {
+    kicker: 'Schritt 1 von 3',
+    h1: 'Plan',
+    lede: 'Zwei Fragen, in dieser Reihenfolge: Was soll es tun, und wie soll es gebaut werden. Die zweite zuerst zu beantworten ist der häufigste Fehler.',
+    loop: ['Plan', 'Build', 'Review'],
+    q1: { n: 'Zuerst', t: 'Was soll es tun?' },
+    q2: { n: 'Dann', t: 'Wie soll es gebaut werden?' },
+    wrong: 'Die zweite zuerst zu beantworten ist der häufigste Fehler.',
+    moves: [
+      { n: '1', t: 'Lesen',      d: 'Der Agent liest Code, Muster und Tests, bevor er irgendetwas vorschlägt.' },
+      { n: '2', t: 'Fragen',     d: 'Er fragt, bis er den Plan ohne Raten schreiben kann. In den Fragen stecken die Anforderungen.' },
+      { n: '3', t: 'Klären',     d: 'Optionen und Abwägungen, entschieden von einem Menschen. Das ist ein Gespräch, keine Übergabe.' },
+      { n: '4', t: 'Schreiben',  d: 'Die geklärten Antworten kommen in eine Datei. Diese Datei liest Build, und gegen sie misst Review.' },
+    ],
+    docKind: 'erzeugt', docName: 'PLAN.md',
+    note: 'In diesem Schritt bist du <b>Beteiligter</b>. In den beiden folgenden bist du Prüfer. Genau deshalb dauert dieser Schritt am längsten.',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the plate: a landmark on the left, the four moves on the right',
+  v2: 'Variation 2 — the run: four moves in order, producing the file slide 7 just approved',
+  v3: 'Variation 3 — two questions: the order is the argument, and the failure is drawn against it',
+  v4: 'Variation 4 — the questions on top, the four moves under them, ending in the file',
+};
+
+function loc(t) {
+  return '<div class="loc">' + t.loop.map(function (s, i) {
+    return (i ? '<i class="sep"></i>' : '') + '<span class="dot' + (i === 0 ? ' on' : '') + '">' + s + '</span>';
+  }).join('') + '</div>';
+}
+function docHTML(t) {
+  return '<span class="doc"><span class="kind">' + t.docKind + '</span><span class="file">' + t.docName + '</span></span>';
+}
+
+/* ── V1 ── */
+function V1(t) {
+  return '<div class="split">'
+    + '<div class="plate">'
+      + '<p class="kicker fg-in" style="--fg-at:1">' + t.kicker + '</p>'
+      + '<h1 class="chapter-h1 fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+      + '<div class="fg-in" style="--fg-at:3">' + loc(t) + '</div>'
+    + '</div>'
+    + '<div class="moves">'
+      + t.moves.map(function (m, i) {
+          return '<div class="mv fg-in" style="--fg-at:' + (4 + i) + '">'
+            + '<span class="mv__n">' + m.n + '</span>'
+            + '<div><span class="mv__t">' + m.t + '</span>'
+            + '<p class="mv__d">' + m.d + '</p></div>'
+          + '</div>';
+        }).join('')
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  return '<div class="run">'
+    + '<i class="rail"></i>'
+    + t.moves.map(function (m, i) {
+        const c = 'grid-column:' + (i + 1) + ';';
+        return '<div class="mv">'
+          + '<span class="mv__n fg-in" style="' + c + ' --fg-at:' + (4 + i) + '">' + m.n + '</span>'
+          + '<span class="mv__t fg-in" style="' + c + ' --fg-at:' + (4 + i) + '">' + m.t + '</span>'
+          + '<p class="mv__d fg-in" style="' + c + ' --fg-at:' + (4 + i) + '">' + m.d + '</p>'
+        + '</div>';
+      }).join('')
+    + '<div class="out fg-in" style="--fg-at:8"><span class="arw">→</span>' + docHTML(t) + '</div>'
+  + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  return ''
+  + '<div class="qs">'
+    + '<div class="q fg-in" style="--fg-at:3"><span class="n">' + t.q1.n + '</span><span class="t">' + t.q1.t + '</span></div>'
+    + '<span class="then fg-in" style="--fg-at:4">→</span>'
+    + '<div class="q fg-in" style="--fg-at:4"><span class="n">' + t.q2.n + '</span><span class="t">' + t.q2.t + '</span></div>'
+  + '</div>'
+  + '<p class="wrong fg-in" style="--fg-at:5">' + t.wrong + '</p>'
+  + '<div class="moves">'
+    + t.moves.map(function (m, i) {
+        return '<div class="mv fg-in" style="--fg-at:' + (6 + i) + '">'
+          + '<span class="mv__t"><i>' + m.n + '</i>' + m.t + '</span>'
+          + '<p class="mv__d">' + m.d + '</p>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+
+function V4(t) {
+  return ''
+  + '<div class="qs">'
+    + '<div class="q fg-in" style="--fg-at:3"><span class="n">' + t.q1.n + '</span><span class="t">' + t.q1.t + '</span></div>'
+    + '<span class="then fg-in" style="--fg-at:4">\u2192</span>'
+    + '<div class="q fg-in" style="--fg-at:4"><span class="n">' + t.q2.n + '</span><span class="t">' + t.q2.t + '</span></div>'
+  + '</div>'
+  + '<p class="wrong fg-in" style="--fg-at:5">' + t.wrong + '</p>'
+  + '<div class="run">'
+    + '<i class="rail"></i>'
+    + t.moves.map(function (m, i) {
+        const c = 'grid-column:' + (i + 1) + ';';
+        return '<div class="mv">'
+          + '<span class="mv__n fg-in" style="' + c + ' --fg-at:' + (6 + i) + '">' + m.n + '</span>'
+          + '<span class="mv__t fg-in" style="' + c + ' --fg-at:' + (6 + i) + '">' + m.t + '</span>'
+          + '<p class="mv__d fg-in" style="' + c + ' --fg-at:' + (6 + i) + '">' + m.d + '</p>'
+        + '</div>';
+      }).join('')
+    + '<div class="out fg-in" style="--fg-at:10">'
+      + '<i class="tail"></i><i class="head"></i>' + docHTML(t)
+    + '</div>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3, v4: V4 };
+/* V1 puts the chapter plate inside its own body layout; the other two
+   keep the standard head. */
+const OWN_HEAD = { v1: true, v2: false, v3: false, v4: false };
+/* V4 drops the lede: the two question boxes and the clay strip already
+   say what it said, and saying it twice made the slide read as a wall. */
+const NO_LEDE = { v4: true };
+
+function render(v, t) {
+  const head = OWN_HEAD[v] ? '' :
+    '<div class="fg-wrap head">'
+      + '<div style="display:flex; align-items:flex-end; justify-content:space-between; gap:var(--ae-space-6); flex-wrap:wrap">'
+        + '<div>'
+          + '<p class="kicker fg-in" style="--fg-at:1">' + t.kicker + '</p>'
+          + '<h1 class="chapter-h1 fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+        + '</div>'
+        + '<div class="fg-in" style="--fg-at:2">' + loc(t) + '</div>'
+      + '</div>'
+      + (NO_LEDE[v] ? '' : '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>')
+    + '</div>';
+  return ''
+  + '<section class="proto ' + v + '">'
+    + head
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:10"><span>' + t.note + '</span></p></div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v4';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3','4'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

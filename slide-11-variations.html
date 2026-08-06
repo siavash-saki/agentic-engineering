@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 11 — What goes in the file, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   DESIGN.md calls this slide two shapes on one page: an inclusion /
+   exclusion rule, and a paired contrast that applies it. It is the
+   densest slide in the Plan chapter — 160 words, four blocks.
+
+   THE TWO SHAPES ARE THE SAME DISTINCTION AT TWO ZOOM LEVELS. The
+   lists say what belongs in the file and what does not; the pair is
+   one requirement sorted by that same rule. So the device that can
+   carry both is A BOUNDARY WHOSE TWO SIDES ARE THEMSELVES A CONTRAST:
+   draw the file, put the list of what it holds and the behaviour
+   version inside it, and put the list of what it never holds and the
+   mechanism version outside. One line, both jobs.
+
+   V1 and V2 test that. V3a / V3b test the split instead — the same
+   content as two slides, so the user can see what each half gets when
+   it is given a whole frame.
+
+   COLOUR. Plan chapter, so blue is the chapter hue: the file, the
+   accepted version, the ticks. Clay is what is excluded and what goes
+   wrong. Two hues in the content, plus ink and greys.
+
+   Every coloured distinction carries a form cue, because all five hues
+   collapse to one grey: solid rule vs dashed rule, tick vs cross,
+   raised white card vs flat paper. Test with the Greyscale button.
+
+   THE DOCUMENT IS INK-EDGED, not blue. That is the cast's document
+   form (slide 7 draws PLAN.md the same way) and it is kept so the file
+   on this slide is recognisably the file gate 1 approved. Blue is
+   spent on the marks inside it. */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-4); }
+
+.proto h1 { margin: 0 0 var(--ae-space-2); color: var(--fg-ink); }
+.proto .fg-lede { margin: 0; }
+
+/* ── the filename tab that sits on the file's top edge ── */
+.tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 12px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font-mono);
+  font-size: var(--ae-fs-caption); line-height: 1.3;
+  font-weight: 600; white-space: nowrap;
+}
+
+/* ── the two lists. Solid blue rule vs dashed clay rule is the
+      greyscale-safe half of the in/out distinction; the tick and the
+      cross are the other half. ── */
+.lst { margin: var(--ae-space-3) 0 0; padding: 0 0 0 var(--ae-space-4); list-style: none; }
+.lst li {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--ae-space-3); align-items: baseline;
+  padding: 3px 0;
+  font-size: var(--ae-fs-small); line-height: 1.4;
+}
+.lst li::before { font-weight: 700; }
+.lst--in  { border-left: 2px solid var(--fg-plan); }
+.lst--in  li { color: var(--fg-body); }
+.lst--in  li::before { content: "\2713"; color: var(--fg-plan); }
+.lst--out { border-left: 2px dashed var(--fg-fail); }
+.lst--out li { color: var(--fg-fail-d); }
+.lst--out li::before { content: "\2715"; color: var(--fg-fail); }
+
+/* ── the worked pair ── */
+.ex { border-radius: var(--ae-radius); padding: var(--ae-space-4) var(--ae-space-5); }
+.ex--good { background: var(--fg-plan-tint); border: 1.5px solid var(--fg-plan); }
+.ex--bad  { background: var(--fg-fail-tint); border: 1.5px dashed var(--fg-fail); }
+.ex .src {
+  margin: 0;
+  font-family: var(--ae-font-mono);
+  font-size: calc(var(--ae-fs-small) * 0.95); line-height: 1.55;
+  color: var(--fg-ink);
+}
+.ex .tag {
+  display: flex; gap: var(--ae-space-2); align-items: baseline;
+  margin: var(--ae-space-3) 0 0;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600;
+}
+.ex--good .tag { color: var(--fg-plan-d); }
+.ex--good .tag::before { content: "\2713"; flex: none; font-weight: 700; }
+.ex--bad .tag { color: var(--fg-fail-d); }
+.ex--bad .tag::before { content: "\2715"; flex: none; font-weight: 700; }
+
+/* ── the marks on the mechanism sentence ──
+      A dashed clay underline is the mark; the numeral keys it to the
+      rule it breaks. The underline is what survives greyscale, so the
+      numeral is never the only carrier. Nothing here is set below the
+      caption size, which is the deck's 14px floor. */
+.mk {
+  border-bottom: 2px dashed var(--fg-fail);
+  color: var(--fg-fail-d); font-weight: 600;
+}
+.mk .bx {
+  font-family: var(--ae-font); font-style: normal;
+  font-size: var(--ae-fs-caption); font-weight: 700;
+  color: var(--fg-fail); vertical-align: super;
+  margin-left: 2px; line-height: 1;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE FILE, INSIDE AND OUT
+   One boundary doing both jobs. The card IS PLAN.md: what it holds
+   and the behaviour version of the requirement live inside it. Its
+   bottom edge is the rule, and what the file never holds — the four
+   forbidden kinds, and the mechanism version of the same line — sits
+   below it on the bare paper.
+
+   The two rows share one column template, so the lists align down the
+   left and the pair aligns down the right ACROSS the boundary. That
+   alignment is what makes the second shape readable at all: the two
+   versions of the requirement are one above the other, separated by
+   exactly the line the lists describe.
+   ══════════════════════════════════════════════════════════════ */
+.v1 h1 { font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2); }
+.v1 .fg-lede { max-width: 84ch; font-size: var(--ae-fs-body); line-height: 1.42; }
+.v1 .zones { display: grid; row-gap: var(--ae-space-4); }
+.v1 .row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  column-gap: var(--ae-space-6);
+  align-items: start;
+}
+.v1 .hdr { align-items: end; padding: 0 var(--ae-space-6); border: 1.5px solid transparent; }
+.v1 .hdr .fg-label { margin: 0; }
+.v1 .infile {
+  position: relative;
+  background: var(--fg-card);
+  border: 1.5px solid var(--fg-ink);
+  border-radius: var(--ae-radius-lg);
+  box-shadow: var(--fg-d2);
+  padding: var(--ae-space-5) var(--ae-space-6);
+}
+/* The tab rides the top edge, so the card reads as a named file rather
+   than as one more panel. Placed on the edge itself and not above it:
+   a gap would make it a caption. */
+.v1 .tab { position: absolute; top: 0; left: var(--ae-space-6); transform: translateY(-52%); }
+.v1 .infile .fg-label { margin: var(--ae-space-2) 0 0; }
+/* A transparent border of the card's own weight, so the row outside the
+   file has the identical box model to the row inside it. Without it the
+   card's 1.5px edge shifted every column one pixel between the two rows,
+   and the alignment ACROSS the boundary is the whole device. */
+.v1 .outfile { padding: 0 var(--ae-space-6); border: 1.5px solid transparent; }
+.v1 .outfile .fg-label { margin: 0; color: var(--fg-fail-d); }
+.v1 .stub { min-width: 0; }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE LINE, TWICE
+   The pair is the hero and the two lists become annotations on it.
+   Each half carries its own rule set: the accepted version is followed
+   by what the file holds, the rejected one by what it never holds —
+   and the three rules that the rejected line actually breaks are
+   marked on the exact words that break them, keyed by numeral.
+
+   That turns "three decisions made, none of them checkable" from a
+   claim into something the audience can count on screen. Rule 2 —
+   code, or pseudo-code — has no single span to sit on, because the
+   whole line is code; its numeral sits on the panel's own label.
+   ══════════════════════════════════════════════════════════════ */
+.v2 h1 { font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2); }
+.v2 .fg-lede { max-width: 84ch; font-size: var(--ae-fs-body); line-height: 1.42; }
+.v2 .exlab { margin: 0 0 var(--ae-space-3); }
+.v2 .pair {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--ae-space-6); align-items: start;
+}
+.v2 .pn { border-radius: var(--ae-radius-lg); padding: var(--ae-space-5) var(--ae-space-6); }
+.v2 .pn--good { background: var(--fg-card); border: 1.5px solid var(--fg-plan); box-shadow: var(--fg-d2); }
+.v2 .pn--bad  { background: var(--fg-fail-tint); border: 1.5px dashed var(--fg-fail); }
+.v2 .pn__tag {
+  display: flex; gap: var(--ae-space-2); align-items: baseline;
+  margin: 0 0 var(--ae-space-4);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); font-weight: 700;
+}
+.v2 .pn--good .pn__tag { color: var(--fg-plan-d); }
+.v2 .pn--good .pn__tag::before { content: "\2713"; flex: none; }
+.v2 .pn--bad .pn__tag { color: var(--fg-fail-d); }
+.v2 .pn--bad .pn__tag::before { content: "\2715"; flex: none; }
+/* Rule 2 — code, or pseudo-code — has no single span to sit on, because
+   the whole line is code. So its numeral does not float at the end of a
+   sentence like a footnote; it heads a dashed bracket down the left of
+   the entire quoted line, which is the mark for "all of this". The first
+   pass set it as a superscript on the label at 12px, under the deck's
+   14px floor, and it read as a typo. */
+.v2 .whole {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--ae-space-3); align-items: stretch;
+}
+.v2 .whole > .bx {
+  font-family: var(--ae-font); font-style: normal;
+  font-size: var(--ae-fs-caption); line-height: 1.6;
+  font-weight: 700; color: var(--fg-fail);
+  font-variant-numeric: tabular-nums;
+  border-left: 2px dashed var(--fg-fail); padding-left: 7px;
+}
+.v2 .src {
+  margin: 0;
+  font-family: var(--ae-font-mono);
+  font-size: calc(var(--ae-fs-small) * 1.06); line-height: 1.62;
+  color: var(--fg-ink);
+}
+.v2 .rules { margin-top: var(--ae-space-5); padding-top: var(--ae-space-4); border-top: 1px solid var(--fg-hair); }
+.v2 .pn--bad .rules { border-top-color: var(--fg-fail-light); }
+.v2 .rules .fg-label { margin: 0; }
+.v2 .rules .lst { border-left: 0; padding-left: 0; }
+.v2 .rules .lst li { padding: 3px 0; font-size: var(--ae-fs-caption); line-height: 1.45; }
+.v2 .rules .lst--out li::before {
+  content: counter(rule); counter-increment: rule;
+  color: var(--fg-fail); font-variant-numeric: tabular-nums;
+  min-width: 1.1em;
+}
+.v2 .rules .lst--out { counter-reset: rule; }
+
+/* ══════════════════════════════════════════════════════════════
+   V3a — SPLIT, PAGE ONE: the boundary alone
+   The inclusion / exclusion rule with the whole frame to itself. Same
+   language as V1 — a named file, and the paper outside it — but the
+   boundary is vertical and the type is a size larger, because nothing
+   else is competing for the room. This is what the first half looks
+   like when it stops sharing.
+   ══════════════════════════════════════════════════════════════ */
+.v3a h1 { font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); }
+.v3a .fg-lede { max-width: 70ch; }
+.v3a .board {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--ae-space-7); align-items: start;
+  margin-top: var(--ae-space-6);
+}
+.v3a .infile {
+  position: relative;
+  background: var(--fg-card);
+  border: 1.5px solid var(--fg-ink);
+  border-radius: var(--ae-radius-lg);
+  box-shadow: var(--fg-d2);
+  padding: var(--ae-space-6);
+}
+.v3a .tab { position: absolute; top: 0; left: var(--ae-space-6); transform: translateY(-52%); }
+.v3a .infile .fg-label { margin: var(--ae-space-2) 0 0; }
+/* Derived, not eyeballed: the card's own label sits at border + inner
+   padding + its top margin, so the outside column repeats that sum and
+   the two headings land on one line. */
+.v3a .outfile { padding-top: calc(1.5px + var(--ae-space-6) + var(--ae-space-2)); }
+.v3a .outfile .fg-label { margin: 0; color: var(--fg-fail-d); }
+.v3a .lst { padding-left: var(--ae-space-5); }
+.v3a .lst li {
+  font-size: calc(var(--ae-fs-body) * 1.12); line-height: 1.4;
+  padding: var(--ae-space-4) 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V3b — SPLIT, PAGE TWO: the pair alone
+   The worked contrast at reading size, and the two versions are
+   STACKED rather than set side by side. Side by side asks the audience
+   to compare two columns at once; stacked, they read the requirement,
+   then read it again — which is what "the same requirement, twice"
+   actually says, and it lets one line of monospace run at a size a
+   room can read.
+
+   No rule list and no legend: page one has already taught the
+   vocabulary, so the marks on the rejected line need no key. They only
+   have to be countable against the words "three decisions" under them.
+   ══════════════════════════════════════════════════════════════ */
+.v3b h1 { font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); }
+.v3b .fg-lede { max-width: 70ch; }
+.v3b .pair { display: grid; row-gap: var(--ae-space-5); margin-top: var(--ae-space-6); }
+.v3b .pn { border-radius: var(--ae-radius-lg); padding: var(--ae-space-5) var(--ae-space-6); }
+.v3b .pn--good { background: var(--fg-card); border: 1.5px solid var(--fg-plan); box-shadow: var(--fg-d2); }
+.v3b .pn--bad  { background: var(--fg-fail-tint); border: 1.5px dashed var(--fg-fail); }
+.v3b .pn__n {
+  margin: 0;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.v3b .pn--good .pn__n { color: var(--fg-plan); }
+.v3b .pn--bad .pn__n { color: var(--fg-fail); }
+.v3b .src {
+  margin: var(--ae-space-3) 0 0;
+  font-family: var(--ae-font-mono);
+  font-size: calc(var(--ae-fs-body) * 1.16); line-height: 1.6;
+  color: var(--fg-ink);
+}
+.v3b .pn__tag {
+  display: flex; gap: var(--ae-space-3); align-items: baseline;
+  margin: var(--ae-space-4) 0 0; padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); font-weight: 600;
+}
+.v3b .pn--good .pn__tag { color: var(--fg-plan-d); }
+.v3b .pn--good .pn__tag::before { content: "\2713"; flex: none; font-weight: 700; }
+.v3b .pn--bad .pn__tag { border-top-color: var(--fg-fail-light); color: var(--fg-fail-d); }
+.v3b .pn--bad .pn__tag::before { content: "\2715"; flex: none; font-weight: 700; }
+/* Page two carries no legend, so the numerals have nothing to key to. */
+.v3b .bx { display: none; }
+
+@media (max-width: 1000px) {
+  .v1 .row, .v2 .pair, .v3a .board { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v1 .hdr .stub { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · File</button>
+        <button type="button" data-p="v2">2 · Twice</button>
+        <button type="button" data-p="v3a">3a · Split ①</button>
+        <button type="button" data-p="v3b">3b · Split ②</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Text is verbatim from presentation-v2/sections/11-plan-write.js except
+   where marked. Four strings are new and all four belong to the SPLIT
+   only — a slide cannot exist without a lede and a takeaway:
+
+     ledeA  the existing lede, minus its last clause
+     ledeB  page two's opening line
+     noteB  the clause ledeA gave up, promoted to page two's takeaway
+     PLAN.md  not new: the file slides 7 and 8 already name
+
+   badMarked is the same sentence as bad, with three spans wrapped so
+   the rules they break can be pointed at. No word is changed. */
+const C = {
+  en: {
+    h1: 'What goes in the file',
+    lede: 'A plan describes behaviour. The moment it describes mechanism, it has made the decisions the model would have made better — and review has lost the yardstick it was supposed to hold.',
+    ledeA: 'A plan describes behaviour. The moment it describes mechanism, it has made the decisions the model would have made better.',
+    file: 'PLAN.md',
+    holdsLabel: 'It holds',
+    holds: [
+      'The context: what exists today, and what is changing',
+      'What the system should do, in the user’s terms',
+      'Acceptance criteria — checkable, one line each',
+      'What is explicitly out of scope',
+      'Open questions, if any are still open',
+    ],
+    neverLabel: 'It never holds',
+    never: [
+      'Function names or signatures',
+      'Code, or pseudo-code',
+      'Which file a change goes in, line by line',
+      'The data structure the model should pick',
+    ],
+    exLabel: 'The same requirement, twice',
+    good: 'Requests over the limit are rejected with 429 and a Retry-After header giving the seconds until the window resets.',
+    goodTag: 'Behaviour — checkable, and the how stays open',
+    bad: 'Add a checkLimit() call at the top of handleRequest() that reads the counter from Redis and throws RateLimitError.',
+    badMarked: 'Add a <span class="mk">checkLimit()<i class="bx">1</i></span> call <span class="mk">at the top of handleRequest()<i class="bx">3</i></span> that reads <span class="mk">the counter from Redis<i class="bx">4</i></span> and throws RateLimitError.',
+    badTag: 'Mechanism — three decisions made, none of them checkable',
+    note: 'If the file is getting long, it has started describing the implementation. <b>Length is the symptom, not the problem.</b>',
+    h1b: 'The same requirement, twice',
+    ledeB: 'One line of a rate-limit plan, written both ways.',
+    noteB: '<b>Review has lost the yardstick it was supposed to hold.</b> That is what the second version costs.',
+    nGood: 'Written as behaviour',
+    nBad: 'Written as mechanism',
+  },
+  de: {
+    h1: 'Was in die Datei gehört',
+    lede: 'Ein Plan beschreibt Verhalten. Sobald er Mechanik beschreibt, hat er Entscheidungen getroffen, die das Modell besser getroffen hätte — und dem Review fehlt der Maßstab, den es halten sollte.',
+    ledeA: 'Ein Plan beschreibt Verhalten. Sobald er Mechanik beschreibt, hat er Entscheidungen getroffen, die das Modell besser getroffen hätte.',
+    file: 'PLAN.md',
+    holdsLabel: 'Er enthält',
+    holds: [
+      'Den Kontext: was heute existiert und was sich ändert',
+      'Was das System tun soll, in der Sprache der Nutzung',
+      'Akzeptanzkriterien — prüfbar, je eine Zeile',
+      'Was ausdrücklich nicht dazugehört',
+      'Offene Fragen, falls noch welche offen sind',
+    ],
+    neverLabel: 'Er enthält nie',
+    never: [
+      'Funktionsnamen oder Signaturen',
+      'Code oder Pseudo-Code',
+      'In welche Datei eine Änderung gehört, Zeile für Zeile',
+      'Die Datenstruktur, die das Modell wählen soll',
+    ],
+    exLabel: 'Dieselbe Anforderung, zweimal',
+    good: 'Requests über dem Limit werden mit 429 abgelehnt, mit einem Retry-After-Header, der die Sekunden bis zum Fensterwechsel angibt.',
+    goodTag: 'Verhalten — prüfbar, und das Wie bleibt offen',
+    bad: 'Füge oben in handleRequest() einen checkLimit()-Aufruf ein, der den Zähler aus Redis liest und RateLimitError wirft.',
+    badMarked: 'Füge <span class="mk">oben in handleRequest()<i class="bx">3</i></span> einen <span class="mk">checkLimit()-Aufruf<i class="bx">1</i></span> ein, der den Zähler <span class="mk">aus Redis<i class="bx">4</i></span> liest und RateLimitError wirft.',
+    badTag: 'Mechanik — drei Entscheidungen getroffen, keine davon prüfbar',
+    note: 'Wird die Datei lang, beschreibt sie inzwischen die Implementierung. <b>Die Länge ist das Symptom, nicht das Problem.</b>',
+    h1b: 'Dieselbe Anforderung, zweimal',
+    ledeB: 'Eine Zeile aus einem Rate-Limit-Plan, in beiden Fassungen geschrieben.',
+    noteB: '<b>Dem Review fehlt der Maßstab, den es halten sollte.</b> Das ist der Preis der zweiten Fassung.',
+    nGood: 'Als Verhalten geschrieben',
+    nBad: 'Als Mechanik geschrieben',
+  },
+};
+
+const SUB = {
+  v1:  'Variation 1 — the file: one boundary, the lists on its two sides and the pair straddling it',
+  v2:  'Variation 2 — the line twice: the pair is the hero, the two lists annotate it',
+  v3a: 'Split, page one — the boundary alone: what the file holds, and what it never holds',
+  v3b: 'Split, page two — the pair alone: the same requirement, behaviour and mechanism',
+};
+
+function li(items, kind) {
+  return '<ul class="lst lst--' + kind + '">'
+    + items.map(function (s) { return '<li><span>' + s + '</span></li>'; }).join('')
+    + '</ul>';
+}
+
+/* ── V1 ── */
+function V1(t) {
+  return '<div class="zones">'
+    + '<div class="row hdr fg-in" style="--fg-at:3">'
+      + '<span class="stub"></span>'
+      + '<p class="fg-label">' + t.exLabel + '</p>'
+    + '</div>'
+    + '<div class="row infile fg-in" style="--fg-at:3">'
+      + '<span class="tab">' + t.file + '</span>'
+      + '<div>'
+        + '<p class="fg-label">' + t.holdsLabel + '</p>'
+        + li(t.holds, 'in')
+      + '</div>'
+      + '<div class="ex ex--good fg-in" style="--fg-at:5">'
+        + '<p class="src">' + t.good + '</p>'
+        + '<p class="tag">' + t.goodTag + '</p>'
+      + '</div>'
+    + '</div>'
+    + '<div class="row outfile fg-in" style="--fg-at:6">'
+      + '<div>'
+        + '<p class="fg-label">' + t.neverLabel + '</p>'
+        + li(t.never, 'out')
+      + '</div>'
+      + '<div class="ex ex--bad fg-in" style="--fg-at:7">'
+        + '<p class="src">' + t.bad + '</p>'
+        + '<p class="tag">' + t.badTag + '</p>'
+      + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  return '<p class="fg-label exlab fg-in" style="--fg-at:3">' + t.exLabel + '</p>'
+  + '<div class="pair">'
+    + '<div class="pn pn--good fg-in" style="--fg-at:4">'
+      + '<p class="pn__tag">' + t.goodTag + '</p>'
+      + '<p class="src">' + t.good + '</p>'
+      + '<div class="rules">'
+        + '<p class="fg-label">' + t.holdsLabel + '</p>'
+        + li(t.holds, 'in')
+      + '</div>'
+    + '</div>'
+    + '<div class="pn pn--bad fg-in" style="--fg-at:6">'
+      + '<p class="pn__tag">' + t.badTag + '</p>'
+      + '<div class="whole"><i class="bx">2</i><p class="src">' + t.badMarked + '</p></div>'
+      + '<div class="rules">'
+        + '<p class="fg-label">' + t.neverLabel + '</p>'
+        + li(t.never, 'out')
+      + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V3a ── */
+function V3a(t) {
+  return '<div class="board">'
+    + '<div class="infile fg-in" style="--fg-at:3">'
+      + '<span class="tab">' + t.file + '</span>'
+      + '<p class="fg-label">' + t.holdsLabel + '</p>'
+      + li(t.holds, 'in')
+    + '</div>'
+    + '<div class="outfile fg-in" style="--fg-at:5">'
+      + '<p class="fg-label">' + t.neverLabel + '</p>'
+      + li(t.never, 'out')
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V3b ── */
+function V3b(t) {
+  return '<div class="pair">'
+    + '<div class="pn pn--good fg-in" style="--fg-at:3">'
+      + '<p class="pn__n">' + t.nGood + '</p>'
+      + '<p class="src">' + t.good + '</p>'
+      + '<p class="pn__tag">' + t.goodTag + '</p>'
+    + '</div>'
+    + '<div class="pn pn--bad fg-in" style="--fg-at:5">'
+      + '<p class="pn__n">' + t.nBad + '</p>'
+      + '<p class="src">' + t.badMarked + '</p>'
+      + '<p class="pn__tag">' + t.badTag + '</p>'
+    + '</div>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3a: V3a, v3b: V3b };
+const HEAD = {
+  v1:  function (t) { return { h1: t.h1,  lede: t.lede }; },
+  v2:  function (t) { return { h1: t.h1,  lede: t.lede }; },
+  v3a: function (t) { return { h1: t.h1,  lede: t.ledeA }; },
+  v3b: function (t) { return { h1: t.h1b, lede: t.ledeB }; },
+};
+const NOTE = { v1: 'note', v2: 'note', v3a: 'note', v3b: 'noteB' };
+
+function render(v, t) {
+  const h = HEAD[v](t);
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + h.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + h.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:9"><span>' + t[NOTE[v]] + '</span></p></div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => {
+  const m = { '1': 'v1', '2': 'v2', '3': 'v3a', '4': 'v3b' };
+  if (m[e.key]) { proto = m[e.key]; mount(); } });
+mount();
+</script>
+</body>
+</html>

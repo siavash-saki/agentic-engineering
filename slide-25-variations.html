@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 25 — What loads into context, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-5) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-4); }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-4);
+  font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2); color: var(--fg-ink);
+}
+.proto .fg-foot { margin-top: var(--ae-space-3); }
+
+/* ══════════════════════════════════════════════════════════════
+   THE BOUNDARY  —  the cast object (DESIGN.md, pass 3)
+
+   The contract comes from slide 16, which built it first. Slide 16
+   is being cut from the deck, so this slide is now the only place
+   the object is taught, and it has to teach itself: a context
+   window is a real container, so its edge is a real line, and it
+   is the machine's plumbing, so the line is grey and never a
+   chapter hue.
+
+   .bd        the enclosure. Whatever is inside it is inside the
+              boundary; whatever must read as outside stays on the
+              paper, unenclosed and unraised.
+   .bd__name  the boundary's NAME, as a pill straddling the border,
+              paper-coloured so it punches a hole in the line. It
+              is always ON the line, never inside as a heading — a
+              heading inside turns the box back into a card.
+   .you       the HUMAN'S MARK ON THE EDGE. Filled ink pill, on the
+              line, opposite the name. Everything the machine does
+              is grey and soft; a human decision is a hard black
+              stop, and deciding what is admitted at all is the one
+              human act on this slide.
+   ══════════════════════════════════════════════════════════════ */
+.bd {
+  position: relative;
+  border-radius: var(--ae-radius-lg);
+  border: 1.5px solid var(--ae-cool-gray-300);
+  background: var(--fg-card);
+  box-shadow: var(--fg-d1);
+}
+.bd__name {
+  position: absolute; top: 0; left: var(--ae-space-6);
+  transform: translateY(-50%);
+  display: inline-flex; align-items: center;
+  padding: 3px 12px; border-radius: 999px;
+  background: var(--fg-paper);
+  border: 1.5px solid var(--ae-cool-gray-300);
+  font-family: var(--ae-font); font-size: var(--ae-fs-small);
+  line-height: var(--ae-lh-caption); font-weight: 600;
+  color: var(--fg-muted); white-space: nowrap; z-index: 4;
+}
+.you {
+  position: absolute; top: 0; right: var(--ae-space-6);
+  transform: translateY(-50%);
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 14px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 600;
+  white-space: nowrap; z-index: 5; box-shadow: var(--fg-d2);
+}
+.you::before { content: "↓"; font-weight: 700; opacity: 0.75; }
+
+/* Entrance for anything PINNED TO A LINE by a transform.
+   .fg-in animates the transform property, so on an element whose resting
+   position is a translateY of -50% the animation replaces the pin: the chip
+   enters 12px below where it belongs and snaps onto the line when the
+   animation ends. The resting state is right, which is why it survived a
+   screenshot and was only caught by measuring during the entrance. This
+   device fades instead of rising and leaves the transform alone. Same delay
+   scale as .fg-in. */
+.pin-in {
+  animation: pin-fade var(--fg-dur-rise) var(--ae-ease) both;
+  animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat));
+}
+@keyframes pin-fade { from { opacity: 0; } }
+@media print { .pin-in { animation: none !important; } }
+
+/* ══════════════════════════════════════════════════════════════
+   THE FORM RAMP  —  three states, three stroke styles
+
+       solid  + clay   inside the wall   always in context
+       dashed + grey   inside the wall   loads on use
+       dotted + grey   OUTSIDE the wall  outside the main context
+
+   Colour appears on exactly one of the three, and clay is the
+   deck's failure hue: a per-request re-send of every connected
+   server is not broken, it is just billed, forever, whether the
+   request touched it or not. That is the slide's argument, so the
+   always-loaded class is the only coloured thing on it.
+
+   Strip the hue and the ramp survives: solid, dashed, dotted.
+   ══════════════════════════════════════════════════════════════ */
+/* Two sizes, declared as variables so a variation can pick its own pair.
+   V1 and V3 use the original slide's pair (body over small) because the
+   drawing leaves them room; V2 drops a step, because its six rows sit next to
+   a matrix and every pixel of row height is spent fourteen times over. */
+.it {
+  --it-name: var(--ae-fs-small);
+  --it-desc: var(--ae-fs-caption);
+  padding-left: var(--ae-space-3); border-left: 3px solid transparent;
+}
+.it--always { border-left: 3px solid  var(--fg-fail); }
+.it--onuse  { border-left: 3px dashed var(--ae-cool-gray-300); }
+.it--out    { border-left: 3px dotted var(--ae-cool-gray-300); }
+.it h4 {
+  margin: 0;
+  font-family: var(--ae-font); font-weight: 700;
+  font-size: var(--it-name); line-height: 1.3; color: var(--fg-ink);
+}
+/* File names take the code face. Ink, not the deck's code green: green is the
+   Build chapter's hue and this slide is in no chapter. */
+.it h4.mono {
+  font-family: var(--ae-font-mono); font-weight: 600;
+  /* 0.94, matching .fg-rows dd in the slide kit. At 0.92 the mono name
+     measured 13.8px in V2 — under the deck's 14px floor. */
+  font-size: calc(var(--it-name) * 0.94); letter-spacing: 0;
+}
+/* The footnote marker takes the caption size rather than a fraction of an em:
+   at 0.66em it rendered at 9.9px, well under the floor. --ae-fs-caption IS
+   the floor, so the smallest glyph on the slide is now a legal size. */
+.it h4 sup { font-size: var(--ae-fs-caption); vertical-align: top; line-height: 1; }
+.it p {
+  margin: 0;
+  font-size: var(--it-desc); line-height: var(--ae-lh-small);
+  color: var(--fg-body);
+}
+.v1 .it, .v3 .it { --it-name: var(--ae-fs-body); --it-desc: var(--ae-fs-small); }
+.v1 .bandhead h3, .v3 .bandhead h3 { font-size: var(--ae-fs-h4); }
+
+/* The band head: the MOMENT something loads. The legend below names the
+   STATE that moment leaves it in; the two are not the same sentence and
+   the original slide carried both. */
+.bandhead {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: 2px var(--ae-space-3);
+  margin-bottom: var(--ae-space-3);
+}
+.bandhead h3 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 600;
+  font-size: var(--ae-fs-h5); line-height: 1.16; color: var(--fg-ink);
+}
+/* The price tag. Radius is small, not a pill: the German runs long and a
+   wrapped 999px pill looks like a mistake. */
+.cost {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  padding: 2px 9px; border-radius: var(--ae-radius-sm);
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); font-weight: 700;
+  background: var(--fg-fail-tint); color: var(--fg-fail-d);
+  border: 1.5px solid var(--fg-fail);
+}
+.cost::before { content: "↻"; font-weight: 700; }
+
+/* ══════════════════════════════════════════════════════════════
+   THE LEGEND  —  kept, because it is a KEY, not a repetition
+   It maps the three stroke styles onto the three states. The band
+   heads name the MOMENT a thing loads; this names the STATE that
+   moment leaves it in. The original slide carried both, and only
+   this one explains the marks.
+   ══════════════════════════════════════════════════════════════ */
+.legend {
+  display: flex; flex-wrap: wrap;
+  gap: var(--ae-space-3) var(--ae-space-6);
+  margin-top: var(--ae-space-5);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  color: var(--fg-muted);
+}
+.legend .lg { display: inline-flex; align-items: center; gap: 9px; }
+.sw {
+  flex: none; width: 18px; height: 18px; border-radius: 4px;
+  background: transparent; border: 1.5px solid transparent;
+}
+.sw--always { background: var(--fg-fail-tint); border: 1.5px solid  var(--fg-fail); }
+.sw--onuse  { border: 1.5px dashed var(--ae-cool-gray-300); }
+.sw--out    { border: 1.5px dotted var(--ae-cool-gray-300); }
+
+.note-row { margin-top: var(--ae-space-5); }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE TIMELINE
+   The original slide's own shape, rebuilt. Its axis is WHEN: three
+   moments running left to right, and each thing placed under the
+   moment it arrives. Three things change.
+
+   One wall, not three panels. The original drew "Context window",
+   "Separate context" and an unlabelled box as three peers, which
+   is three containers and therefore no boundary at all. Here there
+   is exactly one drawn wall, and "isolated" is a place on the bare
+   paper beside it rather than a second box.
+
+   Skills appears TWICE, on the same row, tied. That is the fact
+   the slide exists to teach and the only way to draw it is to put
+   the same name in two moments at once: its description is in
+   context from the first request, its body arrives when it matches.
+
+   The dashed divider inside the wall is the moment line. The tie
+   punches through it, because one thing does cross it: itself.
+   ══════════════════════════════════════════════════════════════ */
+/* The three heads sit on one line across a boundary, so they have to share a
+   box height. Only one of them carries a price tag, and the tag's line box is
+   taller than the heading's: with baseline alignment that head sat 3px lower
+   than its two neighbours. A floor equal to the tag's height, centred, makes
+   the three tops identical whether or not a tag is present. */
+.v1 .bandhead {
+  align-items: center;
+  min-height: calc(var(--ae-fs-caption) * 1.4 + 10px);
+}
+.v1 .tl {
+  --wallgap: clamp(28px, 3.4vw, 58px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.66fr) minmax(0, 1fr);
+  column-gap: var(--wallgap);
+  align-items: start;
+}
+.v1 .bd { padding: var(--ae-space-6) var(--ae-space-6) var(--ae-space-5); }
+.v1 .inside {
+  --colgap: var(--ae-space-6);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--colgap);
+  row-gap: var(--ae-space-4);
+}
+/* The moment line. Absolute rather than a border on a cell, so it runs the
+   full height of the wall's interior whichever column is taller. */
+.v1 .inside::after {
+  content: ''; position: absolute; z-index: 0;
+  left: 50%; top: calc(-1 * var(--ae-space-2)); bottom: calc(-1 * var(--ae-space-2));
+  border-left: 1.5px dashed var(--ae-cool-gray-300);
+}
+.v1 .inside > * { position: relative; z-index: 1; }
+.v1 .c1 { grid-column: 1; }
+.v1 .c2 { grid-column: 2; }
+/* The two Skills cells share row 4, so their tops align without measuring
+   anything: the tie is then a straight horizontal, not a dogleg. */
+.v1 .r1 { grid-row: 1; }
+.v1 .r2 { grid-row: 2; }
+.v1 .r3 { grid-row: 3; }
+.v1 .r4 { grid-row: 4; }
+/* The tie. Dotted and grey — it is the machine's own plumbing, not a human
+   decision — and it carries a card-coloured halo so it reads as passing
+   THROUGH the dashed moment line rather than colliding with it. */
+.v1 .tie::before {
+  content: ''; position: absolute; z-index: 2;
+  top: calc(var(--ae-fs-body) * 0.66);
+  /* Half a column plus the gap: it reaches into the middle of the left cell,
+     level with the NAME line, which is short in both languages. A fixed pixel
+     reach stopped short of the left item and read as a stub. */
+  right: 100%; width: calc(50% + var(--colgap));
+  border-top: 1.5px dotted var(--ae-cool-gray-400);
+  box-shadow: 0 0 0 3.5px var(--fg-card);
+}
+.v1 .tiecap {
+  margin-top: 5px;
+  font-size: var(--ae-fs-caption); line-height: 1.3;
+  color: var(--fg-faint); font-style: italic;
+}
+/* Aligned to the wall's top edge, so the head outside the window sits on the
+   same line as the heads inside it. That line is the only thing tying the two
+   halves of the drawing together and it has to be exact. */
+.v1 .out { padding-top: calc(var(--ae-space-6) + 1.5px); }
+.v1 .out .it + .it { margin-top: var(--ae-space-4); }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — EVERY REQUEST
+   The same content on a different axis: not when a thing loads,
+   but how many of your requests carry it. One column is one
+   request; a filled block is "sent in this one", a dot is "not".
+
+   This is the shape that states the fact the prose version blurred.
+   A skill is not a one-off charge that ends. Its meter simply
+   STARTS LATER — four dots, then blocks all the way out, exactly
+   like the rows above it. Recurring-versus-one-off is the wrong
+   distinction; when the meter starts is the right one, and here it
+   is the only thing the drawing says.
+
+   The wall crosses the matrix horizontally: four rows are in your
+   window, two rows of dots below it never were.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .tape {
+  --n: 14;
+  --lab: clamp(320px, 45vw, 560px);
+  /* The wall's top edge stands this far above the first row. It is real
+     padding on .tape, matched by a negative margin on .bd, rather than an
+     uncompensated overhang: the name chip straddles that edge and hangs half
+     its height into the gap, and an overhang would make the drawing taller
+     than anything measuring it could see. At the type floor the chip is 30px
+     tall, so anything under about 19px puts it on top of the first head. */
+  --wtop: calc(var(--ae-space-6) + 4px);
+  padding-top: var(--wtop);
+  display: grid;
+  grid-template-columns: var(--lab) minmax(0, 1fr);
+  column-gap: var(--ae-space-6);
+  row-gap: var(--ae-space-3);
+  align-items: center;
+}
+/* The enclosure as a BACKDROP behind the first six rows. Negative margins are
+   its padding: the rows own their own spacing, so the wall is drawn around
+   them rather than wrapping them, which is what lets the matrix run straight
+   through it.
+
+   EVERY child of .tape declares its own grid-row. That is not tidiness. An
+   item that spans rows 1-6 occupies both columns of all six, so auto-placed
+   siblings are pushed BELOW it and the six rows collapse to nothing — the
+   wall then renders as a single horizontal line with the chip on it, which is
+   exactly what happened the first time. */
+.v2 .bd {
+  grid-column: 1 / -1; grid-row: 1 / 7; z-index: 0;
+  /* .tape sets align-items:center so a label and its track sit on one line.
+     The wall must opt out: centred, it shrinks to the height of its own
+     content — two absolutely-positioned chips, so nothing — and renders as a
+     single line drawn across the middle of the rows it is meant to contain. */
+  align-self: stretch;
+  margin: calc(-1 * var(--wtop)) calc(-1 * var(--ae-space-5)) calc(-1 * var(--ae-space-3));
+}
+/* Both chips ride the TOP edge. The bottom edge is the one the matrix
+   crosses and it has to stay clean: a name chip there straddles the line the
+   "Isolated" head sits under, and at the type floor the two came within a few
+   pixels of each other in German. The reading does not need the label to be
+   on the crossed edge — two rows of dots below a closed box say it. */
+.v2 .you { top: 0; right: var(--ae-space-6); }
+.v2 .lab, .v2 .trk { position: relative; z-index: 1; }
+.v2 .lab { grid-column: 1; }
+.v2 .trk { grid-column: 2; }
+.v2 .bandhead { grid-column: 1 / -1; margin-bottom: 0; }
+.v2 .bandhead--mid { margin-top: var(--ae-space-3); }
+.v2 .bandhead--out { margin-top: var(--ae-space-4); }
+/* Name and description on ONE line here, in two aligned columns rather than
+   run together with a dash: the item text already contains a dash and two in
+   a row read as a stutter. The matrix is the drawing, so stacking name over
+   description would push the six rows past the frame. No word is dropped. */
+.v2 .lab .it {
+  display: grid;
+  grid-template-columns: calc(var(--ae-fs-small) * 7) minmax(0, 1fr);
+  column-gap: var(--ae-space-3);
+  align-items: baseline;
+}
+.v2 .marks {
+  display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  gap: 5px; align-items: center;
+}
+.v2 .m { height: 15px; position: relative; }
+.v2 .m--on { background: var(--fg-fail); border-radius: 3px; }
+.v2 .m--off::before {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  width: 4px; height: 4px; margin: -2px 0 0 -2px;
+  border-radius: 50%; background: var(--ae-cool-gray-300);
+}
+.v2 .matchcap {
+  grid-column: 5 / -1; grid-row: 2;
+  margin-top: 3px;
+  font-size: var(--ae-fs-caption); line-height: 1.2;
+  color: var(--fg-faint); font-style: italic;
+}
+.v2 .tapekey {
+  grid-column: 2; margin-top: var(--ae-space-2);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  color: var(--fg-faint);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THREE PLACES
+   The axis is WHERE, which is the original slide's other reading
+   and the one its cramped right-hand stack never got to make.
+   There are not two states but three: a thing is in YOUR window;
+   or it is in a window OF ITS OWN and only its answer comes back;
+   or it has no window at all, because it never reaches a model.
+
+   So the drawing is a row of three places in which the third has
+   no wall — three names on one line, two walls under them, and
+   the missing one is the reading. The single grey arrow is the
+   only legitimate crossing on the slide: what a subagent returns,
+   which does land in your window, and is the only thing that does.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .places {
+  --retgap: clamp(60px, 6.4vw, 92px);
+  display: grid;
+  /* The first place is 2.3 of 4.3, not 1.9 of 3.84. Its two item columns were
+     ~230px at the type floor, which is under the German "Tool-Definitionen,
+     jede Anfrage" and put a ragged second line on three of the four rows. */
+  grid-template-columns: minmax(0, 2.3fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--retgap);
+  /* The name chips in row 2 straddle their walls' top edges and so rise half
+     their height into row 1. Without this gap they sat on top of the
+     "Isolated" head — 14px of measured overlap. */
+  row-gap: var(--ae-space-3);
+  align-items: start;
+}
+/* "Isolated" is the original slide's third column head and it has nowhere
+   else to go here: the two places under it carry their own names on their
+   own edges, and the group they form needs saying once. Bottom-aligned so it
+   sits clear of the name chips, which straddle the line below it. */
+.v3 .isohead {
+  grid-column: 2 / -1; grid-row: 1;
+  /* Bottom-aligned, then held clear of the chips below by a full chip
+     half-height plus the row gap. */
+  align-self: end; padding-bottom: var(--ae-fs-small);
+}
+.v3 .mine   { grid-column: 1; grid-row: 2; }
+.v3 .theirs { grid-column: 2; grid-row: 2; }
+.v3 .none   { grid-column: 3; grid-row: 2; }
+.v3 .bd { padding: var(--ae-space-6) var(--ae-space-5) var(--ae-space-4); }
+.v3 .mine .band + .band {
+  margin-top: var(--ae-space-3); padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+}
+.v3 .mine .items {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--ae-space-3) var(--ae-space-5);
+}
+.v3 .mine .band--onuse .items { grid-template-columns: minmax(0, 1fr); }
+/* The human's mark goes on the BOTTOM edge here. On the top edge it clears
+   the window's name at 1440 and collides with it at 1920: both pills grow
+   with the type scale, the wrap does not grow past 1240px, and this column
+   is barely half of that. Measured, not guessed — it looked fine. */
+.v3 .mine .you { top: auto; bottom: 0; left: var(--ae-space-5); right: auto; transform: translateY(50%); }
+/* Reserved padding, not a margin: the ink pill hangs half its height into it,
+   and it is written in terms of the type size because the pill grows with
+   --ae-fs-caption while a constant reserve would stop clearing it. */
+.v3 .mine { padding-bottom: calc(var(--ae-space-3) + var(--ae-fs-caption)); }
+/* The other half of the pill hangs BELOW the wall, into the gap above the
+   legend. At the shared margin the pill's underside and the first legend
+   swatch were three pixels apart at the type floor. */
+.v3 .legend { margin-top: calc(var(--ae-space-5) + var(--ae-fs-caption)); }
+.v3 .theirs { position: relative; }
+/* The return. Solid, grey and pointed: it is supposed to cross. Drawn over
+   the wall rather than through a punched hole — a hole is the mark for an
+   edge that failed, and nothing here failed. */
+.v3 .cross {
+  position: absolute; top: 50%;
+  left: calc(-1 * var(--retgap) - 2px); width: calc(var(--retgap) + 4px); height: 0;
+  border-top: 2px solid var(--ae-cool-gray-400); z-index: 3;
+}
+.v3 .cross::after {
+  content: ''; position: absolute; left: -1px; top: -6px;
+  border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+  border-right: 8px solid var(--ae-cool-gray-400);
+}
+/* The label goes UNDER the arrow, not over it. Over it, the label's top ran
+   into the "Isolated" head that now sits above this column — measured at 2px
+   of overlap, which is nothing to look at and still wrong. Under the arrow
+   the gap between the two walls is empty. */
+.v3 .crosslab {
+  position: absolute; top: calc(50% + 9px);
+  left: calc(-1 * var(--retgap) - 2px); width: calc(var(--retgap) + 4px);
+  text-align: center; z-index: 3;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1.2; font-weight: 600; color: var(--fg-faint);
+}
+/* No container. Not a ghost outline, not a dashed box — nothing. This place
+   gets a NAME on the same line as the other two names and then no wall under
+   it. The chip is dotted, which is where the form ramp ends.
+   padding-top matches .v3 .bd's so the item under the missing wall sits at
+   the same height as the items under the two real ones. */
+.v3 .none { position: relative; padding-top: var(--ae-space-6); }
+.v3 .none__lab {
+  position: absolute; top: 0; left: 0; transform: translateY(-50%);
+  display: inline-flex; align-items: center;
+  padding: 3px 12px; border-radius: 999px;
+  background: var(--fg-paper);
+  border: 1.5px dotted var(--ae-cool-gray-300);
+  font-family: var(--ae-font); font-size: var(--ae-fs-small);
+  line-height: var(--ae-lh-caption); font-weight: 600;
+  color: var(--fg-faint); white-space: nowrap; z-index: 4;
+}
+
+/* ══════════════ NARROW ══════════════ */
+/* 980px, the breakpoint the original slide used — not 1080. Stacking is a
+   fallback, and the stacked layout is 20-25% taller than the frame: at 1080
+   a 1024-wide projector fell into it and overflowed by a fifth. The wide
+   layout is cramped at 1024 and still fits, which is the better failure. */
+@media (max-width: 980px) {
+  .v1 .tl { grid-template-columns: 1fr; row-gap: var(--ae-space-6); }
+  .v1 .out { padding-top: 0; }
+  /* --lab only. --n is the number of MARKS, and the markup renders fourteen
+     of them whatever CSS says: overriding it here left four marks on a second
+     row inside each track. */
+  .v2 .tape { --lab: 42vw; }
+  .v3 .places {
+    grid-template-columns: 1fr; grid-template-rows: auto;
+    row-gap: var(--ae-space-6);
+  }
+  /* The children carry explicit column and row placement, so a one-column
+     grid has to release it or all three places stack in the same cell. */
+  .v3 .isohead, .v3 .mine, .v3 .theirs, .v3 .none {
+    grid-column: 1; grid-row: auto; align-self: start;
+  }
+  /* .mine keeps its bottom padding — the ink pill still hangs into it. */
+  .v3 .isohead { padding-bottom: 0; }
+  .v3 .cross, .v3 .crosslab { display: none; }
+  .v3 .none { padding-top: 0; }
+  .v3 .mine .items { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Timeline</button>
+        <button type="button" data-p="v2">2 · Requests</button>
+        <button type="button" data-p="v3">3 · Places</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* CONTENT — restored from presentation/sections/07-context-loading.js, the v1
+   deck's slide 7. Every string of that slide is here: the heading, the three
+   moment heads, all six item lines (Skills appears twice, which is the fact
+   the v2 rewrite dropped), the three legend states and the footnote.
+
+   Four deliberate departures from v1, each flagged:
+
+     1. The on-use Skills line gains one clause — "and in every request after"
+        / "und in jeder Anfrage danach". v1 was silent on what happens after a
+        skill matches; v2 implied, via a cost badge on the first column only,
+        that it is a one-off. Neither is right. Once a skill has matched, its
+        body is in the conversation and is re-sent like everything else. The
+        distinction is not recurring-vs-one-off, it is WHEN THE METER STARTS.
+
+     2. An ink admission pill on the wall — "You choose what goes in". v1 had
+        no human on the slide. The deck's rule is that whoever decides gets
+        ink, and somebody decides what is connected.
+
+     3. One takeaway line, carried over from the v2 rewrite. It is the reason
+        this slide sits in the Setup chapter at all: the first column is the
+        bill. v1 had no takeaway.
+
+     4. A date stamp in the footer, per the repo's "claims carry their date"
+        convention. v1 predates it.
+
+   v2's lede paragraph is NOT carried over. This is a diagram slide; the lede
+   restated in prose what the drawing says, and it is what pushed the drawing
+   into a third of the frame.
+
+   Per-variation labels are grouped at the bottom of each block. */
+const C = {
+  en: {
+    h1: 'What loads into <span class="fg-mark fg-mark--sweep">context</span> — and when?',
+    windowLabel: 'Context window',
+    admit: 'You choose what goes in',
+    cost: 'Every request',
+    bands: [
+      {
+        head: 'Session start',
+        items: [
+          { t: 'AGENTS.md', mono: true, d: 'Full content, every request' },
+          { t: 'MCP servers', d: 'Tool definitions, every request' },
+          { t: 'Skills <sup>*</sup>', d: 'Descriptions only (default)' },
+        ],
+      },
+      {
+        head: 'On use',
+        items: [
+          { t: 'Skills', d: 'Full content when invoked — and in every request after' },
+        ],
+      },
+      {
+        head: 'Isolated',
+        items: [
+          { t: 'Subagents', d: 'Fresh, own context' },
+          { t: 'Hooks', d: 'External, zero tokens' },
+        ],
+      },
+    ],
+    legend: ['Always in context', 'Loads on use', 'Outside the main context'],
+    note: 'Everything at session start is charged again on every request. <b>That is the bill for a setup, and why “connect everything” is the wrong instruction.</b>',
+    footnote: '*Some tools let a skill stay fully unloaded until you invoke it explicitly.',
+    stamp: 'Loading behaviour checked August 2026 — re-check before relying on it.',
+    /* V1 */ tie: 'the same skill, in two parts',
+    /* V2 */ tapeKey: 'One column = one request you send.',
+             match: '↑ first match',
+    /* V3 */ separate: 'Separate context',
+             nowindow: 'No context window at all',
+             returns: 'what it returns',
+  },
+  de: {
+    h1: 'Wann lädt was in den <span class="fg-mark fg-mark--sweep">Kontext</span>?',
+    windowLabel: 'Kontextfenster',
+    admit: 'Du wählst, was hineinkommt',
+    cost: 'Jede Anfrage',
+    bands: [
+      {
+        head: 'Session-Start',
+        items: [
+          { t: 'AGENTS.md', mono: true, d: 'Voller Inhalt, jede Anfrage' },
+          { t: 'MCP-Server', d: 'Tool-Definitionen, jede Anfrage' },
+          { t: 'Skills <sup>*</sup>', d: 'Nur Beschreibungen (Standard)' },
+        ],
+      },
+      {
+        head: 'Bei Aufruf',
+        items: [
+          { t: 'Skills', d: 'Voller Inhalt bei Aufruf — und in jeder Anfrage danach' },
+        ],
+      },
+      {
+        head: 'Isoliert',
+        items: [
+          { t: 'Subagents', d: 'Frisch, eigener Kontext' },
+          { t: 'Hooks', d: 'Extern, kein Token-Verbrauch' },
+        ],
+      },
+    ],
+    legend: ['Immer im Kontext', 'Lädt bei Aufruf', 'Außerhalb Hauptkontext'],
+    note: 'Alles vom Session-Start kostet bei jeder Anfrage erneut. <b>Das ist die Rechnung für ein Setup — und warum „alles anbinden“ die falsche Anweisung ist.</b>',
+    footnote: '*Manche Tools laden ein Skill erst dann, wenn du es explizit aufrufst.',
+    stamp: 'Ladeverhalten geprüft August 2026 — vor Gebrauch erneut prüfen.',
+    /* V1 */ tie: 'dasselbe Skill, in zwei Teilen',
+    /* V2 */ tapeKey: 'Eine Spalte = eine Anfrage von dir.',
+             match: '↑ erster Treffer',
+    /* V3 */ separate: 'Separater Kontext',
+             nowindow: 'Gar kein Kontextfenster',
+             returns: 'was er zurückgibt',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the timeline: three moments left to right, one drawn wall, and Skills in two of them at once',
+  v2: 'Variation 2 — every request: one column is one request, and the skill’s meter simply starts later',
+  v3: 'Variation 3 — three places: your window, a window of its own, and no window at all',
+};
+
+const KIND = ['always', 'onuse', 'out'];
+
+/* ── shared fragments ───────────────────────────────────────── */
+function item(it, cls, at) {
+  return '<div class="it it--' + cls + ' fg-in" style="--fg-at:' + at + '">'
+    + '<h4' + (it.mono ? ' class="mono"' : '') + '>' + it.t + '</h4>'
+    + '<p>' + it.d + '</p>'
+  + '</div>';
+}
+function head(b, at, extra, row) {
+  return '<div class="bandhead fg-in' + (extra || '') + '" style="'
+    + (row ? 'grid-row:' + row + '; ' : '') + '--fg-at:' + at + '">'
+    + '<h3>' + b.head + '</h3>'
+  + '</div>';
+}
+function legend(t, at) {
+  return '<div class="legend fg-in" style="--fg-at:' + at + '">'
+    + t.legend.map(function (l, i) {
+        return '<span class="lg"><i class="sw sw--' + KIND[i] + '"></i>' + l + '</span>';
+      }).join('')
+  + '</div>';
+}
+function noteRow(t, at) {
+  return '<p class="fg-note note-row fg-in" style="--fg-at:' + at + '">' + t.note + '</p>';
+}
+
+/* ── V1 · THE TIMELINE ───────────────────────────────────────── */
+function V1(t) {
+  const a = t.bands[0].items, b = t.bands[1].items[0], o = t.bands[2].items;
+  return ''
+  + '<div class="tl">'
+    + '<div class="bd fg-in" style="--fg-at:3">'
+      + '<span class="bd__name">' + t.windowLabel + '</span>'
+      + '<span class="you pin-in" style="--fg-at:4">' + t.admit + '</span>'
+      + '<div class="inside">'
+        + '<div class="c1 r1">'
+          + '<div class="bandhead fg-in" style="--fg-at:4">'
+            + '<h3>' + t.bands[0].head + '</h3>'
+            + '<span class="cost">' + t.cost + '</span>'
+          + '</div>'
+        + '</div>'
+        + '<div class="c2 r1">' + head(t.bands[1], 5) + '</div>'
+        + '<div class="c1 r2">' + item(a[0], 'always', 6) + '</div>'
+        + '<div class="c1 r3">' + item(a[1], 'always', 7) + '</div>'
+        + '<div class="c1 r4">' + item(a[2], 'always', 8) + '</div>'
+        + '<div class="c2 r4 tie">'
+          + item(b, 'onuse', 9)
+          + '<p class="tiecap fg-in" style="--fg-at:10">' + t.tie + '</p>'
+        + '</div>'
+      + '</div>'
+    + '</div>'
+
+    + '<div class="out">'
+      + head(t.bands[2], 5)
+      + o.map(function (it, i) { return item(it, 'out', 8 + i); }).join('')
+    + '</div>'
+  + '</div>'
+  + legend(t, 10)
+  + noteRow(t, 11);
+}
+
+/* ── V2 · EVERY REQUEST ──────────────────────────────────────── */
+function V2(t) {
+  const N = 14, START = 4;          /* the skill matches on request 5 */
+  function marks(from, extra) {
+    let s = '';
+    for (let i = 0; i < N; i++) {
+      s += '<i class="m m--' + (from !== null && i >= from ? 'on' : 'off') + '"></i>';
+    }
+    return '<div class="marks">' + s + (extra || '') + '</div>';
+  }
+  /* Rows are numbered here, not left to auto-placement — see the note on
+     .v2 .bd. Row 1 is the first band head; the wall closes after row 6. */
+  let at = 5, r = 1;
+  const rows = [];
+  t.bands.forEach(function (band, bi) {
+    rows.push(head(band, 4 + bi, ['', ' bandhead--mid', ' bandhead--out'][bi], r++));
+    band.items.forEach(function (it) {
+      const from = bi === 0 ? 0 : bi === 1 ? START : null;
+      const cap = (bi === 1) ? '<span class="matchcap">' + t.match + '</span>' : '';
+      rows.push(
+        '<div class="lab" style="grid-row:' + r + '">' + item(it, KIND[bi], at) + '</div>'
+        + '<div class="trk fg-in" style="grid-row:' + r + '; --fg-at:' + at + '">'
+          + marks(from, cap)
+        + '</div>'
+      );
+      at++; r++;
+    });
+  });
+  return ''
+  + '<div class="tape">'
+    + '<div class="bd fg-in" style="--fg-at:3">'
+      + '<span class="bd__name">' + t.windowLabel + '</span>'
+      + '<span class="you pin-in" style="--fg-at:4">' + t.admit + '</span>'
+    + '</div>'
+    + rows.join('')
+    + '<p class="tapekey fg-in" style="grid-row:' + r + '; --fg-at:11">' + t.tapeKey + '</p>'
+  + '</div>'
+  + legend(t, 11)
+  + noteRow(t, 12);
+}
+
+/* ── V3 · THREE PLACES ───────────────────────────────────────── */
+function V3(t) {
+  const o = t.bands[2].items;
+  return ''
+  + '<div class="places">'
+    + '<span class="fg-label isohead fg-in" style="--fg-at:5">' + t.bands[2].head + '</span>'
+    + '<div class="bd mine fg-in" style="--fg-at:3">'
+      + '<span class="bd__name">' + t.windowLabel + '</span>'
+      + '<span class="you pin-in" style="--fg-at:4">' + t.admit + '</span>'
+      + '<div class="band band--always">'
+        + '<div class="bandhead fg-in" style="--fg-at:4">'
+          + '<h3>' + t.bands[0].head + '</h3>'
+          + '<span class="cost">' + t.cost + '</span>'
+        + '</div>'
+        + '<div class="items">'
+          + t.bands[0].items.map(function (it, i) { return item(it, 'always', 5 + i); }).join('')
+        + '</div>'
+      + '</div>'
+      + '<div class="band band--onuse">'
+        + head(t.bands[1], 6)
+        + '<div class="items">' + item(t.bands[1].items[0], 'onuse', 8) + '</div>'
+      + '</div>'
+    + '</div>'
+
+    + '<div class="theirs">'
+      + '<div class="bd fg-in" style="--fg-at:6">'
+        + '<span class="bd__name">' + t.separate + '</span>'
+        + item(o[0], 'out', 8)
+      + '</div>'
+      + '<i class="cross fg-in" aria-hidden="true" style="--fg-at:9"></i>'
+      + '<span class="crosslab fg-in" style="--fg-at:9">' + t.returns + '</span>'
+    + '</div>'
+
+    + '<div class="none">'
+      + '<span class="none__lab pin-in" style="--fg-at:7">' + t.nowindow + '</span>'
+      + item(o[1], 'out', 9)
+    + '</div>'
+  + '</div>'
+  + legend(t, 10)
+  + noteRow(t, 11);
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+
+function render(v, t) {
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot">'
+      + '<div class="fg-foot fg-in" style="--fg-at:12">'
+        + '<span>' + t.footnote + '</span><span>' + t.stamp + '</span>'
+      + '</div>'
+    + '</div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

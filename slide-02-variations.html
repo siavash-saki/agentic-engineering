@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 2 — Two prompts, three variations</title>
+
+<!-- The real deck stylesheets, so these are judged in the actual design
+     language: same fonts, tokens, elevations, motion, and the new palette.
+     Nothing here is wired into the deck. -->
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   HARNESS
+   ══════════════════════════════════════════════════════════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: safe center;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper);
+  overflow: auto;
+}
+/* The greyscale test, on a button: strip hue and every distinction must
+   still read. If a variation fails this, it is failing on purpose-built
+   colour instead of on form. */
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════════════════════════════════════════════════════════
+   THE LAYER MECHANISM  (DESIGN.md, pass 2)
+   No text is deleted; it stops being on screen all at once.
+     L0  the drawing and its labels — the claim in 3 seconds
+     L1  the reasoning
+     L2  the takeaway
+   An element states the layer it arrives in. Elements above the current
+   layer are absent, not merely transparent, so they take no space and
+   the drawing owns the frame at L0.
+   ══════════════════════════════════════════════════════════════════ */
+[data-l="1"], [data-l="2"] { display: none; }
+.proto[data-at="1"] [data-l="1"],
+.proto[data-at="2"] [data-l="1"],
+.proto[data-at="2"] [data-l="2"] { display: revert; }
+
+/* ══════════════════════════════════════════════════════════════════
+   SHARED
+   ══════════════════════════════════════════════════════════════════ */
+.proto h1 {
+  margin: 0 0 var(--ae-space-3);
+  font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1);
+  color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0 0 var(--ae-space-6); max-width: 68ch; }
+.proto .fg-note { margin-top: var(--ae-space-6); }
+
+/* The prompt, wherever it appears. It is file source, so it takes the
+   mono face — the deck's rule, unchanged. */
+.pr {
+  font-family: var(--ae-font-mono);
+  font-size: calc(var(--ae-fs-small) * 0.94);
+  line-height: 1.5;
+  color: var(--fg-body);
+}
+
+/* ── CAST: the human is ink and filled. The machine is grey and hollow.
+      That contrast is the deck's loudest and it is spent here on purpose. ── */
+.node {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: none; width: 26px; height: 26px; border-radius: 999px;
+  font-family: var(--ae-font); font-size: 12px; font-weight: 700;
+  line-height: 1;
+}
+.node--machine { background: var(--fg-card); border: 1.5px solid var(--ae-cool-gray-300); color: var(--fg-faint); }
+.node--human   { background: var(--fg-ink);  border: 1.5px solid var(--fg-ink); color: #fff; }
+.node--doc     { background: var(--fg-card); border: 1.5px solid var(--fg-ink); color: var(--fg-ink); border-radius: 5px; }
+
+/* ── CAST: verdicts. Colour AND a glyph, never colour alone. ── */
+.vd {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--ae-font); font-weight: 600;
+  font-size: var(--ae-fs-caption); line-height: 1;
+}
+.vd::before {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 19px; height: 19px; border-radius: 999px;
+  font-size: 12px; font-weight: 700;
+}
+.vd--keep  { color: var(--fg-build-d); }
+.vd--keep::before  { content: '✓'; background: var(--fg-build-tint); color: var(--fg-build-d); }
+.vd--toss  { color: var(--fg-fail-d); }
+.vd--toss::before  { content: '✕'; background: var(--fg-fail-tint); color: var(--fg-fail-d); }
+
+/* ══════════════════════════════════════════════════════════════════
+   V1 — THE FORK
+   One origin, two paths. The argument is the SHAPE: A is one hop to a
+   dead end, B is four hops to something kept. The path lengths are the
+   claim; the prose underneath only explains it.
+   ══════════════════════════════════════════════════════════════════ */
+.v1 .fork { display: grid; grid-template-columns: auto 1fr; column-gap: var(--ae-space-4); align-items: stretch; }
+.v1 .stem { position: relative; width: clamp(44px, 5.5vw, 84px); }
+.v1 .stem svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.v1 .stem path { fill: none; stroke: var(--ae-cool-gray-300); stroke-width: 2; }
+.v1 .stem .seed {
+  position: absolute; left: -11px; top: 50%; transform: translateY(-50%);
+  width: 22px; height: 22px; border-radius: 999px;
+  background: var(--fg-card); border: 2px solid var(--fg-ink);
+}
+/* The two rows are forced equal so the fork's arms can land on the lane
+   heads by construction rather than by a tuned percentage that drifts the
+   moment the German text wraps differently. */
+.v1 .lanes { display: grid; grid-template-rows: 1fr 1fr; row-gap: var(--ae-space-6); }
+.v1 .lane { align-content: start; }
+
+.v1 .lane { display: grid; row-gap: var(--ae-space-3); }
+/* The prompt sits UNDER its label, not beside it: B's prompt is four times
+   A's length, and inline it squeezed the label onto two lines. The length
+   difference is part of the argument, so it gets its own line to be long in. */
+.v1 .lane__head .who {
+  display: block;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.1; color: var(--fg-ink);
+  white-space: nowrap;
+}
+.v1 .lane__head .pr { display: block; margin-top: 4px; color: var(--fg-muted); max-width: 92ch; }
+
+/* The run of steps. The connector is a real line so the lane reads as a
+   path and not as a row of chips. Sized so B's five hops plus its outcome
+   hold one line at 1280 — a wrapped path stops reading as a path. */
+.v1 .run { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+.v1 .hop { display: inline-flex; align-items: center; gap: 0; }
+.v1 .link { flex: none; width: clamp(12px, 1.5vw, 26px); height: 0; border-top: 1.5px solid var(--ae-cool-gray-300); }
+/* A failing path is clay AND broken. Never hue alone — the two are one
+   distinction, and in greyscale only the dashes survive. */
+.v1 .lane--a .link { border-top-style: dashed; border-top-color: var(--fg-fail); }
+.v1 .step {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 12px 6px 6px; border-radius: 999px;
+  background: var(--fg-card); border: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-caption); line-height: 1.2; color: var(--fg-ink);
+  white-space: nowrap;
+}
+.v1 .step .node { width: 22px; height: 22px; font-size: 11px; }
+.v1 .step--human { border-color: var(--fg-ink); font-weight: 600; }
+.v1 .step--doc   { border-color: var(--fg-ink); border-radius: 8px; }
+.v1 .step--doc .f { font-family: var(--ae-font-mono); font-size: 0.92em; }
+.v1 .end {
+  display: inline-flex; align-items: center; gap: var(--ae-space-3);
+  padding: 8px 15px; border-radius: 10px;
+  font-size: var(--ae-fs-caption); font-weight: 600; white-space: nowrap;
+}
+.v1 .lane--a .end { background: var(--fg-fail-tint);  color: var(--fg-fail-d); }
+.v1 .lane--b .end { background: var(--fg-build-tint); color: var(--fg-build-d); }
+.v1 .lane__why { font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body); max-width: 74ch; }
+.v1 .lane__why b { color: var(--fg-ink); font-weight: 600; }
+
+/* ══════════════════════════════════════════════════════════════════
+   V2 — THE AFTERNOON
+   Both lanes are exactly the same length, because the lede says "same
+   afternoon" and the note says the second is not more work. Equal
+   duration is the honest claim and the stronger one: what differs is
+   what is INSIDE the time, and what is left at the end of it.
+   ══════════════════════════════════════════════════════════════════ */
+.v2 .clock {
+  display: flex; justify-content: space-between;
+  font-size: var(--ae-fs-caption); color: var(--fg-faint);
+  padding-bottom: 6px; border-bottom: 1px solid var(--fg-hair);
+  margin-bottom: var(--ae-space-5);
+}
+/* `start`, not `center`: centring aligned the label against the lane's whole
+   height including the prose underneath, which sank it below its own bar. */
+.v2 .lane { display: grid; grid-template-columns: clamp(96px, 11vw, 150px) 1fr; column-gap: var(--ae-space-5); align-items: start; }
+.v2 .lane + .lane { margin-top: var(--ae-space-6); }
+.v2 .lane__label { text-align: right; padding-top: clamp(9px, 1.5vh, 20px); }
+.v2 .lane__label .who {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.1; color: var(--fg-ink);
+}
+/* Body face, not mono. "Vibe coding" is prose; the deck's rule is that
+   monospace means code and nothing else. */
+.v2 .lane__label .verdict {
+  display: block; margin-top: 4px;
+  font-size: var(--ae-fs-caption); line-height: 1.3; color: var(--fg-muted);
+}
+
+.v2 .bar { display: flex; align-items: stretch; gap: 3px; height: clamp(46px, 6.4vh, 74px); }
+.v2 .blk {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 var(--ae-space-4); border-radius: 8px;
+  font-size: var(--ae-fs-caption); line-height: 1.25; font-weight: 600;
+  overflow: hidden;
+}
+.v2 .blk small { display: block; font-weight: 400; opacity: 0.8; }
+/* Machine work: grey and quiet. */
+.v2 .blk--machine { background: var(--ae-cool-gray-100); border: 1px solid var(--fg-hair); color: var(--fg-muted); }
+/* Human time: ink, filled — the one thing that is not coloured. */
+.v2 .blk--human   { background: var(--fg-ink); color: #fff; }
+.v2 .blk--doc     { background: var(--fg-card); border: 1.5px solid var(--fg-ink); color: var(--fg-ink); font-family: var(--ae-font-mono); font-size: 0.9em; }
+/* Wasted time: clay AND hatched. In greyscale the hatch is what survives. */
+.v2 .blk--waste {
+  color: var(--fg-fail-d); border: 1px dashed var(--fg-fail);
+  background: repeating-linear-gradient(-45deg,
+    var(--fg-fail-tint) 0 7px, transparent 7px 14px);
+}
+.v2 .lane__out { margin-top: var(--ae-space-3); }
+.v2 .lane__why { margin-top: var(--ae-space-3); font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body); max-width: 72ch; }
+.v2 .lane__why b { color: var(--fg-ink); font-weight: 600; }
+
+/* ══════════════════════════════════════════════════════════════════
+   V3 — THE BLANKS
+   The note says the model was "filling in a blank". So draw the blank.
+   Three decisions exist either way; the only question is who made them.
+   The prompts are exhibits at contrasting size — A's brevity is not a
+   layout accident, it is the argument.
+   ══════════════════════════════════════════════════════════════════ */
+.v3 .cols { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--ae-space-7); align-items: start; }
+.v3 .side { display: grid; row-gap: var(--ae-space-4); }
+.v3 .side__head { display: flex; align-items: baseline; gap: var(--ae-space-3); }
+.v3 .side__head .who {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.1; color: var(--fg-ink);
+}
+.v3 .side__head .tag { font-size: var(--ae-fs-caption); color: var(--fg-muted); }
+.v3 .quote {
+  padding: var(--ae-space-4) var(--ae-space-5);
+  border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1px solid var(--fg-hair);
+  box-shadow: var(--fg-d1);
+}
+.v3 .quote--b { box-shadow: var(--fg-d2); }
+
+.v3 .slots { display: grid; row-gap: var(--ae-space-3); }
+.v3 .slot {
+  display: grid; grid-template-columns: auto 1fr; column-gap: var(--ae-space-3);
+  align-items: center;
+  padding: var(--ae-space-3) var(--ae-space-4);
+  border-radius: var(--ae-radius);
+}
+.v3 .slot .k {
+  font-size: var(--ae-fs-caption); font-weight: 600; color: var(--fg-muted);
+  white-space: nowrap;
+}
+.v3 .slot .val { font-size: var(--ae-fs-small); line-height: 1.3; }
+/* An empty slot: clay, dashed, and literally blank. The ruled line is the
+   form cue — it survives desaturation, where the clay does not. */
+.v3 .slot--blank { border: 1px dashed var(--fg-fail); background: var(--fg-fail-tint); }
+.v3 .slot--blank .val { color: var(--fg-fail-d); font-style: italic; }
+.v3 .slot--blank .val i { font-style: normal; letter-spacing: 0.1em; opacity: 0.55; }
+/* A filled slot: ink, solid, decided. */
+.v3 .slot--filled { border: 1px solid var(--fg-ink); background: var(--fg-card); }
+.v3 .slot--filled .val { color: var(--fg-ink); font-weight: 600; }
+.v3 .who-line {
+  display: flex; align-items: center; gap: var(--ae-space-2);
+  font-size: var(--ae-fs-caption); font-weight: 600;
+}
+.v3 .who-line--m { color: var(--fg-fail-d); }
+.v3 .who-line--h { color: var(--fg-ink); }
+.v3 .side__why { font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body); }
+.v3 .side__why b { color: var(--fg-ink); font-weight: 600; }
+
+@media (max-width: 900px) {
+  .v3 .cols { grid-template-columns: 1fr; row-gap: var(--ae-space-6); }
+  .v2 .lane { grid-template-columns: 1fr; row-gap: var(--ae-space-3); }
+  .v2 .lane__label { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Fork</button>
+        <button type="button" data-p="v2">2 · Afternoon</button>
+        <button type="button" data-p="v3">3 · Blanks</button>
+      </div>
+      <div class="lang-toggle" id="layers" role="group" aria-label="Layer">
+        <button type="button" data-a="0">L0</button>
+        <button type="button" data-a="1">L1</button>
+        <button type="button" data-a="2">L2</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Content is verbatim from presentation-v2/sections/02-hook.js wherever the
+   text already existed. Only two things are new, and both are drawn rather
+   than written: the three decisions (which the B prompt already asks about),
+   and the lane labels. Nothing was cut. */
+const C = {
+  en: {
+    h1: 'Two prompts',
+    lede: 'Same model. Same data. Same afternoon. One of these produces a dashboard you throw away.',
+    a: {
+      who: 'Prompt A',
+      prompt: '"Here\'s the inventory data. Build me a dashboard."',
+      verdict: 'Vibe coding',
+      why: 'The agent picks the charts, the metrics and the colours. <b>All of it is a guess, and all of it looks finished.</b>',
+      end: 'A dashboard you throw away',
+      steps: [{ k: 'm', t: 'It guesses' }],
+      blocks: [
+        { kind: 'machine', t: 'It builds', s: 'immediately' },
+        { kind: 'waste',   t: 'You look at it, and start again', s: 'the charts are wrong, the metrics are wrong' },
+      ],
+      decided: 'Decided by the model',
+    },
+    b: {
+      who: 'Prompt B',
+      prompt: '"Here\'s the inventory data. I want a dashboard. Before you write any code: read it, then let\'s talk. What KPIs matter? What should the charts show? What do we leave out? Ask me until you know."',
+      verdict: 'Agentic engineering',
+      why: 'One conversation, and then <b>it builds from a file you agreed</b> — which is also the thing you check it against afterwards.',
+      end: 'A dashboard you keep',
+      steps: [
+        { k: 'm', t: 'It asks' },
+        { k: 'h', t: 'You answer' },
+        { k: 'd', t: 'dashboard.md' },
+        { k: 'm', t: 'It builds from the file' },
+        { k: 'h', t: 'You check it against the file' },
+      ],
+      blocks: [
+        { kind: 'human',   t: 'It asks, you answer', s: 'one conversation' },
+        { kind: 'doc',     t: 'dashboard.md' },
+        { kind: 'machine', t: 'It builds from the file' },
+        { kind: 'human',   t: 'You check', s: 'against the file' },
+      ],
+      decided: 'Decided by you',
+    },
+    clockStart: 'Same start',
+    clockEnd: 'Same afternoon',
+    decisionsLabel: 'The same three decisions, either way',
+    decisions: [
+      { k: 'Which KPIs',   a: 'never asked', b: 'Stock cover, and units below reorder point' },
+      { k: 'Which charts', a: 'never asked', b: 'One table, ranked. No pie charts.' },
+      { k: 'What to omit', a: 'never asked', b: 'Suppliers, and anything with a date range' },
+    ],
+    note: 'The second one is not more work because it is more formal. It is more work because <b>the decisions were made by a person</b> instead of by a model filling in a blank.',
+  },
+  de: {
+    h1: 'Zwei Prompts',
+    lede: 'Gleiches Modell. Gleiche Daten. Gleicher Nachmittag. Einer davon produziert ein Dashboard, das man wegwirft.',
+    a: {
+      who: 'Prompt A',
+      prompt: '„Hier sind die Inventardaten. Bau mir ein Dashboard."',
+      verdict: 'Vibe Coding',
+      why: 'Der Agent wählt Diagramme, Kennzahlen und Farben. <b>Alles davon ist geraten, und alles davon sieht fertig aus.</b>',
+      end: 'Ein Dashboard, das man wegwirft',
+      steps: [{ k: 'm', t: 'Er rät' }],
+      blocks: [
+        { kind: 'machine', t: 'Er baut', s: 'sofort' },
+        { kind: 'waste',   t: 'Du siehst es an und fängst neu an', s: 'die Charts stimmen nicht, die Kennzahlen auch nicht' },
+      ],
+      decided: 'Entschieden vom Modell',
+    },
+    b: {
+      who: 'Prompt B',
+      prompt: '„Hier sind die Inventardaten. Ich will ein Dashboard. Bevor du Code schreibst: sieh sie dir an, dann reden wir. Welche KPIs zählen? Was sollen die Charts zeigen? Was lassen wir weg? Frag mich, bis du es weißt."',
+      verdict: 'Agentic Engineering',
+      why: 'Ein Gespräch, und dann <b>baut er aus einer Datei, die du freigegeben hast</b> — und genau gegen die prüfst du danach.',
+      end: 'Ein Dashboard, das man behält',
+      steps: [
+        { k: 'm', t: 'Er fragt' },
+        { k: 'h', t: 'Du antwortest' },
+        { k: 'd', t: 'dashboard.md' },
+        { k: 'm', t: 'Er baut aus der Datei' },
+        { k: 'h', t: 'Du prüfst gegen die Datei' },
+      ],
+      blocks: [
+        { kind: 'human',   t: 'Er fragt, du antwortest', s: 'ein Gespräch' },
+        { kind: 'doc',     t: 'dashboard.md' },
+        { kind: 'machine', t: 'Er baut aus der Datei' },
+        { kind: 'human',   t: 'Du prüfst', s: 'gegen die Datei' },
+      ],
+      decided: 'Entschieden von dir',
+    },
+    clockStart: 'Gleicher Start',
+    clockEnd: 'Gleicher Nachmittag',
+    decisionsLabel: 'Dieselben drei Entscheidungen, so oder so',
+    decisions: [
+      { k: 'Welche KPIs',   a: 'nie gefragt', b: 'Reichweite, und Artikel unter Meldebestand' },
+      { k: 'Welche Charts', a: 'nie gefragt', b: 'Eine Tabelle, sortiert. Keine Tortendiagramme.' },
+      { k: 'Was weglassen', a: 'nie gefragt', b: 'Lieferanten, und alles mit Zeitraum' },
+    ],
+    note: 'Der zweite Weg ist nicht aufwendiger, weil er formeller ist. Er ist aufwendiger, weil <b>die Entscheidungen von einem Menschen kommen</b> und nicht von einem Modell, das eine Lücke füllt.',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the fork: one origin, two paths, and the path lengths are the argument',
+  v2: 'Variation 2 — the afternoon: identical time, different contents, different residue',
+  v3: 'Variation 3 — the blanks: three decisions exist either way; only the decider changes',
+};
+
+const esc = s => s;
+
+/* ── V1 ────────────────────────────────────────────────────────── */
+function stepHTML(s) {
+  if (s.k === 'd') return '<span class="step step--doc"><span class="node node--doc">▤</span><span class="f">' + s.t + '</span></span>';
+  if (s.k === 'h') return '<span class="step step--human"><span class="node node--human">●</span>' + s.t + '</span>';
+  return '<span class="step"><span class="node node--machine">◦</span>' + s.t + '</span>';
+}
+function runHTML(side, at) {
+  return side.steps.map(function (s, i) {
+    return '<span class="hop fg-in" style="--fg-at:' + (at + i) + '">'
+      + (i ? '<i class="link"></i>' : '') + stepHTML(s) + '</span>';
+  }).join('')
+  + '<span class="hop fg-in" style="--fg-at:' + (at + side.steps.length) + '">'
+  + '<i class="link"></i><span class="end">' + side.end + '</span></span>';
+}
+function laneV1(side, cls, at) {
+  return ''
+  + '<div class="lane lane--' + cls + '">'
+    + '<div class="lane__head fg-in" style="--fg-at:' + at + '">'
+      + '<span class="who">' + side.who + '</span>'
+      + '<span class="pr">' + side.prompt + '</span>'
+    + '</div>'
+    + '<div class="run">' + runHTML(side, at + 1) + '</div>'
+    + '<p class="lane__why" data-l="1">' + side.why + '</p>'
+  + '</div>';
+}
+function V1(t) {
+  return ''
+  + '<div class="fork">'
+    + '<div class="stem fg-in" style="--fg-at:2">'
+      + '<span class="seed"></span>'
+      /* Equal rows put lane A's head at ~12% and lane B's at ~62%. The arms
+         end there, and the horizontal tail carries into each head. */
+      + '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'
+        + '<path d="M6 50 H34 Q52 50 52 34 V12 H100" />'
+        + '<path d="M6 50 H34 Q52 50 52 66 V62 H100" />'
+      + '</svg>'
+    + '</div>'
+    + '<div class="lanes">'
+      + laneV1(t.a, 'a', 3)
+      + laneV1(t.b, 'b', 5)
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V2 ────────────────────────────────────────────────────────── */
+/* Every lane sums to the same width. A spends it on building then on
+   starting over; B spends it on one conversation and then on building
+   once. Equal length is the point — not a rendering convenience. */
+const FLEX = {
+  a: [46, 54],
+  b: [26, 12, 40, 22],
+};
+function blkHTML(b, w, at) {
+  return '<div class="blk blk--' + b.kind + ' fg-in" style="flex:' + w + '; --fg-at:' + at + '">'
+    + '<span>' + b.t + '</span>'
+    + (b.s ? '<small>' + b.s + '</small>' : '')
+  + '</div>';
+}
+function laneV2(side, key, at) {
+  return ''
+  + '<div class="lane">'
+    + '<div class="lane__label fg-in" style="--fg-at:' + at + '">'
+      + '<span class="who">' + side.who + '</span>'
+      + '<span class="verdict">' + side.verdict + '</span>'
+    + '</div>'
+    + '<div>'
+      + '<div class="bar">'
+        + side.blocks.map(function (b, i) { return blkHTML(b, FLEX[key][i], at + 1 + i); }).join('')
+      + '</div>'
+      + '<div class="lane__out fg-in" style="--fg-at:' + (at + 5) + '">'
+        + '<span class="vd vd--' + (key === 'a' ? 'toss' : 'keep') + '">' + side.end + '</span>'
+      + '</div>'
+      + '<p class="lane__why" data-l="1">' + side.why + '</p>'
+    + '</div>'
+  + '</div>';
+}
+function V2(t) {
+  return ''
+  + '<div class="clock fg-in" style="--fg-at:2">'
+    + '<span>' + t.clockStart + '</span><span>' + t.clockEnd + '</span>'
+  + '</div>'
+  + laneV2(t.a, 'a', 3)
+  + laneV2(t.b, 'b', 5);
+}
+
+/* ── V3 ────────────────────────────────────────────────────────── */
+function V3(t) {
+  const blanks = t.decisions.map(function (d, i) {
+    return '<div class="slot slot--blank fg-in" style="--fg-at:' + (5 + i) + '">'
+      + '<span class="k">' + d.k + '</span>'
+      + '<span class="val"><i>▁▁▁▁▁▁▁▁</i> ' + d.a + '</span>'
+    + '</div>';
+  }).join('');
+  const filled = t.decisions.map(function (d, i) {
+    return '<div class="slot slot--filled fg-in" style="--fg-at:' + (6 + i) + '">'
+      + '<span class="k">' + d.k + '</span>'
+      + '<span class="val">' + d.b + '</span>'
+    + '</div>';
+  }).join('');
+  return ''
+  + '<p class="fg-label fg-in" style="--fg-at:2; margin:0 0 var(--ae-space-4)">' + t.decisionsLabel + '</p>'
+  + '<div class="cols">'
+    + '<div class="side">'
+      + '<div class="side__head fg-in" style="--fg-at:3">'
+        + '<span class="who">' + t.a.who + '</span><span class="tag">' + t.a.verdict + '</span></div>'
+      + '<div class="quote fg-in" style="--fg-at:3"><p class="pr" style="margin:0">' + t.a.prompt + '</p></div>'
+      + '<div class="slots">' + blanks + '</div>'
+      + '<p class="who-line who-line--m fg-in" style="--fg-at:8">'
+        + '<span class="node node--machine" style="width:22px;height:22px">◦</span>' + t.a.decided + '</p>'
+      + '<p class="side__why" data-l="1">' + t.a.why + '</p>'
+    + '</div>'
+    + '<div class="side">'
+      + '<div class="side__head fg-in" style="--fg-at:4">'
+        + '<span class="who">' + t.b.who + '</span><span class="tag">' + t.b.verdict + '</span></div>'
+      + '<div class="quote quote--b fg-in" style="--fg-at:4"><p class="pr" style="margin:0">' + t.b.prompt + '</p></div>'
+      + '<div class="slots">' + filled + '</div>'
+      + '<p class="who-line who-line--h fg-in" style="--fg-at:9">'
+        + '<span class="node node--human" style="width:22px;height:22px">●</span>' + t.b.decided + '</p>'
+      + '<p class="side__why" data-l="1">' + t.b.why + '</p>'
+    + '</div>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+
+function render(v, t, at) {
+  return ''
+  + '<section class="proto ' + v + '" data-at="' + at + '">'
+    + '<div class="fg-wrap">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:1">' + t.lede + '</p>'
+      + BODY[v](t)
+      + '<p class="fg-note" data-l="2"><span>' + t.note + '</span></p>'
+    + '</div>'
+  + '</section>';
+}
+
+/* ── harness ── */
+let lang = 'en', proto = 'v1', at = 2;
+const stage = document.getElementById('stage');
+
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang], at);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto);
+  sync('#langs', 'l', lang);
+  sync('#layers', 'a', at);
+}
+
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount();
+});
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount();
+});
+document.getElementById('layers').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; at = +b.dataset.a; mount();
+});
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => {
+  document.body.classList.toggle('grey');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' && at < 2) { at++; mount(); }
+  if (e.key === 'ArrowLeft'  && at > 0) { at--; mount(); }
+  if (e.key === '1' || e.key === '2' || e.key === '3') { proto = 'v' + e.key; mount(); }
+});
+
+mount();
+</script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 27 — The smallest version, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   Slide 27 is the most USABLE slide in the deck: it is what a person
+   does on Monday morning. DESIGN.md calls the current layout a
+   "sequence of six in a 3x2 grid", and that is the defect — a grid
+   asks the reader to wrap, and wrapping destroys the one property
+   that matters, which is that step 4 comes after step 3.
+
+   So all three variations draw a RUN, and differ in the axis they run
+   along: across, down, or across-then-wrapped. That is the choice the
+   user is actually being asked to make.
+
+   THE SLIDE HAS NO CHAPTER HUE OF ITS OWN, but it names all three loop
+   steps in its own recap, so blue/green/plum arrive here as STRUCTURE:
+   steps 1-4 are Plan, step 5 is Build, step 6 is Review. Drawing that
+   turns the recap line from a restatement into part of the figure, and
+   it makes the note's claim visible — four of the six moves happen
+   before any code exists.
+
+   Colour is never the only carrier. In every variation the phase is
+   also written out in words next to the mark that carries it, so the
+   grouping survives the Greyscale button.
+
+   STEP 4 CARRIES AN INK RING. The note says step 4 is the one people
+   skip and the one that makes 5 and 6 possible; ink is the deck's mark
+   for a human decision, and writing the file is the human's act. It is
+   the same emphasis the current slide spends on a card ring, moved on
+   to the drawing where it can be seen.
+
+   (No backticks in these comments: they get ported into a JS template
+   literal later, where one backtick blanks the deck. It has happened.)
+   ══════════════════════════════════════════════════════════════════ */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-4); }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 68ch; }
+.cap { margin: 0 0 var(--ae-space-3); }
+
+/* the three chapter hues, named once */
+.s-plan   { --hue: var(--fg-plan);   --hue-d: var(--fg-plan-d); }
+.s-build  { --hue: var(--fg-build);  --hue-d: var(--fg-build-d); }
+.s-review { --hue: var(--fg-review); --hue-d: var(--fg-review-d); }
+
+/* A phase name. Always rendered next to the coloured mark it names, so
+   the grouping reads with the hue stripped out. */
+.phase-name {
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--hue-d);
+}
+
+/* One disc device for all three variations: filled with the phase hue,
+   white numeral, middle elevation, sitting ON the rail. */
+.disc {
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  background: var(--hue); color: #fff;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--fg-d2);
+  position: relative; z-index: 1;
+}
+/* The pivot. Ink ring, offset by a paper-coloured gap so it reads as a
+   ring rather than a thicker disc — and ink against three mid-tone hues
+   is the widest contrast the deck has, so it survives greyscale. */
+.disc--key {
+  box-shadow: var(--fg-d2), 0 0 0 3px var(--fg-paper), 0 0 0 5.5px var(--fg-ink);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — ONE RUN
+   Six discs on a single rail, with the three phases bracketed
+   above them. The bet: six columns fit at slide width if the
+   prose is set small and the names are short — which is what
+   this variation exists to measure, in German as well as English.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .run {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: var(--ae-space-4);
+  align-items: start;
+  padding-right: 20px;          /* room for the rail's head */
+}
+/* Row 1 — the phase brackets. Three separate bars of unequal width:
+   the widths ARE the claim, four of six moves before any code. */
+.v1 .band { grid-row: 1; padding-bottom: var(--ae-space-5); }
+.v1 .band i {
+  display: block; height: 6px; border-radius: 3px;
+  margin-top: 5px; background: var(--hue);
+  transform-origin: left center;
+  animation: v-extend 620ms var(--ae-ease) both;
+  animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat));
+}
+@keyframes v-extend { from { transform: scaleX(0); } }
+
+/* Row 2 — the rail, at connector strength (cool gray 300), never the
+   hairline value: a line the eye travels along is not a separator. */
+.v1 .rail {
+  grid-row: 2; grid-column: 1 / -1; align-self: center; position: relative;
+  height: 3px; border-radius: 2px 0 0 2px; background: var(--ae-cool-gray-300);
+  transform-origin: left center;
+  animation: v-extend 820ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 4 * var(--fg-beat));
+}
+.v1 .rail::after {
+  content: ''; position: absolute; right: -13px; top: -7.5px;
+  width: 0; height: 0;
+  border-left: 13px solid var(--ae-cool-gray-300);
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+}
+/* The discs run larger than slide 8's, and deliberately: six across is a
+   WIDE, SHORT figure, and at slide-8's disc size the drawing floated in
+   the middle of the frame with a third of the body empty above and below
+   it. The height has to come from somewhere, and a bigger numeral is the
+   part of the drawing that is worth reading from the back of the room. */
+.v1 .disc {
+  grid-row: 2; margin: 0 auto;
+  width: clamp(48px, 6.4vh, 74px); height: clamp(48px, 6.4vh, 74px);
+  font-size: var(--ae-fs-h2);
+}
+.v1 .nm {
+  grid-row: 3; display: block; margin-top: var(--ae-space-5); text-align: center;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.16; color: var(--fg-ink);
+}
+.v1 .ds {
+  grid-row: 4; margin: var(--ae-space-3) 0 0; text-align: center;
+  font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-body);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — ONE COLUMN
+   The run turned ninety degrees. Six rows down the frame, the
+   rail hued by phase with a visible break where the phase
+   changes, the phase named in the gutter beside the break.
+
+   This is the shape that gives German the most room: every step
+   gets the full width of the column for one or two lines, and
+   nothing has to be measured against a six-way division. The
+   title, the lede and the takeaway move to a plate on the left,
+   so the run can own the full height of the frame.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .split {
+  flex: 1; min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.3fr);
+  column-gap: var(--ae-space-8);
+  align-items: stretch;
+}
+.v2 .plate { display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.v2 .plate h1 { font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); margin-bottom: var(--ae-space-4); }
+.v2 .plate .fg-lede { max-width: 42ch; }
+.v2 .plate .fg-note { margin-top: var(--ae-space-6); }
+.v2 .side { display: flex; flex-direction: column; min-height: 0; }
+
+/* The six rows share the height of the frame equally. minmax(min-content,1fr)
+   and not minmax(0,1fr): equal rows are what makes the run read as a run,
+   but a row may never be squeezed below its own German text. */
+.v2 .vrun {
+  flex: 1;
+  grid-template-rows: repeat(6, minmax(min-content, 1fr));
+  --D: clamp(34px, 4.4vh, 46px);   /* disc diameter */
+  --pt: 1px;                       /* disc offset inside its row */
+  display: grid;
+  grid-template-columns: auto var(--D) minmax(0, 1fr);
+  column-gap: var(--ae-space-4);
+  align-items: stretch;
+}
+.v2 .pl { grid-column: 1; align-self: start; padding-top: calc(var(--pt) + 0.30 * var(--D)); white-space: nowrap; }
+
+/* The rail lives on the segment cell as a pseudo-element so it can run
+   the FULL height of the row and join the next one without a gap. The
+   four offsets below are all derived from --D and --pt, never eyeballed:
+   the first segment starts at disc 1's centre, the last ends at disc 6's,
+   and a phase boundary opens a real gap in the line. */
+.v2 .seg { grid-column: 2; position: relative; }
+.v2 .seg::before {
+  content: ''; position: absolute;
+  left: calc(var(--D) / 2 - 1.5px); width: 3px; top: 0; bottom: 0;
+  background: var(--hue); border-radius: 2px;
+  transform-origin: center top;
+  animation: v-extend-y 520ms var(--ae-ease) both;
+  animation-delay: calc(60ms + var(--fg-at, 0) * var(--fg-beat));
+}
+@keyframes v-extend-y { from { transform: scaleY(0); } }
+.v2 .seg--first::before { top: calc(var(--pt) + var(--D) / 2); }
+.v2 .seg--last::before  { bottom: calc(100% - var(--pt) - var(--D) / 2); }
+.v2 .seg--pstart::before { top: 7px; }
+.v2 .seg--pend::before   { bottom: 7px; }
+.v2 .seg .disc {
+  position: absolute; top: var(--pt); left: 0;
+  width: var(--D); height: var(--D);
+  font-size: var(--ae-fs-h4);
+}
+.v2 .txt { grid-column: 3; padding-bottom: var(--ae-space-4); }
+.v2 .txt--last { padding-bottom: 0; }
+.v2 .txt h3 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.18; color: var(--fg-ink);
+}
+.v2 .txt p { margin: 3px 0 0; font-size: var(--ae-fs-small); line-height: 1.38; color: var(--fg-body); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE WRAP
+   Six across is tight and six down is tall, so this one wraps —
+   but it wraps WHERE THE ARGUMENT WRAPS. Row one is the four
+   Plan moves; row two is Build and Review. No phase is split by
+   the break, and the two rows are the recap.
+
+   THE CONNECTOR IS THE WHOLE POINT. A wrapped sequence with no
+   connector is the 3x2 grid this slide is being redrawn to
+   escape. The rail leaves row one on the right, comes back
+   across, and arrives at row two's left end with an arrowhead —
+   so the order survives the wrap.
+
+   It is built from CSS borders and derived from --pad, --D and
+   --G rather than from measured pixels: an SVG with a stretched
+   viewBox turns the rounded corners into ellipses. Each half is
+   positioned inside its own group, so the two halves meet
+   exactly without either of them knowing the other's height.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .fig {
+  --pad: clamp(18px, 2vw, 30px);   /* the channel the wrap runs in */
+  --D: clamp(40px, 5.2vh, 54px);   /* disc diameter */
+  --G: clamp(30px, 4.4vh, 56px);   /* the gap the wrap crosses */
+  --cg: var(--ae-space-5);         /* the grid's column gap, needed by name */
+  padding: 0 var(--pad);
+  display: flex; flex-direction: column; row-gap: var(--G);
+}
+/* The four rows are declared EXPLICITLY, and that is not cosmetic: the
+   wrap connector spans "grid-row: 2 / -1", and in a grid whose rows are
+   all implicit, -1 resolves to the end of the empty explicit grid — the
+   span silently inverts and the connector draws above the rail instead
+   of beside the prose. It did. */
+.v3 .grp {
+  position: relative; display: grid;
+  grid-template-rows: auto auto auto auto;
+  align-items: start; column-gap: var(--cg);
+}
+.v3 .grpA { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.v3 .grpB { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Every phase name sits centred over the disc that starts its phase, so
+   the label always names the mark directly under it. */
+.v3 .capn { grid-row: 1; text-align: center; padding-bottom: var(--ae-space-1); }
+
+.v3 .rail {
+  grid-row: 2; grid-column: 1 / -1; align-self: center; position: relative;
+  height: 3px; background: var(--ae-cool-gray-300);
+  transform-origin: left center;
+  animation: v-extend 700ms var(--ae-ease) both;
+}
+/* The rail begins at the FIRST disc's centre and ends at the LAST one's,
+   the same rule slide 5 uses, so no stub dangles past either end. Both
+   insets are the column geometry written out rather than a guessed
+   percentage: half a column in a four-column grid is 12.5% - 0.375g,
+   and a quarter of a two-column grid is 25% - 0.25g. */
+.v3 .grpA .rail {
+  margin-left: calc(12.5% - var(--cg) * 0.375);
+  margin-right: calc(-1 * var(--pad));
+  animation-delay: calc(60ms + 3 * var(--fg-beat));
+}
+.v3 .grpB .rail {
+  margin-left: calc(-1 * var(--pad));
+  margin-right: calc(25% - var(--cg) * 0.25);
+  animation-delay: calc(60ms + 8 * var(--fg-beat));
+}
+.v3 .disc {
+  grid-row: 2; margin: 0 auto;
+  width: var(--D); height: var(--D);
+}
+.v3 .nm {
+  grid-row: 3; display: block; margin-top: var(--ae-space-3); text-align: center;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.16; color: var(--fg-ink);
+}
+.v3 .ds {
+  grid-row: 4; margin: 6px auto 0; max-width: 34ch; text-align: center;
+  font-size: var(--ae-fs-small); line-height: 1.38; color: var(--fg-body);
+}
+/* The second row has two cells across the same width, so its measure is
+   allowed to be wider. Held at 34ch it wrapped to three lines inside a
+   cell twice that wide, and the row it added is what pushed the German
+   into the takeaway on a short frame. */
+.v3 .grpB .ds { max-width: 46ch; }
+
+/* The wrap, in two halves that meet at the horizontal midline.
+   Half A starts at row one's rail (margin-top = half a disc) and ends
+   half a gap below its group. Half B starts half a gap above its group
+   and ends at row two's rail. Both extend --pad outward, which is the
+   clearance the fig reserves so the line never crosses the prose. */
+.v3 .wrapA, .v3 .wrapB {
+  pointer-events: none;
+  animation: fg-rise 560ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 7 * var(--fg-beat));
+}
+.v3 .wrapA {
+  grid-row: 2 / -1; grid-column: 3 / 5; align-self: stretch;
+  margin-top: calc(var(--D) / 2);
+  margin-bottom: calc(-1 * var(--G) / 2);
+  /* Half a column gap, so the two halves meet at exactly 50% instead of
+     leaving a gap the width of the gutter in the middle of the return. */
+  margin-left: calc(-0.5 * var(--cg));
+  margin-right: calc(-1 * var(--pad));
+  border-right: 1.5px solid var(--ae-cool-gray-300);
+  border-bottom: 1.5px solid var(--ae-cool-gray-300);
+  border-bottom-right-radius: 14px;
+}
+.v3 .wrapB {
+  position: relative;
+  grid-row: 1 / 3; grid-column: 1 / 2; align-self: stretch;
+  margin-top: calc(-1 * var(--G) / 2 - 1.5px);
+  margin-bottom: calc(var(--D) / 2);
+  margin-left: calc(-1 * var(--pad));
+  margin-right: calc(-0.5 * var(--cg));
+  border-left: 1.5px solid var(--ae-cool-gray-300);
+  border-top: 1.5px solid var(--ae-cool-gray-300);
+  border-top-left-radius: 14px;
+}
+/* The head where the wrap arrives, so the return reads as a direction
+   and not as a bracket. Same grey, same stroke, one continuous line. */
+.v3 .wrapB::after {
+  content: ''; position: absolute; left: -5.75px; bottom: -1px;
+  width: 0; height: 0;
+  border-top: 9px solid var(--ae-cool-gray-300);
+  border-left: 6.5px solid transparent;
+  border-right: 6.5px solid transparent;
+}
+
+@media print {
+  .v1 .rail, .v1 .band i, .v2 .seg::before,
+  .v3 .rail, .v3 .wrapA, .v3 .wrapB { animation: none !important; }
+}
+
+@media (max-width: 1000px) {
+  .v1 .run { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--ae-space-5); }
+  .v1 .rail, .v1 .band { display: none; }
+  .v2 .split { grid-template-columns: 1fr; row-gap: var(--ae-space-6); }
+  .v3 .grpA, .v3 .grpB { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v3 .rail, .v3 .wrapA, .v3 .wrapB { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · One run</button>
+        <button type="button" data-p="v2">2 · One column</button>
+        <button type="button" data-p="v3">3 · The wrap</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/27-monday.js. No string is added,
+   removed or reworded. The only markup change is the mint sweep on one word
+   of the title, which is the deck's existing title device. */
+const C = {
+  en: {
+    h1: 'The <span class="fg-mark fg-mark--sweep">smallest</span> version that works',
+    lede: 'Nothing here needs a folder structure, a naming convention or a new tool. Take the next thing you were going to build and do this instead.',
+    steps: [
+      { n: '1', t: 'Do not ask for code yet',   d: 'Ask the agent to read the files that matter and summarise what it found.' },
+      { n: '2', t: 'Make it ask',               d: '"Ask me every question you need answered to build this without guessing."' },
+      { n: '3', t: 'Answer, and decide',        d: 'The questions are the requirements. The answers are yours to give, not its to assume.' },
+      { n: '4', t: 'Put it in a markdown file', d: 'What it should do, what is out of scope, and how you will know it worked.' },
+      { n: '5', t: 'Then build',                d: 'In steps. One commit each. The file stays in the prompt the whole time.' },
+      { n: '6', t: 'Check, then have it read',  d: 'Walk your own criteria first. Then have a different model read the diff.' },
+    ],
+    recapLabel: 'And that is the whole thing',
+    recap: ['Plan', 'Build', 'Review'],
+    note: 'Step 4 is the one people skip, and it is the one that makes steps 5 and 6 possible. <b>Everything else in this talk is turning the dial.</b>',
+  },
+  de: {
+    h1: 'Die <span class="fg-mark fg-mark--sweep">kleinste</span> Fassung, die funktioniert',
+    lede: 'Nichts davon braucht eine Ordnerstruktur, eine Namenskonvention oder ein neues Werkzeug. Nimm die nächste Aufgabe und mach es so.',
+    steps: [
+      { n: '1', t: 'Noch keinen Code verlangen', d: 'Den Agenten die relevanten Dateien lesen und zusammenfassen lassen.' },
+      { n: '2', t: 'Fragen lassen',              d: '„Stell mir jede Frage, die du beantwortet brauchst, um das ohne Raten zu bauen."' },
+      { n: '3', t: 'Antworten und entscheiden',  d: 'Die Fragen sind die Anforderungen. Die Antworten gibst du, nicht das Modell.' },
+      { n: '4', t: 'In eine Markdown-Datei',     d: 'Was es tun soll, was nicht dazugehört, und woran du erkennst, dass es klappt.' },
+      { n: '5', t: 'Dann bauen',                 d: 'In Schritten. Ein Commit je Schritt. Die Datei bleibt die ganze Zeit im Prompt.' },
+      { n: '6', t: 'Prüfen, dann lesen lassen',  d: 'Erst die eigenen Kriterien durchgehen. Dann ein anderes Modell den Diff lesen lassen.' },
+    ],
+    recapLabel: 'Und das ist alles',
+    recap: ['Plan', 'Build', 'Review'],
+    note: 'Schritt 4 ist der, den man auslässt, und der, der die Schritte 5 und 6 erst möglich macht. <b>Alles andere in diesem Vortrag ist der Regler.</b>',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — one run: six discs on a single rail, the three phases bracketed above',
+  v2: 'Variation 2 — one column: the run turned ninety degrees, the phase named in the gutter',
+  v3: 'Variation 3 — the wrap: four Plan moves, then Build and Review, joined across the break',
+};
+
+/* Which loop step each of the six belongs to. This is the slide's own
+   recap, drawn instead of restated. */
+const PHASE = [0, 0, 0, 0, 1, 2];
+const HUE = ['s-plan', 's-build', 's-review'];
+
+/* ── V1 ── */
+function V1(t) {
+  const spans = [[1, 5], [5, 6], [6, 7]];
+  let h = '<p class="fg-label cap fg-in" style="--fg-at:3">' + t.recapLabel + '</p>';
+  h += '<div class="run">';
+  for (let p = 0; p < 3; p++) {
+    h += '<div class="band ' + HUE[p] + ' fg-in" style="grid-column:' + spans[p][0] + '/' + spans[p][1] + '; --fg-at:' + (3 + p) + '">'
+       + '<span class="phase-name">' + t.recap[p] + '</span><i></i></div>';
+  }
+  h += '<i class="rail" aria-hidden="true"></i>';
+  t.steps.forEach(function (s, i) {
+    const c = 'grid-column:' + (i + 1) + ';';
+    const at = ' --fg-at:' + (5 + i) + '"';
+    h += '<span class="disc ' + HUE[PHASE[i]] + (s.n === '4' ? ' disc--key' : '') + ' fg-in" style="' + c + at + '>' + s.n + '</span>'
+       + '<span class="nm fg-in" style="' + c + at + '>' + s.t + '</span>'
+       + '<p class="ds fg-in" style="' + c + at + '>' + s.d + '</p>';
+  });
+  return h + '</div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  let h = '<div class="split">';
+  h += '<div class="plate">'
+     + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+     + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+     + '<p class="fg-note fg-in" style="--fg-at:11"><span>' + t.note + '</span></p>'
+     + '</div>';
+  h += '<div class="side">'
+     + '<p class="fg-label cap fg-in" style="--fg-at:3">' + t.recapLabel + '</p>'
+     + '<div class="vrun">';
+  t.steps.forEach(function (s, i) {
+    const p = PHASE[i];
+    const at = (4 + i);
+    const row = 'grid-row:' + (i + 1) + '; --fg-at:' + at + ';';
+    let seg = 'seg ' + HUE[p];
+    if (i === 0) seg += ' seg--first';
+    if (i === 5) seg += ' seg--last';
+    if (i > 0 && PHASE[i - 1] !== p) seg += ' seg--pstart';
+    if (i < 5 && PHASE[i + 1] !== p) seg += ' seg--pend';
+    if (i === 0 || PHASE[i - 1] !== p) {
+      h += '<span class="pl phase-name ' + HUE[p] + ' fg-in" style="' + row + '">' + t.recap[p] + '</span>';
+    }
+    h += '<div class="' + seg + '" style="' + row + '">'
+       + '<span class="disc ' + HUE[p] + (s.n === '4' ? ' disc--key' : '') + ' fg-in" style="--fg-at:' + at + '">' + s.n + '</span>'
+       + '</div>'
+       + '<div class="txt' + (i === 5 ? ' txt--last' : '') + ' fg-in" style="' + row + '">'
+       + '<h3>' + s.t + '</h3><p>' + s.d + '</p></div>';
+  });
+  return h + '</div></div></div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  function cell(s, i, col) {
+    const c = 'grid-column:' + col + ';';
+    const at = ' --fg-at:' + (4 + i) + '"';
+    return '<span class="disc ' + HUE[PHASE[i]] + (s.n === '4' ? ' disc--key' : '') + ' fg-in" style="' + c + at + '>' + s.n + '</span>'
+         + '<span class="nm fg-in" style="' + c + at + '>' + s.t + '</span>'
+         + '<p class="ds fg-in" style="' + c + at + '>' + s.d + '</p>';
+  }
+  let h = '<p class="fg-label cap fg-in" style="--fg-at:3">' + t.recapLabel + '</p>';
+  h += '<div class="fig">';
+
+  h += '<div class="grp grpA">'
+     + '<span class="capn phase-name s-plan fg-in" style="grid-column:1; --fg-at:3">' + t.recap[0] + '</span>'
+     + '<i class="rail" aria-hidden="true"></i>';
+  for (let i = 0; i < 4; i++) h += cell(t.steps[i], i, i + 1);
+  h += '<i class="wrapA" aria-hidden="true"></i></div>';
+
+  h += '<div class="grp grpB">'
+     + '<i class="wrapB" aria-hidden="true"></i>'
+     + '<span class="capn phase-name s-build fg-in" style="grid-column:1; --fg-at:8">' + t.recap[1] + '</span>'
+     + '<span class="capn phase-name s-review fg-in" style="grid-column:2; --fg-at:9">' + t.recap[2] + '</span>'
+     + '<i class="rail" aria-hidden="true"></i>';
+  for (let i = 4; i < 6; i++) h += cell(t.steps[i], i, i - 3);
+  h += '</div>';
+
+  return h + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+/* V2 carries the title inside its own left plate, and the takeaway with
+   it, so the run can own the full height of the frame. */
+const OWN_HEAD = { v2: true };
+
+function render(v, t) {
+  const head = OWN_HEAD[v] ? '' :
+    '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>';
+  const foot = OWN_HEAD[v] ? '' :
+    '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:11"><span>' + t.note + '</span></p></div>';
+  return ''
+  + '<section class="proto ' + v + '">'
+    + head
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + foot
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 33 — Close, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   The last slide the audience sees. DESIGN.md measures it at 43% fill and
+   files it under Tier A — near-wordless, filling the frame — while its
+   content is a summary AND a resource list. Those two pull opposite ways,
+   and each variation resolves the pull differently rather than splitting
+   the difference:
+
+     V1  the argument is the landing, the resources are a footer band
+     V2  the resource is the landing — one object, handed over
+     V3  neither dominates; a single centred axis, largest type in the deck
+
+   THREE PALETTE CORRECTIONS carried by all three. The old slide set the
+   step names, the arrows, the list bullets, the URL and "Questions?" all
+   in the accent green. Under the new palette green is BUILD, one job, and
+   it may not be spent on a bullet or a link. So: the step names keep the
+   chapter hue they were taught on slide 5 (a step name is the one piece of
+   text allowed to carry one), and everything else that was green becomes
+   ink or grey.
+
+   INK IS THE HUMAN. This is the slide where that can be said loudest,
+   because the deck's whole claim is that the human stays the final gate.
+   V1 says it structurally — a solid ink gate across the rail carrying
+   "Agree it.", the fourth clause of the tagline. V2 and V3 say it in the
+   sentence: the same clause set in ink behind a filled ink stop, the "hard
+   black stop on the line" from DESIGN.md pass 4.
+
+   AN "AS OF" STAMP IS NEW. The slide ships a URL and a claim about what is
+   inside a repository, both of which have a shelf life; the project
+   convention is that such claims carry their date. Added in both
+   languages, at footer weight. */
+
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-5); }
+
+/* The three chapter hues, named as classes and never as literal colours —
+   the same three slide 5 taught. */
+.s-plan   { --hue: var(--fg-plan);   --hue-d: var(--fg-plan-d);   --hue-t: var(--fg-plan-tint); }
+.s-build  { --hue: var(--fg-build);  --hue-d: var(--fg-build-d);  --hue-t: var(--fg-build-tint); }
+.s-review { --hue: var(--fg-review); --hue-d: var(--fg-review-d); --hue-t: var(--fg-review-tint); }
+
+/* The one clickable thing in the deck, so it has to look clickable from the
+   back of the room. Ink, not the accent: a link is not the Build step.
+
+   IT BREAKS AT THE SLASHES, NOT ANYWHERE. The type scale is viewport-HEIGHT
+   derived and the frame's max-width is fixed, so at 1920x1080 and at
+   1024x768 the URL outgrew its column and word-break: break-all split it
+   as "agentic-eng / ineering" — on the one string an audience is in the
+   room to photograph. A wbr after each slash gives the line breaker a
+   sensible opportunity first; overflow-wrap: anywhere is only the floor
+   under it. */
+.url {
+  display: inline-block;
+  font-family: var(--ae-font-mono);
+  font-weight: 600;
+  color: var(--fg-ink);
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-color: var(--ae-cool-gray-300);
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--ae-dur-fast) var(--ae-ease);
+}
+.url:hover, .url:focus-visible { text-decoration-color: var(--fg-ink); }
+
+/* What is in the repository. Grey square markers: this is the machine's
+   plumbing — files in a directory — not a human decision, so not ink. */
+.take { margin: 0; padding: 0; list-style: none; }
+.take li {
+  display: flex; gap: var(--ae-space-3); align-items: baseline;
+  padding: 3px 0;
+  font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-body);
+}
+.take li::before {
+  content: ''; flex: none;
+  width: 7px; height: 7px;
+  background: var(--ae-cool-gray-300);
+  transform: translateY(-1px);
+}
+
+.lbl { margin: 0 0 var(--ae-space-2); }
+.cap { margin: var(--ae-space-2) 0 0; font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); color: var(--fg-muted); }
+.stamp { margin: 0; font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); color: var(--fg-faint); }
+
+/* The human decision inside the tagline. Ink and heavier, behind a filled
+   ink stop — colour is never the only carrier, and here the carrier that
+   survives greyscale is the stop plus the weight. */
+.human { font-weight: 700; color: var(--fg-ink); }
+.human::before {
+  content: ''; display: inline-block;
+  width: 0.42em; height: 0.42em; border-radius: 999px;
+  background: var(--fg-ink);
+  margin-right: 0.36em; vertical-align: 0.10em;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE RETURN
+   The deck opened on this drawing and it closes on it: three hued
+   discs on a rail with the grey return arc under them, exactly as
+   slide 5 built it. What is new is that the tagline is no longer a
+   sentence beside the picture — its four clauses ARE the picture's
+   labels. Three of them sit under the three steps; the fourth,
+   "Agree it.", is the ink gate standing across the rail between
+   Plan and Build. So the last thing on screen is the loop with the
+   human's decision drawn into it, and the resources drop to a band
+   along the bottom where a takeaway belongs.
+
+   THE GEOMETRY IS DERIVED, NOT EYEBALLED. Three equal columns put
+   the disc centres at 16.66 / 50 / 83.33 percent, so the rail spans
+   first centre to last centre and the gate sits at 33.33 percent —
+   exactly halfway between disc 1 and disc 2 — by arithmetic rather
+   than by a number that drifts when the German wraps differently.
+   The arc is CSS borders, never SVG: a stretched viewBox turns a
+   rounded corner into an ellipse and an arrowhead into a smear.
+   ══════════════════════════════════════════════════════════════ */
+/* The drawing is sized to be GIVEN the frame rather than centred inside a
+   band of it — the failure DESIGN.md measures as 43% fill. Every quantity
+   here is vh-derived so the proportions hold from a laptop to a hall. */
+/* --gh is capped so the gate's label always clears the step-name row. At
+   8.2vh the label's line box ran 5px into the names' row at 1920x1080 —
+   no glyphs touched, because the label sits in a column gap, but a
+   quantity that only just misses is a quantity that will hit the first
+   time a string changes. 7.2vh clears by 5-13px across 1024 to 1920. */
+.v1 { --dd: clamp(74px, 10.6vh, 126px); --gh: clamp(50px, 7.2vh, 88px); --arc: clamp(30px, 5vh, 60px); }
+.v1 .top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ae-space-6); flex-wrap: wrap; }
+.v1 .thanks {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-display); line-height: 1; letter-spacing: -0.035em;
+  color: var(--fg-ink);
+}
+.v1 .who {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 600;
+  font-size: var(--ae-fs-h3); line-height: 1.2; color: var(--fg-ink);
+}
+
+.v1 .spine { position: relative; padding-bottom: var(--arc); }
+.v1 .run { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+/* The rail is the machine's plumbing, so it is grey — never a chapter hue.
+   cool-gray-300, not the hairline value: the hairline is the deck's
+   SEPARATOR strength and this is a line the eye is meant to travel along.
+   It is also the same grey as the return arc, which is the same line. */
+.v1 .rail {
+  position: absolute; left: 16.666%; right: 16.666%;
+  top: calc(var(--dd) / 2 - 1.5px);
+  height: 3px; border-radius: 2px; background: var(--ae-cool-gray-300);
+  transform-origin: left center;
+  animation: v1rail 760ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 3 * var(--fg-beat));
+}
+@keyframes v1rail { from { transform: scaleX(0); } }
+
+.v1 .st { text-align: center; padding: 0 var(--ae-space-3); }
+.v1 .disc {
+  width: var(--dd); height: var(--dd); margin: 0 auto; border-radius: 999px;
+  background: var(--hue); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--fg-d2);
+  position: relative; z-index: 1;
+}
+.v1 .st h2 {
+  margin: var(--ae-space-6) 0 0;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: calc(var(--ae-fs-h1) * 1.1); line-height: 1.02; letter-spacing: -0.03em;
+  color: var(--hue-d);
+}
+.v1 .st p {
+  margin: var(--ae-space-4) auto 0; max-width: 20ch;
+  font-size: calc(var(--ae-fs-lead) * 1.05); line-height: 1.3; color: var(--fg-ink);
+}
+
+/* A gate is solid ink ACROSS the line — a different shape from the step, a
+   different colour, a different relationship to the rail, and the widest
+   contrast the palette has. It is the deck's most important act. */
+.v1 .gate {
+  position: absolute; left: 33.333%; top: 0; z-index: 2;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+}
+.v1 .gate .bar {
+  margin-top: calc(var(--dd) / 2 - var(--gh) / 2);
+  width: clamp(32px, 4.4vh, 52px); height: var(--gh);
+  border-radius: 11px; background: var(--fg-ink);
+  box-shadow: var(--fg-d2);
+}
+.v1 .gate .lab {
+  margin-top: var(--ae-space-2); white-space: nowrap;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.2; color: var(--fg-ink);
+}
+
+/* The return, in CSS borders. Unlabelled and grey, as on slide 5: it says
+   the three come round again without restating it in words. */
+.v1 .arc {
+  position: absolute; left: 16.666%; right: 16.666%; bottom: 0;
+  height: var(--arc);
+  border: 1.5px solid var(--ae-cool-gray-300); border-top: 0;
+  border-radius: 0 0 16px 16px;
+  animation: fg-rise 620ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 8 * var(--fg-beat));
+}
+.v1 .arc::before {
+  content: ''; position: absolute; left: -5.5px; top: -1px;
+  border-left: 5.5px solid transparent;
+  border-right: 5.5px solid transparent;
+  border-bottom: 8px solid var(--ae-cool-gray-300);
+}
+
+.v1 .band {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.25fr) auto;
+  column-gap: var(--ae-space-7);
+  align-items: start;
+  padding-top: var(--ae-space-4);
+  border-top: 1px solid var(--fg-hair);
+}
+.v1 .band .url { font-size: calc(var(--ae-fs-small) * 1.02); line-height: 1.3; }
+.v1 .band .q {
+  margin: 0; align-self: center; white-space: nowrap;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-ink);
+}
+.v1 .stamp { margin-top: var(--ae-space-3); }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE HANDOVER
+   The opposite resolution: the resource is not a footnote under
+   the argument, it is the argument's output, so it gets half the
+   frame and is drawn as ONE OBJECT rather than as two lists. The
+   ink-edged box is the deck's document cast member at poster
+   scale — the same form slides 7 and 8 hang off the rail — and
+   the three "in the repository" lines stop being a second list
+   and become that object's contents.
+
+   The loop is deliberately NOT redrawn. By slide 33 the audience
+   has seen it on 1, 5, 7, 8, 13, 18 and 28; here it is a chip row
+   at label size, present as a signature rather than as a claim.
+   That is the whole difference from V1 and the user should pick
+   between them on exactly that question.
+   ══════════════════════════════════════════════════════════════ */
+/* BOTH COLUMNS ARE GIVEN THE FRAME, not centred inside it. The first pass
+   measured 42% ink extent — the exact failure DESIGN.md files against this
+   slide — because a short statement and a short card were both centred in
+   a tall body. Stretching them and distributing their own contents fills
+   the frame without adding a word. */
+.v2 .split {
+  flex: 1; min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  column-gap: var(--ae-space-8);
+  align-items: stretch;
+}
+/* The loop chips pin the top of the column and the sign-off pins the
+   bottom, so the ink spans the frame; the statement centres between them,
+   on the same axis as the card. Top-aligning the statement instead left
+   one 480px hole under it, which is the defect this slide is being
+   redesigned to remove, only moved. */
+.v2 .say { display: flex; flex-direction: column; min-height: 0; }
+.v2 .stmt { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.v2 .chips { flex: none; display: flex; align-items: center; gap: var(--ae-space-3); margin: 0; flex-wrap: wrap; }
+.v2 .chips .c {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 700;
+  letter-spacing: 0.02em; color: var(--hue-d);
+}
+.v2 .chips .c::before {
+  content: ''; flex: none; width: 11px; height: 11px; border-radius: 999px;
+  background: var(--hue); box-shadow: 0 0 0 4px var(--hue-t);
+}
+.v2 .chips .sep { flex: none; width: 20px; height: 2px; background: var(--fg-hair); }
+
+.v2 .thanks {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: calc(var(--ae-fs-display) * 1.16); line-height: 0.98; letter-spacing: -0.035em;
+  color: var(--fg-ink);
+}
+/* The tagline set as four lines rather than as a paragraph. Same words,
+   same order: they are four imperatives and a paragraph hides that. It
+   also gives the statement column the presence it needs against the card,
+   which a three-line block of body copy did not have. */
+.v2 .creed { margin: var(--ae-space-5) 0 0; padding: 0; list-style: none; max-width: 24ch; }
+.v2 .creed li {
+  padding: 3px 0;
+  font-family: var(--ae-font-head); font-weight: 600;
+  font-size: var(--ae-fs-h3); line-height: 1.26; color: var(--fg-body);
+}
+.v2 .creed li.human { font-weight: 700; color: var(--fg-ink); }
+.v2 .creed li.human::before { vertical-align: 0.14em; }
+.v2 .sig {
+  flex: none;
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--ae-space-5); flex-wrap: wrap;
+  margin-top: var(--ae-space-5); padding-top: var(--ae-space-4);
+  border-top: 1px solid var(--fg-hair);
+}
+.v2 .who {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 600;
+  font-size: var(--ae-fs-h3); line-height: 1.2; color: var(--fg-ink);
+}
+.v2 .q {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-ink);
+}
+
+/* The document cast member at poster scale: the same ink-edged box that
+   hangs off the rail on slides 7 and 8, here holding the whole takeaway.
+
+   THE CARD IS CONTENT-SIZED. Two attempts to stretch it to the column
+   both failed and are recorded here so they are not retried: with
+   justify-content: space-between it broke into three islands separated by
+   holes, and with flex: 1 on the rows it became a table of single lines in
+   180px cells. A card is an object and an object has a size. What gives it
+   presence instead is the URL, which is the one thing an audience
+   photographs, set at heading scale.
+
+   The FRAME is filled by the column beside it, not by this box. */
+.v2 .kit {
+  align-self: center;
+  display: flex; flex-direction: column;
+  border: 1.5px solid var(--fg-ink);
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card);
+  box-shadow: var(--fg-d2);
+  padding: var(--ae-space-6) var(--ae-space-6) var(--ae-space-5);
+}
+.v2 .kit .url { margin-top: var(--ae-space-3); font-size: var(--ae-fs-h4); line-height: 1.36; }
+.v2 .kit .cap { margin-top: var(--ae-space-3); }
+.v2 .kit .take li {
+  font-size: var(--ae-fs-body); line-height: 1.38;
+  padding: var(--ae-space-4) 0; border-bottom: 1px solid var(--fg-hair);
+}
+.v2 .kit .take li:last-child { border-bottom: 0; }
+.v2 .kit .rule { border: 0; height: 1px; background: var(--fg-hair); margin: var(--ae-space-5) 0; }
+.v2 .kit .stamp { margin-top: var(--ae-space-4); padding-top: var(--ae-space-4); border-top: 1px solid var(--fg-hair); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE SIGN-OFF
+   One centred axis, biggest type in the deck, no drawing except
+   the loop set as a wordmark: the three step names in their own
+   hues with grey arrows between them. Tier A read literally —
+   the slide lands rather than lists, and the resources sit under
+   a hairline as a single band of three columns, closer to a
+   colophon than to a panel.
+
+   It ends on "Questions?" at display size in ink, which is the
+   only reading of ink this slide needs: the humans in the room
+   are the next gate.
+   ══════════════════════════════════════════════════════════════ */
+/* The biggest type in the deck. A first pass at plain display size left
+   the stack filling barely half its body and reading as a small centred
+   note; the whole point of this variation is scale, so it takes it. */
+.v3 .mid { text-align: center; }
+.v3 .thanks {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: calc(var(--ae-fs-display) * 1.28); line-height: 1.02; letter-spacing: -0.035em;
+  color: var(--fg-ink);
+}
+/* space-3, not space-2: at 1.28x display the descender of "you" and the
+   name's line box were 2-4px apart at 900 and 1080. */
+.v3 .who {
+  margin: var(--ae-space-3) 0 0; font-family: var(--ae-font-head); font-weight: 600;
+  font-size: var(--ae-fs-h5); line-height: 1.2; color: var(--fg-muted);
+}
+.v3 .mark {
+  display: flex; align-items: center; justify-content: safe center;
+  gap: var(--ae-space-4); flex-wrap: wrap;
+  margin-top: var(--ae-space-6);
+}
+/* A step name is the one piece of text allowed to carry a chapter hue. */
+.v3 .mark .w {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: calc(var(--ae-fs-h1) * 1.18); line-height: 1.02; letter-spacing: -0.03em;
+  color: var(--hue-d);
+}
+.v3 .mark .a { color: var(--ae-cool-gray-300); font-family: var(--ae-font-head); font-weight: 700; font-size: var(--ae-fs-h2); line-height: 1; }
+.v3 .tag {
+  margin: var(--ae-space-5) auto 0; max-width: 56ch;
+  font-size: calc(var(--ae-fs-lead) * 1.1); line-height: 1.4; color: var(--fg-body);
+}
+.v3 .q {
+  margin: var(--ae-space-6) 0 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: calc(var(--ae-fs-h1) * 1.18); line-height: 1; letter-spacing: -0.03em; color: var(--fg-ink);
+}
+
+/* The colophon. It lives in the FOOT rather than at the end of the centred
+   stack: inside the stack it was centred with the statement and left a dead
+   band under it, which is the same "thin content floating in an empty
+   frame" defect the redesign exists to remove. */
+.v3 .give {
+  padding-top: var(--ae-space-4);
+  border-top: 1px solid var(--fg-hair);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  column-gap: var(--ae-space-7); align-items: start; text-align: left;
+}
+/* Two columns, not three with the stamp beside them: at three the first
+   column was too narrow and the URL broke mid-word — "agentic-eng /
+   ineering" — on the one string an audience is there to photograph. */
+.v3 .give .url { margin-top: var(--ae-space-2); font-size: calc(var(--ae-fs-small) * 1.06); line-height: 1.3; }
+.v3 .stamp { margin-top: var(--ae-space-4); text-align: left; }
+
+/* ══════════════ NARROW ══════════════ */
+@media (max-width: 900px) {
+  .v1 .run { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v1 .rail, .v1 .arc, .v1 .gate { display: none; }
+  .v1 .spine { padding-bottom: 0; }
+  .v1 .band { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v2 .split { grid-template-columns: 1fr; row-gap: var(--ae-space-6); }
+  .v3 .give { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+}
+
+@media print {
+  .v1 .rail, .v1 .arc { animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Return</button>
+        <button type="button" data-p="v2">2 · Handover</button>
+        <button type="button" data-p="v3">3 · Sign-off</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Content from presentation-v2/sections/33-close.js. Nothing is deleted.
+   Three things changed:
+
+   1. The tagline is also carried as its four clauses, because V1 hangs
+      them on the drawing instead of setting them as a sentence. Same
+      words, same order, no rewording.
+   2. The single link entry is flattened to linkTitle / url / href — it
+      was an array of one, and no second link exists.
+   3. "stamp" is new, in both languages: the slide asserts a URL and the
+      contents of a repository, and this deck dates claims with a shelf
+      life. */
+const C = {
+  en: {
+    thanks: 'Thank you',
+    loop: ['Plan', 'Build', 'Review'],
+    clauses: ['Write the plan down.', 'Build in small steps.', 'Have something else read the diff.'],
+    gate: 'Agree it.',
+    lines: ['Write the plan down.', 'Agree it.', 'Build in small steps.', 'Have something else read the diff.'],
+    tagPre: 'Write the plan down. ',
+    tagHuman: 'Agree it.',
+    tagPost: ' Build in small steps. Have something else read the diff.',
+    who: 'Dr. Siavash Saki',
+    linksLabel: 'Everything from this talk',
+    linkTitle: 'The deck and the adoption kit',
+    url: 'github.com/siavash-saki/agentic-engineering',
+    href: 'https://github.com/siavash-saki/agentic-engineering',
+    takeLabel: 'In the repository',
+    take: [
+      'These slides, in English and German',
+      'AGENTS.md with the method, ready to copy into a repo',
+      'Templates for the four artifacts, plus a linter that checks them',
+    ],
+    questions: 'Questions?',
+    stamp: 'Link and contents · as of August 2026',
+  },
+  de: {
+    thanks: 'Danke',
+    loop: ['Plan', 'Build', 'Review'],
+    clauses: ['Plan aufschreiben.', 'In kleinen Schritten bauen.', 'Den Diff von etwas anderem lesen lassen.'],
+    gate: 'Freigeben.',
+    lines: ['Plan aufschreiben.', 'Freigeben.', 'In kleinen Schritten bauen.', 'Den Diff von etwas anderem lesen lassen.'],
+    tagPre: 'Plan aufschreiben. ',
+    tagHuman: 'Freigeben.',
+    tagPost: ' In kleinen Schritten bauen. Den Diff von etwas anderem lesen lassen.',
+    who: 'Dr. Siavash Saki',
+    linksLabel: 'Alles aus diesem Vortrag',
+    linkTitle: 'Die Folien und das Adoption-Kit',
+    url: 'github.com/siavash-saki/agentic-engineering',
+    href: 'https://github.com/siavash-saki/agentic-engineering',
+    takeLabel: 'Im Repository',
+    take: [
+      'Diese Folien, auf Englisch und Deutsch',
+      'AGENTS.md mit der Methode, fertig zum Kopieren',
+      'Vorlagen für die vier Artefakte, plus ein Linter, der sie prüft',
+    ],
+    questions: 'Fragen?',
+    stamp: 'Link und Inhalte · Stand August 2026',
+  },
+};
+
+const HUE = ['s-plan', 's-build', 's-review'];
+
+const SUB = {
+  v1: 'Variation 1 — the return: the loop drawn one last time, the tagline as its labels, resources in a band',
+  v2: 'Variation 2 — the handover: one object, given away, with the loop reduced to a signature',
+  v3: 'Variation 3 — the sign-off: one centred axis, the loop as a wordmark, the resources as a colophon',
+};
+
+/* The slashes get a wbr so the URL wraps at a path boundary instead of
+   mid-word when the column is narrower than the line. */
+function urlText(u) { return u.split('/').join('/<wbr>'); }
+function urlBlock(t, at) {
+  return '<div class="fg-in" style="--fg-at:' + at + '">'
+    + '<p class="fg-label lbl">' + t.linksLabel + '</p>'
+    + '<a class="url" href="' + t.href + '" target="_blank" rel="noreferrer noopener">' + urlText(t.url) + '</a>'
+    + '<p class="cap">' + t.linkTitle + '</p>'
+  + '</div>';
+}
+function takeBlock(t, at) {
+  return '<div class="takeblock fg-in" style="--fg-at:' + at + '">'
+    + '<p class="fg-label lbl">' + t.takeLabel + '</p>'
+    + '<ul class="take">' + t.take.map(function (x) { return '<li><span>' + x + '</span></li>'; }).join('') + '</ul>'
+  + '</div>';
+}
+function taglineHTML(t) {
+  return t.tagPre + '<span class="human">' + t.tagHuman + '</span>' + t.tagPost;
+}
+
+/* ── V1 ── */
+function V1(t) {
+  return ''
+  + '<div class="fg-wrap head">'
+    + '<div class="top">'
+      + '<h1 class="thanks fg-in" style="--fg-at:1">' + t.thanks + '</h1>'
+      + '<p class="who fg-in" style="--fg-at:2">' + t.who + '</p>'
+    + '</div>'
+  + '</div>'
+  + '<div class="fg-wrap body">'
+    + '<div class="spine">'
+      + '<div class="run">'
+        + '<i class="rail" aria-hidden="true"></i>'
+        + t.loop.map(function (s, i) {
+            return '<div class="st ' + HUE[i] + ' fg-in" style="--fg-at:' + (4 + i) + '">'
+              + '<div class="disc">' + (i + 1) + '</div>'
+              + '<h2>' + s + '</h2>'
+              + '<p>' + t.clauses[i] + '</p>'
+            + '</div>';
+          }).join('')
+        + '<div class="gate fg-in" style="--fg-at:7">'
+          + '<i class="bar" aria-hidden="true"></i>'
+          + '<span class="lab">' + t.gate + '</span>'
+        + '</div>'
+      + '</div>'
+      + '<i class="arc" aria-hidden="true"></i>'
+    + '</div>'
+  + '</div>'
+  + '<div class="fg-wrap foot">'
+    + '<div class="band">'
+      + urlBlock(t, 9)
+      + takeBlock(t, 9)
+      + '<p class="q fg-in" style="--fg-at:10">' + t.questions + '</p>'
+    + '</div>'
+    + '<p class="stamp fg-in" style="--fg-at:10">' + t.stamp + '</p>'
+  + '</div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  return '<div class="fg-wrap body">'
+    + '<div class="split">'
+      + '<div class="say">'
+        + '<div class="chips fg-in" style="--fg-at:1">'
+          + t.loop.map(function (s, i) {
+              return (i ? '<i class="sep" aria-hidden="true"></i>' : '')
+                + '<span class="c ' + HUE[i] + '">' + s + '</span>';
+            }).join('')
+        + '</div>'
+        + '<div class="stmt">'
+          + '<h1 class="thanks fg-in" style="--fg-at:2">' + t.thanks + '</h1>'
+          + '<ul class="creed">'
+            + t.lines.map(function (s, i) {
+                return '<li class="' + (i === 1 ? 'human ' : '') + 'fg-in" style="--fg-at:' + (3 + i) + '">' + s + '</li>';
+              }).join('')
+          + '</ul>'
+        + '</div>'
+        + '<div class="sig">'
+          + '<p class="who fg-in" style="--fg-at:4">' + t.who + '</p>'
+          + '<p class="q fg-in" style="--fg-at:9">' + t.questions + '</p>'
+        + '</div>'
+      + '</div>'
+      + '<div class="kit fg-in" style="--fg-at:5">'
+        + urlBlock(t, 6)
+        + '<hr class="rule">'
+        + takeBlock(t, 7)
+        + '<p class="stamp fg-in" style="--fg-at:8">' + t.stamp + '</p>'
+      + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  return '<div class="fg-wrap body">'
+    + '<div class="mid">'
+      + '<h1 class="thanks fg-in" style="--fg-at:1">' + t.thanks + '</h1>'
+      + '<p class="who fg-in" style="--fg-at:2">' + t.who + '</p>'
+      + '<div class="mark">'
+        + t.loop.map(function (s, i) {
+            return (i ? '<span class="a fg-in" style="--fg-at:' + (3 + i * 2 - 1) + '" aria-hidden="true">→</span>' : '')
+              + '<span class="w ' + HUE[i] + ' fg-in" style="--fg-at:' + (3 + i * 2) + '">' + s + '</span>';
+          }).join('')
+      + '</div>'
+      + '<p class="tag fg-in" style="--fg-at:8">' + taglineHTML(t) + '</p>'
+      + '<p class="q fg-in" style="--fg-at:9">' + t.questions + '</p>'
+    + '</div>'
+  + '</div>'
+  + '<div class="fg-wrap foot">'
+    + '<div class="give">'
+      + urlBlock(t, 10)
+      + takeBlock(t, 10)
+    + '</div>'
+    + '<p class="stamp fg-in" style="--fg-at:11">' + t.stamp + '</p>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+
+function render(v, t) {
+  return '<section class="proto ' + v + '">' + BODY[v](t) + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

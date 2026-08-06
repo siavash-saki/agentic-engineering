@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 6 — Why it is written down, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper);
+  overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+[data-l="1"], [data-l="2"] { display: none; }
+.proto[data-at="1"] [data-l="1"],
+.proto[data-at="2"] [data-l="1"],
+.proto[data-at="2"] [data-l="2"] { display: revert; }
+
+/* ══════════════ SHARED ══════════════
+   Slide 5 has just taught three chapter hues. Slide 6 deliberately uses
+   NONE of them: it is not about a step of the loop, it is about one
+   distinction — written and not written. So it gets exactly two marks,
+   ink for what you wrote and clay for what you left for the model, and
+   the restraint is what stops the new palette becoming confetti. */
+.proto .head { flex: none; }
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 66ch; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-5); }
+
+/* The price line. Present in all three, because it is the slide's only
+   concession and it should not read as a footnote. */
+.cost {
+  display: inline-flex; align-items: center; gap: var(--ae-space-3);
+  font-size: var(--ae-fs-lead); line-height: 1.3; color: var(--fg-ink);
+}
+.cost .tagword {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--fg-faint); flex: none;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE FAN
+   One cause, three consequences. The written file is the origin
+   object — the same document form the gate and SDD slides already
+   use — and three arms carry out of it. Causation drawn, rather
+   than three peers sitting in a row implying nothing.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .fan { display: grid; grid-template-columns: auto clamp(52px, 7vw, 120px) 1fr; align-items: center; column-gap: 0; }
+.v1 .src {
+  display: flex; flex-direction: column; gap: 9px;
+  padding: var(--ae-space-6);
+  border: 2px solid var(--fg-ink); border-radius: var(--ae-radius-md);
+  background: var(--fg-card); box-shadow: var(--fg-d2);
+  width: clamp(190px, 24vw, 300px);
+}
+.v1 .src .cap {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.1; color: var(--fg-ink);
+  margin-bottom: var(--ae-space-2);
+}
+.v1 .src i { display: block; height: 10px; border-radius: 3px; background: var(--fg-ink); opacity: 0.82; }
+.v1 .src i:nth-child(3) { width: 88%; }
+.v1 .src i:nth-child(4) { width: 96%; }
+.v1 .src i:nth-child(5) { width: 62%; }
+.v1 .arms { position: relative; align-self: stretch; }
+.v1 .arms svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.v1 .arms path { fill: none; stroke: var(--ae-cool-gray-300); stroke-width: 2; stroke-dasharray: 100;
+  animation: draw 640ms var(--ae-ease) both; animation-delay: calc(60ms + var(--fg-at,0) * var(--fg-beat)); }
+@keyframes draw { from { stroke-dashoffset: 100; } }
+.v1 .gains { display: grid; row-gap: var(--ae-space-6); }
+.v1 .g { display: grid; row-gap: 4px; align-items: baseline; }
+.v1 .g .t {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-ink); white-space: nowrap;
+}
+.v1 .g .d { margin: 0; font-size: var(--ae-fs-lead); line-height: 1.4; color: var(--fg-body); }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE LINE
+   The lede is a boundary claim: what is written, and everything
+   else. So it is drawn as one page with a line across it. Above,
+   ink — you decided it. Below, clay and dashed — the model will,
+   plausibly and silently. The three gains annotate the ink half.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: var(--ae-space-7); align-items: center; }
+.v2 .page {
+  border-radius: var(--ae-radius-md); overflow: hidden;
+  border: 1px solid var(--fg-hair); background: var(--fg-card); box-shadow: var(--fg-d2);
+}
+.v2 .zone { padding: var(--ae-space-6); }
+.v2 .zone .lab {
+  display: flex; align-items: baseline; justify-content: space-between; gap: var(--ae-space-3);
+  margin-bottom: var(--ae-space-4);
+}
+.v2 .zone .lab b {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.1;
+}
+.v2 .zone .lab span { font-size: var(--ae-fs-caption); }
+.v2 .zone i { display: block; height: 11px; border-radius: 5px; margin-bottom: 12px; }
+.v2 .zone--yours b { color: var(--fg-ink); }
+.v2 .zone--yours .lab span { color: var(--fg-muted); }
+.v2 .zone--yours i { background: var(--fg-ink); opacity: 0.85; }
+.v2 .zone--yours i:nth-of-type(2) { width: 92%; }
+.v2 .zone--yours i:nth-of-type(3) { width: 74%; }
+/* The divider IS the argument. Heavy, ink, and labelled. */
+.v2 .divider {
+  position: relative; height: 0; border-top: 2.5px solid var(--fg-ink);
+}
+.v2 .divider span {
+  position: absolute; left: 50%; top: 0; transform: translate(-50%, -50%);
+  padding: 3px 12px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 600; white-space: nowrap;
+}
+.v2 .zone--theirs { background: var(--fg-fail-tint); }
+.v2 .zone--theirs b { color: var(--fg-fail-d); }
+.v2 .zone--theirs .lab span { color: var(--fg-fail-d); }
+/* Dashed, not solid: in greyscale the dashes are what survives. */
+.v2 .zone--theirs i {
+  height: 0; border-top: 2px dashed var(--fg-fail); border-radius: 0; margin-bottom: 14px; opacity: 0.85;
+}
+.v2 .zone--theirs i:nth-of-type(2) { width: 84%; }
+.v2 .zone--theirs i:nth-of-type(3) { width: 95%; }
+.v2 .gains { display: grid; row-gap: var(--ae-space-6); }
+.v2 .g { display: grid; grid-template-columns: auto 1fr; column-gap: var(--ae-space-4); align-items: start; }
+.v2 .g .num {
+  display: flex; align-items: center; justify-content: center; flex: none;
+  width: 34px; height: 34px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font); font-size: 13px; font-weight: 700;
+}
+.v2 .g .t {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.12; color: var(--fg-ink);
+}
+.v2 .g .d { margin: 7px 0 0; font-size: var(--ae-fs-lead); line-height: 1.4; color: var(--fg-body); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE LEDGER
+   Three things it buys, one thing it costs. The current slide has
+   the price as a grey line under three columns, where it reads as
+   a disclaimer; here it is one of two sides, and the asymmetry —
+   three against one — is the argument made visually.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .ledger { display: grid; grid-template-columns: 1.55fr auto 1fr; column-gap: var(--ae-space-6); align-items: stretch; }
+.v3 .side__h {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--fg-faint); margin: 0 0 var(--ae-space-4);
+}
+.v3 .stack { display: grid; row-gap: var(--ae-space-4); }
+.v3 .item {
+  padding: var(--ae-space-5) var(--ae-space-6);
+  border-radius: var(--ae-radius); background: var(--fg-card);
+  border: 1px solid var(--fg-hair); box-shadow: var(--fg-d1);
+}
+.v3 .item .t {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.12; color: var(--fg-ink);
+}
+.v3 .item .d { margin: 7px 0 0; font-size: var(--ae-fs-lead); line-height: 1.4; color: var(--fg-body); }
+.v3 .vs {
+  align-self: center; padding: 0 var(--ae-space-2);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); color: var(--ae-cool-gray-300);
+}
+.v3 .price {
+  height: 100%; display: flex; flex-direction: column; justify-content: center;
+  padding: var(--ae-space-5); border-radius: var(--ae-radius-md);
+  background: var(--fg-mint); border: 1px solid transparent;
+}
+.v3 .price .t {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.08; color: var(--fg-green-d);
+}
+.v3 .price .d { margin: var(--ae-space-3) 0 0; font-size: var(--ae-fs-lead); line-height: 1.4; color: var(--fg-green-d); }
+
+@media (max-width: 900px) {
+  .v1 .fan, .v2 .board, .v3 .ledger { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v1 .arms, .v3 .vs { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Fan</button>
+        <button type="button" data-p="v2">2 · Line</button>
+        <button type="button" data-p="v3">3 · Ledger</button>
+      </div>
+      <div class="lang-toggle" id="layers" role="group" aria-label="Layer">
+        <button type="button" data-a="0">L0</button>
+        <button type="button" data-a="1">L1</button>
+        <button type="button" data-a="2">L2</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/06-changed.js. The only new strings
+   are the four labels the drawings need — "What you wrote", "What you did
+   not", "It buys you", "It costs you" — none of which add a claim. */
+const C = {
+  en: {
+    h1: 'Why it is <span class="fg-mark fg-mark--sweep">written down</span>',
+    lede: 'The agent reads only what is written. Everything that is not written, it decides itself.',
+    srcCap: 'What you wrote',
+    yours: { t: 'What you wrote', s: 'You decided it' },
+    theirs: { t: 'What you did not', s: 'It decides, plausibly and silently' },
+    divider: 'the line you choose',
+    points: [
+      { n: '1', t: 'No guessing',      d: 'Every blank you leave, the model fills in — plausibly, and silently.' },
+      { n: '2', t: 'No drifting',      d: 'It builds against a written plan, not against its memory of the chat.' },
+      { n: '3', t: 'You can check it', d: 'You did not write the code, so you need a yardstick. The plan is the yardstick.' },
+    ],
+    buys: 'It buys you',
+    costs: 'It costs you',
+    costT: 'One conversation',
+    costD: 'Before the first line of code.',
+    cost: 'The price is one conversation before the first line of code.',
+    priceword: 'The price',
+  },
+  de: {
+    h1: 'Warum es <span class="fg-mark fg-mark--sweep">aufgeschrieben</span> wird',
+    lede: 'Der Agent liest nur, was dasteht. Alles, was nicht dasteht, entscheidet er selbst.',
+    srcCap: 'Was du geschrieben hast',
+    yours: { t: 'Was du geschrieben hast', s: 'Du hast entschieden' },
+    theirs: { t: 'Was du nicht geschrieben hast', s: 'Er entscheidet, plausibel und lautlos' },
+    divider: 'die Linie, die du wählst',
+    points: [
+      { n: '1', t: 'Kein Raten',          d: 'Jede Lücke, die du lässt, füllt das Modell — plausibel und lautlos.' },
+      { n: '2', t: 'Kein Abdriften',      d: 'Er baut gegen einen geschriebenen Plan, nicht gegen sein Gedächtnis vom Chat.' },
+      { n: '3', t: 'Du kannst es prüfen', d: 'Der Code stammt nicht von dir, also brauchst du einen Maßstab. Der Plan ist der Maßstab.' },
+    ],
+    buys: 'Das bringt es',
+    costs: 'Das kostet es',
+    costT: 'Ein Gespräch',
+    costD: 'Vor der ersten Zeile Code.',
+    cost: 'Der Preis ist ein Gespräch vor der ersten Zeile Code.',
+    priceword: 'Der Preis',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the fan: one written file, three things that follow from it',
+  v2: 'Variation 2 — the line: above it you decided, below it the model will',
+  v3: 'Variation 3 — the ledger: three things it buys against the one thing it costs',
+};
+
+function costLine(t) {
+  return '<p class="cost"><span class="tagword">' + t.priceword + '</span>'
+    + '<span>' + t.cost.replace(/^The price is |^Der Preis ist /, '') + '</span></p>';
+}
+
+/* ── V1 ── */
+function V1(t) {
+  return '<div class="fan">'
+    + '<div class="src fg-in" style="--fg-at:3">'
+      + '<span class="cap">' + t.srcCap + '</span>'
+      + '<i></i><i></i><i></i>'
+    + '</div>'
+    + '<div class="arms" aria-hidden="true">'
+      + '<svg viewBox="0 0 100 100" preserveAspectRatio="none">'
+        + '<path pathLength="100" style="--fg-at:4" d="M0 50 H40 Q60 50 60 32 V10 H100"/>'
+        + '<path pathLength="100" style="--fg-at:5" d="M0 50 H70 H100"/>'
+        + '<path pathLength="100" style="--fg-at:6" d="M0 50 H40 Q60 50 60 68 V90 H100"/>'
+      + '</svg>'
+    + '</div>'
+    + '<div class="gains">'
+      + t.points.map(function (p, i) {
+          return '<div class="g fg-in" style="--fg-at:' + (5 + i) + '">'
+            + '<span class="t">' + p.t + '</span>'
+            + '<p class="d" data-l="1">' + p.d + '</p>'
+          + '</div>';
+        }).join('')
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  return '<div class="board">'
+    + '<div class="page fg-in" style="--fg-at:3">'
+      + '<div class="zone zone--yours">'
+        + '<div class="lab"><b>' + t.yours.t + '</b><span>' + t.yours.s + '</span></div>'
+        + '<i></i><i></i><i></i>'
+      + '</div>'
+      + '<div class="divider"><span>' + t.divider + '</span></div>'
+      + '<div class="zone zone--theirs">'
+        + '<div class="lab"><b>' + t.theirs.t + '</b><span>' + t.theirs.s + '</span></div>'
+        + '<i></i><i></i><i></i>'
+      + '</div>'
+    + '</div>'
+    + '<div class="gains">'
+      + t.points.map(function (p, i) {
+          return '<div class="g fg-in" style="--fg-at:' + (4 + i) + '">'
+            + '<span class="num">' + p.n + '</span>'
+            + '<div><span class="t">' + p.t + '</span>'
+            + '<p class="d" data-l="1">' + p.d + '</p></div>'
+          + '</div>';
+        }).join('')
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  return '<div class="ledger">'
+    + '<div>'
+      + '<p class="side__h fg-in" style="--fg-at:3">' + t.buys + '</p>'
+      + '<div class="stack">'
+        + t.points.map(function (p, i) {
+            return '<div class="item fg-in" style="--fg-at:' + (3 + i) + '">'
+              + '<span class="t">' + p.t + '</span>'
+              + '<p class="d" data-l="1">' + p.d + '</p>'
+            + '</div>';
+          }).join('')
+      + '</div>'
+    + '</div>'
+    + '<span class="vs fg-in" style="--fg-at:6" aria-hidden="true">vs</span>'
+    + '<div>'
+      + '<p class="side__h fg-in" style="--fg-at:6">' + t.costs + '</p>'
+      + '<div class="price fg-in" style="--fg-at:7">'
+        + '<span class="t">' + t.costT + '</span>'
+        + '<p class="d">' + t.costD + '</p>'
+      + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+/* The ledger states the price as one of its two sides, so repeating it
+   underneath would be the duplication this whole redesign is removing. */
+const HAS_FOOT = { v1: true, v2: true, v3: false };
+
+function render(v, t, at) {
+  return ''
+  + '<section class="proto ' + v + '" data-at="' + at + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + (HAS_FOOT[v] ? '<div class="fg-wrap foot" data-l="2">' + costLine(t) + '</div>' : '')
+  + '</section>';
+}
+
+/* ── harness ── */
+let lang = 'en', proto = 'v1', at = 2;
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang], at);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang); sync('#layers', 'a', at);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('layers').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; at = +b.dataset.a; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' && at < 2) { at++; mount(); }
+  if (e.key === 'ArrowLeft'  && at > 0) { at--; mount(); }
+  if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); }
+});
+mount();
+</script>
+</body>
+</html>

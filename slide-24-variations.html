@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 24 — Five things you give it, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+/* Six tabs, not three. The toolbar is a 1fr auto 1fr grid, so the
+   tab strip has to give up the padding it had when there were half
+   as many of it or the subtitle in the middle loses its column. */
+#tabs button { padding: 5px 9px; font-size: 11.5px; letter-spacing: 0.01em; }
+/* Below this the six tabs and the two toggles collide with the
+   subtitle in the middle column. The subtitle is the least useful
+   of the three at that width, so it goes. */
+@media (max-width: 1240px) { #header .page-title { display: none; } }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-5) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-4); }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2); color: var(--fg-ink);
+}
+/* THE MEASURE IS WIDER THAN THE KIT'S 62ch ON PURPOSE. This slide's overflow
+   is a HEIGHT problem, and at 62ch the 205-character lede takes four lines on
+   a short stage where the type scale has already bottomed out at its floor.
+   Widening it to 84ch buys two lines back without touching a word. */
+.proto .fg-lede { margin: 0; max-width: 84ch; }
+.proto .fg-note { margin: 0; }
+.proto .fg-foot { margin-top: var(--ae-space-3); }
+
+/* ══════════════════════════════════════════════════════════════
+   THE BOUNDARY  —  the cast object (DESIGN.md, pass 3)
+
+   Slides 16, 24 and 25 all need it. The enclosure and its edge
+   label are taken UNCHANGED from slide-16-variations.html so the
+   three slides share one vocabulary; what this slide adds is the
+   ONE-DIMENSIONAL forms of the same object, because a portability
+   line is a line and not a room.
+
+   INHERITED FROM 16
+   .bd        the enclosure. Whatever is INSIDE it is inside the
+              boundary; whatever must read as outside stays on the
+              paper, unenclosed and unraised.
+   .bd__name  the boundary's NAME, as a chip straddling the edge,
+              paper-coloured so it punches a hole in the line. It
+              always sits ON the line. A heading beside the box
+              would make the box a card; a label on the edge is
+              what makes it a boundary.
+
+   ADDED HERE — the same object, drawn as a line
+   .edge      the same chip, freed from an enclosure. Any boundary
+              drawn as a line names itself with this, ON the line,
+              never beside it.
+   .vline     a boundary drawn as a BORDER between two territories.
+              Solid 2px grey: this line is real, so it is a real
+              line. Grey because a fact about the ecosystem is the
+              machine's plumbing, not a human decision — ink would
+              claim somebody chose it.
+   .rail      a boundary drawn as a SHELF the content stands on.
+              Solid when the thing standing on it is one thing;
+              .rail--broken when it is not, in which case it is
+              dashed and clay, and something below it forks.
+
+   The two content hues, and no others: green is the standard's
+   own name (the deck's code face already carries it), clay is the
+   spelling that does not travel. Never hue alone — the standard
+   is ALWAYS a solid edge and ONE name, the spelling is ALWAYS a
+   dashed edge and THREE names. Desaturate and both still read.
+   ══════════════════════════════════════════════════════════════ */
+.bd {
+  position: relative;
+  border-radius: var(--ae-radius-lg);
+  border: 1.5px solid var(--ae-cool-gray-300);
+  background: var(--fg-card);
+  box-shadow: var(--fg-d1);
+}
+.bd__name, .edge {
+  display: inline-flex; align-items: center;
+  padding: 3px 12px; border-radius: 999px;
+  background: var(--fg-paper);
+  border: 1.5px solid var(--ae-cool-gray-300);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 600;
+  color: var(--fg-muted); white-space: nowrap; z-index: 4;
+}
+.bd__name {
+  position: absolute; top: 0; left: var(--ae-space-6);
+  transform: translateY(-50%);
+}
+/* The far side of the line. Dashed and clay wherever it names a
+   boundary that does not hold. */
+.edge--broken { border-style: dashed; border-color: var(--fg-fail); color: var(--fg-fail-d); }
+
+/* ══════════════════════════════════════════════════════════════
+   THE FIVE  —  one primitive, identical in all three variations
+   so that what the user is comparing is the SHAPE and not the
+   type.
+   ══════════════════════════════════════════════════════════════ */
+.prim__t {
+  display: block;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h5); line-height: 1.16; color: var(--fg-ink);
+}
+.prim__d {
+  margin: 4px 0 0;
+  font-size: var(--ae-fs-small); line-height: 1.38; color: var(--fg-body);
+}
+
+/* The standard's name. A file name takes the code face; a protocol
+   name is prose and does not, however much it wants to sit in the
+   same column. Both sit in the same SOLID-edged chip, because the
+   chip is the claim: there is one of these, and it is a real thing
+   with a real edge. */
+/* SIZED FROM --ae-fs-small, NOT --ae-fs-caption. Caption IS the deck's
+   14px floor, so anything scaled DOWN from it renders below the floor
+   on a short stage — the first pass set the mono variant at caption ×
+   0.96 and measured 13.4px at 700px viewport height. Mono is scaled
+   0.94 against small (the kit's own .fg-rows dd rule) because Plex
+   Mono runs large next to Inter; that lands at 14.1px at the floor,
+   which is the smallest legal number this slide may print. */
+.std {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: var(--ae-radius-sm);
+  border: 1.5px solid var(--ae-cool-gray-300);
+  background: var(--fg-card);
+  font-family: var(--ae-font); font-size: var(--ae-fs-small);
+  line-height: 1.3; font-weight: 600; color: var(--fg-ink);
+}
+.std--mono {
+  font-family: var(--ae-font-mono);
+  font-size: calc(var(--ae-fs-small) * 0.94);
+  color: var(--fg-green-d);
+}
+/* Who keeps it. Prose, and quiet — it is the evidence for the chip
+   above it, not a second claim.
+
+   The chip row and the keeper row are separate grid rows with a ZERO
+   row-gap; each carries its own top margin instead. A uniform grid
+   gap cannot be both the generous space under a description and the
+   4px hairline under a chip, and this needs to be both. */
+.stdcell { margin-top: var(--ae-space-3); }
+.keeper {
+  display: block; margin-top: 4px;
+  font-size: var(--ae-fs-caption); line-height: 1.28; color: var(--fg-faint);
+}
+
+/* The three spellings, as a well: one dashed clay enclosure, three
+   rows inside it. Dashed is the form cue, three rows is the count
+   cue, clay is the hue — and only the first two survive greyscale,
+   which is why there are three of them.
+
+   THE PATH IS PULLED BACK NEXT TO ITS TOOL. The kit's .fg-rows
+   right-aligns its values, which is right for a table of unrelated
+   rows and wrong here: at this width it left 230px of blank between
+   "Codex" and its path, and the pair read as two independent
+   columns — a lookup table, which is the exact thing this slide's
+   own header comment says the mapping must stop being. */
+.well {
+  border-radius: var(--ae-radius);
+  border: 1.5px dashed var(--fg-fail);
+  background: var(--fg-card);
+  padding: var(--ae-space-3) var(--ae-space-4);
+}
+.well .fg-rows__r {
+  border-bottom: 0; padding: 2px 0;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--ae-space-4);
+}
+.well .fg-rows dd { color: var(--fg-fail-d); text-align: left; }
+
+/* A single spelling as a standalone chip, for the variation that
+   forks into three of them. */
+.spell {
+  padding: 4px 7px; border-radius: var(--ae-radius-sm);
+  border: 1.5px dashed var(--fg-fail);
+  background: var(--fg-card);
+}
+.spell__tool {
+  display: block;
+  font-size: var(--ae-fs-caption); line-height: 1.25;
+  font-weight: 600; color: var(--fg-muted);
+}
+/* overflow-wrap stays NORMAL, and the break opportunities are placed
+   by hand instead — see wbrPath(). "anywhere" let ".cursor/hooks.json"
+   break after "jso" and hang an "n" on the next line; "normal" fixed
+   that but then the path simply ran out through the dashed edge at
+   1080p, where the type scale is at its ceiling and these chips are
+   the narrowest boxes on the slide. Neither is acceptable, so the
+   path breaks where a path is allowed to break: after a slash. */
+.spell__path {
+  display: block; margin-top: 1px;
+  font-family: var(--ae-font-mono);
+  font-size: calc(var(--ae-fs-small) * 0.94); line-height: 1.28;
+  color: var(--fg-fail-d); overflow-wrap: normal; word-break: normal;
+}
+.maplab { display: block; }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE BORDER
+   Two territories and a line between them, both standing on the
+   paper. Nobody is raised, nothing is enclosed: the slide's claim
+   is the LINE, not a winner, and the previous version's two peer
+   cards said the opposite by giving each half its own box.
+
+   The line carries its own name on a chip at its head, in a row
+   of its own. It got that row after the first pass put the chip
+   beside the line's top, where the German territory label ran
+   into it at 1440px.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .board {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) var(--ae-space-7) minmax(0, 1fr);
+  row-gap: var(--ae-space-3);
+  align-items: start;
+}
+/* A fourth, empty row. The line stretches into it so it runs PAST
+   the content it divides — a border overshoots what it separates,
+   and a rule that stops exactly level with the last word reads as a
+   separator between two blocks instead.
+
+   Sized on the vh-scaled step, not a fixed one, so the overshoot is
+   generous on a 1080p stage and nearly nothing on a short window —
+   this is the tallest of the three variations and the one with the
+   least headroom left at the type scale's floor. */
+.v1 .tail { grid-column: 1 / 4; grid-row: 4; height: var(--ae-space-3); }
+.v1 .vline {
+  grid-column: 2; grid-row: 1 / 5;
+  justify-self: center; align-self: stretch;
+  width: 0; border-left: 2px solid var(--ae-cool-gray-300);
+  /* Starts at the vertical centre of its own name chip, so the chip
+     reads as sitting ON the line rather than above it. Derived from
+     the caption size rather than hard-coded, because the type scale
+     moves with viewport height and a fixed 14px drifted off the chip
+     on a 1080p stage. */
+  margin-top: calc(var(--ae-fs-caption) * var(--ae-lh-caption) / 2 + 4.5px);
+}
+.v1 .vline__name { grid-column: 2; grid-row: 1; justify-self: center; align-self: start; position: relative; }
+.v1 .lab-l { grid-column: 1; grid-row: 2; }
+.v1 .lab-r { grid-column: 3; grid-row: 2; }
+.v1 .side-l { grid-column: 1; grid-row: 3; }
+.v1 .side-r { grid-column: 3; grid-row: 3; }
+/* TWO EXPLICIT ROWS, NOT THREE STACKS. The three standard names sit
+   in a row of their own, so they land on one baseline whatever their
+   descriptions do. Nested per-column stacks put AGENTS.md, SKILL.md
+   and Model Context Protocol at three different heights — and the
+   three chips ARE the slide's claim, so they cannot be the ragged
+   part of it. */
+.v1 .cols3, .v1 .cols2 {
+  display: grid; column-gap: var(--ae-space-5); row-gap: 0;
+  align-items: start;
+}
+.v1 .cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.v1 .cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.v1 .maplab { margin: var(--ae-space-4) 0 var(--ae-space-2); }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE ENCLOSURE
+   The boundary object at full strength: a drawn room with its
+   name on the edge, three primitives inside it, and the other two
+   OUTSIDE — on the paper, unenclosed and unraised, exactly as the
+   object's contract says. Being outside is the whole point, so
+   nothing is drawn around it.
+
+   Asymmetric on purpose. V1 says "there is a line"; this says
+   "there is a standard, and two of these are not in it".
+   ══════════════════════════════════════════════════════════════ */
+.v2 .board {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  column-gap: var(--ae-space-7);
+  align-items: start;
+}
+.v2 .bd { padding: calc(var(--ae-space-6) + 2px) var(--ae-space-6) var(--ae-space-5); }
+/* The outside starts level with the enclosure's first line of
+   content, not with its top edge — otherwise the two halves read
+   as misaligned rather than as inside and outside. */
+.v2 .out { padding-top: calc(var(--ae-space-6) + 2px); }
+.v2 .cols3, .v2 .cols2 {
+  display: grid; column-gap: var(--ae-space-5); row-gap: 0;
+  align-items: start;
+}
+.v2 .cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.v2 .cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.v2 .out > .fg-label { display: block; margin-bottom: var(--ae-space-4); }
+.v2 .maplab { margin: var(--ae-space-5) 0 var(--ae-space-3); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — ONE RAIL, THEN THREE
+   The boundary drawn as the shelf the five stand on, and the line
+   is the point where the shelf stops being one thing. Left: one
+   continuous rail, three stems, three names. Right: a dashed rail,
+   ONE stem that forks into THREE, three names.
+
+   This is the only variation in which the mapping is a drawing
+   rather than a lookup: the three tool names are the labels of the
+   three branches, which is what the original slide's header
+   comment asked for and a table cannot do.
+
+   Two down-stems and a crossbar, all CSS borders — an SVG fork
+   with preserveAspectRatio="none" smears its arrowheads, which has
+   already bitten this deck.
+   ══════════════════════════════════════════════════════════════ */
+/* 1.12fr, not 1.28. The right block holds THREE spellings under TWO
+   features, so its columns are the narrow ones on the slide even
+   though it carries fewer items — and at 1.28 ".cursor/hooks.json"
+   broke mid-token into a hanging "n". A path that wraps inside its
+   own name stops being a path. */
+.v3 .rig {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  column-gap: var(--ae-space-7);
+  align-items: stretch;
+}
+.v3 .prims { display: grid; column-gap: var(--ae-space-4); align-content: end; }
+.v3 .prims--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.v3 .prims--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.v3 .prims > * { text-align: center; }
+.v3 .prim__d { margin-inline: auto; max-width: 30ch; }
+
+/* The rail row. Fixed height from the chip that sits on it, so both
+   rails are at ONE height across the slide however the columns above
+   them wrap. */
+.v3 .railrow {
+  position: relative;
+  min-height: calc(var(--ae-fs-caption) * var(--ae-lh-caption) + 24px);
+  margin-top: var(--ae-space-3);
+}
+.v3 .rail { position: absolute; top: 50%; left: 0; right: 0; border-top: 2px solid var(--ae-cool-gray-300); }
+.v3 .rail--broken { border-top: 2px dashed var(--fg-fail); }
+.v3 .railrow .edge { position: absolute; top: 50%; left: var(--ae-space-5); transform: translateY(-50%); }
+/* The right rail's name goes to the FAR end, not the near one. The
+   chip punches a hole in the line it sits on, and at the near end
+   that hole swallowed the first 300px of dashes — the stretch right
+   after the break, which is the one place the eye has to see solid
+   become dashed. */
+.v3 .railrow--r .edge { left: auto; right: var(--ae-space-5); }
+
+/* The descent. Both sides are the same height so the names below
+   line up; only the SHAPE of the descent differs, which is the
+   argument. */
+.v3 .descent { position: relative; height: clamp(22px, 3.2vh, 34px); }
+.v3 .descent--straight { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--ae-space-4); }
+.v3 .descent--straight i {
+  justify-self: center; width: 0; height: 100%;
+  border-left: 2px solid var(--ae-cool-gray-300);
+}
+/* The fork: one stem down, a crossbar, three stems down. The
+   crossbar is inset by half a column at each end so it lands on the
+   OUTER STEMS' centres — computed from the track, not guessed at
+   16.7%, because the gap makes those two numbers different. */
+.v3 .fork { --g: var(--ae-space-4); }
+.v3 .fork__stem {
+  position: absolute; top: 0; left: 50%; width: 0; height: 45%;
+  border-left: 2px dashed var(--fg-fail);
+}
+.v3 .fork__bar {
+  position: absolute; top: 45%;
+  left: calc((100% - 2 * var(--g)) / 6); right: calc((100% - 2 * var(--g)) / 6);
+  border-top: 2px dashed var(--fg-fail);
+}
+.v3 .fork__legs {
+  position: absolute; top: 45%; left: 0; right: 0; bottom: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--g);
+}
+.v3 .fork__legs i { justify-self: center; width: 0; height: 100%; border-left: 2px dashed var(--fg-fail); }
+
+.v3 .names { display: grid; column-gap: var(--ae-space-4); row-gap: 0; align-items: start; }
+.v3 .names--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.v3 .names > * { text-align: center; }
+.v3 .names .std { margin-inline: auto; }
+.v3 .maplab { margin-top: var(--ae-space-3); text-align: center; }
+
+/* ══════════════════════════════════════════════════════════════
+   SECOND PASS  —  V4 · V5 · V6
+
+   WHAT CHANGED IN THE CONTENT, once for all three.
+
+   DROPPED — the mapping block. "The same feature, three spellings"
+   and its three rows (Claude Code, Codex, Cursor) are gone from
+   V4–V6 entirely. They were the slide's weakest evidence: all
+   three rows were HOOKS' paths, so a slide claiming two
+   tool-specific primitives evidenced exactly one of them, and the
+   audience had to read six file paths to be told a fact the group
+   label already stated.
+
+   DROPPED — the keepers. "Agentic AI Foundation, Linux Foundation"
+   and "Open standard, published spec at agentskills.io" are gone.
+   They flattened two different kinds of claim into one caption
+   row: who governs a spec, and where a spec is published, are not
+   the same fact, and neither is what the slide is about. What
+   remains as evidence for "portable" is the standard's own NAME,
+   which is the stronger evidence anyway — one name is the claim.
+
+   ADDED — the plugin, promoted from a footnote to the drawing. It
+   was one sentence in the mint note strip at the bottom of the
+   slide; it is now the object the other five are arranged inside,
+   under or beside. A plugin is a BUNDLE, and containment is
+   drawable — that relationship was the most interesting thing on
+   the slide and the only one not drawn.
+
+   ADDED — a chip for the two that have no standard. The three
+   portable primitives always carried a name chip and the other
+   two carried nothing, which read as an unfinished grid rather
+   than as an argument. Both now answer the same question, in the
+   same box: three name a standard, two say there is none.
+
+   CHANGED — the stamp. It used to date a governance claim
+   ("Governance checked August 2026"). No governance claim is made
+   any more, so the stamp dates what is still claimed: the tool
+   landscape. The stamp itself stays — the project requires one on
+   any slide making tool or model claims.
+
+   THE VOCABULARY DECISION. Slide 16 used dashed to mean
+   PERMEABLE; the first pass at this slide used dashed to mean
+   DOES NOT TRAVEL. With 16 leaving the deck, one meaning has to
+   win, and it is the one already landed on slide 6 and written
+   into DESIGN.md pass 4: a broken line is the path that does not
+   hold, and the accepted path is solid. So here:
+
+     DASHED + CLAY = there is no common format for this; it does
+                     not travel. It is the mark on the two
+                     tool-specific primitives AND on the plugin
+                     itself, because the same sentence is true of
+                     both — and that shared mark is the point.
+     SOLID GREY    = a real line, a fact about the ecosystem. The
+                     machine's plumbing, not a human decision.
+     GREEN         = the standard's own name, in the code face.
+
+   Two content hues, plus ink and greys. Nothing rests on hue: the
+   standard is always SOLID and NAMED, the absence is always
+   DASHED and says so in words.
+   ══════════════════════════════════════════════════════════════ */
+
+/* The chip that says there is no standard to name. The same box as
+   the standard's chip, because the two are answers to the same
+   question and have to be compared; dashed and clay, because the
+   answer has to survive the hue being stripped out. Body face, not
+   mono — "no standard" is prose, and only a real file name earns
+   the code face. */
+.std--none {
+  border-style: dashed;
+  border-color: var(--fg-fail);
+  color: var(--fg-fail-d);
+}
+/* THE PROSE CHIPS TAKE THE SAME SIZE THE MONO ONES ALREADY DO.
+   "Model Context Protocol" is 22 characters in a track that is a
+   fifth of a 1240px measure, and at full --ae-fs-small it missed
+   by two pixels on a 1080p stage and wrapped — one two-line box
+   in a row of five one-line boxes. The 0.94 step is the kit's own
+   (see .fg-rows dd) and bottoms out at 14.1px, which clears the
+   deck's floor. Scoped to the second pass so V1-V3 stay as the
+   user last saw them. */
+.v4 .std, .v5 .std, .v6 .std {
+  font-size: calc(var(--ae-fs-small) * 0.94);
+  padding: 3px 6px;
+  letter-spacing: -0.008em;
+}
+
+/* The bundle's own voice — what a plugin is, and the one thing
+   wrong with it. The caveat is not a second paragraph: it is the
+   last clause of the first, in clay, so that the good news and the
+   catch cannot be read apart. */
+.say {
+  margin: 0;
+  font-size: var(--ae-fs-small); line-height: 1.42; color: var(--fg-body);
+}
+.cav { color: var(--fg-fail-d); font-weight: 600; }
+
+/* ══════════════════════════════════════════════════════════════
+   V4 — THE CRATE
+   One drawn enclosure, and all five primitives inside it. The
+   enclosure is the plugin: its name sits ON the edge, which is
+   what makes it a boundary rather than a card with a heading.
+   Inside, a solid grey line divides the three that travel from
+   the two that do not — the portability split becomes an internal
+   partition rather than the slide's outer structure.
+
+   The claim this shape makes: a plugin is a box, the five are
+   what is in it, and the interesting line runs INSIDE the box.
+   The crate's own edge is dashed because the box does not travel
+   either, which is the joke the old note strip made in words.
+   ══════════════════════════════════════════════════════════════ */
+.v4 .crate {
+  position: relative;
+  border: 2px dashed var(--fg-fail);
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card);
+  box-shadow: var(--fg-d1);
+  /* Vertical padding is generous, horizontal is one step down. The
+     crate is the only shape here that pays for its own inset out
+     of the five columns, and at the full step on both axes the
+     longest chip, "Model Context Protocol", no longer fit its
+     track on a 1080p stage — where the type scale is at its
+     CEILING while the 1240px measure is not.
+
+     WHAT IS LEFT: at 980x800 that one chip still takes two lines
+     in this variation and only this one, because the crate is the
+     only shape that spends width on its own inset. Measured, not
+     guessed: the chip wants 174px and the track is 165px, and no
+     amount of padding gets those nine pixels back without making
+     the box stop reading as a box. V5 and V6 are clean at every
+     tested size. */
+  padding: calc(var(--ae-space-6) + 2px) var(--ae-space-5) var(--ae-space-4);
+}
+.v4 .crate__name { position: absolute; top: 0; left: var(--ae-space-5); transform: translateY(-50%); }
+
+/* SIX TRACKS FOR FIVE COLUMNS. The partition gets a track of its
+   own rather than being drawn in a gap: a line hung in a column
+   gap moves when the gap changes, and this one has to sit exactly
+   between the third and fourth primitive at every stage width. */
+.v4 .board5 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) var(--ae-space-4) repeat(2, minmax(0, 1fr));
+  column-gap: var(--ae-space-3);
+  row-gap: var(--ae-space-3);
+  align-items: start;
+}
+.v4 .lab-a { grid-column: 1 / 4; grid-row: 1; }
+.v4 .lab-b { grid-column: 5 / 7; grid-row: 1; }
+/* Placement lives in CSS, not in an inline style on each cell, so a
+   narrow stage can reflow it. An inline grid-column cannot be
+   overridden by a media query without !important, and the first
+   pass of this file learned that at 860px. */
+.v4 .prim { grid-row: 2; }
+.v4 .chip { grid-row: 3; }
+.v4 .k1 { grid-column: 1; }
+.v4 .k2 { grid-column: 2; }
+.v4 .k3 { grid-column: 3; }
+.v4 .k4 { grid-column: 5; }
+.v4 .k5 { grid-column: 6; }
+.v4 .split {
+  grid-column: 4; grid-row: 1 / 4;
+  justify-self: center; align-self: stretch;
+  width: 0; border-left: 2px solid var(--ae-cool-gray-300);
+}
+/* The crate says what it is at its own foot, under a hairline —
+   inside the box, because it is the box talking. */
+.v4 .crate__foot {
+  margin-top: var(--ae-space-4);
+  padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V5 — THE GATHER
+   Nothing encloses anything. The five stand free on the paper,
+   split by the portability line, and BELOW them five stems drop
+   into a collector bar that converges to one thing: the plugin.
+
+   Bundling drawn as an ACT rather than as a container. The three
+   portable stems are solid and the two tool-specific stems are
+   dashed, so the bar is fed by both kinds — and the bar, the
+   trunk and the package they arrive at are all dashed, which
+   states the argument as geometry: three of these travel on their
+   own, and the box you put them in does not.
+   ══════════════════════════════════════════════════════════════ */
+.v5 .rig { --g: var(--ae-space-4); }
+.v5 .board5 {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: var(--g);
+  row-gap: var(--ae-space-3);
+  align-items: start;
+}
+.v5 .lab-a { grid-column: 1 / 4; grid-row: 1; }
+.v5 .lab-b { grid-column: 4 / 6; grid-row: 1; }
+.v5 .prim { grid-row: 2; }
+.v5 .chip { grid-row: 3; }
+.v5 .k1 { grid-column: 1; }
+.v5 .k2 { grid-column: 2; }
+.v5 .k3 { grid-column: 3; }
+.v5 .k4 { grid-column: 4; }
+.v5 .k5 { grid-column: 5; }
+/* The portability line falls between the third and fourth track.
+   In a five-track grid with four equal gaps that is three tracks
+   plus two and a half gaps, i.e. 0.6 of the track space plus 2.5g
+   — computed, because guessing 60% puts it inside column four at
+   every width where the gaps are wide. */
+.v5 .split {
+  position: absolute; top: 0; bottom: 0;
+  left: calc((100% - 4 * var(--g)) * 0.6 + 2.5 * var(--g));
+  width: 0; border-left: 2px solid var(--ae-cool-gray-300);
+}
+
+/* The collector. Stems drop on the same five tracks as the
+   columns above, so they land on the primitives' centres however
+   the prose wraps.
+
+   HEIGHT IS THE WHOLE DEVICE. The first pass sized this at
+   clamp(26px, 3.6vh, 44px), which on a 700px stage gave 12px
+   stems and a 13px trunk: five ticks and a rule, not a gathering.
+   A converging pipe needs enough run to read as a run. It also
+   loses its top margin — the stems are the separation. */
+.v5 .gath {
+  position: relative;
+  height: clamp(46px, 6.4vh, 78px);
+}
+.v5 .gath__s {
+  position: absolute; top: 0; left: 0; right: 0; height: 48%;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--g);
+}
+.v5 .gath__s i { justify-self: center; width: 0; height: 100%; border-left: 2px solid var(--ae-cool-gray-300); }
+.v5 .gath__s i.b { border-left: 2px dashed var(--fg-fail); }
+/* The bar stops on the OUTER STEMS' centres, half a track in from
+   each end — a collector that overshoots the things it collects
+   reads as an unrelated rule lying across the slide. */
+.v5 .gath__bar {
+  position: absolute; top: 48%;
+  left: calc((100% - 4 * var(--g)) / 10);
+  right: calc((100% - 4 * var(--g)) / 10);
+  border-top: 2px dashed var(--fg-fail);
+}
+.v5 .gath__t {
+  position: absolute; top: 48%; bottom: 0; left: 50%;
+  width: 0; border-left: 2px dashed var(--fg-fail);
+}
+/* NARROWER THAN THE ROW ABOVE IT, and centred under the trunk.
+   Five wide things converging into one wide thing is not a
+   convergence; the destination has to be smaller than what feeds
+   it or the drawing says nothing. */
+.v5 .pkg {
+  position: relative;
+  max-width: min(100%, 820px);
+  margin-inline: auto;
+  border: 2px dashed var(--fg-fail);
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card);
+  box-shadow: var(--fg-d1);
+  padding: calc(var(--ae-space-5) + 2px) var(--ae-space-6) var(--ae-space-5);
+  text-align: center;
+}
+/* The name sits on the top edge, OFF CENTRE. Centred was the
+   first choice — the label where the pipe lands — but the chip
+   is paper-coloured and z-index 4, so it punched a hole in the
+   trunk and swallowed the last third of it. The one segment the
+   eye has to see is the arrival. */
+.v5 .pkg__name { position: absolute; top: 0; left: var(--ae-space-6); transform: translateY(-50%); }
+.v5 .pkg .fg-label { display: block; margin-bottom: var(--ae-space-2); }
+.v5 .pkg .say { max-width: 84ch; margin-inline: auto; }
+
+/* ══════════════════════════════════════════════════════════════
+   V6 — THE BUNDLE AND ITS MANIFEST
+   The only one of the three that leads with the plugin. It is a
+   full column of its own on the left, with room for a heading and
+   real prose; a dashed brace holds the five to it; and the five
+   are its CONTENTS, listed as a manifest — name, what it does,
+   whether it has a standard — in three aligned columns.
+
+   Rows rather than columns is the point. The other two shapes ask
+   the eye to read five short columns; this one reads down a
+   packing list, which is what a bundle's contents are, and it is
+   the only shape here that gives each primitive a full line of
+   prose rather than a narrow stack of six.
+   ══════════════════════════════════════════════════════════════ */
+.v6 .rig {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) clamp(34px, 5vw, 74px) minmax(0, 2.1fr);
+  align-items: center;
+}
+.v6 .pkg {
+  border: 2px dashed var(--fg-fail);
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card);
+  box-shadow: var(--fg-d1);
+  padding: var(--ae-space-5);
+}
+.v6 .pkg .fg-label { display: block; }
+.v6 .pkg h2 {
+  margin: 4px 0 var(--ae-space-3);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-ink);
+}
+.v6 .pkg .say + .say { margin-top: var(--ae-space-2); }
+
+/* The brace, as ONE box with its right border removed and its
+   left corners rounded. Three separate borders and two hand-drawn
+   ticks were the first attempt; at 2px dashed a 10px tick renders
+   as one dash and a half, which reads as dirt rather than as a
+   bracket. A single rounded box gives real corners at any size. */
+.v6 .brace { position: relative; align-self: stretch; }
+.v6 .brace__b {
+  position: absolute; left: 54%; right: 0; top: 5%; bottom: 5%;
+  border: 2px dashed var(--fg-fail); border-right: 0;
+  border-radius: var(--ae-radius) 0 0 var(--ae-radius);
+}
+.v6 .brace__a {
+  position: absolute; left: 0; right: 46%; top: 50%;
+  border-top: 2px dashed var(--fg-fail);
+}
+
+.v6 .man .fg-label { display: block; margin-bottom: var(--ae-space-2); }
+.v6 .grp + .grp { margin-top: var(--ae-space-5); }
+/* Every row states the same template, so the three columns line up
+   down the whole manifest without a subgrid — the name column, the
+   prose column and the answer column are the manifest's argument
+   and they cannot be ragged.
+
+   THE THIRD TRACK IS A FRACTION, NOT auto. With auto it sized to
+   its own row's chip, so "Model Context Protocol" stole 60px from
+   the prose column and that one row's text started 20px left of
+   the other four. A manifest whose middle column wanders is not a
+   manifest. The chip is pushed to the end of its fixed track
+   instead, which is what makes the five answers line up.
+
+   THE NAME TRACK HAS A FLOOR, and the floor is derived from the
+   type size rather than fixed. At minmax(0, 0.4fr) the track came
+   out at 74px on a 980px stage and "Subagents" is 84px wide, so
+   it ran straight into its own description with no gap. The floor
+   scales with --ae-fs-h5 because the name is set in it. */
+.v6 .r {
+  display: grid;
+  grid-template-columns:
+    minmax(calc(var(--ae-fs-h5) * 5.9), 0.4fr)
+    minmax(0, 1.9fr)
+    minmax(calc(var(--ae-fs-small) * 11.9), 0.82fr);
+  column-gap: var(--ae-space-4);
+  align-items: baseline;
+  /* Three quarters of the step, not the whole step. Five rows pay
+     this ten times, and at the full step German runs to 92% of the
+     deck's stage on a 700px window — inside the limit, with no
+     room left for a projector that is a little shorter again. */
+  padding: calc(var(--ae-space-3) * 0.75) 0;
+  border-bottom: 1px solid var(--fg-hair);
+}
+.v6 .r .std { justify-self: end; }
+.v6 .grp .r:last-child { border-bottom: 0; padding-bottom: 0; }
+.v6 .r:first-of-type { padding-top: 0; }
+.v6 .r .prim__d { margin: 0; }
+
+/* ══════════════ NARROW ══════════════
+   Below the two-column threshold every variation stacks. The old
+   slide's 1000px breakpoint dropped to one column and overflowed
+   the stage by 259px, because stacking three items on top of two
+   is the tallest arrangement of this content that exists. Here the
+   groups stay side by side as long as they can, and when they
+   cannot, the items inside them go two-up rather than one-up. */
+/* THE THREE STAY THREE. The obvious narrow rule — drop the portable
+   group from three columns to two — was measured and is WRONG here:
+   three items in two columns is a 2+1 arrangement, which is taller
+   than three side by side, and height is the whole problem on this
+   slide. The columns get narrow and the prose takes another line;
+   that costs far less than an extra row. The groups only stack when
+   the board itself can no longer hold two of them. */
+
+/* Under ~1100px the wrap is narrower than its 1240px measure, so every
+   paragraph gains a line at once and the frame padding is the only
+   thing left to give. It is given here rather than deck-wide, because
+   at presentation widths that padding is doing real work. */
+@media (max-width: 1100px) {
+  #stage > .proto { padding-top: var(--ae-space-3); padding-bottom: var(--ae-space-3); }
+  .proto .foot { margin-top: var(--ae-space-3); }
+  .proto .fg-note { padding: var(--ae-space-3) var(--ae-space-4); }
+  .proto .fg-foot { margin-top: var(--ae-space-2); padding-top: var(--ae-space-2); }
+
+  /* V6 is the tallest of the second pass here, because its prose
+     is in one narrow column that gains a line on every one of five
+     rows at once. It buys the height back from the plugin's column,
+     which has slack, and from the row padding — which is paid ten
+     times. Below 1100px the deck's own nav bar also wraps to two
+     lines, so the real stage is 26px shorter again than the
+     arithmetic elsewhere on this page assumes. */
+  .v6 .rig { grid-template-columns: minmax(0, 0.76fr) clamp(30px, 4vw, 52px) minmax(0, 2.4fr); }
+  .v6 .r { padding: var(--ae-space-2) 0; }
+  .v6 .grp + .grp { margin-top: var(--ae-space-4); }
+}
+@media (max-width: 860px) {
+  .v1 .board { grid-template-columns: 1fr; }
+  .v1 .vline { display: none; }
+  .v1 .vline__name, .v1 .lab-l, .v1 .lab-r, .v1 .side-l, .v1 .side-r { grid-column: 1; grid-row: auto; justify-self: start; }
+  .v2 .board, .v3 .rig { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v1 .cols2, .v2 .cols2, .v3 .prims--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* V4 and V5 go three-up, then two-up, on two stacked bands. The
+     partition goes with them: a vertical rule cannot divide two
+     groups that are no longer side by side, and leaving it in
+     would draw a line through the middle of the portable three. */
+  .v4 .board5, .v5 .board5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .v4 .lab-a, .v5 .lab-a { grid-column: 1 / 4; grid-row: 1; }
+  .v4 .lab-b, .v5 .lab-b { grid-column: 1 / 4; grid-row: 4; }
+  .v4 .split, .v5 .split { display: none; }
+  .v4 .k4, .v4 .k5, .v5 .k4, .v5 .k5 { grid-column: auto; }
+  .v4 .k4, .v5 .k4 { grid-column: 1; }
+  .v4 .k5, .v5 .k5 { grid-column: 2; }
+  .v4 .prim.k4, .v4 .prim.k5, .v5 .prim.k4, .v5 .prim.k5 { grid-row: 5; }
+  .v4 .chip.k4, .v4 .chip.k5, .v5 .chip.k4, .v5 .chip.k5 { grid-row: 6; }
+  /* The stems only make sense under a five-across row. Below that
+     the collector has nothing to collect in a straight line, so
+     the package keeps its name chip and loses its plumbing. */
+  .v5 .gath { display: none; }
+
+  /* V6 loses the brace and stacks. The bracket is the one device
+     here that cannot survive stacking: a brace turned on its side
+     is an arrow, which says something the slide does not. */
+  .v6 .rig { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v6 .brace { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Border</button>
+        <button type="button" data-p="v2">2 · Enclosure</button>
+        <button type="button" data-p="v3">3 · Rail</button>
+        <button type="button" data-p="v4">4 · Crate</button>
+        <button type="button" data-p="v5">5 · Gather</button>
+        <button type="button" data-p="v6">6 · Manifest</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Content. Every sentence from presentation-v2/sections/24-setup-kit.js is
+   here unchanged, including the date stamp, which the project's conventions
+   require on a slide making tool and governance claims.
+
+   Two changes, both by shape rather than by deletion:
+
+   1. The group's kicker and its heading are joined into ONE string —
+      "Portable" + "One spelling, every tool" become "Portable — one
+      spelling, every tool". Both phrases survive; they stop taking two
+      stacked lines each. That is the compression the overflow needed.
+   2. One string is new: the line's own name, in the variation where the
+      line is drawn as a border and has to be labelled. It is lifted from
+      the lede, which already says "the line that decides how much of it
+      travels with you". */
+const C = {
+  en: {
+    h1: 'Five things you give it — three of them <span class="fg-mark fg-mark--sweep">standard</span>',
+    lede: 'You have met four already — the memory file, skills and MCP in Build, and the subagent that read the diff in Review. Here is the whole set, and the line that decides how much of it travels with you.',
+    lineName: 'what travels with you',
+    portLabel: 'Portable — one spelling, every tool',
+    toolLabel: 'Tool-specific — a different spelling in each',
+    portable: [
+      { t: 'Memory',
+        d: 'The project’s standing brief: stack, conventions, what is out of scope. Read at every session start.',
+        std: 'AGENTS.md', mono: true,
+        keeper: 'Agentic AI Foundation, Linux Foundation' },
+      { t: 'Skills',
+        d: 'A procedure the model loads only when it becomes relevant. Written once, read by any agent.',
+        std: 'SKILL.md', mono: true,
+        keeper: 'Open standard, published spec at agentskills.io' },
+      { t: 'MCP',
+        d: 'The systems it may reach: the tracker, the database, the docs.',
+        std: 'Model Context Protocol',
+        keeper: 'Agentic AI Foundation, Linux Foundation' },
+    ],
+    specific: [
+      { t: 'Hooks',
+        d: 'Fires on an event, every time, whatever the model decides. Policy it cannot talk its way around.' },
+      { t: 'Subagents',
+        d: 'A second agent, its own context, a narrower job. You get the result, not its reading.' },
+    ],
+    mapLabel: 'The same feature, three spellings',
+    map: [
+      ['Claude Code', 'settings.json → hooks'],
+      ['Codex',       '.codex/hooks.json'],
+      ['Cursor',      '.cursor/hooks.json'],
+    ],
+    note: 'And plugins — one installable bundle of the five, so a team ships its setup instead of describing it in a README. <b>No common format for those either.</b>',
+    foot: 'Governance checked August 2026 · tool paths July 2026 — re-check before relying on them.',
+
+    /* ── the second pass, V4–V6 ──────────────────────────────
+       The lede gains one clause, because the slide now has three
+       subjects rather than two: the set, the line, and the bundle.
+       The five descriptions are the originals, word for word. */
+    lede2: 'You have met four already — the memory file, skills and MCP in Build, and the subagent that read the diff in Review. Here is the whole set, the line that decides how much of it travels — and the bundle that ships all five at once.',
+    five: [
+      { t: 'Memory', port: true, std: 'AGENTS.md', mono: true,
+        d: 'The project’s standing brief: stack, conventions, what is out of scope. Read at every session start.' },
+      { t: 'Skills', port: true, std: 'SKILL.md', mono: true,
+        d: 'A procedure the model loads only when it becomes relevant. Written once, read by any agent.' },
+      { t: 'MCP', port: true, std: 'Model Context Protocol',
+        d: 'The systems it may reach: the tracker, the database, the docs.' },
+      { t: 'Hooks', port: false, std: 'no standard',
+        d: 'Fires on an event, every time, whatever the model decides. Policy it cannot talk its way around.' },
+      { t: 'Subagents', port: false, std: 'no standard',
+        d: 'A second agent, its own context, a narrower job. You get the result, not its reading.' },
+    ],
+    plugin: {
+      name: 'Plugin',
+      chip: 'Plugin — one install',
+      kick: 'the sixth thing, and the only one made of the others',
+      say: 'One install, and a team has the whole setup — all five, versioned together. You ship it instead of describing it in a README.',
+      cav: 'No common format for the bundle either: you build one per tool.',
+    },
+    foot2: 'The tool landscape as of July 2026 — re-check before relying on it.',
+  },
+  de: {
+    h1: 'Fünf Dinge, die du ihm gibst — drei davon <span class="fg-mark fg-mark--sweep">Standard</span>',
+    lede: 'Vier sind dir schon begegnet — Memory-Datei, Skills und MCP in Build, und der Subagent, der im Review den Diff gelesen hat. Hier ist der ganze Satz, und die Linie, die entscheidet, wie viel davon mitreist.',
+    lineName: 'was mitreist',
+    portLabel: 'Portabel — eine Schreibweise, jedes Tool',
+    toolLabel: 'Tool-spezifisch — in jedem Tool anders geschrieben',
+    portable: [
+      { t: 'Memory',
+        d: 'Der ständige Auftrag des Projekts: Stack, Konventionen, was nicht dazugehört. Bei jedem Start gelesen.',
+        std: 'AGENTS.md', mono: true,
+        keeper: 'Agentic AI Foundation, Linux Foundation' },
+      { t: 'Skills',
+        d: 'Ein Ablauf, den das Modell lädt, wenn er relevant wird. Einmal geschrieben, von jedem Agenten lesbar.',
+        std: 'SKILL.md', mono: true,
+        keeper: 'Offener Standard, Spezifikation auf agentskills.io' },
+      { t: 'MCP',
+        d: 'Die Systeme, die er erreichen darf: Ticket-System, Datenbank, Doku.',
+        std: 'Model Context Protocol',
+        keeper: 'Agentic AI Foundation, Linux Foundation' },
+    ],
+    specific: [
+      { t: 'Hooks',
+        d: 'Feuert bei einem Ereignis, jedes Mal. Policy, die das Modell nicht aushebeln kann.' },
+      { t: 'Subagents',
+        d: 'Ein zweiter Agent, eigener Kontext, engerer Auftrag. Du bekommst nur das Ergebnis.' },
+    ],
+    mapLabel: 'Dasselbe Feature, drei Schreibweisen',
+    map: [
+      ['Claude Code', 'settings.json → hooks'],
+      ['Codex',       '.codex/hooks.json'],
+      ['Cursor',      '.cursor/hooks.json'],
+    ],
+    note: 'Und Plugins — ein installierbares Bündel aus den fünf, mit dem ein Team sein Setup ausliefert statt es zu beschreiben. <b>Auch dafür kein gemeinsames Format.</b>',
+    foot: 'Governance geprüft August 2026 · Tool-Pfade Juli 2026 — vor Gebrauch erneut prüfen.',
+
+    /* ── der zweite Durchgang, V4–V6 ────────────────────────── */
+    lede2: 'Vier sind dir schon begegnet — Memory-Datei, Skills und MCP in Build, und der Subagent, der im Review den Diff gelesen hat. Hier ist der ganze Satz, die Linie, die entscheidet, wie viel davon mitreist — und das Bündel, das alle fünf auf einmal ausliefert.',
+    five: [
+      { t: 'Memory', port: true, std: 'AGENTS.md', mono: true,
+        d: 'Der ständige Auftrag des Projekts: Stack, Konventionen, was nicht dazugehört. Bei jedem Start gelesen.' },
+      { t: 'Skills', port: true, std: 'SKILL.md', mono: true,
+        d: 'Ein Ablauf, den das Modell lädt, wenn er relevant wird. Einmal geschrieben, von jedem Agenten lesbar.' },
+      { t: 'MCP', port: true, std: 'Model Context Protocol',
+        d: 'Die Systeme, die er erreichen darf: Ticket-System, Datenbank, Doku.' },
+      { t: 'Hooks', port: false, std: 'kein Standard',
+        d: 'Feuert bei einem Ereignis, jedes Mal. Policy, die das Modell nicht aushebeln kann.' },
+      { t: 'Subagents', port: false, std: 'kein Standard',
+        d: 'Ein zweiter Agent, eigener Kontext, engerer Auftrag. Du bekommst nur das Ergebnis.' },
+    ],
+    plugin: {
+      name: 'Plugin',
+      chip: 'Plugin — eine Installation',
+      kick: 'das sechste Ding, und das einzige aus den anderen gebaut',
+      say: 'Eine Installation, und ein Team hat das ganze Setup — alle fünf, gemeinsam versioniert. Du lieferst es aus, statt es im README zu beschreiben.',
+      cav: 'Auch für das Bündel kein gemeinsames Format: du baust eins pro Tool.',
+    },
+    foot2: 'Tool-Landschaft Stand Juli 2026 — vor Gebrauch erneut prüfen.',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the border: two territories, and the line between them drawn and named',
+  v2: 'Variation 2 — the enclosure: three inside the standard, two outside it on bare paper',
+  v3: 'Variation 3 — one rail, then three: the shelf stops being one thing, and the mapping becomes the fork',
+  v4: 'Variation 4 — the crate: the plugin is the box, all five are in it, and the portability line runs inside',
+  v5: 'Variation 5 — the gather: five stand free, five stems drop, and the bundle is what they converge into',
+  v6: 'Variation 6 — the manifest: the bundle leads, a dashed brace holds its contents, the five read as a packing list',
+};
+
+/* The three second-pass variations run on the rewritten content:
+   no mapping table, no keepers, a plugin with a drawing, and a
+   stamp that dates only what is still claimed. */
+const PASS2 = { v4: 1, v5: 1, v6: 1 };
+
+/* ── shared fragments ───────────────────────────────────────── */
+function prim(p, at) {
+  return '<div class="fg-in" style="--fg-at:' + at + '">'
+    + '<span class="prim__t">' + p.t + '</span>'
+    + '<p class="prim__d">' + p.d + '</p>'
+  + '</div>';
+}
+function stdCell(p, at) {
+  return '<div class="stdcell fg-in" style="--fg-at:' + at + '">'
+    + '<span class="std' + (p.mono ? ' std--mono' : '') + '">' + p.std + '</span>'
+  + '</div>';
+}
+function keeperCell(p, at) {
+  return '<span class="keeper fg-in" style="--fg-at:' + at + '">' + p.keeper + '</span>';
+}
+/* THREE ROWS OF ONE GRID, not three nested stacks. Descriptions,
+   standard names and keepers each get their own row, so each lands on
+   one baseline whatever the row above it did. Nested per-column
+   stacks put the three chips at three different heights — and when
+   "Model Context Protocol" wrapped to two lines at 1080p it dragged
+   its keeper down with it while the other two stayed put. The three
+   chips ARE the slide's claim; they cannot be the ragged part of it. */
+function portableCols(t) {
+  return '<div class="cols3">'
+    + t.portable.map(function (p, i) { return prim(p, 5 + i); }).join('')
+    + t.portable.map(function (p) { return stdCell(p, 8); }).join('')
+    + t.portable.map(function (p) { return keeperCell(p, 8); }).join('')
+  + '</div>';
+}
+function well(t, at) {
+  return '<div class="well fg-map fg-in" style="--fg-at:' + at + '">'
+    + '<dl class="fg-rows">'
+    + t.map.map(function (r) {
+        return '<div class="fg-rows__r"><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>';
+      }).join('')
+    + '</dl>'
+  + '</div>';
+}
+/* A break opportunity after each slash, so a path too long for its box
+   wraps between segments rather than through the middle of a filename.
+   The stored string is untouched — this is a rendering concern, and
+   the content object stays copy-pasteable back into the section. */
+function wbrPath(s) { return s.split('/').join('/<wbr>'); }
+function mapLabel(t, at) {
+  return '<span class="fg-label maplab fg-in" style="--fg-at:' + at + '">' + t.mapLabel + '</span>';
+}
+
+/* ── V1 · THE BORDER ─────────────────────────────────────────── */
+function V1(t) {
+  return ''
+  + '<div class="board">'
+    + '<i class="vline fg-in" aria-hidden="true" style="--fg-at:3"></i>'
+    + '<span class="edge vline__name fg-in" style="--fg-at:3">' + t.lineName + '</span>'
+
+    + '<span class="fg-label lab-l fg-in" style="--fg-at:4">' + t.portLabel + '</span>'
+    + '<span class="fg-label lab-r fg-in" style="--fg-at:4">' + t.toolLabel + '</span>'
+
+    + '<div class="side-l">' + portableCols(t) + '</div>'
+
+    + '<div class="side-r">'
+      + '<div class="cols2">'
+        + t.specific.map(function (p, i) { return prim(p, 6 + i); }).join('')
+      + '</div>'
+      + mapLabel(t, 9)
+      + well(t, 10)
+    + '</div>'
+    + '<i class="tail" aria-hidden="true"></i>'
+  + '</div>';
+}
+
+/* ── V2 · THE ENCLOSURE ──────────────────────────────────────── */
+function V2(t) {
+  return ''
+  + '<div class="board">'
+    + '<section class="bd fg-in" style="--fg-at:3">'
+      + '<span class="bd__name">' + t.portLabel + '</span>'
+      + portableCols(t)
+    + '</section>'
+
+    + '<div class="out">'
+      + '<span class="fg-label fg-in" style="--fg-at:4">' + t.toolLabel + '</span>'
+      + '<div class="cols2">'
+        + t.specific.map(function (p, i) { return prim(p, 6 + i); }).join('')
+      + '</div>'
+      + mapLabel(t, 9)
+      + well(t, 10)
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V3 · ONE RAIL, THEN THREE ───────────────────────────────── */
+function V3(t) {
+  return ''
+  + '<div class="rig">'
+    + '<div class="prims prims--3">'
+      + t.portable.map(function (p, i) { return prim(p, 5 + i); }).join('')
+    + '</div>'
+    + '<div class="prims prims--2">'
+      + t.specific.map(function (p, i) { return prim(p, 6 + i); }).join('')
+    + '</div>'
+
+    + '<div class="railrow fg-in" style="--fg-at:3">'
+      + '<i class="rail" aria-hidden="true"></i>'
+      + '<span class="edge">' + t.portLabel + '</span>'
+    + '</div>'
+    + '<div class="railrow railrow--r fg-in" style="--fg-at:4">'
+      + '<i class="rail rail--broken" aria-hidden="true"></i>'
+      + '<span class="edge edge--broken">' + t.toolLabel + '</span>'
+    + '</div>'
+
+    + '<div class="descent descent--straight fg-in" aria-hidden="true" style="--fg-at:8">'
+      + '<i></i><i></i><i></i>'
+    + '</div>'
+    + '<div class="descent fork fg-in" aria-hidden="true" style="--fg-at:9">'
+      + '<i class="fork__stem"></i><i class="fork__bar"></i>'
+      + '<span class="fork__legs"><i></i><i></i><i></i></span>'
+    + '</div>'
+
+    + '<div class="names names--3">'
+      + t.portable.map(function (p) { return stdCell(p, 8); }).join('')
+      + t.portable.map(function (p) { return keeperCell(p, 8); }).join('')
+    + '</div>'
+    + '<div>'
+      + '<div class="names names--3">'
+        + t.map.map(function (r) {
+            return '<span class="spell fg-in" style="--fg-at:10">'
+              + '<span class="spell__tool">' + r[0] + '</span>'
+              + '<span class="spell__path">' + wbrPath(r[1]) + '</span>'
+            + '</span>';
+          }).join('')
+      + '</div>'
+      + '<span class="fg-label maplab fg-in" style="--fg-at:10">' + t.mapLabel + '</span>'
+    + '</div>'
+  + '</div>';
+}
+
+/* ── shared fragments, second pass ───────────────────────────
+   One primitive cell and one answer chip, used by all three of
+   V4, V5 and V6, so what the user compares is the SHAPE. */
+function chipFor(p) {
+  var cls = p.port ? ('std' + (p.mono ? ' std--mono' : '')) : 'std std--none';
+  return '<span class="' + cls + '">' + p.std + '</span>';
+}
+function cell(p, at, cls) {
+  return '<div class="prim ' + cls + ' fg-in" style="--fg-at:' + at + '">'
+    + '<span class="prim__t">' + p.t + '</span>'
+    + '<p class="prim__d">' + p.d + '</p>'
+  + '</div>';
+}
+function chipCell(p, at, cls) {
+  return '<div class="chip ' + cls + ' fg-in" style="--fg-at:' + at + '">' + chipFor(p) + '</div>';
+}
+/* The bundle's paragraph. The catch is the last clause of the
+   sentence rather than a second line, so the two cannot be read
+   apart — a plugin that only ships in one tool is still worth
+   having, and a plugin presented without that clause is a lie. */
+function say(t) {
+  return '<p class="say">' + t.plugin.say + ' <b class="cav">' + t.plugin.cav + '</b></p>';
+}
+
+/* ── V4 · THE CRATE ──────────────────────────────────────────
+   Drops: the mapping table, the three keepers.
+   Adds: the plugin as the enclosure the five sit inside, its name
+         on the edge, and its own sentence at its own foot.        */
+function V4(t) {
+  var cells = '', chips = '';
+  t.five.forEach(function (p, i) {
+    cells += cell(p, 4 + i, 'k' + (i + 1));
+    chips += chipCell(p, 9, 'k' + (i + 1));
+  });
+  return ''
+  + '<section class="crate fg-in" style="--fg-at:3">'
+    + '<span class="edge edge--broken crate__name">' + t.plugin.chip + '</span>'
+    + '<div class="board5">'
+      + '<span class="fg-label lab-a fg-in" style="--fg-at:3">' + t.portLabel + '</span>'
+      + '<span class="fg-label lab-b fg-in" style="--fg-at:3">' + t.toolLabel + '</span>'
+      + '<i class="split" aria-hidden="true"></i>'
+      + cells + chips
+    + '</div>'
+    + '<div class="crate__foot fg-in" style="--fg-at:10">' + say(t) + '</div>'
+  + '</section>';
+}
+
+/* ── V5 · THE GATHER ─────────────────────────────────────────
+   Drops: the mapping table, the three keepers.
+   Adds: the plugin as the thing five stems converge into — the
+         bundle drawn as an act rather than as a container.        */
+function V5(t) {
+  var cells = '', chips = '', stems = '';
+  t.five.forEach(function (p, i) {
+    cells += cell(p, 4 + i, 'k' + (i + 1));
+    chips += chipCell(p, 9, 'k' + (i + 1));
+    stems += '<i class="' + (p.port ? '' : 'b') + '"></i>';
+  });
+  return ''
+  + '<div class="rig">'
+    + '<div class="board5">'
+      + '<i class="split" aria-hidden="true"></i>'
+      + '<span class="fg-label lab-a fg-in" style="--fg-at:3">' + t.portLabel + '</span>'
+      + '<span class="fg-label lab-b fg-in" style="--fg-at:3">' + t.toolLabel + '</span>'
+      + cells + chips
+    + '</div>'
+    + '<div class="gath fg-in" aria-hidden="true" style="--fg-at:10">'
+      + '<span class="gath__s">' + stems + '</span>'
+      + '<i class="gath__bar"></i><i class="gath__t"></i>'
+    + '</div>'
+    + '<section class="pkg fg-in" style="--fg-at:11">'
+      + '<span class="edge edge--broken pkg__name">' + t.plugin.chip + '</span>'
+      + '<span class="fg-label">' + t.plugin.kick + '</span>'
+      + say(t)
+    + '</section>'
+  + '</div>';
+}
+
+/* ── V6 · THE BUNDLE AND ITS MANIFEST ────────────────────────
+   Drops: the mapping table, the three keepers.
+   Adds: the plugin as a column of its own with a heading and real
+         prose, a dashed brace, and the five as its contents.      */
+function V6(t) {
+  function row(p, at) {
+    return '<div class="r fg-in" style="--fg-at:' + at + '">'
+      + '<span class="prim__t">' + p.t + '</span>'
+      + '<p class="prim__d">' + p.d + '</p>'
+      + chipFor(p)
+    + '</div>';
+  }
+  var a = t.five.slice(0, 3).map(function (p, i) { return row(p, 5 + i); }).join('');
+  var b = t.five.slice(3).map(function (p, i) { return row(p, 8 + i); }).join('');
+  return ''
+  + '<div class="rig">'
+    + '<section class="pkg fg-in" style="--fg-at:3">'
+      + '<span class="fg-label">' + t.plugin.kick + '</span>'
+      + '<h2>' + t.plugin.name + '</h2>'
+      + '<p class="say">' + t.plugin.say + '</p>'
+      + '<p class="say"><b class="cav">' + t.plugin.cav + '</b></p>'
+    + '</section>'
+    + '<div class="brace fg-in" aria-hidden="true" style="--fg-at:4">'
+      + '<i class="brace__b"></i><i class="brace__a"></i>'
+    + '</div>'
+    + '<div class="man">'
+      + '<div class="grp">'
+        + '<span class="fg-label fg-in" style="--fg-at:4">' + t.portLabel + '</span>' + a
+      + '</div>'
+      + '<div class="grp">'
+        + '<span class="fg-label fg-in" style="--fg-at:7">' + t.toolLabel + '</span>' + b
+      + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6 };
+
+function render(v, t) {
+  var two = PASS2[v];
+  /* The mint note strip carried the plugin sentence. In the second
+     pass the plugin is in the drawing, so the strip has nothing
+     left to say and is not printed — a takeaway that repeats the
+     picture beside it is the thing DESIGN.md calls duplication. */
+  var note = two ? '' : '<p class="fg-note fg-in" style="--fg-at:11">' + t.note + '</p>';
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + (two ? t.lede2 : t.lede) + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot">'
+      + note
+      + '<div class="fg-foot fg-in" style="--fg-at:12"><span>' + (two ? t.foot2 : t.foot) + '</span></div>'
+    + '</div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3','4','5','6'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

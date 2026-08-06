@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 7 — Two agreements, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   The diagram on this slide was already right. The defect was that the two
+   cards underneath said the same thing again in prose — the picture was
+   being treated as an illustration OF the content rather than as the
+   content. Every variation here folds that prose into the gate it belongs
+   to, and none of them keeps a separate card row.
+
+   This is also the first slide after 5 where the loop reappears, so the
+   three hues do real work: Plan blue, Build green, Review plum.
+
+   AND THE GATES ARE INK. A gate is a person deciding, and the human is the
+   one thing in this deck that is not coloured — a hard black stop against
+   three soft hues. See DESIGN.md, pass 4. */
+.proto .head { flex: none; }
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 66ch; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-5); }
+
+.s-plan   { --hue: var(--fg-plan);   --hue-d: var(--fg-plan-d);   --tint: var(--fg-plan-tint); }
+.s-build  { --hue: var(--fg-build);  --hue-d: var(--fg-build-d);  --tint: var(--fg-build-tint); }
+.s-review { --hue: var(--fg-review); --hue-d: var(--fg-review-d); --tint: var(--fg-review-tint); }
+
+/* The document object — the same form the SDD slides use. */
+.doc {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 8px 15px; border-radius: 8px;
+  background: var(--fg-card); border: 1.5px solid var(--fg-ink); box-shadow: var(--fg-d1);
+}
+.doc .kind { font-size: var(--ae-fs-caption); line-height: 1.2; color: var(--fg-muted); }
+.doc .file {
+  font-family: var(--ae-font-mono); font-size: calc(var(--ae-fs-caption) * 1.02);
+  line-height: 1.2; font-weight: 600; color: var(--fg-ink);
+}
+
+/* The gate disc. Ink, filled, numbered. Never a hue. */
+.gate {
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(42px, 5.6vh, 62px); height: clamp(42px, 5.6vh, 62px);
+  border-radius: 999px; background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1;
+  font-variant-numeric: tabular-nums; box-shadow: var(--fg-d2);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE PIPELINE, KEPT
+   The existing device, given the palette and the room it needed.
+   The two cards are gone; their sentences now hang under the gate
+   they describe, which is where a reader was already looking.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .pipe {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto;
+  align-items: start; row-gap: var(--ae-space-4);
+}
+.v1 .rail {
+  grid-row: 2; grid-column: 1 / -1; align-self: center;
+  height: 3px; border-radius: 2px; background: var(--fg-hair);
+  transform-origin: left center;
+  animation: rail 800ms var(--ae-ease) both; animation-delay: calc(60ms + 2 * var(--fg-beat));
+}
+@keyframes rail { from { transform: scaleX(0); } }
+.v1 .st { grid-row: 1; text-align: center; }
+.v1 .st h3 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.05; letter-spacing: -0.03em; color: var(--hue-d);
+}
+.v1 .nd {
+  grid-row: 2; justify-self: center; align-self: center;
+  width: 20px; height: 20px; border-radius: 999px;
+  background: var(--fg-card); border: 3.5px solid var(--hue); z-index: 1;
+}
+.v1 .gate-cell { grid-row: 2; justify-self: center; align-self: center; z-index: 2; }
+.v1 .under { grid-row: 3; padding: 0 var(--ae-space-3); text-align: center; }
+/* The gate prose lives in its OWN row, not in the rail's grid. Inside it,
+   a 300px text block forced its `auto` track wide and shoved Build and
+   Review off their positions — the track sizing was being driven by a
+   caption. */
+.v1 .gtexts {
+  display: grid; grid-template-columns: 1fr 1fr;
+  column-gap: var(--ae-space-7); margin-top: var(--ae-space-6);
+}
+.v1 .gt { display: grid; grid-template-columns: auto 1fr; column-gap: var(--ae-space-4); align-items: start; }
+.v1 .gt .num {
+  display: flex; align-items: center; justify-content: center; flex: none;
+  width: 30px; height: 30px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font); font-size: 13px; font-weight: 700;
+}
+.v1 .gt .l {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.12; color: var(--fg-ink);
+}
+.v1 .gt .d { margin: 6px 0 0; font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body); }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE STOP
+   "A gate is a point where the work stops." So the rail is not
+   continuous: it is cut at each gate, and the ink disc is what
+   bridges the cut. Nothing flows past a gate on its own — which
+   is the sentence, drawn.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .pipe {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto;
+  align-items: start; row-gap: var(--ae-space-5);
+}
+.v2 .seg {
+  grid-row: 2; align-self: center; height: 3px; border-radius: 2px;
+  background: var(--hue); opacity: 0.55;
+  transform-origin: left center;
+  animation: rail 620ms var(--ae-ease) both;
+  animation-delay: calc(60ms + var(--fg-at,2) * var(--fg-beat));
+}
+/* The cut. A dashed stub either side of the gate says the line does not
+   continue by itself — and the dashes are what survives greyscale. */
+.v2 .cut {
+  grid-row: 2; align-self: center; height: 0;
+  border-top: 2px dashed var(--ae-cool-gray-300);
+  width: clamp(14px, 2vw, 30px);
+}
+.v2 .st { grid-row: 1; text-align: center; }
+.v2 .st h3 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.05; letter-spacing: -0.03em; color: var(--hue-d);
+}
+.v2 .st .sub { margin: 4px 0 0; font-size: var(--ae-fs-small); color: var(--fg-muted); }
+.v2 .gate-cell { grid-row: 2; justify-self: center; align-self: center; z-index: 2; }
+.v2 .gwrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+.v2 .gwrap .stopword {
+  margin-top: 7px; padding: 2px 10px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff; white-space: nowrap;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption); font-weight: 600;
+}
+.v2 .docrow { grid-row: 3; grid-column: 1; justify-self: center; }
+.v2 .gtexts {
+  display: grid; grid-template-columns: 1fr 1fr;
+  column-gap: var(--ae-space-7); margin-top: var(--ae-space-6);
+}
+.v2 .gt { display: grid; grid-template-columns: auto 1fr; column-gap: var(--ae-space-4); align-items: start; }
+.v2 .gt .num {
+  display: flex; align-items: center; justify-content: center; flex: none;
+  width: 30px; height: 30px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font); font-size: 13px; font-weight: 700;
+}
+.v2 .gt .l {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.12; color: var(--fg-ink);
+}
+.v2 .gt .d { margin: 6px 0 0; font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — TWO AGREEMENTS
+   The headline says "Two agreements", so the two agreements are
+   the slide and the pipeline shrinks to a locator strip. This is
+   the only variation where the long sentences — "you wrote a
+   longer prompt", "an agent reporting its own success is not this
+   gate" — are read at full size rather than as captions.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .locator { display: flex; align-items: center; gap: 0; margin-bottom: var(--ae-space-6); }
+.v3 .locator .lstep {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1; color: var(--hue-d);
+}
+.v3 .locator .lstep::before {
+  content: ''; width: 11px; height: 11px; border-radius: 999px;
+  background: var(--fg-card); border: 3px solid var(--hue);
+}
+.v3 .locator .lline { flex: 1; height: 2px; background: var(--fg-hair); margin: 0 var(--ae-space-3); }
+.v3 .locator .lgate {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font); font-size: 12px; font-weight: 700;
+}
+.v3 .pair { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--ae-space-6); }
+.v3 .ag {
+  display: grid; row-gap: var(--ae-space-4);
+  padding: var(--ae-space-6);
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card); border: 2px solid var(--fg-ink); box-shadow: var(--fg-d2);
+}
+.v3 .ag__top { display: flex; align-items: center; gap: var(--ae-space-4); }
+.v3 .ag__when {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-faint);
+}
+.v3 .ag__what {
+  margin: 2px 0 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-ink);
+}
+.v3 .ag__d { margin: 0; font-size: var(--ae-fs-lead); line-height: 1.4; color: var(--fg-body); }
+/* The "this is not the gate" clause, which is the sharpest line on the
+   slide and currently buried at the end of a card. */
+.v3 .ag__not {
+  display: flex; gap: var(--ae-space-3); align-items: baseline;
+  padding-top: var(--ae-space-4); border-top: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-fail-d);
+}
+.v3 .ag__not::before { content: '✕'; flex: none; font-weight: 700; }
+
+
+/* ══════════════════════════════════════════════════════════════
+   V4 — THE COMBINATION
+   From the current slide: the doc hangs off its step on a drawn
+   connector. From V1: hued step names, big and bold.
+   New, and the point of this version — TWO BINDING PROBLEMS FIXED:
+
+   1. A GATE NO LONGER LOOKS LIKE A STEP. A step is a hollow hued
+      ring sitting ON the rail. A gate is a solid ink bar sitting
+      ACROSS it. Different shape, different colour, different
+      relationship to the line — you cannot read one as the other,
+      and the difference survives greyscale because ink against
+      three mid-tone hues is the widest contrast in the deck.
+
+   2. EACH PANEL IS WIRED TO ITS GATE. It hangs from the gate on
+      the same drawn connector the doc uses, lands on an ink top
+      edge, and repeats the gate's number at the point of contact.
+      Three cues, all spatial. Nothing to work out.
+   ══════════════════════════════════════════════════════════════ */
+.v4 .pipe {
+  display: grid;
+  /* Col 4 is a real gap, not a zero-width spacer: the two panels below
+     butt against it, so it is what separates them. */
+  grid-template-columns:
+    minmax(0,1fr) auto minmax(0,1fr) clamp(22px, 3.2vw, 52px) minmax(0,1fr) auto;
+  align-items: start;
+}
+.v4 .rail {
+  grid-row: 2; grid-column: 1 / -1; align-self: center;
+  height: 3px; border-radius: 2px; background: var(--fg-hair);
+  transform-origin: left center;
+  animation: rail 800ms var(--ae-ease) both; animation-delay: calc(60ms + 2 * var(--fg-beat));
+}
+.v4 .st { grid-row: 1; text-align: center; padding-bottom: var(--ae-space-4); }
+.v4 .st h3 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.05; letter-spacing: -0.03em; color: var(--hue-d);
+}
+/* A step: hollow, hued, ON the line. */
+.v4 .nd {
+  grid-row: 2; justify-self: center; align-self: center; z-index: 1;
+  width: 22px; height: 22px; border-radius: 999px;
+  background: var(--fg-card); border: 4px solid var(--hue);
+}
+/* A gate: solid ink, ACROSS the line. */
+.v4 .gate-cell { grid-row: 2; justify-self: center; align-self: center; z-index: 3; }
+.v4 .gatebar {
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(30px, 3.4vh, 38px); height: clamp(58px, 7.6vh, 84px);
+  border-radius: 10px; background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1;
+  font-variant-numeric: tabular-nums; box-shadow: var(--fg-d2);
+}
+
+/* The connector, used three times: once for the doc, once per gate.
+   Dotted hairline — it is an attachment, not a flow. */
+.v4 .lead { justify-self: center; width: 0; border-left: 2px dotted var(--ae-cool-gray-400); }
+.v4 .lead--doc  { grid-row: 3; height: var(--ae-space-5); }
+.v4 .lead--gate { grid-row: 3 / 5; align-self: stretch; }
+.v4 .docwrap { grid-row: 4; grid-column: 1; justify-self: center; }
+/* Reserves the height the gate connectors run through. */
+.v4 .spacer { grid-row: 4; grid-column: 3; height: var(--ae-space-7); }
+
+/* THE PANELS LIVE IN THE SAME GRID AS THE RAIL. Panel 1 starts at gate 1's
+   column and panel 2 ends at gate 2's, so each connector lands on its own
+   panel's corner by construction — no percentage to drift when the German
+   wraps differently, and no second look needed to see what belongs to what. */
+.v4 .pn {
+  grid-row: 5;
+  border-top: 3px solid var(--fg-ink);
+  border-radius: 0 0 var(--ae-radius) var(--ae-radius);
+  background: var(--fg-card); box-shadow: var(--fg-d1);
+  padding: var(--ae-space-5);
+}
+.v4 .pn--left  { grid-column: 2 / 4; }
+.v4 .pn--right { grid-column: 5 / 7; text-align: right; }
+.v4 .pn__h { display: flex; align-items: center; gap: var(--ae-space-3); margin-bottom: var(--ae-space-3); }
+/* The number repeats exactly where the connector arrives. */
+.v4 .pn__n {
+  display: flex; align-items: center; justify-content: center; flex: none;
+  width: 30px; height: 30px; border-radius: 7px;
+  background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font-head); font-size: 15px; font-weight: 700;
+}
+.v4 .pn__l {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.12; color: var(--fg-ink);
+}
+.v4 .pn__d { margin: 0; font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body); }
+.v4 .pn__not {
+  display: flex; gap: var(--ae-space-2); align-items: baseline;
+  margin: var(--ae-space-3) 0 0; padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-fail-d);
+}
+.v4 .pn__not::before { content: '\2715'; flex: none; font-weight: 700; }
+/* Panel 2 is fed from the far right, so its number sits where the connector
+   actually arrives. Binding beats symmetry. */
+.v4 .pn--right .pn__h,
+.v4 .pn--right .pn__not { flex-direction: row-reverse; }
+
+@media (max-width: 900px) {
+  .v4 .pipe { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v4 .rail, .v4 .lead, .v4 .spacer { display: none; }
+  .v4 .pn, .v4 .pn--left, .v4 .pn--right { grid-column: 1; grid-row: auto; text-align: left; }
+  .v4 .pn--right .pn__h, .v4 .pn--right .pn__not { flex-direction: row; }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   V5 — V4 with three corrections
+   · The doc connector now touches the ring at one end and the box
+     at the other. It did not before, and the reason is worth
+     recording: a step ring is 22px and a gate bar is ~84px, so the
+     ring floats in the middle of a row the bar defines. The gap
+     under it was that row's leftover height. Both ends are now
+     derived from --gh rather than eyeballed, so they stay joined
+     at any viewport.
+   · The doc box is larger — it is a named artifact, not a caption.
+   · The panels are fully rounded with no ink top edge. The binding
+     that edge was carrying moves to a dot where the connector
+     meets the card, plus the repeated number beside it.
+   ══════════════════════════════════════════════════════════════ */
+.v5 .pipe {
+  --gh: clamp(58px, 7.6vh, 84px);   /* gate bar height — the row's ruler */
+  --nd: 22px;                       /* step ring diameter */
+  display: grid;
+  grid-template-columns:
+    minmax(0,1fr) auto minmax(0,1fr) clamp(22px, 3.2vw, 52px) minmax(0,1fr) auto;
+  align-items: start;
+}
+.v5 .rail {
+  grid-row: 2; grid-column: 1 / -1; align-self: center;
+  height: 3px; border-radius: 2px; background: var(--fg-hair);
+  transform-origin: left center;
+  animation: rail 800ms var(--ae-ease) both; animation-delay: calc(60ms + 2 * var(--fg-beat));
+}
+.v5 .st { grid-row: 1; text-align: center; padding-bottom: var(--ae-space-4); }
+.v5 .st h3 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.05; letter-spacing: -0.03em; color: var(--hue-d);
+}
+.v5 .nd {
+  grid-row: 2; justify-self: center; align-self: center; z-index: 1;
+  width: var(--nd); height: var(--nd); border-radius: 999px;
+  background: var(--fg-card); border: 4px solid var(--hue);
+}
+.v5 .gate-cell { grid-row: 2; justify-self: center; align-self: center; z-index: 3; }
+.v5 .gatebar {
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(30px, 3.4vh, 38px); height: var(--gh);
+  border-radius: 10px; background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1;
+  font-variant-numeric: tabular-nums; box-shadow: var(--fg-d2);
+}
+
+.v5 .lead { justify-self: center; width: 0; border-left: 2px dotted var(--ae-cool-gray-400); }
+/* Segment A closes the gap the ring leaves inside the bar-height row:
+   the ring's underside sits at (gh + nd) / 2, and the row ends at gh. */
+.v5 .lead--docA { grid-row: 2; grid-column: 1; align-self: end; height: calc((var(--gh) - var(--nd)) / 2); }
+.v5 .lead--docB { grid-row: 3; grid-column: 1; height: var(--ae-space-5); }
+.v5 .lead--gate { grid-row: 3 / 5; align-self: stretch; position: relative; z-index: 4; }
+.v5 .docwrap { grid-row: 4; grid-column: 1; justify-self: center; }
+/* This is what sets the drop between rail and cards. The gap belongs
+   HERE and not as a margin on the card — a margin would end the
+   connector short of the thing it is connecting to, which is the
+   defect being fixed. */
+.v5 .spacer { grid-row: 4; grid-column: 3; height: var(--ae-space-8); }
+/* Bigger: this is a named artifact, and on slide 28 the same object
+   carries four filenames. */
+.v5 .doc { padding: var(--ae-space-4) var(--ae-space-6); border-radius: var(--ae-radius); gap: 3px; }
+.v5 .doc .kind { font-size: var(--ae-fs-small); }
+.v5 .doc .file { font-size: calc(var(--ae-fs-small) * 1.06); }
+
+.v5 .pn {
+  grid-row: 5;
+  border-radius: var(--ae-radius-lg);
+  border: 1.5px solid var(--fg-ink);
+  background: var(--fg-card); box-shadow: var(--fg-d2);
+  padding: var(--ae-space-5) var(--ae-space-6);
+}
+.v5 .pn--left  { grid-column: 2 / 4; }
+.v5 .pn--right { grid-column: 5 / 7; }
+/* 5 — the title is two lines: when it happens, then what is agreed.
+   The first line is the condition and sits back; the second is the
+   agreement itself and carries the weight. */
+.v5 .pn__h { margin-bottom: var(--ae-space-3); }
+.v5 .pn__when {
+  display: block;
+  font-family: var(--ae-font-head); font-weight: 600;
+  font-size: var(--ae-fs-h4); line-height: 1.2; color: var(--fg-muted);
+}
+.v5 .pn__l {
+  display: block; margin-top: 2px;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.12; color: var(--fg-ink);
+}
+.v5 .pn__d { margin: 0; font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body); }
+.v5 .pn__not {
+  display: flex; gap: var(--ae-space-2); align-items: baseline;
+  margin: var(--ae-space-3) 0 0; padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-fail-d);
+}
+.v5 .pn__not::before { content: '\2715'; flex: none; font-weight: 700; }
+
+@media (max-width: 900px) {
+  .v5 .pipe { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v5 .rail, .v5 .lead, .v5 .spacer { display: none; }
+  .v5 .pn, .v5 .pn--left, .v5 .pn--right { grid-column: 1; grid-row: auto; }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   V6 — SYMMETRIC
+   Everything on this slide is now positioned from ONE set of x
+   coordinates, so the composition is a decision rather than a
+   consequence of how wide the German happens to run.
+
+   The whole picture occupies 13%–87%: equal margins, nothing
+   pressed against the right edge, and the rail no longer runs to
+   the frame.
+
+   The connectors land on each card's TOP CENTRE, and that is true
+   by construction rather than by tuning: the connector is the
+   card's own ::before at left:50%, and each gate sits at the same
+   x as its card's centre. Move a card and its line follows.
+
+   Card centres are 28% and 72% — mirrored about the middle — so
+   the two cards, the two connectors and the two gates are all
+   symmetric. Only the steps are not, because Plan, Build and
+   Review are not symmetric events.
+   ══════════════════════════════════════════════════════════════ */
+.v6 .rig {
+  --gh: clamp(58px, 7.6vh, 84px);   /* gate bar height */
+  --nd: 22px;                       /* step ring diameter */
+  --drop: clamp(84px, 11.5vh, 132px);
+  --x-plan: 19%;
+  --x-g1: 28%;
+  --x-build: 46%;
+  --x-review: 62%;
+  --x-g2: 72%;
+  --edge: 13%;
+}
+.v6 .labels { position: relative; height: calc(var(--ae-fs-h1) * 1.05); margin-bottom: var(--ae-space-4); }
+.v6 .lb {
+  position: absolute; transform: translateX(-50%); white-space: nowrap;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.05; letter-spacing: -0.03em; color: var(--hue-d);
+}
+.v6 .rail-row { position: relative; height: var(--gh); }
+.v6 .rail {
+  position: absolute; left: var(--edge); right: var(--edge); top: 50%;
+  height: 3px; margin-top: -1.5px; border-radius: 2px; background: var(--fg-hair);
+  transform-origin: left center;
+  animation: rail 800ms var(--ae-ease) both; animation-delay: calc(60ms + 2 * var(--fg-beat));
+}
+.v6 .nd {
+  position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 1;
+  width: var(--nd); height: var(--nd); border-radius: 999px;
+  background: var(--fg-card); border: 4px solid var(--hue);
+}
+.v6 .gatebar {
+  position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(30px, 3.4vh, 38px); height: var(--gh);
+  border-radius: 10px; background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1;
+  font-variant-numeric: tabular-nums; box-shadow: var(--fg-d2);
+}
+/* The doc hangs from the ring, starting at its underside. */
+.v6 .lead-doc {
+  position: absolute; left: var(--x-plan); transform: translateX(-50%);
+  top: calc(50% + var(--nd) / 2); height: var(--ae-space-5);
+  width: 0; border-left: 2px dotted var(--ae-cool-gray-400);
+}
+.v6 .docwrap {
+  position: absolute; left: var(--x-plan); transform: translateX(-50%);
+  top: calc(50% + var(--nd) / 2 + var(--ae-space-5));
+}
+.v6 .doc { padding: var(--ae-space-4) var(--ae-space-6); border-radius: var(--ae-radius); gap: 3px; }
+.v6 .doc .kind { font-size: var(--ae-fs-small); }
+.v6 .doc .file { font-size: calc(var(--ae-fs-small) * 1.06); }
+
+.v6 .gap { height: var(--drop); }
+
+/* 13 · 30 · 14 · 30 · 13 — card centres land on 28% and 72%. */
+.v6 .cards { display: grid; grid-template-columns: 13% 30% 14% 30% 13%; }
+.v6 .pn {
+  position: relative;
+  border-radius: var(--ae-radius-lg);
+  border: 1.5px solid var(--fg-ink);
+  background: var(--fg-card); box-shadow: var(--fg-d2);
+  padding: var(--ae-space-5) var(--ae-space-6);
+}
+.v6 .pn--left  { grid-column: 2; }
+.v6 .pn--right { grid-column: 4; }
+/* The connector belongs to the card, so it cannot drift off centre. */
+.v6 .pn::before {
+  content: ''; position: absolute; left: 50%; bottom: 100%;
+  transform: translateX(-50%);
+  height: var(--drop); width: 0;
+  border-left: 2px dotted var(--ae-cool-gray-400);
+}
+.v6 .pn__h { margin-bottom: var(--ae-space-3); }
+.v6 .pn__when {
+  display: block;
+  font-family: var(--ae-font-head); font-weight: 600;
+  font-size: var(--ae-fs-h4); line-height: 1.2; color: var(--fg-muted);
+}
+.v6 .pn__l {
+  display: block; margin-top: 2px;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.12; color: var(--fg-ink);
+}
+.v6 .pn__d { margin: 0; font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body); }
+.v6 .pn__not {
+  display: flex; gap: var(--ae-space-2); align-items: baseline;
+  margin: var(--ae-space-3) 0 0; padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+  font-size: var(--ae-fs-small); line-height: 1.4; color: var(--fg-fail-d);
+}
+.v6 .pn__not::before { content: '\2715'; flex: none; font-weight: 700; }
+
+@media (max-width: 900px) {
+  .v6 .labels, .v6 .rail-row, .v6 .gap { display: none; }
+  .v6 .cards { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v6 .pn--left, .v6 .pn--right { grid-column: 1; }
+  .v6 .pn::before { display: none; }
+}
+
+@media (max-width: 900px) {
+  .v1 .pipe, .v2 .pipe { grid-template-columns: 1fr; }
+  .v1 .rail, .v2 .seg, .v2 .cut { display: none; }
+  .v3 .pair { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Pipeline</button>
+        <button type="button" data-p="v2">2 · Stop</button>
+        <button type="button" data-p="v3">3 · Two agreements</button>
+        <button type="button" data-p="v4">4 · Combination</button>
+        <button type="button" data-p="v5">5 · Fixed</button>
+        <button type="button" data-p="v6">6 · Symmetric</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/07-gate.js. The two card bodies are
+   kept in full — they are the best sentences on the slide — and simply move
+   to the gate they describe. Only "stops here" is new, and only in V2. */
+const C = {
+  en: {
+    h1: 'Two agreements',
+    lede: 'A gate is a point where the work stops and a person decides. There are two, and both of them are yours.',
+    steps: ['Plan', 'Build', 'Review'],
+    docKind: 'writes', docName: 'PLAN.md',
+    stopword: 'work stops',
+    gates: [
+      { n: '1', label: 'Before the code', when: 'Before Build', desc: 'A person agrees the plan',
+        body: 'Without it you did not plan, you wrote a longer prompt.',
+        not: 'The agent may not cross it alone, however obvious the next step looks.' },
+      { n: '2', label: 'Before it is done', when: 'After Review', desc: 'A person accepts the result',
+        body: 'The evidence is checked and the work is accepted, or it is not.',
+        not: 'An agent reporting its own success is not this gate.' },
+    ],
+    note: 'The plan is a file, committed next to the code — that is what gate 1 approves. <b>Everything else — how formal, how many files, who signs — is yours to choose.</b>',
+  },
+  de: {
+    h1: 'Zwei Freigaben',
+    lede: 'Ein Gate ist ein Punkt, an dem die Arbeit stoppt und ein Mensch entscheidet. Es gibt zwei, und beide gehören dir.',
+    steps: ['Plan', 'Build', 'Review'],
+    docKind: 'schreibt', docName: 'PLAN.md',
+    stopword: 'Arbeit stoppt',
+    gates: [
+      { n: '1', label: 'Vor dem Code', when: 'Vor Build', desc: 'Ein Mensch gibt den Plan frei',
+        body: 'Ohne das hast du nicht geplant, sondern nur länger geprompted.',
+        not: 'Der Agent darf es nicht allein überschreiten, so naheliegend der nächste Schritt auch aussieht.' },
+      { n: '2', label: 'Vor dem Fertig', when: 'Nach Review', desc: 'Ein Mensch nimmt das Ergebnis ab',
+        body: 'Die Belege werden geprüft und die Arbeit abgenommen — oder eben nicht.',
+        not: 'Ein Agent, der seinen eigenen Erfolg meldet, ist nicht dieses Gate.' },
+    ],
+    note: 'Der Plan ist eine Datei, neben dem Code eingecheckt — genau die gibt Gate 1 frei. <b>Alles Weitere — wie formell, wie viele Dateien, wer unterschreibt — wählst du selbst.</b>',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the pipeline kept, with the two cards folded into the gates they describe',
+  v2: 'Variation 2 — the stop: the rail is cut at each gate, and only a person bridges it',
+  v3: 'Variation 3 — the two agreements are the slide; the pipeline becomes a locator strip',
+  v4: 'Variation 4 — a gate is a bar ACROSS the rail, and each panel hangs from its gate on a drawn connector',
+  v5: 'Variation 5 — V4 with the doc joined at both ends, a larger doc box, and fully rounded panels',
+  v6: 'Variation 6 — connectors on each card\u2019s top centre, the whole picture inset to 13%\u201387%',
+};
+const HUE = ['s-plan', 's-build', 's-review'];
+const docHTML = t => '<span class="doc"><span class="kind">' + t.docKind + '</span><span class="file">' + t.docName + '</span></span>';
+
+/* ── V1 ── steps in columns 1/3/5, gates in 2 and 6. */
+function V1(t) {
+  const SC = [1, 3, 5], GC = [2, 6];
+  return '<div class="pipe">'
+    + '<i class="rail"></i>'
+    + t.steps.map(function (s, i) {
+        return '<div class="st ' + HUE[i] + ' fg-in" style="grid-column:' + SC[i] + '; --fg-at:' + (3 + i) + '">'
+          + '<h3>' + s + '</h3></div>'
+        + '<i class="nd ' + HUE[i] + '" style="grid-column:' + SC[i] + '; animation: fg-appear 300ms var(--ae-ease) both; animation-delay: calc(60ms + ' + (3 + i) + ' * var(--fg-beat))"></i>';
+      }).join('')
+    + '<div class="under fg-in" style="grid-column:1; --fg-at:6; text-align:center">' + docHTML(t) + '</div>'
+    + t.gates.map(function (g, i) {
+        return '<div class="gate-cell fg-in" style="grid-column:' + GC[i] + '; --fg-at:' + (7 + i) + '">'
+          + '<span class="gate">' + g.n + '</span></div>';
+      }).join('')
+  + '</div>'
+  + '<div class="gtexts">'
+    + t.gates.map(function (g, i) {
+        return '<div class="gt fg-in" style="--fg-at:' + (8 + i) + '">'
+          + '<span class="num">' + g.n + '</span>'
+          + '<div><span class="l">' + g.label + ' — ' + g.desc + '</span>'
+          + '<p class="d">' + g.body + ' ' + g.not + '</p></div>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+/* ── V2 ── the rail exists only between gates, never through one. */
+function V2(t) {
+  const SC = [1, 3, 5], GC = [2, 6];
+  return '<div class="pipe">'
+    + t.steps.map(function (s, i) {
+        return '<div class="st ' + HUE[i] + ' fg-in" style="grid-column:' + SC[i] + '; --fg-at:' + (3 + i) + '">'
+          + '<h3>' + s + '</h3></div>'
+        + '<i class="seg ' + HUE[i] + '" style="grid-column:' + SC[i] + '; --fg-at:' + (3 + i) + '"></i>';
+      }).join('')
+    + '<i class="cut" style="grid-column:4"></i>'
+    + t.gates.map(function (g, i) {
+        return '<div class="gate-cell fg-in" style="grid-column:' + GC[i] + '; --fg-at:' + (6 + i) + '">'
+          + '<span class="gwrap"><span class="gate">' + g.n + '</span>'
+          + '<span class="stopword">' + t.stopword + '</span></span></div>';
+      }).join('')
+    + '<div class="docrow fg-in" style="--fg-at:8">' + docHTML(t) + '</div>'
+  + '</div>'
+  + '<div class="gtexts">'
+    + t.gates.map(function (g, i) {
+        return '<div class="gt fg-in" style="--fg-at:' + (8 + i) + '">'
+          + '<span class="num">' + g.n + '</span>'
+          + '<div><span class="l">' + g.label + ' — ' + g.desc + '</span>'
+          + '<p class="d">' + g.body + ' ' + g.not + '</p></div>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  return ''
+  + '<div class="locator fg-in" style="--fg-at:3">'
+    + '<span class="lstep ' + HUE[0] + '">' + t.steps[0] + '</span>'
+    + '<i class="lline"></i><span class="lgate">1</span><i class="lline"></i>'
+    + '<span class="lstep ' + HUE[1] + '">' + t.steps[1] + '</span>'
+    + '<i class="lline"></i>'
+    + '<span class="lstep ' + HUE[2] + '">' + t.steps[2] + '</span>'
+    + '<i class="lline"></i><span class="lgate">2</span>'
+  + '</div>'
+  + '<div class="pair">'
+    + t.gates.map(function (g, i) {
+        return '<div class="ag fg-in" style="--fg-at:' + (4 + i * 2) + '">'
+          + '<div class="ag__top"><span class="gate">' + g.n + '</span>'
+            + '<div><span class="ag__when">' + g.when + '</span>'
+            + '<p class="ag__what">' + g.desc + '</p></div></div>'
+          + '<p class="ag__d">' + g.body + '</p>'
+          + '<p class="ag__not">' + g.not + '</p>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+
+/* ── V4 ── Steps in 1/3/5, gates in 2/6, panels spanning 2-4 and 5-7.
+   Everything shares one grid, so every alignment on this slide is
+   structural. */
+function V4(t) {
+  const SC = [1, 3, 5], GC = [2, 6], PC = ['pn--left', 'pn--right'];
+  return '<div class="pipe">'
+    + '<i class="rail"></i>'
+    + t.steps.map(function (s, i) {
+        return '<div class="st ' + HUE[i] + ' fg-in" style="grid-column:' + SC[i] + '; --fg-at:' + (3 + i) + '">'
+          + '<h3>' + s + '</h3></div>'
+        + '<i class="nd ' + HUE[i] + '" style="grid-column:' + SC[i] + '; animation: fg-appear 300ms var(--ae-ease) both; animation-delay: calc(60ms + ' + (3 + i) + ' * var(--fg-beat))"></i>';
+      }).join('')
+    + '<i class="lead lead--doc fg-in" style="grid-column:1; --fg-at:6"></i>'
+    + '<div class="docwrap fg-in" style="--fg-at:6">' + docHTML(t) + '</div>'
+    + '<i class="spacer"></i>'
+    + t.gates.map(function (g, i) {
+        return '<div class="gate-cell fg-in" style="grid-column:' + GC[i] + '; --fg-at:' + (7 + i) + '">'
+          + '<span class="gatebar">' + g.n + '</span></div>'
+        + '<i class="lead lead--gate fg-in" style="grid-column:' + GC[i] + '; --fg-at:' + (8 + i) + '"></i>'
+        + '<div class="pn ' + PC[i] + ' fg-in" style="--fg-at:' + (8 + i) + '">'
+          + '<div class="pn__h"><span class="pn__n">' + g.n + '</span>'
+            + '<span class="pn__l">' + g.label + ' — ' + g.desc + '</span></div>'
+          + '<p class="pn__d">' + g.body + '</p>'
+          + '<p class="pn__not">' + g.not + '</p>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+function V5(t) {
+  const SC = [1, 3, 5], GC = [2, 6], PC = ['pn--left', 'pn--right'];
+  return '<div class="pipe">'
+    + '<i class="rail"></i>'
+    + t.steps.map(function (s, i) {
+        return '<div class="st ' + HUE[i] + ' fg-in" style="grid-column:' + SC[i] + '; --fg-at:' + (3 + i) + '">'
+          + '<h3>' + s + '</h3></div>'
+        + '<i class="nd ' + HUE[i] + '" style="grid-column:' + SC[i] + '; animation: fg-appear 300ms var(--ae-ease) both; animation-delay: calc(60ms + ' + (3 + i) + ' * var(--fg-beat))"></i>';
+      }).join('')
+    + '<i class="lead lead--docA fg-in" style="--fg-at:6"></i>'
+    + '<i class="lead lead--docB fg-in" style="--fg-at:6"></i>'
+    + '<div class="docwrap fg-in" style="--fg-at:6">' + docHTML(t) + '</div>'
+    + '<i class="spacer"></i>'
+    + t.gates.map(function (g, i) {
+        return '<div class="gate-cell fg-in" style="grid-column:' + GC[i] + '; --fg-at:' + (7 + i) + '">'
+          + '<span class="gatebar">' + g.n + '</span></div>'
+        + '<i class="lead lead--gate fg-in" style="grid-column:' + GC[i] + '; --fg-at:' + (8 + i) + '"></i>'
+        + '<div class="pn ' + PC[i] + ' fg-in" style="--fg-at:' + (8 + i) + '">'
+          + '<div class="pn__h">'
+            + '<span class="pn__when">' + g.label + ':</span>'
+            + '<span class="pn__l">' + g.desc + '</span></div>'
+          + '<p class="pn__d">' + g.body + '</p>'
+          + '<p class="pn__not">' + g.not + '</p>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+
+function V6(t) {
+  const X = ['var(--x-plan)', 'var(--x-build)', 'var(--x-review)'];
+  const G = ['var(--x-g1)', 'var(--x-g2)'];
+  const PC = ['pn--left', 'pn--right'];
+  return '<div class="rig">'
+    + '<div class="labels">'
+      + t.steps.map(function (s, i) {
+          return '<span class="lb ' + HUE[i] + ' fg-in" style="left:' + X[i] + '; --fg-at:' + (3 + i) + '">' + s + '</span>';
+        }).join('')
+    + '</div>'
+    + '<div class="rail-row">'
+      + '<i class="rail"></i>'
+      + t.steps.map(function (s, i) {
+          return '<i class="nd ' + HUE[i] + '" style="left:' + X[i] + '; animation: fg-appear 300ms var(--ae-ease) both; animation-delay: calc(60ms + ' + (3 + i) + ' * var(--fg-beat))"></i>';
+        }).join('')
+      + t.gates.map(function (g, i) {
+          return '<span class="gatebar fg-in" style="left:' + G[i] + '; --fg-at:' + (6 + i) + '">' + g.n + '</span>';
+        }).join('')
+      + '<i class="lead-doc fg-in" style="--fg-at:6"></i>'
+      + '<div class="docwrap fg-in" style="--fg-at:6">' + docHTML(t) + '</div>'
+    + '</div>'
+    + '<div class="gap"></div>'
+    + '<div class="cards">'
+      + t.gates.map(function (g, i) {
+          return '<div class="pn ' + PC[i] + ' fg-in" style="--fg-at:' + (8 + i) + '">'
+            + '<div class="pn__h">'
+              + '<span class="pn__when">' + g.label + ':</span>'
+              + '<span class="pn__l">' + g.desc + '</span></div>'
+            + '<p class="pn__d">' + g.body + '</p>'
+            + '<p class="pn__not">' + g.not + '</p>'
+          + '</div>';
+        }).join('')
+    + '</div>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6 };
+function render(v, t) {
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:10"><span>' + t.note + '</span></p></div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v6';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3','4','5','6'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

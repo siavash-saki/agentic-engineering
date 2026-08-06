@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 29 — the four artifacts, one slide</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════════════════════════════════════════════════════════════
+   HARNESS
+
+   THE ARTIFACT SELECTOR IS GONE. It was chrome doing the slide's job.
+   In treatments 4–6 the four cards down the rail ARE the selector, and
+   in 1–3 the crumb segments now are — so every treatment navigates
+   itself and the row that used to sit here has nothing left to do.
+
+   THE SECOND ROW STAYS, EMPTY OF CONTROLS, BECAUSE IT IS MEASURING.
+   The real deck's stage is a viewport minus header (55px) and nav bar
+   (55px). Drop this row and two things go wrong at once: the stage
+   measures 55px too tall, AND every clamp(px, vh, px) token in the deck
+   resolves against a viewport that no longer matches the one the deck
+   runs at — so the type comes out a size the real slide never renders.
+   Keeping 110px of chrome keeps BOTH true: viewport 1280x720 here is
+   viewport 1280x720 there, and this stage is that stage. The row now
+   carries the treatment's description, which used to sit in the header.
+   ══════════════════════════════════════════════════════════════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+/* Nine treatments do not fit the toolbar at the shell's own button size,
+   and a wrapped tab row silently makes the header taller than the deck's
+   55px — which would put every measurement below out by the difference. */
+#tabs button { font-size: 11.5px; padding: 5px 8px; white-space: nowrap; }
+
+#toolbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  /* 55px, measured, not guessed: the real nav is 10px + a 34px button +
+     10px + a 1px top border. Header 55 + nav 55 = 110, so this stage is
+     the deck's stage and every number below transfers unadjusted. */
+  min-height: 55px;
+  padding: 6px var(--ae-gutter);
+  background: var(--fg-paper);
+  border-bottom: 1px solid var(--fg-hair);
+}
+#toolbar .tb-desc {
+  font-family: var(--ae-font); font-size: 13px; line-height: 1.3;
+  color: var(--fg-muted); text-align: center;
+}
+#toolbar .tb-desc b { color: var(--fg-ink); font-weight: 600; }
+
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-5) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════════════════════════════════════════════════════════════
+   SHARED — THE EXHIBIT DEVICE
+
+   DESIGN.md's verdict on 29–32 is the same four times: "agrees — exhibit,
+   a real file. Leave, but fill more frame." So this is one device treated
+   three ways, not three designs. Everything in this block is common to
+   all three treatments; only the layout blocks below differ.
+
+   FOUR THINGS ARE FIXED HERE, IN ALL THREE TREATMENTS, BECAUSE THEY ARE
+   CORRECTIONS RATHER THAN CHOICES:
+
+   1. THE THIRD VERDICT EXISTS NOW. The shipped device renders "not
+      verified" through the same class as a failure, in --ae-error, with
+      no glyph at all — so the deck's loudest claim, that a truthful
+      PENDING beats a convincing PASS, is drawn as if PENDING were a
+      failure and is carried by hue alone. Here a verdict is a colour AND
+      a glyph: pass = green + tick, not verified = ochre + hollow ring,
+      wrong = clay + cross. The unverified row also takes an ochre wash,
+      which is what makes it the climax of slide 32 rather than the last
+      line of a table. Clay is kept live in the legend even though this
+      record never uses it, because the legend is teaching the palette.
+
+   2. NOTHING IS SET BELOW THE FLOOR. The shipped device multiplies
+      --ae-fs-small by 0.88 and --ae-fs-caption by 0.92. At a 1280x720
+      stage both of those tokens are already clamped to their minimum, so
+      the multipliers produce 13.2px source and 12.9px frontmatter —
+      under the deck's own 14px floor. The multipliers are gone. This
+      makes the fit problem HARDER, not easier, and it is why the source
+      sits close to the floor at 720.
+
+   3. GREEN IS NOT "YOU ARE HERE" ANY MORE. The shipped crumb fills the
+      active pill with --fg-green, which since pass 4 means Build. Each
+      artifact now carries the hue of the loop step it belongs to — spec
+      and plan are Plan, tasks is Build (the slide shows it mid-flight,
+      being worked), verification is Review — and a small locator names
+      that step, because a chapter hue must always travel with the
+      chapter's name. It is also what stops the four slides from being
+      four identical green pictures.
+
+   4. THE FRONTMATTER IS THE REAL CONTRACT. sdd/README.md requires eight
+      fields; the slide showed four, and dropped the one the README
+      argues hardest for. Eight now, plus the real repo path on the
+      sheet, so a viewer can check the claim against the repo. See the
+      report for the one field that contradicts its own slide.
+   ══════════════════════════════════════════════════════════════════════ */
+
+.proto .head { flex: none; margin-bottom: var(--ae-space-3); }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-3); }
+
+.hrow {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: var(--ae-space-5); flex-wrap: wrap;
+}
+.proto h1 {
+  margin: 0; font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2);
+  color: var(--fg-ink);
+}
+
+/* ── the artifact's loop hue ────────────────────────────────────────── */
+.a-plan   { --hue: var(--fg-plan);   --hue-d: var(--fg-plan-d);   --hue-tint: var(--fg-plan-tint); }
+.a-build  { --hue: var(--fg-build);  --hue-d: var(--fg-build-d);  --hue-tint: var(--fg-build-tint); }
+.a-review { --hue: var(--fg-review); --hue-d: var(--fg-review-d); --hue-tint: var(--fg-review-tint); }
+
+/* ── the locator: which step of the loop this document belongs to ──── */
+.loc { display: flex; align-items: center; gap: var(--ae-space-2); }
+.loc .dot {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1.2; font-weight: 600; color: var(--ae-text-disabled);
+}
+.loc .dot::before {
+  content: ''; width: 9px; height: 9px; border-radius: 999px;
+  background: var(--ae-cool-gray-200);
+}
+.loc .dot.on { color: var(--hue-d); font-weight: 700; }
+.loc .dot.on::before { background: var(--hue); box-shadow: 0 0 0 4px var(--hue-tint); }
+.loc .sep { width: 14px; height: 2px; background: var(--fg-hair); }
+
+/* ── the crumb: which of the four ──────────────────────────────────── */
+/* Now a control, not a label. Treatments 1 and 3 kept their crumb when
+   the harness lost its artifact row, so the crumb has to be able to do
+   what the row did — otherwise the three old treatments become
+   unreachable and the comparison they exist for is gone. */
+.crumb { display: flex; align-items: center; gap: var(--ae-space-2); flex-wrap: wrap; }
+.crumb .seg {
+  appearance: none; margin: 0; cursor: pointer; background: transparent;
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-caption);
+  line-height: 1; color: var(--fg-faint);
+  padding: 5px 11px; border-radius: 100px; border: 1px solid var(--fg-hair);
+}
+.crumb .seg:hover { color: var(--fg-ink); border-color: var(--fg-muted); }
+/* Filled versus hollow, not hue versus hue: the active segment survives
+   the greyscale test on its fill alone. */
+.crumb .seg--on {
+  color: #fff; background: var(--hue); border-color: var(--hue); font-weight: 700;
+}
+.crumb .sep { color: var(--ae-cool-gray-300); font-weight: 700; }
+
+/* ── the sheet ─────────────────────────────────────────────────────── */
+.sheet {
+  display: flex; flex-direction: column; min-height: 0;
+  background: var(--fg-card);
+  border: 1px solid var(--fg-hair);
+  border-radius: var(--ae-radius-lg);
+  box-shadow: var(--fg-d1);
+  overflow: hidden;
+}
+.sheet__bar {
+  flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--ae-space-4); flex-wrap: wrap;
+  padding: var(--ae-space-2) var(--ae-space-5);
+  background: var(--ae-cool-gray-100);
+  border-bottom: 1px solid var(--fg-hair);
+}
+.path {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-caption);
+  line-height: 1.3; color: var(--fg-muted);
+}
+.path b { color: var(--fg-ink); font-weight: 600; }
+
+/* Frontmatter is file source, so it is mono — but it is metadata about
+   the document rather than the document, so it sits in the header well
+   and the keys recede. */
+.fm {
+  flex: none;
+  display: flex; flex-wrap: wrap;
+  gap: 3px var(--ae-space-5);
+  padding: var(--ae-space-2) var(--ae-space-5);
+  background: var(--ae-cool-gray-100);
+  border-bottom: 1px solid var(--fg-hair);
+  font-family: var(--ae-font-mono);
+  font-size: var(--ae-fs-caption); line-height: 1.35;
+  color: var(--fg-ink);
+}
+.fm .k { color: var(--fg-faint); }
+
+/* ── the document body ─────────────────────────────────────────────── */
+.src { font-family: var(--ae-font-mono); font-size: var(--src-fs); line-height: 1.5; }
+.ln { color: var(--fg-ink); }
+.ln + .ln { margin-top: 1px; }
+/* The markdown markers are source, not decoration, and they are what
+   carries heading-versus-item and done-versus-open when the hue is gone.
+   --fg-faint rather than a hairline grey: this is text and it is read. */
+.mk { color: var(--fg-faint); }
+.h { font-weight: 700; margin-top: 0.5em; }
+.h b { font-weight: 700; }
+.sec > .h:first-child, .src > .h:first-child { margin-top: 0; }
+.p { color: var(--fg-body); }
+.li, .done, .todo { padding-left: 1.5em; text-indent: -1.5em; }
+.done { color: var(--fg-build-d); }
+.done .mk { color: var(--fg-build); font-weight: 700; }
+.todo { color: var(--fg-ink); }
+.gap { height: 0.5em; }
+
+/* ── the verification table ────────────────────────────────────────── */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto;
+  gap: var(--ae-space-3);
+  padding: 3px 0;
+  border-bottom: 1px solid var(--fg-hair);
+  color: var(--fg-ink);
+}
+.row--head { color: var(--fg-faint); border-bottom-color: var(--ae-cool-gray-300); }
+.row span:last-child { text-align: right; }
+/* The unverified row is the point of slide 32. Ochre wash, bled to the
+   sheet's inner edge so it reads as a band rather than a highlighted
+   word, and it still carries its own glyph. */
+.row--wait {
+  background: var(--fg-wait-tint);
+  border-bottom-color: var(--fg-wait-light);
+  margin: 0 calc(-1 * var(--ae-space-5));
+  padding: 3px var(--ae-space-5);
+}
+
+/* ── the three verdicts ────────────────────────────────────────────── */
+.v {
+  display: inline-flex; align-items: baseline; gap: 0.34em;
+  font-weight: 700; white-space: nowrap;
+}
+/* The glyph takes the BODY face even inside the mono document. In Plex
+   Mono U+2713 sets as a square-shouldered radical and reads as √; in the
+   legend, which is prose and therefore Inter, the same character is a
+   tick. A legend that teaches ✓ beside a table that draws √ is teaching
+   the wrong mark. styles.css already states the principle for the nav
+   chevron: a glyph is not code and does not take the code face. */
+.v::before { flex: none; font-weight: 700; font-family: var(--ae-font); }
+.v--pass { color: var(--fg-build-d); }
+.v--pass::before { content: '\2713'; }
+/* A hollow ring, not the typographic white bullet DESIGN.md writes the
+   verdict with: at body size U+25E6 sets as a raised dot and reads as a
+   degree sign rather than as "open". U+25CB is the same idea at a size
+   the back row can tell apart from the tick. */
+.v--wait { color: var(--fg-wait-d); }
+.v--wait::before { content: '\25CB'; font-size: 0.85em; }
+.v--fail { color: var(--fg-fail-d); }
+.v--fail::before { content: '\2715'; }
+.row span:last-child .v { justify-content: flex-end; }
+
+/* The legend is prose about the file, not the file, so it takes the body
+   face. It appears only on a document that carries verdicts. */
+.key {
+  flex: none;
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: 2px var(--ae-space-5);
+  padding: var(--ae-space-2) var(--ae-space-5);
+  background: var(--ae-cool-gray-100);
+  border-top: 1px solid var(--fg-hair);
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: 1.3;
+}
+.key .kl { color: var(--fg-faint); font-weight: 600; }
+.key .v { font-weight: 600; }
+
+.proto .fg-note { padding: var(--ae-space-3) var(--ae-space-5); }
+
+/* ══════════════════════════════════════════════════════════════════════
+   SHARED — ONE SLIDE, FOUR DOCUMENTS  (treatments 4, 5 and 6)
+
+   Four slides collapse into one. The rail stops being a picture of a set
+   and becomes the way through it: click a card, the sheet shows that
+   document. This is only allowed because the deck is two artifacts at
+   once — a talk, and a thing a reader clicks through alone — and the
+   click serves the second without costing the first anything, since the
+   presenter simply arrives with spec.md open and clicks three times
+   where they used to press the arrow key three times.
+
+   FOUR RULES HOLD IN ALL THREE, BECAUSE THEY ARE WHAT MAKES A CLICKABLE
+   SLIDE HONEST RATHER THAN A DEMO:
+
+   1. IT IS A BUTTON. Not a div with a click handler. Tab reaches it,
+      Space and Enter fire it, arrow keys walk the rail, Home and End
+      jump to the ends. A slide that can only be operated with a mouse
+      is a slide half the room cannot operate.
+
+   2. IT DEGRADES TO A SLIDE. The first artifact is rendered at mount.
+      If nobody ever clicks — projector, PDF export, a script that
+      screenshots — what is on screen is a complete, correct slide about
+      spec.md, not an empty shell waiting for an event.
+
+   3. THE STATE IS NEVER ONLY COLOUR. An open card is white where the
+      others are grey, raised where the others are flat, larger where the
+      others are small, and bound to the sheet where the others stand
+      clear of it. Hue is the fifth cue, not the first.
+
+   4. THE ENTRANCE PLAYS ONCE. Re-running the rise animation on every
+      click turns a navigation control into a strobe. A click renders
+      settled; only Replay and a language change replay the choreography.
+   ══════════════════════════════════════════════════════════════════════ */
+.rail { display: grid; min-height: 0; }
+.tab {
+  appearance: none; margin: 0; color: inherit; font: inherit;
+  text-align: left; cursor: pointer; min-width: 0;
+  display: flex; flex-direction: column; justify-content: center; gap: 3px;
+}
+/* Ink, not the chapter hue: --fg-ink is the human and every human
+   decision, and a focus ring is exactly where the human is standing. */
+.tab:focus-visible, .crumb .seg:focus-visible {
+  outline: 2px solid var(--fg-ink); outline-offset: 2px; z-index: 3;
+}
+/* The affordance has to survive a screenshot. A presenter looking at a
+   still of this slide, or a reader who has not moved the mouse yet, gets
+   a chevron on every closed card and none on the open one. */
+.tab .go { flex: none; color: var(--fg-faint); font-weight: 700; }
+.tab--on .go { display: none; }
+.settled .fg-in, .settled .fg-mark--sweep { animation: none; }
+
+/* ── the takeaway, three ways, none of them the mint box ───────────────
+   The mint .fg-note is the deck's generic "here is the point" band, and
+   under a document exhibit it reads as a fifth object stuck to the
+   bottom of a slide that already has four. Each treatment below places
+   the same sentence somewhere it belongs to something:
+     4 — inside the open card, so it is the artifact's own line;
+     5 — in the sheet's footer well, so it is the document's last line;
+     6 — in the margin, bracketed to the band that earns it.
+   All three are typographic and INK. No fill, no chapter hue: the
+   takeaway is addressed to the person in the room, and ink is what this
+   deck says a person with is. That also makes it greyscale-proof by
+   construction rather than by test. */
+/* The hanging arrow is a text-indent, NOT a flex row. As a flex row the
+   sentence becomes an anonymous flex item, which cannot be given
+   min-width:0, so in the narrow rail of treatment 4 the German
+   "wahrheitsgemäß" pushed 31px out through the side of the card. A
+   negative text-indent hangs the same arrow with no flex box to fail. */
+.tk {
+  display: block;
+  padding-left: 1.15em; text-indent: -1.15em;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1.4; color: var(--fg-body);
+  overflow-wrap: break-word;
+}
+.tk::before { content: '\2192\00a0'; color: var(--fg-ink); font-weight: 700; }
+.tk b { font-weight: 700; color: var(--fg-ink); }
+
+/* The chapter kicker, exactly as slide 28 sets it. */
+.proto .kicker {
+  margin: 0 0 var(--ae-space-1);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-green);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T1 — THE PAGE
+   The conservative reading of the verdict: the shape is right, so give
+   it the frame. The sheet is stretched to the full body band and the
+   crumb moves into the sheet's own tab bar, which buys back a whole
+   standalone row. Fill comes from FIDELITY — the real path, the whole
+   frontmatter contract, source at full reading size — rather than from
+   any new furniture.
+
+   The remaining slack is spent BETWEEN SECTIONS, not inside them. The
+   source is a grid of markdown sections with stretched auto rows, so
+   whatever height is left over lands where a well-set page would put it:
+   in the space between "## Context" and "## Acceptance criteria". A line
+   of source never gets stretched leading.
+   ══════════════════════════════════════════════════════════════════════ */
+.v1 { --src-fs: clamp(15px, 2.15vh, 23px); }
+.v1 .sheet { flex: 1; }
+.v1 .src {
+  flex: 1; min-height: 0;
+  display: grid; align-content: stretch; align-items: start;
+  row-gap: var(--ae-space-3);
+  padding: var(--ae-space-4) var(--ae-space-5);
+}
+/* The trailing row is what stops a SHORT document from being pulled
+   apart. Stretch shares the leftover height equally between auto rows,
+   so with bands alone tasks.md — three bands, eight one-line items —
+   got 65px between its sections and read as if content were missing.
+   One extra row takes a share as bottom margin and the gaps drop by a
+   third, which is what a short file in an editor actually looks like. */
+.v1 .src .fill, .v2 .src .fill { display: block; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   T2 — THE BINDER
+   The four artifacts are a SET, and the shipped slide says so in a
+   horizontal pill row that costs a line and reads as furniture. Here the
+   set is the left edge of the frame: four tabs down a rail, stretched to
+   the sheet's full height, with the open one carrying the slide's title.
+
+   THE TITLE IS THE TAB. Every word of the h1 is still on screen —
+   "spec.md" at heading size, "what and why" under it in the mint mark —
+   it is just on the tab instead of above it. That is what pays for the
+   rail: the slide spends no vertical space on a heading at all, so the
+   sheet gets the whole band, and the three unopened tabs answer "what
+   are the other three for" without a word of new prose.
+
+   The sheet is squared off on its bound edge and the open tab overlaps
+   it by a pixel, so tab and sheet read as one object rather than as a
+   menu next to a card.
+   ══════════════════════════════════════════════════════════════════════ */
+.v2 { --src-fs: clamp(15px, 2.0vh, 22px); }
+.v2 .body { display: grid; grid-template-columns: minmax(190px, 0.3fr) minmax(0, 1fr); }
+/* Four rows, no fifth. The locator used to head the rail, which pushed
+   the first tab 77px below the sheet's top edge and made the binder read
+   as a menu standing next to a card. It now sits in the sheet's own bar,
+   where treatment 1 puts the crumb, and the four tabs run exactly the
+   height of the thing they open. */
+.v2 .rail {
+  display: grid;
+  grid-template-rows: repeat(4, minmax(min-content, 1fr));
+  row-gap: 3px;
+  min-height: 0;
+  padding-right: 1px;
+}
+.v2 .tab {
+  display: flex; flex-direction: column; justify-content: center; gap: 3px;
+  padding: var(--ae-space-3) var(--ae-space-4);
+  border-radius: var(--ae-radius-lg) 0 0 var(--ae-radius-lg);
+  /* A closed tab is still a tab: paper fill and a hairline on three
+     sides, so the rail reads as a stack of four rather than as four
+     labels floating in the gutter. */
+  background: var(--ae-cool-gray-100);
+  border: 1px solid var(--fg-hair); border-right: 0;
+  min-width: 0;
+}
+/* A closed tab is quiet, not switched off. --ae-text-disabled is the one
+   grey the kit lets fail AA, and it is wrong here: these four labels are
+   the questions the four documents answer, which is content the back row
+   should be able to read. Both values clear AA on the tab fill. */
+.v2 .tab .f {
+  margin: 0; font-family: var(--ae-font-mono);
+  font-size: var(--ae-fs-caption); line-height: 1.2;
+  font-weight: 600; color: var(--fg-muted);
+  overflow-wrap: anywhere;
+}
+.v2 .tab .q {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1.25; color: var(--fg-faint);
+}
+/* Open: white, raised, bound to the sheet, and hued on its outer edge.
+   Four cues, only one of which is colour. */
+.v2 .tab--on {
+  background: var(--fg-card);
+  border-color: var(--fg-hair);
+  box-shadow: inset 5px 0 0 var(--hue), var(--fg-d1);
+  margin-right: -1px; z-index: 1;
+  padding-left: calc(var(--ae-space-4) + 5px);
+}
+.v2 .tab--on .f {
+  font-family: var(--ae-font-mono);
+  font-size: var(--ae-fs-h3); line-height: var(--ae-lh-h3);
+  font-weight: 700; color: var(--fg-ink); letter-spacing: -0.01em;
+}
+.v2 .tab--on .q {
+  font-size: var(--ae-fs-body); line-height: 1.25; color: var(--fg-ink);
+}
+.v2 .rail .th { margin: 0; display: contents; }
+.v2 .sheet { border-radius: 0 var(--ae-radius-lg) var(--ae-radius-lg) 0; }
+.v2 .src {
+  flex: 1; min-height: 0;
+  display: grid; align-content: stretch; align-items: start;
+  row-gap: var(--ae-space-3);
+  padding: var(--ae-space-4) var(--ae-space-5);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T3 — THE MARGIN
+   Pass 1 calls slide 9 "exhibit + annotation — rules should point AT the
+   prompt". These four are the same kind of object and never got that
+   treatment. Here the sheet has a margin rail, and each markdown section
+   has a note beside it saying what to notice in that band.
+
+   ALIGNMENT IS STRUCTURAL, NOT NUDGED. A section and its note are the
+   two cells of one grid row, so a note lands beside its section by
+   construction and stays there when the German wraps to three lines.
+   Section bands are separated by a hairline that crosses both columns,
+   which is what makes the pairing readable without a single connector.
+
+   THE FACE IS THE FORM CUE. The document is mono because it is file
+   source; the margin is Inter because it is a reading of that source.
+   Nobody can mistake the annotation for part of the file, in colour or
+   out of it.
+
+   This is the only treatment where slide 32's ochre row gets a note of
+   its own — it is its own band, so the deck's sharpest claim gets
+   pointed at rather than left to the caption.
+   ══════════════════════════════════════════════════════════════════════ */
+.v3 { --src-fs: clamp(15px, 1.95vh, 21px); }
+.v3 .sheet { flex: 1; }
+/* 0.4fr, not 0.5fr. The margin is a margin: at half the source column the
+   annotations were wider than several of the lines they annotate, and the
+   source wrapped enough extra times to overrun the sheet in German. The
+   note column is sized by the longest note, not by symmetry. */
+.v3 .ann {
+  flex: 1; min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.36fr);
+  align-content: stretch;
+}
+/* Both cells centre their content. When a band has more height than its
+   source needs — tasks.md at 1080, where nine lines are asked to hold a
+   700px sheet — top-aligned source next to a centred note stopped
+   reading as a pair. Centring both keeps the pairing at every height. */
+.v3 .acell { padding: 5px var(--ae-space-4); display: flex; flex-direction: column; justify-content: center; }
+.v3 .asrc > .src { width: 100%; }
+.v3 .src { line-height: 1.4; }
+.v3 .ln + .ln { margin-top: 0; }
+.v3 .h { margin-top: 0.32em; }
+.v3 .row { padding: 1px 0; gap: var(--ae-space-2); }
+/* The wash spans the whole source cell, so it butts against the margin
+   rule and continues into the ochre note on the other side of it: one
+   band across the sheet rather than a highlighted strip inside it. */
+.v3 .row--wait { padding: 1px var(--ae-space-4); margin: 0 calc(-1 * var(--ae-space-4)); }
+.v3 .gap { height: 0.25em; }
+.v3 .fg-note { padding: var(--ae-space-2) var(--ae-space-5); }
+.v3 .acell.brd { border-top: 1px solid var(--fg-hair); }
+.v3 .anote {
+  background: var(--fg-paper);
+  border-left: 1px solid var(--fg-hair);
+}
+.v3 .anote p {
+  margin: 0; width: 100%;
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: 1.4;
+  color: var(--fg-muted);
+}
+/* One band is not an observation about the file, it is the argument. The
+   wash runs across BOTH cells and the row's own wash is switched off, so
+   the unverified criterion and the sentence about it are one ochre band
+   crossing the whole sheet rather than two tinted rectangles that nearly
+   line up. */
+.v3 .band--wait { background: var(--fg-wait-tint); }
+.v3 .anote--wait { border-left-color: var(--fg-wait-light); }
+.v3 .anote--wait p { color: var(--fg-wait-d); font-weight: 600; }
+.v3 .band--wait .row--wait { background: none; margin: 0; padding: 1px 0; border-bottom: 0; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   T4 — THE BINDER OPENS
+   The binder, made to work. The rail keeps its four tabs; the open one
+   swells to take whatever height the sheet has spare, and the sentence
+   about the artifact lives in that swell. So the takeaway is not under
+   the slide, it is inside the thing it is about, and it moves when you
+   click. Nothing on this slide is a full-width band.
+
+   TITLE: kicker over h1, top left, with the loop locator opposite —
+   the deck's own masthead from slide 28, unchanged. The slide is called
+   "The four artifacts" because that is now what it is; the file name is
+   on the card, where the click put it.
+
+   The swell is a SEPARATE CELL, not content inside the button. Four
+   sentences of prose inside a control would be read out as the control's
+   name, and a tab called "spec.md what and why Not a word about Redis,
+   middleware, or which function changes…" is not a tab.
+   ══════════════════════════════════════════════════════════════════════ */
+.v4 { --src-fs: clamp(15px, 1.95vh, 22px); }
+.v4 .body {
+  display: grid; align-items: stretch;
+  grid-template-columns: minmax(232px, 0.31fr) minmax(0, 1fr);
+}
+.v4 .rail { row-gap: 3px; padding-right: 1px; }   /* rows set inline */
+.v4 .tab {
+  padding: var(--ae-space-3) var(--ae-space-4);
+  border-radius: var(--ae-radius-lg) 0 0 var(--ae-radius-lg);
+  background: var(--ae-cool-gray-100);
+  border: 1px solid var(--fg-hair); border-right: 0;
+}
+.v4 .tab:hover { background: var(--fg-card); }
+.v4 .tab .f {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-caption);
+  line-height: 1.2; font-weight: 600; color: var(--fg-muted);
+  overflow-wrap: anywhere;
+}
+.v4 .tab .q {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1.25; color: var(--fg-faint);
+}
+.v4 .tab--on {
+  background: var(--fg-card);
+  box-shadow: inset 5px 0 0 var(--hue), var(--fg-d1);
+  border-bottom: 0; border-radius: var(--ae-radius-lg) 0 0 0;
+  margin-right: -1px; z-index: 1;
+  padding-left: calc(var(--ae-space-4) + 5px);
+  justify-content: flex-start;
+}
+.v4 .tab--on .f {
+  font-size: var(--ae-fs-h3); line-height: var(--ae-lh-h3);
+  font-weight: 700; color: var(--fg-ink); letter-spacing: -0.01em;
+}
+.v4 .tab--on .q { font-size: var(--ae-fs-body); line-height: 1.25; color: var(--fg-ink); }
+/* The swell. -3px cancels the rail's row gap so card and swell are one
+   white shape; the shadow and the hue edge are repeated, not inherited,
+   because they are drawn per box. */
+/* The note sits at the FOOT of the swell, not the head of it. Anchored
+   at the top it left a pool of blank card under it and the open tab read
+   as unfinished; anchored at the foot the blank is between the question
+   and the note, and the card reads as a page with a footnote. */
+.v4 .tkcell {
+  display: flex; flex-direction: column; justify-content: flex-end;
+  margin-top: -3px; margin-right: -1px; z-index: 1;
+  background: var(--fg-card);
+  border: 1px solid var(--fg-hair); border-right: 0; border-top: 0;
+  border-radius: 0 0 0 var(--ae-radius-lg);
+  box-shadow: inset 5px 0 0 var(--hue), var(--fg-d1);
+  padding: 0 var(--ae-space-4) var(--ae-space-3) calc(var(--ae-space-4) + 5px);
+  min-height: 0; overflow: hidden;
+}
+.v4 .tkcell .tk {
+  padding-top: var(--ae-space-3); border-top: 1px solid var(--fg-hair);
+}
+.v4 .sheet { border-radius: 0 var(--ae-radius-lg) var(--ae-radius-lg) 0; }
+.v4 .src {
+  flex: 1; min-height: 0;
+  display: grid; align-content: stretch; align-items: start;
+  row-gap: var(--ae-space-3);
+  padding: var(--ae-space-4) var(--ae-space-5);
+}
+.v4 .src .fill { display: block; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   T5 — THE INDEX
+   The other reading of the same set: not four tabs but a numbered
+   contents list, because the four artifacts are a SEQUENCE and a tab
+   stack does not say so. 1·2·3·4 down the left, hairline between, and
+   the open one lifts off the list as a white card. Flat row versus
+   raised card is a much louder state change than tab versus tab, and it
+   costs no colour at all.
+
+   TITLE: in the rail head, above the list, so the slide has no header
+   band across the top and the sheet gets the whole height — the tallest
+   document area of the three. The loop locator sits under the title,
+   where it reads as part of the masthead rather than as a legend.
+
+   TAKEAWAY: the sheet's footer well, same fill as its top bar, so the
+   document is bracketed top and bottom by its own chrome and the
+   sentence reads as the file's last line rather than as a slide caption.
+   On verification.md the verdict legend and the takeaway stack in that
+   one well, divided by a hairline.
+   ══════════════════════════════════════════════════════════════════════ */
+.v5 { --src-fs: clamp(15px, 2.0vh, 22px); }
+.v5 .body {
+  display: grid; align-items: stretch;
+  grid-template-columns: minmax(250px, 0.32fr) minmax(0, 1fr);
+  gap: var(--ae-space-5);
+}
+.v5 .mast { display: flex; flex-direction: column; min-height: 0; }
+.v5 .mast h1 { margin: 0 0 var(--ae-space-3); }
+/* The list runs the height of the document beside it. At min-content
+   rows it ended two-fifths down the column with a field of blank paper
+   under it, which read as a list that had lost its last six entries. */
+.v5 .rail {
+  flex: 1; margin-top: var(--ae-space-4); align-content: stretch;
+  grid-auto-rows: minmax(min-content, 1fr);
+}
+/* justify-content on the shared .tab means "centre the stack of lines".
+   Here the stack is a ROW, so the same declaration centred every entry
+   horizontally and the numerals stepped left as the file names got
+   longer — a contents list with no left edge. Restated, not inherited. */
+/* A grid, not a flex row: the numeral has to sit on the file name's
+   first baseline AND the pair has to sit in the middle of a tall row.
+   align-items handles the first, align-content the second, and a flex
+   row cannot do both at once. */
+.v5 .tab {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  align-content: start; align-items: baseline;
+  column-gap: var(--ae-space-3);
+  padding: var(--ae-space-3) var(--ae-space-2);
+  background: transparent; border: 0; border-top: 1px solid var(--fg-hair);
+  border-radius: var(--ae-radius);
+}
+.v5 .tab:last-of-type { border-bottom: 1px solid var(--fg-hair); }
+.v5 .tab:hover { background: var(--ae-cool-gray-100); }
+.v5 .tab .n {
+  flex: none; font-family: var(--ae-font-mono); font-weight: 700;
+  font-variant-numeric: tabular-nums; font-size: var(--ae-fs-caption);
+  line-height: 1.2; color: var(--fg-faint);
+}
+.v5 .tab .txt { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.v5 .tab .f {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-caption);
+  line-height: 1.2; font-weight: 600; color: var(--fg-muted);
+  overflow-wrap: anywhere;
+}
+.v5 .tab .q {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1.25; color: var(--fg-faint);
+}
+/* Lifted out of the list: white, raised, hue-edged, and pulled into the
+   gutter on both sides so it is visibly no longer flush with the rows
+   above and below it. */
+/* An entry sits directly under its own rule; the blank falls below it,
+   which is what leading in a contents list looks like. The open one is
+   the exception — it is a card, so it centres in its band. */
+.v5 .tab--on {
+  align-content: center;
+  background: var(--fg-card);
+  box-shadow: inset 5px 0 0 var(--hue), var(--fg-d2);
+  border-top-color: transparent;
+  margin: 0 calc(-1 * var(--ae-space-3));
+  padding: var(--ae-space-4) var(--ae-space-4) var(--ae-space-4) calc(var(--ae-space-4) + 5px);
+}
+.v5 .tab--on .n { color: var(--hue-d); }
+.v5 .tab--on .f {
+  font-size: var(--ae-fs-h4); line-height: var(--ae-lh-h4);
+  font-weight: 700; color: var(--fg-ink); letter-spacing: -0.01em;
+}
+.v5 .tab--on .q { font-size: var(--ae-fs-small); line-height: 1.3; color: var(--fg-ink); }
+.v5 .src {
+  flex: 1; min-height: 0;
+  display: grid; align-content: stretch; align-items: start;
+  row-gap: var(--ae-space-3);
+  padding: var(--ae-space-4) var(--ae-space-5);
+}
+.v5 .src .fill { display: block; }
+.v5 .tkbar {
+  flex: none;
+  padding: var(--ae-space-3) var(--ae-space-5);
+  padding-left: calc(var(--ae-space-5) + 1.15em);
+  background: var(--ae-cool-gray-100);
+  border-top: 1px solid var(--fg-hair);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T6 — THE MARGIN NOTE
+   The takeaway stops being a summary and becomes an annotation: one
+   note, in a margin, bracketed to the exact band of the document that
+   earns it. On spec.md it stands beside the acceptance criteria, on
+   plan.md beside the approach, on tasks.md beside the four checked
+   lines, and on verification.md beside the one ochre row — which is the
+   only placement in this file where the deck's sharpest claim is
+   pointed AT rather than restated underneath.
+
+   The bracket is a 3px ink rule thickening the margin rule for exactly
+   the height of that band. Ink, and only there: it survives greyscale
+   with no hue to lose, and it never competes with the ochre wash it
+   sits next to.
+
+   TITLE: one line, and it names what is open — "The four artifacts —
+   spec.md". So the title is also the answer to "which one am I looking
+   at", and a click visibly changes the heading, which is what tells a
+   first-time reader the rail did something.
+
+   The margin is EMPTY on the other bands. That is what a margin looks
+   like; filling it was treatment 3, and treatment 3 is still in the file
+   for anyone who wants that instead.
+   ══════════════════════════════════════════════════════════════════════ */
+.v6 { --src-fs: clamp(15px, 1.95vh, 21px); }
+/* Three columns compete for 1280px here — rail, document, margin — and
+   the document is the one that must not lose. At 0.2fr rail and 0.3fr
+   margin the German verification table wrapped two extra rows and the
+   grid drew 19px past its own bottom edge into the verdict legend. The
+   rail and the margin each give back a little; both are sized by their
+   longest line, not by proportion. */
+.v6 .body {
+  display: grid; align-items: stretch;
+  grid-template-columns: minmax(176px, 0.185fr) minmax(0, 1fr);
+}
+.v6 .rail {
+  grid-template-rows: repeat(4, minmax(min-content, 1fr));
+  row-gap: 3px; padding-right: 1px;
+}
+.v6 .tab {
+  padding: var(--ae-space-3) var(--ae-space-4);
+  border-radius: var(--ae-radius-lg) 0 0 var(--ae-radius-lg);
+  background: var(--ae-cool-gray-100);
+  border: 1px solid var(--fg-hair); border-right: 0;
+}
+.v6 .tab:hover { background: var(--fg-card); }
+.v6 .tab .f {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-caption);
+  line-height: 1.2; font-weight: 600; color: var(--fg-muted);
+  overflow-wrap: anywhere;
+}
+.v6 .tab .q {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1.25; color: var(--fg-faint);
+}
+.v6 .tab--on {
+  background: var(--fg-card);
+  box-shadow: inset 5px 0 0 var(--hue), var(--fg-d1);
+  margin-right: -1px; z-index: 1;
+  padding-left: calc(var(--ae-space-4) + 5px);
+}
+.v6 .tab--on .f {
+  font-size: var(--ae-fs-h4); line-height: var(--ae-lh-h4);
+  font-weight: 700; color: var(--fg-ink); letter-spacing: -0.01em;
+}
+.v6 .tab--on .q { font-size: var(--ae-fs-small); line-height: 1.25; color: var(--fg-ink); }
+.v6 .sheet { border-radius: 0 var(--ae-radius-lg) var(--ae-radius-lg) 0; }
+.v6 .ann {
+  flex: 1; min-height: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.28fr);
+  align-content: stretch;
+}
+.v6 .acell { padding: 3px var(--ae-space-4); display: flex; flex-direction: column; justify-content: safe center; }
+.v6 .asrc > .src { width: 100%; }
+.v6 .src { line-height: 1.42; }
+.v6 .ln + .ln { margin-top: 0; }
+.v6 .h { margin-top: 0.34em; }
+.v6 .row { padding: 1px 0; gap: var(--ae-space-2); }
+.v6 .row--wait { padding: 1px var(--ae-space-4); margin: 0 calc(-1 * var(--ae-space-4)); }
+.v6 .gap { height: 0.25em; }
+.v6 .amar { background: var(--fg-paper); border-left: 1px solid var(--fg-hair); position: relative; }
+/* The bracket. A 3px ink rule where the hairline runs, for the height of
+   one band. Drawn with a box-shadow rather than a wider border so the
+   margin's text does not shift by 2px on the annotated row. */
+/* z-index, because the note is now out of flow and the margin cells
+   below it are opaque. Without it the cell for the next band paints
+   straight over the bottom third of the sentence — nothing overflows,
+   nothing clips, the words are simply not there. */
+.v6 .amar--on { box-shadow: inset 3px 0 0 var(--fg-ink); z-index: 2; }
+/* THE NOTE FLOATS; THE BRACKET POINTS. In flow, the note was the tallest
+   thing in its grid row, so the row grew to hold it — and on
+   verification.md that row is a SINGLE TABLE LINE, which meant a
+   four-line note forced a one-line band to 180px and shoved the rest of
+   the document out through the bottom of the sheet and into the verdict
+   legend. Taking the note out of flow separates the two jobs: the
+   bracket keeps the exact height of the band it marks, and the note
+   centres on it using space the empty margin has anyway. */
+.v6 .amar .tk { margin: 0; }
+.v6 .amar--on .tk {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  left: calc(var(--ae-space-4) + 3px); right: var(--ae-space-4);
+  color: var(--fg-ink);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   SHARED — THE INDEX FAMILY  (treatments 7, 8 and 9)
+
+   Treatment 5 was the shape the user wanted and the card was the thing
+   they rejected. Four complaints, and the first one is the one that
+   matters:
+
+   1. THE LABEL MOVED. A closed entry in 5 sat at the top of its band
+      (align-content:start) and the open one centred in it, and the file
+      name grew from 14px to 17px at the same moment. So a click did not
+      open a card, it TELEPORTED the word you had just clicked. Here the
+      geometry is a promise: every card in 7, 8 and 9 keeps the same
+      padding, the same type sizes and the same vertical anchor in both
+      states. Nothing about the label is a function of whether the card
+      is open — not its size, not its position, not its leading.
+
+      WHERE A CARD DOES GROW, IT GROWS OUTWARD. The open card takes a
+      negative margin and adds exactly that much padding back, so the
+      border box swells while the content box stays where it was, to the
+      pixel. That is the whole trick, and it is why "bigger" and "did not
+      move" are not in conflict here.
+
+      What is left to say "open" is therefore FILL, EDGE, DEPTH and
+      WEIGHT — four cues, three of which survive greyscale.
+
+   2. THE HUE WAS A LEFT BORDER. An inset 5px shadow in var(--hue), on the open
+      card only: the colour appeared on click, sat on one edge, and said
+      nothing about the other three artifacts. Each treatment below
+      carries the chapter hue a different way, and in all three EVERY
+      card carries its own step's hue at rest, not just the open one —
+      which is what "the card represents its step" actually asks for.
+
+   3. THE SHEET WAS PLAIN. Three different typesettings of the same
+      markdown below; see each treatment's own note.
+
+   4. TOO BIG. The source drops from clamp(15px, 2.0vh, 22px) to
+      clamp(14px, 1.78vh, 19px), leading from 1.5 to 1.45, and the
+      sheet's padding from space-4/space-5 to space-3/space-4. 14px is
+      the deck's floor and this sits ON it, not under it — the shipped
+      device's 12.9px frontmatter is what that rule exists to stop.
+   ══════════════════════════════════════════════════════════════════════ */
+.ix { --src-fs: clamp(14px, 1.78vh, 19px); }
+.ix .body {
+  display: grid; align-items: stretch;
+  grid-template-columns: minmax(240px, 0.30fr) minmax(0, 1fr);
+  gap: var(--ae-space-5);
+}
+.ix .mast { display: flex; flex-direction: column; min-height: 0; }
+.ix .mast h1 { margin: 0 0 var(--ae-space-2); }
+.ix .rail { flex: 1; margin-top: var(--ae-space-4); }
+
+/* The card, before any treatment styles it. A grid rather than a flex
+   row: the numeral has to sit against the label AND the pair has to sit
+   at a fixed place in the band, and a flex row cannot do both. */
+.ix .tab {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  align-content: center; align-items: center;
+  column-gap: var(--ae-space-3);
+  background: transparent; border: 1px solid transparent;
+}
+.ix .tab .n {
+  font-family: var(--ae-font-mono); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--ae-fs-caption); line-height: 1.2; color: var(--fg-faint);
+}
+.ix .tab .txt { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+/* Both lines are set at the floor and STAY there when the card opens.
+   This is the constraint the whole family is built around. */
+.ix .tab .f {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-caption);
+  line-height: 1.25; font-weight: 600; color: var(--fg-muted);
+  overflow-wrap: anywhere;
+}
+.ix .tab .q {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1.3; color: var(--fg-faint);
+}
+.ix .tab--on .f { color: var(--fg-ink); font-weight: 700; }
+.ix .tab--on .q { color: var(--fg-ink); }
+
+/* ── the sheet, tightened ──────────────────────────────────────────── */
+.ix .sheet__bar { padding: 5px var(--ae-space-4); }
+.ix .path .dir { color: var(--fg-faint); }
+.ix .fm { padding: 6px var(--ae-space-4); line-height: 1.3; }
+.ix .src {
+  flex: 1; min-height: 0;
+  display: grid; align-content: stretch; align-items: start;
+  row-gap: var(--ae-space-3);
+  padding: var(--ae-space-3) var(--ae-space-4);
+  line-height: 1.45;
+}
+.ix .src .fill { display: block; }
+.ix .ln + .ln { margin-top: 0; }
+.ix .h { margin-top: 0.5em; }
+.ix .key { padding: 5px var(--ae-space-4); }
+.ix .row { padding: 2px 0; }
+.ix .row--wait { padding: 2px var(--ae-space-4); margin: 0 calc(-1 * var(--ae-space-4)); }
+/* A hanging indent that actually hangs. The shared rule indents wrapped
+   lines by 1.5em whatever the marker is, so a wrapped checkbox item used
+   to land 2.1em short of the text it continues. The indent is now the
+   width of the marker it is hanging: "- " is 1.2em, "- [x] " is 3.6em. */
+.ix .li { padding-left: 1.2em; text-indent: -1.2em; }
+.ix .done, .ix .todo { padding-left: 3.6em; text-indent: -3.6em; }
+.ix .tk--foot {
+  flex: none;
+  padding: var(--ae-space-3) var(--ae-space-4);
+  padding-left: calc(var(--ae-space-4) + 1.15em);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T7 — THE LEDGER
+   CARD: none, until you open one. Four entries on a ruled column, the
+   way a contents list is set. The open entry lifts off the rules as a
+   white card that BLEEDS OUTWARD past them — same padding plus the same
+   margin, so it grows 18px taller and 22px wider around a label that has
+   not moved a pixel.
+
+   HUE: the numeral. Every entry carries a ring in its step's colour, so
+   the four steps are legible before any click; opening one FILLS the
+   ring and flips the numeral to white. Hollow versus filled is the exact
+   form cue the palette note names, and it is the one that survives
+   greyscale best — a white disc and a near-black disc are six stops
+   apart with no hue involved at all.
+
+   SHEET: sections are RULED. Every "##" gets a hairline under it running
+   the width of the measure, so the document reads as a set of banded
+   sections rather than as a wall of mono. The frontmatter becomes a
+   four-column grid on the white page, fenced above by the path bar's own
+   rule and below by its own — the "---" of a real frontmatter block,
+   drawn instead of spelled, because spelling it costs two lines of type
+   at the floor size and buys nothing.
+   ══════════════════════════════════════════════════════════════════════ */
+/* 9px of padding, because the open card bleeds 9px. Without it the card
+   for the LAST artifact hangs 9px below the rail — which is also the
+   bottom of the sheet beside it — and the slide ends on a card that is
+   lower than everything else on it by exactly the amount it grew. */
+.v7 .rail {
+  align-content: stretch; grid-auto-rows: minmax(min-content, 1fr);
+  padding: 9px 0; margin-top: calc(var(--ae-space-4) - 9px);
+}
+.v7 .tab {
+  padding: var(--ae-space-3) var(--ae-space-2);
+  border-top-color: var(--fg-hair);
+  border-radius: var(--ae-radius);
+}
+.v7 .tab:last-of-type { border-bottom-color: var(--fg-hair); }
+.v7 .tab:hover { background: var(--ae-cool-gray-100); }
+.v7 .tab .n {
+  width: 1.75em; height: 1.75em; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--hue); color: var(--hue-d); background: transparent;
+}
+/* The bleed. -9/-11 of margin, +9/+11 of padding: the border box grows,
+   the content box does not move. The border stays 1px and only loses its
+   colour, because dropping it to 0 would shift the label by that pixel. */
+.v7 .tab--on {
+  margin: -9px -11px;
+  padding: calc(var(--ae-space-3) + 9px) calc(var(--ae-space-2) + 11px);
+  background: var(--fg-card);
+  border-color: transparent;
+  box-shadow: var(--fg-d2);
+  z-index: 1;
+}
+.v7 .tab--on .n { background: var(--hue); border-color: var(--hue); color: #fff; }
+.v7 .fm {
+  background: var(--fg-card);
+  display: grid; grid-template-columns: repeat(4, auto);
+  justify-content: start; column-gap: var(--ae-space-5); row-gap: 0;
+}
+.v7 .h { border-bottom: 1px solid var(--fg-hair); padding-bottom: 2px; }
+.v7 .tk--foot {
+  background: var(--ae-cool-gray-100);
+  border-top: 1px solid var(--fg-hair);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T8 — THE DOCK
+   CARD: a tab with a squared inner edge. The three closed ones stand off
+   the sheet by a gutter; the open one reaches across it and overlaps the
+   sheet's own border by a pixel, so card and document are one shape.
+   Only the RIGHT edge moves — the label's left padding is identical in
+   both states, so the text cannot move even in principle.
+
+   HUE: the ground. Every card is filled with its step's tint at rest, so
+   the rail is four coloured chips and the two Plan artifacts group
+   without a word. Opening one drains it to white — and the tint appears
+   at the top of the sheet instead, as if the card's colour had poured
+   into the document it opened. Colour never leaves the slide; it moves.
+   The form cue is the docking, plus white-versus-tint and the depth.
+
+   SHEET: the chrome does LESS. One band only — the path — and it is the
+   band carrying the hue. Frontmatter, verdict legend and takeaway are
+   plain text on the page, divided by hairlines. The markdown markers
+   hang in a left margin so every line of text, heading and prose and
+   list alike, sits on ONE left edge. That is what a set page looks like
+   and it is invisible until you see it next to the alternative.
+   ══════════════════════════════════════════════════════════════════════ */
+.v8 .body { grid-template-columns: minmax(236px, 0.29fr) minmax(0, 1fr); gap: 0; }
+.v8 .rail { align-content: stretch; grid-auto-rows: minmax(min-content, 1fr); row-gap: 4px; }
+.v8 .tab {
+  padding: var(--ae-space-3) var(--ae-space-4);
+  margin-right: var(--ae-space-5);
+  background: var(--hue-tint);
+  border-color: var(--fg-hair);
+  border-radius: var(--ae-radius) 0 0 var(--ae-radius);
+}
+.v8 .tab:hover { border-color: var(--fg-muted); }
+.v8 .tab--on {
+  margin-right: -1px;
+  background: var(--fg-card);
+  border-right-color: var(--fg-card);
+  box-shadow: var(--fg-d2);
+  z-index: 2;
+}
+.v8 .sheet { border-radius: 0 var(--ae-radius-lg) var(--ae-radius-lg) 0; }
+.v8 .sheet__bar { background: var(--hue-tint); }
+.v8 .fm {
+  background: transparent;
+  gap: 1px var(--ae-space-2);
+}
+.v8 .fm span:not(:last-child)::after { content: ' \00b7'; color: var(--ae-cool-gray-300); }
+.v8 .key { background: transparent; }
+.v8 .tk--foot { border-top: 1px solid var(--fg-hair); }
+/* The margin. 1.9em of it, and the marker sits in a box of its own so
+   "#" and "##" both start at its left edge and the words after them both
+   land on zero. A plain negative margin cannot do this: it moves the
+   marker AND the text, so a one-hash heading would sit 0.6em left of a
+   two-hash one and the edge the whole idea depends on would be ragged. */
+.v8 .src { padding-left: calc(var(--ae-space-4) + 1.9em); }
+.v8 .h { margin-top: 0.75em; }
+.v8 .h .mk { display: inline-block; width: 1.3em; margin-left: -1.9em; }
+.v8 .li { padding-left: 0; text-indent: 0; }
+.v8 .li .mk { display: inline-block; width: 0.6em; margin-left: -1.2em; }
+/* The wash still has to reach the sheet's inner edge, and the sheet's
+   inner edge is further away on this treatment than on any other. */
+.v8 .row--wait {
+  margin-left: calc(-1 * (var(--ae-space-4) + 1.9em));
+  padding-left: calc(var(--ae-space-4) + 1.9em);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T9 — THE STACK
+   CARD: four separate blocks with air between them, each capped by a
+   3px rule in its step's colour. Nothing on the left edge at all — the
+   colour is a HEADER on the card, the way a tab divider is coloured at
+   its top rather than down its spine. Opening one washes the block in
+   the same hue at tint strength and doubles the cap to 6px, drawn with
+   an inset shadow rather than a thicker border so that the label does
+   not move by the 3px a border change would cost. It also widens by
+   10px each side, on the same margin-plus-padding trick.
+
+   COMPACTION: this is the compact one. The four cards take the height
+   they need and no more, and the space that treatment 5 left blank under
+   its list is where the artifact's sentence now lives — so the left
+   column reads top to bottom as title, contents, and the point of the
+   thing you have open.
+
+   SHEET: the chrome does MORE. Path and frontmatter share one well in
+   the open artifact's tint, closed off from the page by a 2px rule in
+   the full hue — so the document is visibly headed by the same colour as
+   the card that opened it. Section headings are followed by a rule that
+   runs out to the measure, which is the oldest way of setting a heading
+   inside a body of type and costs no vertical space at all.
+   ══════════════════════════════════════════════════════════════════════ */
+.v9 .body { grid-template-columns: minmax(252px, 0.315fr) minmax(0, 1fr); }
+.v9 .rail {
+  flex: none; align-content: start;
+  grid-auto-rows: min-content; row-gap: var(--ae-space-4);
+}
+.v9 .tab {
+  padding: var(--ae-space-3);
+  background: var(--fg-card);
+  border-color: var(--fg-hair);
+  border-top: 3px solid var(--hue);
+  border-radius: 2px 2px var(--ae-radius) var(--ae-radius);
+}
+.v9 .tab:hover { border-color: var(--fg-muted); border-top-color: var(--hue); }
+.v9 .tab--on {
+  margin: 0 -10px;
+  padding: var(--ae-space-3) calc(var(--ae-space-3) + 10px);
+  background: var(--hue-tint);
+  box-shadow: inset 0 3px 0 var(--hue), var(--fg-d2);
+  z-index: 1;
+}
+.v9 .tab--on .n { color: var(--hue-d); }
+/* The sentence takes the column's remaining height, under a rule. It is
+   the only thing on the slide that is not a document or a control, so it
+   gets the one place that is neither. */
+/* Anchored to the FOOT of the column, not floated under the list. Under
+   the list it left the left column ending two-thirds down a full-height
+   slide, which is the exact complaint treatment 5's rail earned. At the
+   foot the column is pinned top and bottom and the air is between the
+   contents and its footnote, where air belongs. The rail keeps a margin
+   of its own so a long German sentence cannot push its rule up against
+   the last card. */
+.v9 .rail { margin-bottom: var(--ae-space-5); }
+.v9 .tk--mar {
+  flex: none; margin-top: auto;
+  padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+}
+.v9 .sheet__bar { background: var(--hue-tint); border-bottom: 0; }
+.v9 .fm { background: var(--hue-tint); border-bottom: 2px solid var(--hue); }
+.v9 .h { display: flex; align-items: center; gap: 0.55em; }
+.v9 .h::after { content: ''; flex: 1 1 auto; height: 1px; background: var(--fg-hair); }
+
+/* Four aligned columns of frontmatter need roughly 740px of sheet, and
+   below about 1180px of viewport they stop having it — "feature:
+   0002-rate-limiting" starts breaking mid-token and the block reads as
+   damaged rather than as dense. Two columns and four rows costs ~36px of
+   height, which every treatment here has to spare. */
+@media (max-width: 1180px) {
+  .v7 .fm { grid-template-columns: repeat(2, auto); }
+}
+
+@media (max-width: 900px) {
+  .v2 .body { grid-template-columns: 1fr; }
+  .v2 .rail { grid-template-rows: none; }
+  .v2 .sheet { border-radius: var(--ae-radius-lg); }
+  .v3 .ann { grid-template-columns: 1fr; }
+  .v3 .anote { border-left: 0; border-top: 1px solid var(--fg-hair); }
+  .v4 .body, .v5 .body, .v6 .body, .ix .body { grid-template-columns: 1fr; }
+  .v4 .rail, .v6 .rail { grid-template-rows: none !important; }
+  .v4 .sheet, .v6 .sheet, .v8 .sheet { border-radius: var(--ae-radius-lg); }
+  .ix .rail { grid-auto-rows: min-content; }
+  .v8 .tab, .v8 .tab--on { margin-right: 0; border-radius: var(--ae-radius); }
+  .v7 .fm { grid-template-columns: repeat(2, auto); }
+  .v6 .ann { grid-template-columns: 1fr; }
+  .v6 .amar { border-left: 0; border-top: 1px solid var(--fg-hair); }
+  .row { grid-template-columns: 1fr; gap: 0; }
+  .row span:last-child { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <span class="tb-label" style="margin-right:2px">Treatment</span>
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Treatment">
+        <button type="button" data-p="v1">1 · Page</button>
+        <button type="button" data-p="v2">2 · Binder</button>
+        <button type="button" data-p="v3">3 · Margin</button>
+        <button type="button" data-p="v4">4 · Opens</button>
+        <button type="button" data-p="v5">5 · Index</button>
+        <button type="button" data-p="v6">6 · Note</button>
+        <button type="button" data-p="v7">7 · Ledger</button>
+        <button type="button" data-p="v8">8 · Dock</button>
+        <button type="button" data-p="v9">9 · Stack</button>
+      </div>
+    </div>
+    <span class="page-title"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<div id="toolbar">
+  <span class="tb-desc" id="subtitle"></span>
+</div>
+
+<main id="stage"></main>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════
+   CONTENT
+
+   Every string of the four slides is carried over verbatim from
+   presentation-v2/sections/29..32. Three things are added, and the report
+   argues each of them:
+
+   - the frontmatter grows from four fields to the eight sdd/README.md
+     actually requires, and gains the real repo path;
+   - the loop step each artifact belongs to, drawn as a locator. The three
+     step names are identical in both languages, exactly as on slide 5;
+   - T3's margin notes, and the verdict legend on slide 32.
+
+   Frontmatter is deliberately NOT duplicated per language. It is file
+   source with English keys and machine values; the shipped sections
+   duplicate it into both maps, where it can only drift.
+   ══════════════════════════════════════════════════════════════════════ */
+
+var ORDER = ['spec', 'plan', 'tasks', 'verification'];
+
+/* spec and plan are written in Plan; tasks is shown mid-flight, being
+   worked, which is Build; verification is Review. */
+var STEP = { spec: 0, plan: 0, tasks: 1, verification: 2 };
+var HUECLS = ['a-plan', 'a-build', 'a-review'];
+
+var FEATURE = '0002-rate-limiting';
+var DIR = 'sdd/' + FEATURE + '/';
+
+var FM = {
+  spec: ['feature: ' + FEATURE, 'artifact: spec', 'version: 2', 'status: approved',
+         'updated: 2026-08-05', 'authoring_tool: claude-code', 'model: Opus 5', 'reasoning_effort: high'],
+  plan: ['feature: ' + FEATURE, 'artifact: plan', 'version: 1', 'status: approved',
+         'updated: 2026-08-05', 'authoring_tool: claude-code', 'model: Opus 5', 'reasoning_effort: high'],
+  tasks: ['feature: ' + FEATURE, 'artifact: tasks', 'version: 1', 'status: approved',
+          'updated: 2026-08-05', 'authoring_tool: claude-code', 'model: Opus 5', 'reasoning_effort: high'],
+  verification: ['feature: ' + FEATURE, 'artifact: verification', 'version: 1', 'status: final',
+                 'updated: 2026-08-06', 'authoring_tool: claude-code', 'model: Sonnet 5', 'reasoning_effort: high'],
+};
+
+/* Where each document divides into bands. Index ranges into doc[], so
+   they are language-independent — which is the point: a note cannot slide
+   off its section when the German wraps differently. */
+var SECS = {
+  spec:         [[0, 0], [1, 2], [3, 7], [8, 9]],
+  plan:         [[0, 2], [3, 7], [8, 10], [11, 12]],
+  tasks:        [[0, 0], [1, 4], [5, 8]],
+  verification: [[0, 5], [6, 6], [7, 9]],
+};
+
+var C = {
+  en: {
+    loop: ['Plan', 'Build', 'Review'],
+    keyLabel: 'Verdicts:',
+    key: [['pass', 'pass'], ['wait', 'not verified'], ['fail', 'wrong']],
+    /* The one-slide title. "Spec-Driven Development" is the chapter
+       kicker slide 28 already uses, carried over verbatim so the two
+       slides read as one chapter rather than as two designs. */
+    kicker: 'Spec-Driven Development',
+    title: 'The four artifacts',
+    railLabel: 'The four artifacts',
+    docs: {
+      spec: {
+        file: 'spec.md', title: 'what and why',
+        doc: [
+          { h: '# Rate limiting for the public API' },
+          { h: '## Context' },
+          { p: 'The /search endpoint is public and a few clients are hammering it. We need abuse protection that never locks out legitimate users.' },
+          { h: '## Acceptance criteria' },
+          { li: 'A client under the limit is served normally.' },
+          { li: 'A client over 100 requests per minute gets 429, with a Retry-After header giving the seconds until the window resets.' },
+          { li: 'The limit counts per API key, not per IP address.' },
+          { li: 'Internal service calls are exempt.' },
+          { h: '## Out of scope' },
+          { li: 'Per-endpoint limits. Billing. Quota reporting.' },
+        ],
+        notes: [
+          '',
+          "The problem in the user's words. No file, no function, no library.",
+          'Each one independently checkable. These become the rows of verification.md.',
+          'The section most often skipped, and the one that stops an agent building three adjacent things.',
+        ],
+        caption: 'Not a word about Redis, middleware, or which function changes. <b>Behaviour only</b> — which is exactly what makes the fourth document possible.',
+      },
+      plan: {
+        file: 'plan.md', title: 'how',
+        doc: [
+          { h: '## Approach' },
+          { p: 'A sliding window counter in the existing Redis instance, keyed by API key. Enforced in the shared request middleware, so no endpoint has to opt in.' },
+          { p: 'Decided in the discussion: per key, sliding window, internal calls exempted by the existing service header.' },
+          { h: '## Sequence' },
+          { li: 'Counter and window logic, with unit tests, no wiring.' },
+          { li: 'Middleware enforcement behind a config flag, default off.' },
+          { li: 'Exemption for internal callers.' },
+          { li: 'Turn the flag on, with the limit configurable per environment.' },
+          { h: '## Risks' },
+          { li: 'Redis unavailable — fail open, and log. Never reject on infrastructure failure.' },
+          { li: 'Clock skew across instances makes the window slightly generous. Accepted.' },
+          { h: '## Areas touched' },
+          { li: 'The request middleware, the Redis client, the config schema.' },
+        ],
+        notes: [
+          'The first document allowed to name mechanism. Redis appears here, never in the spec.',
+          'Four steps, each shippable. The flag stays off until the last one.',
+          'Named before they are hit, with the decision already taken.',
+          'Three. A fourth appearing while coding means the plan was wrong.',
+        ],
+        caption: "Approach, order, risks, and the areas it touches. <b>No function signatures, no line-level detail</b> — that is the next document's job, and the model's.",
+      },
+      tasks: {
+        file: 'tasks.md', title: 'in what order',
+        doc: [
+          { h: '# Tasks — rate limiting' },
+          { done: 'Sliding-window counter with unit tests' },
+          { done: 'Redis client: read, increment, expire' },
+          { done: 'Middleware enforcement behind a config flag' },
+          { done: 'Exempt internal callers via the service header' },
+          { todo: '429 response with the Retry-After header' },
+          { todo: 'Fail open when Redis is unreachable, plus a log line' },
+          { todo: 'Limit configurable per environment' },
+          { todo: 'Turn the flag on in staging' },
+        ],
+        notes: [
+          'One line per task. No sub-bullets — a tree here means the plan is not finished.',
+          'Four commits already on the branch, reviewable one at a time.',
+          'Where the work is, without anyone having to ask.',
+        ],
+        caption: 'Flat, checkable, one line each. <b>One task, one commit</b> — so the branch reads as eight small diffs instead of one large one. Nobody signs this off; it is here so you can see where the work is.',
+      },
+      verification: {
+        file: 'verification.md', title: 'the proof',
+        doc: [
+          { h: '# Verification — rate limiting' },
+          { row: ['Criterion', 'Evidence', 'Result'], head: true },
+          { row: ['Under the limit is served', 'test: 99 requests in the window, all 200', 'pass'], v: 'pass' },
+          { row: ['Over the limit gets 429 + Retry-After', 'test: 101st request; asserts status and header seconds', 'pass'], v: 'pass' },
+          { row: ['Per API key, not per IP', 'test: two keys one IP both served; one key two IPs, second rejected', 'pass'], v: 'pass' },
+          { row: ['Internal calls exempt', 'test drives the internal path with and without the header', 'pass'], v: 'pass' },
+          { row: ['Counters survive a restart', 'not tested — no test drives Redis restart', 'not verified'], v: 'wait' },
+          { gap: true },
+          { h: '## Automated checks' },
+          { li: 'lint, types, unit, integration: green on 4f3a2b1' },
+        ],
+        notes: [
+          "One row per acceptance criterion, in the spec's order.",
+          'Nothing was run, so nothing is claimed — and now you know where to look.',
+          'The mechanical half, and the commit it was green on.',
+        ],
+        caption: 'Four passes and one honest gap. <b>A row that says "not verified" truthfully is worth more than one that says "pass" convincingly</b> — the first tells you where to look.',
+      },
+    },
+  },
+
+  de: {
+    loop: ['Plan', 'Build', 'Review'],
+    keyLabel: 'Ergebnisse:',
+    key: [['pass', 'bestanden'], ['wait', 'nicht geprüft'], ['fail', 'falsch']],
+    kicker: 'Spec-Driven Development',
+    title: 'Die vier Artefakte',
+    railLabel: 'Die vier Artefakte',
+    docs: {
+      spec: {
+        file: 'spec.md', title: 'was und warum',
+        doc: [
+          { h: '# Rate-Limiting für die öffentliche API' },
+          { h: '## Kontext' },
+          { p: 'Der Endpoint /search ist öffentlich, und einzelne Clients überlasten ihn. Wir brauchen Missbrauchsschutz, ohne legitime Nutzer auszusperren.' },
+          { h: '## Akzeptanzkriterien' },
+          { li: 'Ein Client unter dem Limit wird normal bedient.' },
+          { li: 'Ein Client über 100 Requests pro Minute bekommt 429, mit Retry-After-Header, der die Sekunden bis zum Fensterwechsel angibt.' },
+          { li: 'Das Limit zählt pro API-Key, nicht pro IP-Adresse.' },
+          { li: 'Interne Service-Aufrufe sind ausgenommen.' },
+          { h: '## Nicht im Umfang' },
+          { li: 'Limits je Endpoint. Abrechnung. Kontingent-Auswertung.' },
+        ],
+        notes: [
+          '',
+          'Das Problem in der Sprache der Nutzer. Keine Datei, keine Funktion, keine Bibliothek.',
+          'Jedes einzeln prüfbar. Genau sie werden die Zeilen von verification.md.',
+          'Der Abschnitt, der am häufigsten fehlt — und der den Agenten davon abhält, drei Nachbarsachen mitzubauen.',
+        ],
+        caption: 'Kein Wort über Redis, Middleware oder welche Funktion sich ändert. <b>Nur Verhalten</b> — und genau das macht das vierte Dokument überhaupt möglich.',
+      },
+      plan: {
+        file: 'plan.md', title: 'wie',
+        doc: [
+          { h: '## Ansatz' },
+          { p: 'Ein gleitendes Zeitfenster im bestehenden Redis, geschlüsselt nach API-Key. Durchgesetzt in der gemeinsamen Request-Middleware, damit kein Endpoint sich anmelden muss.' },
+          { p: 'In der Diskussion entschieden: pro Key, gleitendes Fenster, interne Aufrufe über den bestehenden Service-Header ausgenommen.' },
+          { h: '## Reihenfolge' },
+          { li: 'Zähler und Fensterlogik, mit Unit-Tests, ohne Verdrahtung.' },
+          { li: 'Durchsetzung in der Middleware hinter einem Config-Flag, standardmäßig aus.' },
+          { li: 'Ausnahme für interne Aufrufer.' },
+          { li: 'Flag einschalten, Limit je Umgebung konfigurierbar.' },
+          { h: '## Risiken' },
+          { li: 'Redis nicht erreichbar — offen durchlassen und protokollieren. Niemals wegen Infrastruktur ablehnen.' },
+          { li: 'Uhrenversatz zwischen Instanzen macht das Fenster leicht großzügig. Akzeptiert.' },
+          { h: '## Berührte Bereiche' },
+          { li: 'Die Request-Middleware, der Redis-Client, das Config-Schema.' },
+        ],
+        notes: [
+          'Das erste Dokument, das Mechanik nennen darf. Redis steht hier, nie in der Spec.',
+          'Vier Schritte, jeder auslieferbar. Das Flag bleibt bis zum letzten aus.',
+          'Benannt, bevor sie eintreten — die Entscheidung ist schon getroffen.',
+          'Drei. Taucht beim Coden ein vierter auf, war der Plan falsch.',
+        ],
+        caption: 'Ansatz, Reihenfolge, Risiken und die berührten Bereiche. <b>Keine Signaturen, keine Zeilendetails</b> — das ist Sache des nächsten Dokuments und des Modells.',
+      },
+      tasks: {
+        file: 'tasks.md', title: 'in welcher Reihenfolge',
+        doc: [
+          { h: '# Tasks — Rate-Limiting' },
+          { done: 'Zähler mit gleitendem Fenster, mit Unit-Tests' },
+          { done: 'Redis-Client: lesen, hochzählen, ablaufen lassen' },
+          { done: 'Durchsetzung in der Middleware hinter einem Config-Flag' },
+          { done: 'Interne Aufrufer über den Service-Header ausnehmen' },
+          { todo: '429-Antwort mit Retry-After-Header' },
+          { todo: 'Offen durchlassen, wenn Redis nicht erreichbar ist, plus Logzeile' },
+          { todo: 'Limit je Umgebung konfigurierbar' },
+          { todo: 'Flag in Staging einschalten' },
+        ],
+        notes: [
+          'Eine Zeile je Task. Keine Unterpunkte — ein Baum heißt, der Plan ist nicht fertig.',
+          'Vier Commits liegen schon auf dem Branch, einzeln prüfbar.',
+          'Wo die Arbeit steht, ohne dass jemand fragen muss.',
+        ],
+        caption: 'Flach, abhakbar, je eine Zeile. <b>Ein Task, ein Commit</b> — so liest sich der Branch als acht kleine Diffs statt als ein großer. Niemand gibt das frei; es zeigt nur, wo die Arbeit steht.',
+      },
+      verification: {
+        file: 'verification.md', title: 'der Nachweis',
+        doc: [
+          { h: '# Verifikation — Rate-Limiting' },
+          { row: ['Kriterium', 'Beleg', 'Ergebnis'], head: true },
+          { row: ['Unter dem Limit wird bedient', 'Test: 99 Requests im Fenster, alle 200', 'bestanden'], v: 'pass' },
+          { row: ['Über dem Limit 429 + Retry-After', 'Test: 101. Request; prüft Status und Header-Sekunden', 'bestanden'], v: 'pass' },
+          { row: ['Pro API-Key, nicht pro IP', 'Test: zwei Keys eine IP, beide bedient; ein Key zwei IPs, zweiter abgelehnt', 'bestanden'], v: 'pass' },
+          { row: ['Interne Aufrufe ausgenommen', 'Test fährt den internen Pfad mit und ohne Header', 'bestanden'], v: 'pass' },
+          { row: ['Zähler überstehen Neustart', 'nicht getestet — kein Test fährt einen Redis-Neustart', 'nicht geprüft'], v: 'wait' },
+          { gap: true },
+          { h: '## Automatische Prüfungen' },
+          { li: 'Lint, Typen, Unit, Integration: grün auf 4f3a2b1' },
+        ],
+        notes: [
+          'Eine Zeile je Akzeptanzkriterium, in der Reihenfolge der Spec.',
+          'Nichts gelaufen, also nichts behauptet — und du weißt, wo du nachsehen musst.',
+          'Die maschinelle Hälfte — und der Commit, auf dem sie grün war.',
+        ],
+        caption: 'Vier bestanden, eine ehrliche Lücke. <b>Eine Zeile, die wahrheitsgemäß „nicht geprüft" sagt, ist mehr wert als eine, die überzeugend „bestanden" sagt</b> — die erste sagt, wo man nachsehen muss.',
+      },
+    },
+  },
+};
+
+var SUB = {
+  v1: '<b>1 · Page</b> — four slides. The sheet takes the frame, the crumb moves into its tab bar. Click the crumb to walk the four.',
+  v2: '<b>2 · Binder</b> — four slides. Four tabs down the rail, and the open one is the title. Click a tab to walk the four.',
+  v3: '<b>3 · Margin</b> — four slides. A note beside every section, aligned by grid row. Click the crumb to walk the four.',
+  v4: '<b>4 · The binder opens</b> — one slide. The open card swells and holds the takeaway; kicker and h1 above, nothing across the bottom.',
+  v5: '<b>5 · The index</b> — one slide. A numbered contents list, the open one lifted out as a card; title in the rail head, takeaway in the sheet’s footer.',
+  v6: '<b>6 · The margin note</b> — one slide. The title names what is open; the takeaway is bracketed to the band of the document that earns it.',
+  v7: '<b>7 · The ledger</b> — 5, re-cut. Ruled contents column, hue in the numeral (hollow ring → filled disc), open entry bleeds outward as a card. Sheet: ruled sections, frontmatter in a fenced four-column grid.',
+  v8: '<b>8 · The dock</b> — 5, re-cut. Each card filled with its step’s tint; the open one drains to white, reaches across the gutter and joins the sheet, whose path bar takes the tint instead. Sheet: no bands, markers hanging in a left margin.',
+  v9: '<b>9 · The stack</b> — 5, re-cut, and the compact one. Four blocks capped by a 3px hue rule, the open one hue-washed with a doubled cap; the takeaway fills the column under the list. Sheet: tinted header well, headings ruled out to the measure.',
+};
+
+/* Which band of each document the takeaway is ABOUT — treatment 6 only.
+   Indexes into SECS[art], not into doc[], so it moves with the bands and
+   cannot drift when a section is re-cut. Verification points at band 1,
+   which is the single ochre row: the one place in this file where the
+   claim and the sentence about the claim are side by side. */
+var TKBAND = { spec: 2, plan: 0, tasks: 1, verification: 1 };
+
+/* ── pieces ─────────────────────────────────────────────────────────── */
+
+function h1of(d) {
+  return d.file + ' — <span class="fg-mark fg-mark--sweep">' + d.title + '</span>';
+}
+
+function loc(t, art) {
+  return '<div class="loc">' + t.loop.map(function (s, i) {
+    return (i ? '<i class="sep"></i>' : '')
+      + '<span class="dot' + (i === STEP[art] ? ' on' : '') + '">' + s + '</span>';
+  }).join('') + '</div>';
+}
+
+function crumb(t, art) {
+  return '<div class="crumb" role="tablist" aria-label="' + t.railLabel + '">' + ORDER.map(function (a, i) {
+    var on = a === art;
+    return (i ? '<span class="sep" aria-hidden="true">→</span>' : '')
+      + '<button type="button" role="tab" id="tab-' + a + '" class="seg' + (on ? ' seg--on' : '') + '"'
+      + ' data-art="' + a + '" aria-selected="' + on + '" aria-controls="sheet"'
+      + ' tabindex="' + (on ? '0' : '-1') + '">' + a + '</button>';
+  }).join('') + '</div>';
+}
+
+/* The sheet is the tab panel the rail and the crumb both control. It is
+   focusable so a keyboard user can reach the document itself after
+   choosing it, which is the whole point of the interaction. */
+function sheet(art, inner) {
+  return '<div class="sheet" id="sheet" role="tabpanel" tabindex="0"'
+    + ' aria-labelledby="tab-' + art + '">' + inner + '</div>';
+}
+
+/* ── the rail: four cards, four real buttons ────────────────────────────
+   One builder for treatments 4, 5 and 6. They differ in what a card
+   shows and how the open one is drawn, never in what it IS: a button in
+   a tablist, with roving tabindex, that renders the document it names.
+
+   "extra" lets treatment 4 hang its swell off the open card. It is a
+   presentational sibling rather than button content, so the card's
+   accessible name stays "spec.md, what and why". */
+function rail(t, art, opt) {
+  var kids = ORDER.map(function (a, i) {
+    var dd = t.docs[a];
+    var on = a === art;
+    var num = opt.numbered ? '<span class="n" aria-hidden="true">' + (i + 1) + '</span>' : '';
+    var inner = '<span class="f"><span>' + dd.file + '</span>'
+        + (on ? '' : '<i class="go" aria-hidden="true">›</i>') + '</span>'
+      + '<span class="q">'
+        + (on && opt.mark ? '<span class="fg-mark fg-mark--sweep">' + dd.title + '</span>' : dd.title)
+      + '</span>';
+    /* EVERY card carries its own step's hue class, not just the open
+       one. Treatments 7, 8 and 9 all colour the closed cards too — a
+       rail where only the open card has a colour is a rail that cannot
+       say the four artifacts belong to three different steps. */
+    return '<button type="button" role="tab" id="tab-' + a + '"'
+      + ' class="tab ' + HUECLS[STEP[a]] + (on ? ' tab--on' : '') + ' fg-in"'
+      + ' style="--fg-at:' + (1 + i) + '"'
+      + ' data-art="' + a + '" aria-selected="' + on + '" aria-controls="sheet"'
+      + ' tabindex="' + (on ? '0' : '-1') + '">'
+      + num + (opt.numbered ? '<span class="txt">' + inner + '</span>' : inner)
+      + '</button>'
+      + (on && opt.extra ? opt.extra : '');
+  }).join('');
+  return '<div class="rail ' + HUECLS[STEP[art]] + '" role="tablist" aria-orientation="vertical"'
+    + ' aria-label="' + t.railLabel + '"'
+    + (opt.rows ? ' style="grid-template-rows:' + opt.rows + '"' : '')
+    + '>' + kids + '</div>';
+}
+
+/* The slide masthead: the deck's own kicker-over-h1 from slide 28. */
+function mast(t, extra) {
+  return '<p class="kicker fg-in" style="--fg-at:1">' + t.kicker + '</p>'
+    + '<h1 class="fg-in" style="--fg-at:1">' + t.title + (extra || '') + '</h1>';
+}
+
+function takeaway(d, cls, at) {
+  return '<span class="tk ' + cls + ' fg-in" style="--fg-at:' + at + '">'
+    + d.caption + '</span>';
+}
+
+/* The directory is wrapped so a treatment can push it back behind the
+   file name without touching the string. It is one path either way. */
+function bar(art, right, cls) {
+  return '<div class="sheet__bar ' + (cls || '') + ' fg-in" style="--fg-at:3">'
+    + '<span class="path"><span class="dir">' + DIR + '</span><b>' + art + '.md</b></span>'
+    + (right || '')
+  + '</div>';
+}
+
+function fm(art) {
+  return '<div class="fm fg-in" style="--fg-at:3">' + FM[art].map(function (f) {
+    var i = f.indexOf(': ');
+    return '<span><span class="k">' + f.slice(0, i + 1) + '</span> ' + f.slice(i + 2) + '</span>';
+  }).join('') + '</div>';
+}
+
+function srcLine(r) {
+  if (r.h) {
+    var i = r.h.indexOf(' ');
+    return '<div class="ln h"><span class="mk">' + r.h.slice(0, i) + '</span> <b>' + r.h.slice(i + 1) + '</b></div>';
+  }
+  if (r.li)   return '<div class="ln li"><span class="mk">-</span> ' + r.li + '</div>';
+  if (r.done) return '<div class="ln done"><span class="mk">- [x]</span> ' + r.done + '</div>';
+  if (r.todo) return '<div class="ln todo"><span class="mk">- [ ]</span> ' + r.todo + '</div>';
+  if (r.gap)  return '<div class="ln gap"></div>';
+  if (r.row) {
+    var cells = r.row.map(function (c, i) {
+      if (r.head || i < 2) return '<span>' + c + '</span>';
+      return '<span><span class="v v--' + r.v + '">' + c + '</span></span>';
+    }).join('');
+    return '<div class="ln row' + (r.head ? ' row--head' : '')
+      + (r.v === 'wait' ? ' row--wait' : '') + '">' + cells + '</div>';
+  }
+  return '<div class="ln p">' + r.p + '</div>';
+}
+
+/* A document, cut into its bands. Returns an array of HTML strings, one
+   per band, so T1 can stretch between them and T3 can put a note beside
+   each one. */
+function bands(d, art) {
+  return SECS[art].map(function (rg) {
+    return d.doc.slice(rg[0], rg[1] + 1).map(srcLine).join('');
+  });
+}
+
+function hasVerdicts(d) {
+  return d.doc.some(function (r) { return r.v; });
+}
+
+function legend(t, d) {
+  if (!hasVerdicts(d)) return '';
+  return '<div class="key fg-in" style="--fg-at:10">'
+    + '<span class="kl">' + t.keyLabel + '</span>'
+    + t.key.map(function (k) {
+        return '<span class="v v--' + k[0] + '">' + k[1] + '</span>';
+      }).join('')
+  + '</div>';
+}
+
+/* HOW MUCH OF THE LEFTOVER HEIGHT EACH GAP GETS. The rows stretch, which
+   shares the slack equally between them — so a SHORT document is pulled
+   apart, and tasks.md, three bands of one-line items in a 440px well,
+   opened 65px between its title and its first task and read as if lines
+   were missing. Trailing rows take a share as bottom margin instead: one
+   for treatments 1–5, four for 7–9, which brings that gap to 45px and
+   leaves the rest as blank page under the last line, where a short file
+   in an editor puts it. */
+function srcGrid(d, art, fills) {
+  var tail = '';
+  for (var i = 0; i < (fills || 1); i++) tail += '<i class="fill" aria-hidden="true"></i>';
+  return '<div class="src">' + bands(d, art).map(function (s, i) {
+    return '<div class="sec fg-in" style="--fg-at:' + (4 + Math.min(i, 6)) + '">' + s + '</div>';
+  }).join('') + tail + '</div>';
+}
+
+function foot(d) {
+  return '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:11"><span>'
+    + d.caption + '</span></p></div>';
+}
+
+/* ── T1 · THE PAGE ──────────────────────────────────────────────────── */
+function V1(t, art) {
+  var d = t.docs[art];
+  return ''
+  + '<div class="fg-wrap head hrow">'
+    + '<h1 class="fg-in" style="--fg-at:1">' + h1of(d) + '</h1>'
+    + '<div class="fg-in" style="--fg-at:2">' + loc(t, art) + '</div>'
+  + '</div>'
+  + '<div class="fg-wrap body">'
+    + sheet(art, bar(art, crumb(t, art)) + fm(art) + srcGrid(d, art) + legend(t, d))
+  + '</div>'
+  + foot(d);
+}
+
+/* ── T2 · THE BINDER ────────────────────────────────────────────────── */
+function V2(t, art) {
+  var d = t.docs[art];
+  return ''
+  + '<div class="fg-wrap body">'
+    + '<div class="rail">'
+      + ORDER.map(function (a, i) {
+          var dd = t.docs[a];
+          var on = a === art;
+          /* Treatment 2's whole idea is that the open tab IS the slide
+             title, so it has to stay an h1 — but a heading may not live
+             inside a button, and the tab is a button now. The heading
+             wraps the button and takes display:contents, which keeps the
+             semantics and leaves the rail's grid rows untouched. */
+          var btn = '<button type="button" id="tab-' + a + '" data-art="' + a + '" class="tab'
+            + (on ? ' tab--on ' + HUECLS[STEP[a]] : '') + ' fg-in" style="--fg-at:' + (1 + i) + '">'
+            + '<span class="f">' + dd.file + '</span>'
+            + '<span class="q">'
+              + (on ? '<span class="fg-mark fg-mark--sweep">' + dd.title + '</span>' : dd.title)
+            + '</span>'
+          + '</button>';
+          return on ? '<h1 class="th">' + btn + '</h1>' : btn;
+        }).join('')
+    + '</div>'
+    + sheet(art, bar(art, loc(t, art)) + fm(art) + srcGrid(d, art) + legend(t, d))
+  + '</div>'
+  + foot(d);
+}
+
+/* ── T3 · THE MARGIN ────────────────────────────────────────────────── */
+function V3(t, art) {
+  var d = t.docs[art];
+  var bs = bands(d, art);
+  var isWaitBand = function (i) {
+    return art === 'verification' && SECS[art][i][0] === SECS[art][i][1]
+      && d.doc[SECS[art][i][0]].v === 'wait';
+  };
+  return ''
+  + '<div class="fg-wrap head hrow">'
+    + '<h1 class="fg-in" style="--fg-at:1">' + h1of(d) + '</h1>'
+    + '<div class="fg-in" style="--fg-at:2">' + loc(t, art) + '</div>'
+  + '</div>'
+  + '<div class="fg-wrap body">'
+    + sheet(art, ''
+      + bar(art, crumb(t, art)) + fm(art)
+      + '<div class="ann">'
+        + bs.map(function (s, i) {
+            var b = i ? ' brd' : '';
+            var w = isWaitBand(i) ? ' band--wait' : '';
+            var at = 4 + Math.min(i, 6);
+            return '<div class="acell asrc' + b + w + ' fg-in" style="--fg-at:' + at + '"><div class="src">' + s + '</div></div>'
+              + '<div class="acell anote' + b + w + (isWaitBand(i) ? ' anote--wait' : '') + ' fg-in" style="--fg-at:' + at + '">'
+                + (d.notes[i] ? '<p>' + d.notes[i] + '</p>' : '')
+              + '</div>';
+          }).join('')
+      + '</div>'
+      + legend(t, d))
+  + '</div>'
+  + foot(d);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T4 · THE BINDER OPENS
+   ══════════════════════════════════════════════════════════════════════ */
+function V4(t, art) {
+  var d = t.docs[art];
+  /* The open card takes only the height it needs; the swell beneath it
+     takes everything left over. Written as a rows string rather than as
+     flex on the card because the swell is a sibling — a grid is the only
+     thing here that can hand leftover height to a specific child. */
+  var rows = [];
+  ORDER.forEach(function (a) {
+    rows.push('min-content');
+    if (a === art) rows.push('1fr');
+  });
+  var swell = '<span class="tkcell ' + HUECLS[STEP[art]] + ' fg-in" role="presentation" style="--fg-at:5">'
+    + takeaway(d, '', 5) + '</span>';
+  return ''
+  + '<div class="fg-wrap head hrow">'
+    + '<div>' + mast(t) + '</div>'
+    + '<div class="fg-in" style="--fg-at:2">' + loc(t, art) + '</div>'
+  + '</div>'
+  + '<div class="fg-wrap body">'
+    /* No crumb in the sheet bar. The rail IS the crumb now — a second
+       copy of the same control would be two things claiming to say where
+       you are, and two elements claiming the same DOM id. */
+    + rail(t, art, { rows: rows.join(' '), extra: swell, mark: true })
+    + sheet(art, bar(art, '') + fm(art) + srcGrid(d, art) + legend(t, d))
+  + '</div>';
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T5 · THE INDEX
+   ══════════════════════════════════════════════════════════════════════ */
+function V5(t, art) {
+  var d = t.docs[art];
+  return ''
+  + '<div class="fg-wrap body">'
+    + '<div class="mast">'
+      + mast(t)
+      + '<div class="fg-in" style="--fg-at:2">' + loc(t, art) + '</div>'
+      + rail(t, art, { numbered: true, mark: true })
+    + '</div>'
+    + sheet(art, bar(art, '') + fm(art) + srcGrid(d, art) + legend(t, d)
+        + takeaway(d, 'tkbar', 11))
+  + '</div>';
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T6 · THE MARGIN NOTE
+   ══════════════════════════════════════════════════════════════════════ */
+function V6(t, art) {
+  var d = t.docs[art];
+  var bs = bands(d, art);
+  var tkb = TKBAND[art];
+  var isWaitBand = function (i) {
+    return art === 'verification' && SECS[art][i][0] === SECS[art][i][1]
+      && d.doc[SECS[art][i][0]].v === 'wait';
+  };
+  return ''
+  + '<div class="fg-wrap head hrow">'
+    + '<h1 class="fg-in" style="--fg-at:1">' + t.title
+      + ' — <span class="fg-mark fg-mark--sweep">' + d.file + '</span></h1>'
+    + '<div class="fg-in" style="--fg-at:2">' + loc(t, art) + '</div>'
+  + '</div>'
+  + '<div class="fg-wrap body">'
+    + rail(t, art, {})
+    + sheet(art, ''
+      + bar(art, '') + fm(art)
+      + '<div class="ann">'
+        + bs.map(function (s, i) {
+            var b = i ? ' brd' : '';
+            var w = isWaitBand(i) ? ' band--wait' : '';
+            var at = 4 + Math.min(i, 6);
+            var on = i === tkb;
+            return '<div class="acell asrc' + b + w + ' fg-in" style="--fg-at:' + at + '"><div class="src">' + s + '</div></div>'
+              + '<div class="acell amar' + b + w + (on ? ' amar--on' : '') + ' fg-in" style="--fg-at:' + at + '">'
+                + (on ? takeaway(d, '', at) : '')
+              + '</div>';
+          }).join('')
+      + '</div>'
+      + legend(t, d))
+  + '</div>';
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T7 · THE LEDGER
+   ══════════════════════════════════════════════════════════════════════ */
+function V7(t, art) {
+  var d = t.docs[art];
+  return ''
+  + '<div class="fg-wrap body">'
+    + '<div class="mast">'
+      + mast(t)
+      + '<div class="fg-in" style="--fg-at:2">' + loc(t, art) + '</div>'
+      + rail(t, art, { numbered: true, mark: true })
+    + '</div>'
+    + sheet(art, bar(art, '') + fm(art) + srcGrid(d, art, 4) + legend(t, d)
+        + takeaway(d, 'tk--foot', 11))
+  + '</div>';
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T8 · THE DOCK
+   ══════════════════════════════════════════════════════════════════════ */
+function V8(t, art) {
+  var d = t.docs[art];
+  return ''
+  + '<div class="fg-wrap body">'
+    + '<div class="mast">'
+      + mast(t)
+      + '<div class="fg-in" style="--fg-at:2">' + loc(t, art) + '</div>'
+      + rail(t, art, { numbered: true, mark: true })
+    + '</div>'
+    + sheet(art, bar(art, '') + fm(art) + srcGrid(d, art, 4) + legend(t, d)
+        + takeaway(d, 'tk--foot', 11))
+  + '</div>';
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   T9 · THE STACK
+   The locator moves into the sheet's bar here, beside the path: this is
+   the treatment whose left column has a fourth job — the sentence — and
+   a masthead of kicker, title, locator, list AND sentence is one band
+   too many for a 250px column in German.
+   ══════════════════════════════════════════════════════════════════════ */
+function V9(t, art) {
+  var d = t.docs[art];
+  return ''
+  + '<div class="fg-wrap body">'
+    + '<div class="mast">'
+      + mast(t)
+      + rail(t, art, { numbered: true })
+      + takeaway(d, 'tk--mar', 11)
+    + '</div>'
+    + sheet(art, bar(art, loc(t, art)) + fm(art) + srcGrid(d, art, 4) + legend(t, d))
+  + '</div>';
+}
+
+var BODY = { v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7, v8: V8, v9: V9 };
+/* 7, 8 and 9 share a base layer; 1–6 must not inherit it. */
+var IX = { v7: 1, v8: 1, v9: 1 };
+
+/* lang on the section, not just on <html>: it is what lets the browser
+   hyphenate and quote German correctly, and this deck switches language
+   inside one document. */
+function render(v, lang, art) {
+  var t = C[lang];
+  return '<section class="proto ' + v + (IX[v] ? ' ix' : '') + ' ' + HUECLS[STEP[art]]
+    + '" lang="' + lang + '">' + BODY[v](t, art) + '</section>';
+}
+
+var lang = 'en', proto = 'v1', art = 'spec';
+var stage = document.getElementById('stage');
+
+/* settle = render without the entrance choreography. A click on the rail
+   is navigation, and navigation that re-runs a rise animation on eleven
+   elements reads as a flicker rather than as a page turn. Replay and a
+   language change still play it, because those are entrances. */
+function mount(settle) {
+  document.getElementById('subtitle').innerHTML = SUB[proto];
+  stage.innerHTML = render(proto, lang, art);
+  if (settle) stage.firstChild.classList.add('settled');
+  var sync = function (sel, key, val) {
+    var bs = document.querySelectorAll(sel + ' button');
+    for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('active', bs[i].dataset[key] === String(val));
+  };
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+
+/* Choosing an artifact. Re-rendering the slide throws away the element
+   that was focused, so focus is put back on the card that now reads as
+   open — otherwise a keyboard user's next arrow press starts from the
+   top of the document instead of from where they just were. */
+function setArt(a, keepFocus) {
+  art = a;
+  mount(true);
+  if (keepFocus) {
+    var el = stage.querySelector('[data-art="' + a + '"]');
+    if (el) el.focus();
+  }
+}
+
+/* One delegated listener on the stage, so it survives every re-render
+   and works for the rail in 2/4/5/6 and the crumb in 1/3 alike. */
+stage.addEventListener('click', function (e) {
+  var b = e.target.closest('[data-art]');
+  if (b) setArt(b.dataset.art, false);
+});
+/* Arrow keys walk the set, Home and End jump to its ends. Both axes are
+   accepted: the rail is vertical and the crumb is horizontal, and a
+   viewer should not have to work out which one this treatment drew. */
+stage.addEventListener('keydown', function (e) {
+  var b = e.target.closest('[data-art]');
+  if (!b) return;
+  var i = ORDER.indexOf(b.dataset.art), n = ORDER.length, j = -1;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') j = (i + 1) % n;
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') j = (i + n - 1) % n;
+  else if (e.key === 'Home') j = 0;
+  else if (e.key === 'End') j = n - 1;
+  if (j < 0) return;
+  e.preventDefault();
+  setArt(ORDER[j], true);
+});
+
+document.getElementById('tabs').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', function () { mount(); });
+document.getElementById('btn-grey').addEventListener('click', function () {
+  document.body.classList.toggle('grey'); });
+document.addEventListener('keydown', function (e) {
+  if (e.target.closest('[data-art]')) return;
+  if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].indexOf(e.key) >= 0) { proto = 'v' + e.key; mount(); }
+});
+
+/* ══════════════════════════════════════════════════════════════════════
+   MEASUREMENT
+
+   Verified by eval, not by eyeballing. Two numbers and two probes:
+
+   - fit: scrollHeight against clientHeight on the proto, plus the union
+     of its bands as a percentage of the frame.
+   - minType: the smallest font-size actually rendered on any element
+     that carries its own text. The 14px floor is a promise about what
+     the back row can read, and it is only checkable by asking the
+     browser what it painted.
+   - clip: THE ONE THE STANDARD CHECK MISSES. Every sheet here is
+     overflow:hidden, and a box with overflow:hidden that is too small
+     for its content reports the SAME scrollHeight as clientHeight on the
+     proto above it — the content is simply gone. So every scroll
+     container is asked directly, and every line of source is checked
+     against the rect of the sheet that is supposed to contain it.
+   ══════════════════════════════════════════════════════════════════════ */
+window.fit = function () {
+  var p = document.querySelector('#stage > .proto');
+  var cs = getComputedStyle(p);
+  var pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+  var kids = p.querySelectorAll(':scope > *');
+  var top = Infinity, bot = -Infinity;
+  for (var i = 0; i < kids.length; i++) {
+    var r = kids[i].getBoundingClientRect();
+    if (r.height === 0) continue;
+    top = Math.min(top, r.top); bot = Math.max(bot, r.bottom);
+  }
+  var pr = p.getBoundingClientRect();
+  return {
+    v: proto, lang: lang, art: art,
+    scrollH: p.scrollHeight, clientH: p.clientHeight,
+    over: p.scrollHeight - p.clientHeight,
+    fill: +(((bot - top) / (pr.height - pad)) * 100).toFixed(1),
+    minType: (function () {
+      var all = p.querySelectorAll('*'), m = 999;
+      for (var j = 0; j < all.length; j++) {
+        if (!all[j].textContent.trim()) continue;
+        if (all[j].children.length && all[j].textContent.trim() === all[j].children[0].textContent.trim()) continue;
+        m = Math.min(m, parseFloat(getComputedStyle(all[j]).fontSize));
+      }
+      return +m.toFixed(1);
+    })(),
+    clip: window.clip(),
+  };
+};
+
+window.clip = function () {
+  var p = document.querySelector('#stage > .proto');
+  var out = [];
+  var all = p.querySelectorAll('*');
+  for (var i = 0; i < all.length; i++) {
+    var el = all[i], s = getComputedStyle(el);
+    if (s.overflow === 'visible' && s.overflowY === 'visible' && s.overflowX === 'visible') continue;
+    var dy = el.scrollHeight - el.clientHeight, dx = el.scrollWidth - el.clientWidth;
+    if (dy > 1 || dx > 1) {
+      out.push({ el: el.className.split(' ')[0] || el.tagName, dy: dy, dx: dx });
+    }
+  }
+  /* Content that is inside the box's scroll extent but outside its
+     painted rect — the failure a scrollHeight comparison cannot see. */
+  var boxes = p.querySelectorAll('.sheet, .rail, .tkcell, .mast');
+  for (var b = 0; b < boxes.length; b++) {
+    var br = boxes[b].getBoundingClientRect();
+    var lines = boxes[b].querySelectorAll('.ln, .tk, .q, .f, .fm span, .key span');
+    for (var l = 0; l < lines.length; l++) {
+      var lr = lines[l].getBoundingClientRect();
+      if (lr.height === 0) continue;
+      if (lr.bottom > br.bottom + 1 || lr.top < br.top - 1 || lr.right > br.right + 1) {
+        out.push({ cut: (lines[l].textContent || '').slice(0, 42),
+                   by: +(Math.max(lr.bottom - br.bottom, br.top - lr.top, lr.right - br.right)).toFixed(1) });
+      }
+    }
+  }
+
+  /* THE ONE THAT GOT THROUGH. A grid with stretched rows whose content
+     needs more height than the grid has does not scroll and does not
+     clip — it simply draws past its own bottom edge, INTO ITS SIBLING.
+     Every line was still inside the sheet, so both checks above passed
+     while the last line of verification.md was being sliced in half by
+     the verdict legend. Siblings that overlap is the actual symptom, so
+     that is what gets measured. */
+  var stacks = p.querySelectorAll('.sheet, .proto > .body');
+  for (var s2 = 0; s2 < stacks.length; s2++) {
+    var kids2 = stacks[s2].querySelectorAll(':scope > *'), prev = null;
+    for (var k = 0; k < kids2.length; k++) {
+      var kr = kids2[k].getBoundingClientRect();
+      if (kr.height === 0) continue;
+      if (prev && kr.top < prev.r.bottom - 1 && kr.left < prev.r.right - 1) {
+        out.push({ overlap: prev.c + '|' + (kids2[k].className.split(' ')[0] || '?'),
+                   by: +(prev.r.bottom - kr.top).toFixed(1) });
+      }
+      prev = { r: kr, c: kids2[k].className.split(' ')[0] || '?' };
+    }
+  }
+
+  /* And the band itself: a stretched grid reports its overflow here even
+     though nothing clips it. */
+  var grids = p.querySelectorAll('.ann, .src, .rail');
+  for (var g = 0; g < grids.length; g++) {
+    var gd = grids[g].scrollHeight - grids[g].clientHeight;
+    if (gd > 1) out.push({ grid: grids[g].className.split(' ')[0], dy: gd });
+  }
+
+  /* OCCLUSION. Nothing above catches text that is present, in the right
+     place, the right size — and painted over by an opaque sibling. It
+     happened the moment the margin note came out of flow: the next
+     margin cell drew across the bottom third of the sentence. So the
+     page is asked what is actually on top at points inside each note. */
+  var notes = p.querySelectorAll('.tk');
+  for (var n = 0; n < notes.length; n++) {
+    var nr = notes[n].getBoundingClientRect();
+    if (nr.height === 0) continue;
+    for (var f = 0.15; f < 1; f += 0.35) {
+      var hit = document.elementFromPoint(nr.left + 6, nr.top + nr.height * f);
+      if (hit && !notes[n].contains(hit) && !hit.contains(notes[n])) {
+        out.push({ hidden: (notes[n].textContent || '').slice(0, 30),
+                   under: hit.className.split(' ')[0] || hit.tagName });
+        break;
+      }
+    }
+  }
+  return out;
+};
+
+/* ── THE JUMP PROBE ─────────────────────────────────────────────────────
+   The defect that got treatment 5 rejected is a geometric one, so it is
+   checkable rather than arguable. Render the slide four times, once per
+   open artifact, and record where each card's file name and question
+   sit relative to the rail's own top-left corner. A card's label appears
+   in all four renders — open in one of them, closed in three — and if
+   the four positions are not the same position, the label moves when the
+   card opens. Returns the worst displacement in pixels, per version.
+
+   Measured against the RAIL, not the viewport: a whole-rail shift would
+   be a different bug, and this probe should not be able to hide one
+   inside the other. */
+window.jump = function (v, l) {
+  var pos = {}, worst = 0, at = '';
+  ORDER.forEach(function (open) {
+    window.setState(v, l, open);
+    var p = document.querySelector('#stage > .proto');
+    var rr = p.querySelector('.rail').getBoundingClientRect();
+    ORDER.forEach(function (a) {
+      var card = p.querySelector('[data-art="' + a + '"]');
+      ['.f', '.q'].forEach(function (sel) {
+        var e = card.querySelector(sel); if (!e) return;
+        var r = e.getBoundingClientRect();
+        var k = a + sel, now = [r.left - rr.left, r.top - rr.top];
+        if (pos[k]) {
+          var d = Math.max(Math.abs(pos[k][0] - now[0]), Math.abs(pos[k][1] - now[1]));
+          if (d > worst) { worst = d; at = k + ' when ' + open + ' is open'; }
+        } else pos[k] = now;
+      });
+    });
+  });
+  return { v: v, lang: l, maxLabelShift: +worst.toFixed(2), where: at };
+};
+
+/* Measurement mounts SETTLED. The entrance is a translateY(12px), and
+   Chrome counts a transformed descendant in a scroll container's
+   overflow — so measuring mid-flight reports a 12px clip on every sheet
+   in the file and buries the two real ones. The resting state is the
+   state the slide is in for all but 1.2 seconds of its life, and it is
+   the only one worth a number. */
+window.setState = function (v, l, a) { proto = v; lang = l; art = a; mount(true); };
+
+mount();
+</script>
+</body>
+</html>

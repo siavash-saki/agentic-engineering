@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 19 — Walk the criteria, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   DESIGN.md's verdict on this slide is "agrees — genuinely tabular", with
+   one instruction: MAKE THE PENDING ROW THE CLIMAX. So none of the three
+   variations argues with the table's existence. They argue about which of
+   the three columns is the slide.
+
+   TWO THINGS THE CURRENT SLIDE GETS WRONG, and all three fix them.
+
+   1. THE PENDING BADGE IS CLAY. It is drawn with --ae-error, the deck's
+      failure colour. The talk's whole point one slide later is that "not
+      verified" is NOT failure — it is a precise statement about missing
+      evidence. Rendering it in the failure hue says the opposite of the
+      argument, in the one place the argument is on screen. It is ochre
+      here, which is the hue the palette added for exactly this.
+
+   2. THE PENDING ROW IS GREY. --ae-cool-gray-100 is the colour of a
+      switched-off thing, so the row the note calls "the useful output"
+      is the one row rendered as background. Grey de-emphasises; this
+      row is the climax.
+
+   COLOUR BUDGET, stated deliberately. Plum is the chapter and stays on
+   the frame — one device per variation, and never on body text. The
+   content carries exactly two state hues, green and ochre, because this
+   slide has exactly two verdicts on it. CLAY IS ABSENT ON PURPOSE: no
+   row here is wrong, so the third verdict is not taught on this slide.
+   That keeps the count at two content hues plus ink and greys.
+
+   THE TAKEAWAY IS OCHRE, NOT MINT. .fg-note is mint deck-wide, but the
+   sentence inside it is about the gap, and on this slide mint now means
+   "pass". A mint block saying "the gap is the useful output" would be
+   spending the pass colour on the not-verified argument. One rule change,
+   one line to revert. */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-4); }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0 0 var(--ae-space-5); max-width: 72ch; }
+
+.proto .fg-note { background: var(--fg-wait-tint); color: var(--fg-wait-d); }
+.proto .fg-note::before { color: var(--fg-wait); }
+
+/* ── THE VERDICT — a cast object (DESIGN.md, pass 3) ──────────────
+   Three verdicts exist in the deck's argument: pass, not verified,
+   wrong. Each is a hue AND a glyph, never a hue alone:
+
+       pass          green   filled    checkmark
+       not verified  ochre   hollow    open circle
+       wrong         clay    struck    multiplication sign
+
+   Only the first two appear on this slide. One scoped triple of
+   custom properties carries the whole system, so a row states its
+   verdict once and every mark inside it recolours. */
+.v-pass { --vd: var(--fg-build); --vd-d: var(--fg-build-d); --vd-tint: var(--fg-build-tint); }
+.v-wait { --vd: var(--fg-wait);  --vd-d: var(--fg-wait-d);  --vd-tint: var(--fg-wait-tint); }
+
+/* The glyph never carries italics — it is a mark, not emphasis. */
+.proto i { font-style: normal; }
+/* U+25E6 is drawn at about a third of its em box, so beside a checkmark
+   at the same font-size it reads as a middot — a separator, not a
+   verdict. That silently deleted the form half of the not-verified cue,
+   which is the half that has to survive greyscale. It is scaled here
+   until the open circle carries the same optical weight as the check,
+   with a collapsed line box so the larger glyph does not open the line. */
+.proto .v-wait i { font-size: 2.1em; line-height: 0.45; position: relative; top: 0.1em; }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE LEDGER
+   The table kept, because the shape is right. What changes is the
+   weighting: three passes are set as a quiet run at small size,
+   and the fourth row breaks the run — full-bleed ochre wash, both
+   its columns bumped a size, its evidence set in ochre-deep rather
+   than grey, and a rule above it that is heavier than the hairlines
+   between the passes. The eye lands on the bottom row, which is
+   where the content is.
+
+   Plum lives on ONE device: the rule under the column heads. That
+   is the chapter on the frame, and it is the only plum in the slide.
+
+   The tint bleeds to the card's edges because the card's horizontal
+   padding lives on the cells, not on the card. A padded card would
+   have inset the climax row and made it look like a footnote.
+   ══════════════════════════════════════════════════════════════ */
+/* No bottom padding: the climax is the last row, and a strip of white
+   under its wash made the tint stop short of the card edge and read as
+   a footnote rather than as the end of the ledger. The row supplies the
+   card's bottom padding itself, so the ochre runs into the corner. */
+.v1 .tbl { padding: var(--ae-space-5) 0 0; overflow: hidden; }
+.v1 table { width: 100%; border-collapse: collapse; }
+.v1 th {
+  text-align: left; font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600; letter-spacing: 0.02em; color: var(--fg-muted);
+  padding: 0 var(--ae-space-4) var(--ae-space-3) 0;
+  border-bottom: 2px solid var(--fg-review);
+}
+.v1 td {
+  padding: var(--ae-space-4) var(--ae-space-4) var(--ae-space-4) 0;
+  border-bottom: 1px solid var(--fg-hair);
+  vertical-align: top;
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small);
+}
+.v1 th.c, .v1 td.c { padding-left: var(--ae-space-6); }
+.v1 th.v, .v1 td.v { padding-right: var(--ae-space-6); text-align: right; white-space: nowrap; }
+.v1 td.c { width: 31%; color: var(--fg-ink); font-weight: 600; }
+.v1 td.e { color: var(--fg-muted); }
+.v1 tbody tr:last-child td { border-bottom: 0; }
+
+/* The climax. Four cues, three of which survive desaturation: the wash,
+   the size step, the heavier rule above it, and the ringed pill. */
+.v1 tr.is-climax td {
+  background: var(--vd-tint);
+  border-top: 1.5px solid var(--vd);
+  padding-top: var(--ae-space-5); padding-bottom: var(--ae-space-5);
+  font-size: var(--ae-fs-body); line-height: 1.42;
+}
+.v1 tr.is-climax td.e { color: var(--vd-d); font-size: var(--ae-fs-lead); line-height: 1.34; }
+.v1 tr.is-climax td.e .lead { font-weight: 700; }
+
+.v1 .pill {
+  display: inline-flex; align-items: baseline; gap: 7px;
+  padding: 4px 13px; border-radius: 999px;
+  border: 1.5px solid transparent;
+  background: var(--vd-tint); color: var(--vd-d);
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 700;
+}
+.v1 .pill i { font-weight: 700; }
+/* Hollow, not filled: the form half of the not-verified cue. */
+.v1 .v-wait .pill { background: var(--fg-card); border-color: var(--vd); }
+.v1 .is-climax .pill { font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); padding: 5px 15px; }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE WALK
+   The title says "walk the criteria, one row at a time", so the
+   slide is drawn as a walk: a plum spine down the page with four
+   stations on it, each criterion a station and its evidence hanging
+   under it in a well. The spine is drawn only BETWEEN nodes, so the
+   walk visibly starts at the first criterion and ends at the last —
+   it does not run off the top or trail into nothing.
+
+   The node is the verdict, using the cast's own vocabulary: a filled
+   disc where a person could sign it off, a hollow ring where nobody
+   could. Filled versus hollow is the deck's existing distinction for
+   exactly this, and it is the one that survives a projector.
+
+   The gain over the table is width: evidence gets the full measure
+   instead of 60% of it, so a two-line cell becomes one line, which
+   is what pays for the extra vertical rhythm.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .walk { display: grid; row-gap: var(--ae-space-5); }
+.v2 .st {
+  --nd: clamp(28px, 3.4vh, 38px);
+  position: relative;
+  display: grid; grid-template-columns: var(--nd) minmax(0, 1fr);
+  column-gap: var(--ae-space-4);
+}
+.v2 .is-climax { --nd: clamp(34px, 4.2vh, 46px); }
+/* The spine segment: from this node's underside to the next node's top.
+   Derived from --nd and the row gap rather than from a guessed height,
+   so it still closes when German rewraps a criterion onto two lines. */
+.v2 .st:not(:last-child)::before {
+  content: ''; position: absolute; z-index: 0;
+  left: calc(var(--nd) / 2 - 1.5px);
+  top: var(--nd);
+  height: calc(100% - var(--nd) + var(--ae-space-5));
+  width: 3px; border-radius: 2px; background: var(--fg-review);
+}
+.v2 .node {
+  position: relative; z-index: 1;
+  width: var(--nd); height: var(--nd); border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font); font-weight: 700; line-height: 1;
+  font-size: calc(var(--nd) * 0.5);
+}
+.v2 .v-pass .node { background: var(--vd); color: #fff; box-shadow: var(--fg-d1); }
+/* The not-verified node is an EMPTY ring. It was drawn with a U+25E6
+   inside it, which put a small circle in the middle of a large one and
+   read as a record button; the ring is already the open-circle form, so
+   the character is redundant there and belongs on the label instead.
+   The pass node keeps its check, because a filled disc with nothing in
+   it would be a gate — a different object in this deck's cast. */
+.v2 .v-wait .node { background: var(--fg-card); border: 3px solid var(--vd); }
+
+.v2 .cline {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--ae-space-4);
+  min-height: var(--nd);
+}
+.v2 .crit {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.22; color: var(--fg-ink);
+}
+.v2 .is-climax .crit { font-size: var(--ae-fs-h3); }
+.v2 .vtag {
+  flex: none; display: inline-flex; align-items: baseline; gap: 7px;
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 700; color: var(--vd-d); white-space: nowrap;
+}
+.v2 .well {
+  margin: var(--ae-space-2) 0 0;
+  padding: var(--ae-space-3) var(--ae-space-4);
+  border-radius: var(--ae-radius);
+  border: 1.5px solid transparent;
+  background: var(--ae-cool-gray-100);
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small);
+  color: var(--fg-muted);
+}
+.v2 .is-climax .well {
+  background: var(--vd-tint); border-color: var(--vd);
+  color: var(--vd-d);
+  font-size: var(--ae-fs-body); line-height: 1.42;
+}
+.v2 .well .lead { font-weight: 700; }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — EVIDENCE FIRST
+   The lede already states the hierarchy the table contradicts: the
+   evidence is the slide. So the columns swap jobs. The criterion
+   becomes a caption — it was agreed upstream and nobody is reading
+   it for the first time — and what was actually done to check it is
+   set at lead size in ink, full measure, as the statement of the
+   band. The verdict sits at the end of the caption line, where a
+   reader arrives having already read what it is a verdict ON.
+
+   Four bands separated by hairlines, and the fourth is a tinted
+   block that breaks out past the measure on both sides. It is the
+   only band with a background, the only one with a radius, and the
+   only one whose evidence opens on a bolded two-word sentence.
+
+   Plum is the rule under the key line: the same chapter device as
+   V1, deliberately, because the chapter marker should not change
+   shape between two slides of the same chapter.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .key {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--ae-space-4);
+  padding-bottom: var(--ae-space-3);
+  border-bottom: 2px solid var(--fg-review);
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600; letter-spacing: 0.02em;
+}
+.v3 .k-c { color: var(--fg-muted); }
+.v3 .k-sep { color: var(--ae-cool-gray-300); margin: 0 8px; }
+.v3 .k-e { color: var(--fg-ink); font-weight: 700; }
+.v3 .k-v { color: var(--fg-muted); }
+
+.v3 .bd { padding: var(--ae-space-5) 0; border-bottom: 1px solid var(--fg-hair); }
+.v3 .cap {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--ae-space-5);
+  font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 600; color: var(--fg-muted);
+}
+.v3 .vtag {
+  flex: none; display: inline-flex; align-items: baseline; gap: 6px;
+  font-weight: 700; color: var(--vd-d); white-space: nowrap;
+}
+.v3 .ev {
+  margin: 5px 0 0;
+  font-size: var(--ae-fs-lead); line-height: 1.32;
+  color: var(--fg-ink);
+}
+/* The climax breaks the measure on both sides, which no other band does.
+   The negative margin is what makes it read as a block rather than as a
+   row that happens to be shaded. */
+.v3 .is-climax {
+  margin: var(--ae-space-3) calc(-1 * var(--ae-space-5)) 0;
+  padding: var(--ae-space-5);
+  border-bottom: 0; border-radius: var(--ae-radius-md);
+  background: var(--vd-tint);
+}
+.v3 .is-climax .cap { color: var(--vd-d); }
+.v3 .is-climax .ev { color: var(--vd-d); }
+.v3 .is-climax .ev .lead { font-weight: 700; }
+.v3 .bd:last-child { border-bottom: 0; }
+
+@media (max-width: 900px) {
+  .v1 td.c { width: auto; }
+  .v2 .cline { display: block; }
+  .v3 .cap { display: block; }
+  .v3 .vtag { display: inline-flex; margin-top: 4px; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Ledger</button>
+        <button type="button" data-p="v2">2 · Walk</button>
+        <button type="button" data-p="v3">3 · Evidence first</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/19-review-against.js, with three
+   changes, all recorded here so the port back is mechanical:
+
+   1. cols[2] was an empty string. It is now "Verdict" / "Urteil" — a word
+      the lede already uses. The third column stopped being a decoration
+      hanging off the end of the row the moment it became the thing the
+      slide is arguing about, so it gets a name like the other two.
+
+   2. ledeAlt, used by V2 and V3 only: "The evidence column is the slide"
+      becomes "The evidence is the slide". Neither of those two layouts
+      HAS a column, and a lede that names one would be pointing at
+      furniture that is not on screen. V1 keeps the original sentence.
+
+   3. Nothing else. Every criterion, every evidence string, both verdict
+      labels and the note are unchanged in both languages. */
+const C = {
+  en: {
+    h1: 'Walk the criteria, one row at a time',
+    lede: 'The acceptance criteria from the plan, each with what was actually done to check it. The evidence column is the slide — a verdict with nothing next to it is an opinion.',
+    ledeAlt: 'The acceptance criteria from the plan, each with what was actually done to check it. The evidence is the slide — a verdict with nothing next to it is an opinion.',
+    cols: ['Acceptance criterion', 'Evidence', 'Verdict'],
+    rows: [
+      { c: 'Requests over the limit return 429 with Retry-After',
+        e: 'Integration test: 101st request in the window; asserts status and header value',
+        v: 'pass' },
+      { c: 'The limit is per API key, not per IP',
+        e: 'Test: two keys from one IP, both served; one key from two IPs, second rejected',
+        v: 'pass' },
+      { c: 'Internal service calls are exempt',
+        e: 'Test drives the internal path with the header present and absent',
+        v: 'pass' },
+      { c: 'Counters survive a process restart',
+        e: 'Not tested. Restart behaviour depends on the shared cache; no test drives it',
+        v: 'pending' },
+    ],
+    verdicts: { pass: 'Pass', pending: 'Not verified' },
+    note: 'Four rows, three passes, one honest gap. <b>The gap is the useful output.</b> Nobody would have found it by asking whether the feature works.',
+  },
+  de: {
+    h1: 'Die Kriterien durchgehen, Zeile für Zeile',
+    lede: 'Die Akzeptanzkriterien aus dem Plan, je mit dem, was tatsächlich zur Prüfung getan wurde. Die Belegspalte ist der Inhalt dieser Folie — ein Urteil ohne Beleg ist eine Meinung.',
+    ledeAlt: 'Die Akzeptanzkriterien aus dem Plan, je mit dem, was tatsächlich zur Prüfung getan wurde. Der Beleg ist der Inhalt dieser Folie — ein Urteil ohne Beleg ist eine Meinung.',
+    cols: ['Akzeptanzkriterium', 'Beleg', 'Urteil'],
+    rows: [
+      { c: 'Requests über dem Limit liefern 429 mit Retry-After',
+        e: 'Integrationstest: 101. Request im Fenster; prüft Status und Header-Wert',
+        v: 'pass' },
+      { c: 'Das Limit gilt pro API-Key, nicht pro IP',
+        e: 'Test: zwei Keys von einer IP, beide bedient; ein Key von zwei IPs, zweiter abgelehnt',
+        v: 'pass' },
+      { c: 'Interne Service-Aufrufe sind ausgenommen',
+        e: 'Test fährt den internen Pfad mit und ohne den Header',
+        v: 'pass' },
+      { c: 'Zähler überstehen einen Prozess-Neustart',
+        e: 'Nicht getestet. Das Neustartverhalten hängt am gemeinsamen Cache; kein Test fährt es',
+        v: 'pending' },
+    ],
+    verdicts: { pass: 'Bestanden', pending: 'Nicht geprüft' },
+    note: 'Vier Zeilen, drei bestanden, eine ehrliche Lücke. <b>Die Lücke ist das nützliche Ergebnis.</b> Über die Frage, ob das Feature funktioniert, hätte sie niemand gefunden.',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the ledger: the table kept, the pending row set as the climax',
+  v2: 'Variation 2 — the walk: four stations on a plum spine, evidence hanging under each',
+  v3: 'Variation 3 — evidence first: the criterion becomes the caption, the evidence the statement',
+};
+
+const GLYPH  = { pass: '✓', pending: '◦' };
+const VCLASS = { pass: 'v-pass', pending: 'v-wait' };
+
+/* The pending row's evidence opens on a two-word sentence that is the whole
+   verdict — "Not tested." / "Nicht getestet." Everything after it is the
+   reason. Splitting on the first sentence end sets the verdict in bold and
+   leaves the reason at normal weight, in both languages, without either
+   string being rewritten. */
+function leadSplit(s) {
+  const i = s.indexOf('. ');
+  if (i < 0) return s;
+  return '<span class="lead">' + s.slice(0, i + 1) + '</span> ' + s.slice(i + 2);
+}
+
+/* ── V1 ── */
+function V1(t) {
+  return '<div class="tbl fg-card fg-in" style="--fg-at:3">'
+    + '<table><thead><tr>'
+      + '<th class="c">' + t.cols[0] + '</th>'
+      + '<th class="e">' + t.cols[1] + '</th>'
+      + '<th class="v">' + t.cols[2] + '</th>'
+    + '</tr></thead><tbody>'
+    + t.rows.map(function (r, i) {
+        const climax = r.v === 'pending';
+        return '<tr class="' + VCLASS[r.v] + (climax ? ' is-climax' : '') + ' fg-in" style="--fg-at:' + (4 + i) + '">'
+          + '<td class="c">' + r.c + '</td>'
+          + '<td class="e">' + (climax ? leadSplit(r.e) : r.e) + '</td>'
+          + '<td class="v"><span class="pill"><i>' + GLYPH[r.v] + '</i>' + t.verdicts[r.v] + '</span></td>'
+        + '</tr>';
+      }).join('')
+    + '</tbody></table></div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  return '<div class="walk">'
+    + t.rows.map(function (r, i) {
+        const climax = r.v === 'pending';
+        return '<div class="st ' + VCLASS[r.v] + (climax ? ' is-climax' : '') + ' fg-in" style="--fg-at:' + (3 + i) + '">'
+          + '<span class="node">' + (r.v === 'pass' ? GLYPH[r.v] : '') + '</span>'
+          + '<div class="stb">'
+            + '<div class="cline">'
+              + '<span class="crit">' + r.c + '</span>'
+              + '<span class="vtag"><i>' + GLYPH[r.v] + '</i>' + t.verdicts[r.v] + '</span>'
+            + '</div>'
+            + '<p class="well">' + (climax ? leadSplit(r.e) : r.e) + '</p>'
+          + '</div>'
+        + '</div>';
+      }).join('')
+    + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  return '<div class="key fg-in" style="--fg-at:3">'
+      + '<span><span class="k-c">' + t.cols[0] + '</span>'
+      + '<span class="k-sep">·</span>'
+      + '<span class="k-e">' + t.cols[1] + '</span></span>'
+      + '<span class="k-v">' + t.cols[2] + '</span>'
+    + '</div>'
+    + '<div class="stack">'
+    + t.rows.map(function (r, i) {
+        const climax = r.v === 'pending';
+        return '<div class="bd ' + VCLASS[r.v] + (climax ? ' is-climax' : '') + ' fg-in" style="--fg-at:' + (4 + i) + '">'
+          + '<div class="cap">'
+            + '<span class="crit">' + r.c + '</span>'
+            + '<span class="vtag"><i>' + GLYPH[r.v] + '</i>' + t.verdicts[r.v] + '</span>'
+          + '</div>'
+          + '<p class="ev">' + (climax ? leadSplit(r.e) : r.e) + '</p>'
+        + '</div>';
+      }).join('')
+    + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+/* V1 keeps the original lede because V1 keeps the column it names. */
+const ALT_LEDE = { v2: true, v3: true };
+
+function render(v, t) {
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + (ALT_LEDE[v] ? t.ledeAlt : t.lede) + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:9"><span>' + t.note + '</span></p></div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

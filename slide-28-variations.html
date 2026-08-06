@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 28 — SDD full process, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════════════════════════════════════════════════════════════
+   WHAT WAS MEASURED FIRST, AND WHAT IT SAID
+
+   Slide 28 as it ships, measured in the real deck at 1280x720 (stage
+   610px):
+
+     head (kicker + h1 + lede) .... 110px    24 words
+     the diagram .................. 159px    43 words   26.1% of frame
+     the ship block ................ 89px    71 words   14.6% of frame
+     the note ...................... 43px    22 words
+     total content ................ 449px   160 words   73.6% fill
+
+   So the ship block is 44% of the slide's words in 15% of its height:
+   0.80 words per vertical pixel against the diagram's 0.27. The densest
+   thing on a slide whose subject is a drawing is the block that is not
+   the drawing, and it sits directly under the artifact cards with the
+   same left edge and no separating rule — so the eye reads seven
+   columns of text, four of which are the diagram's labels.
+
+   And it does not even buy a full frame. Measured the way the landed
+   slides are measured — head plus what the body actually contains plus
+   the note, over the stage — slide 28 today fills 77.2% and leaves 139px
+   of empty paper, while slide 7, approved, fills 92.3% with 47px of
+   slack. So the ship block is not what makes the slide full. It makes
+   one band of it dense while a fifth of the frame stays blank.
+
+   It also answers a different question. The diagram answers "what is
+   the process". The ship block answers "how does the work reach main
+   and who reads it" — and two of its three claims are already made in
+   the deck: slide 22 is an entire slide on a different model family
+   reviewing, and slide 27 step 6 says it again. So the block is the
+   third statement of an argument, competing with the first statement of
+   a different one.
+
+   The three variations below differ ONLY in what is allowed on the
+   slide beside the diagram. The diagram itself is one shared component
+   in all of them, so the comparison is about the block and nothing
+   else.
+
+   ── THE DIAGRAM IS SLIDE 7's DEVICE, FULL SIZE ────────────────────────
+
+   Slide 7 has landed and 7 and 28 share the pipeline. Everything here
+   is 7's geometry:
+
+     - a step is a HOLLOW HUED RING sitting ON the rail (22px, 4px
+       stroke, card fill);
+     - a gate is a SOLID INK BAR sitting ACROSS it, and the bar's
+       height is the ruler the whole rail row is built from;
+     - documents hang below on dotted hairline connectors, in
+       ink-edged boxes;
+     - the connector under a ring closes exactly the gap the ring
+       leaves in a row the BAR defines: (gh - nd) / 2, derived, never
+       eyeballed;
+     - everything lives in one grid, so a connector lands on its own
+       object by construction rather than by a percentage that drifts
+       when the German wraps differently.
+
+   Four departures from slide 7, each forced by this slide having four
+   steps and three gates instead of three and two:
+
+   1. THE GATE LABEL REPLACES THE GATE PANEL. Slide 7 has two gates and
+      room for a prose panel under each. Three gates and four documents
+      do not leave room for three panels, and the labels here are three
+      words, not three sentences. The label sits directly under the bar
+      with no gap — the bar's own caption — so it is still attached to
+      the bar by construction. Gate columns are a fixed width and the
+      label is allowed to overflow them symmetrically; if the column
+      were "auto" the label would set the column width and shove the
+      whole rail sideways.
+
+   2. THE LOOP BAND. Four steps, three hues: Spec and Plan are BOTH the
+      loop's Plan step, which is the lede's actual claim ("still Plan,
+      Build, Review"). Two blue rings next to each other only read as
+      that claim if something says so, so a labelled bracket runs above
+      the rail naming the three phases and showing where each starts and
+      stops. It also makes the unequal spans visible: the Plan phase
+      owns half the rail, which is what the SDD tuning actually costs.
+
+   3. A STEP CARRIES ONE LINE OF PROSE. Slide 7's steps are bare names.
+      Here each name has the one-line "what this step is" under it,
+      because this slide is where the four artifacts get introduced.
+
+   4. THE KICKER IS NO LONGER GREEN. It said "Spec-Driven Development"
+      in the old single-accent green, which is now the Build hue and is
+      spent on the Build ring three columns away. It is a metadata
+      label, so it takes the deck's own label device: grey.
+
+   ── THE HUE BUDGET, COUNTED ───────────────────────────────────────────
+
+   Three chapter hues appear. The rule allows at most two hues IN THE
+   CONTENT, plus ink and greys; chapter hue on structure is a separate
+   system and is not counted against it. The count here:
+
+     content hues ......... 0   (no clay, no ochre; every sentence on
+                                 the slide is ink, body or muted grey)
+     structure hues ....... 3   (blue Plan, green Build, plum Review)
+                                 and they appear in exactly two places:
+                                 the loop band and the step rings
+     ink .................. every human decision — the three gate bars,
+                            the gate labels, the artifact boxes' edges
+     grey / hairline ...... the rail, every connector, the branch
+                            boundary, the second reader
+
+   So the content budget is spent at 0 of 2. If a variation ever needed
+   clay or ochre it would still have both slots free.
+
+   GREYSCALE. Nothing rests on hue. Step vs gate is hollow ring vs
+   filled bar — different shape, different colour, different
+   relationship to the line. Which phase a step belongs to is carried by
+   the loop band's NAME above it, not by the ring's colour. Machine vs
+   human is grey-filled soft vs ink-filled hard. Press Greyscale: the
+   only thing that disappears is which of two blues is which, and the
+   band says it in words.
+   ══════════════════════════════════════════════════════════════════════ */
+
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-4); }
+
+.kicker {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--fg-muted); margin: 0 0 var(--ae-space-1);
+}
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 68ch; }
+
+/* ══════════════ THE PIPELINE — shared by all variations ══════════════ */
+.pipe {
+  --gh: clamp(46px, 6.2vh, 72px);   /* gate bar height — the row's ruler */
+  --nd: 22px;                        /* step ring diameter */
+  --sfs: clamp(22px, 3.4vh, 42px);   /* step name */
+  --bfs: var(--ae-fs-caption);       /* the step's one line of prose */
+  display: grid;
+  /* 1 Spec · 2 gate1 · 3 Plan · 4 gate2 · 5 Build · 6 gap · 7 Review · 8 gate3.
+     The gate columns are a FIXED width, not "auto": their labels are wider
+     than the bar and must overflow the column rather than define it.
+     Column 6 is a real gap, the way slide 7's column 4 is — it is what
+     separates Build from Review, and in variation 3 it is also the only
+     clean channel a connector can run down between two document cards. */
+  grid-template-columns:
+    minmax(0, 1fr) var(--gw) minmax(0, 1fr) var(--gw)
+    minmax(0, 1fr) clamp(18px, 2.4vw, 40px) minmax(0, 1fr) auto;
+  --gw: clamp(30px, 3.4vh, 38px);
+  align-items: start;
+}
+/* THE LAST GATE COLUMN IS "auto", THE OTHER TWO ARE FIXED, and that
+   asymmetry is load-bearing. A gate label is wider than its bar, so it
+   overflows its column symmetrically. For gates 1 and 2 that is free —
+   what it overflows into is a gap. For gate 3 it is the right edge of
+   the slide, and it poked out of the branch enclosure in variation 3 and
+   came within a few pixels of a horizontal scrollbar. Letting the last
+   column size to its own label puts the label back inside the grid; the
+   rail then runs a little past the last bar instead of ending on it,
+   which is the one place this departs from slide 7 in the drawing
+   itself. */
+
+.s-plan   { --hue: var(--fg-plan);   --hue-d: var(--fg-plan-d); }
+.s-build  { --hue: var(--fg-build);  --hue-d: var(--fg-build-d); }
+.s-review { --hue: var(--fg-review); --hue-d: var(--fg-review-d); }
+
+/* ── row 1: the loop band ── */
+.bd {
+  grid-row: 1; display: flex; align-items: center; gap: var(--ae-space-2);
+  margin: 0 6px var(--ae-space-3);
+}
+.bd i { flex: 1; height: 3px; border-radius: 2px; background: var(--hue); opacity: 0.5; }
+.bd span {
+  flex: none; font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1; font-weight: 700; letter-spacing: 0.06em; color: var(--hue-d);
+}
+
+/* ── row 2: step name and its line ── */
+.st { grid-row: 2; text-align: center; padding: 0 var(--ae-space-2) var(--ae-space-3); }
+.st h3 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--sfs); line-height: 1.05;
+  letter-spacing: -0.03em; color: var(--hue-d);
+}
+.st p {
+  margin: 3px 0 0; font-size: var(--bfs); line-height: var(--ae-lh-caption);
+  color: var(--fg-muted);
+}
+
+/* ── row 3: the rail, the rings, the bars ── */
+.rail {
+  grid-row: 3; grid-column: 1 / -1; align-self: center; z-index: 1;
+  height: 3px; border-radius: 2px; background: var(--fg-hair);
+  transform-origin: left center;
+  animation: s28-rail 820ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 3 * var(--fg-beat));
+}
+@keyframes s28-rail { from { transform: scaleX(0); } }
+
+/* A step: hollow, hued, ON the line. */
+.nd {
+  grid-row: 3; justify-self: center; align-self: center; z-index: 2;
+  width: var(--nd); height: var(--nd); border-radius: 999px;
+  background: var(--fg-card); border: 4px solid var(--hue);
+}
+/* A gate: solid ink, ACROSS the line. */
+.gate {
+  grid-row: 3; justify-self: center; align-self: center; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  width: var(--gw); height: var(--gh);
+  border-radius: 10px; background: var(--fg-ink); color: #fff;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1;
+  font-variant-numeric: tabular-nums; box-shadow: var(--fg-d2);
+}
+
+/* ── row 4: the gate's caption, and the drop to the documents ── */
+/* Width in em, not ch and not max-content: it has to hold two words on a
+   line at every size the vh scale produces, and it has to be the same
+   shape in German. "min(max-content, 14ch)" measured 57px here — the
+   width of the longest WORD — and broke every label onto three lines. */
+.gl {
+  grid-row: 4; justify-self: center; z-index: 2;
+  width: 9.5em; padding-top: var(--ae-space-2);
+  text-align: center;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 600; color: var(--fg-ink);
+}
+
+/* One attachment device, used for every hanging thing: dotted hairline,
+   an attachment rather than a flow. */
+.lead { justify-self: center; width: 0; border-left: 2px dotted var(--ae-cool-gray-400); z-index: 1; }
+/* Segment A closes the gap the ring leaves inside the bar-height row:
+   the ring's underside sits at (gh + nd) / 2, the row ends at gh. */
+.lead--a { grid-row: 3; align-self: end; height: calc((var(--gh) - var(--nd)) / 2); }
+/* Segment B stretches, so however tall the gate labels make row 4, the
+   connector still ends exactly on the document. A fixed height here
+   would leave the line short of the box the moment German wrapped. */
+.lead--b { grid-row: 4; align-self: stretch; min-height: var(--ae-space-5); }
+
+/* ── row 5: the documents ── */
+.doc {
+  grid-row: 5; justify-self: center; z-index: 2;
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+  max-width: 100%;
+  padding: var(--ae-space-3) var(--ae-space-4);
+  border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1.5px solid var(--fg-ink);
+  box-shadow: var(--fg-d1);
+}
+.doc .kind { font-size: var(--ae-fs-caption); line-height: 1.2; color: var(--fg-muted); }
+.doc .file {
+  font-family: var(--ae-font-mono); font-size: calc(var(--ae-fs-caption) * 1.02);
+  line-height: 1.25; font-weight: 600; color: var(--fg-ink); white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE RAIL ALONE
+   The ship block leaves for its own slide, and the diagram takes
+   the frame it was always drawn for: slide 7's step size, a taller
+   bar, documents with room around them. Nothing is compressed and
+   nothing is deleted — the block is one tab to the right, drawn.
+
+   This is the variation that costs a slide. Tab 1b is that slide,
+   so the cost is visible rather than asserted.
+   ══════════════════════════════════════════════════════════════ */
+/* Sized against the landed slide 7, not by eye: on a 610px stage slide
+   7's pipeline occupies 351px, 57.5% of the frame. At the shared
+   settings this one occupied 39%, which is not "the diagram takes the
+   frame", it is the same diagram with the block deleted. */
+.v1 .pipe {
+  --gh: clamp(64px, 10.4vh, 120px);
+  --sfs: clamp(28px, 5vh, 60px);
+  --bfs: var(--ae-fs-small);
+}
+.v1 .pipe .st { padding-bottom: var(--ae-space-5); }
+.v1 .lead--b { min-height: var(--ae-space-7); }
+.v1 .doc { padding: var(--ae-space-4) var(--ae-space-5); }
+.v1 .gl { padding-top: var(--ae-space-3); }
+
+/* ══════════════════════════════════════════════════════════════
+   V1b — THE COMPANION SLIDE
+   Where the ship block goes if it leaves. Same cast, one lane:
+   the branch is the rail, and three things happen on it. The marks
+   are the deck's own vocabulary and they differ in FORM, not only
+   in colour — a hollow grey ring (a machine step), a filled grey
+   square (the second reader, a machine that is not a step), an ink
+   bar (a person deciding).
+
+   The two grey end-caps are the whole point of drawing it at all:
+   the branch is cut from main and goes back to main, and everything
+   between those two dots is one feature. That is the claim the
+   three-card row could not make.
+   ══════════════════════════════════════════════════════════════ */
+/* Three claims is a thin slide. At the sizes the other variations use it
+   measured 68.6% of the frame — under the deck's own floor — so the type
+   and the spacing are stepped up until it fills like a slide rather than
+   like a block that has been moved. That it needs the help at all is
+   information about whether the block deserves a slide. */
+.v1b .brun {
+  --bh: clamp(60px, 9.4vh, 108px);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: start;
+}
+.v1b .brail {
+  grid-row: 2; grid-column: 1 / -1; align-self: center; z-index: 1;
+  height: 3px; border-radius: 2px; background: var(--fg-hair);
+  transform-origin: left center;
+  animation: s28-rail 820ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 3 * var(--fg-beat));
+}
+/* The end caps' LABELS are positioned out of flow. In flow they set the
+   width of their auto column, and the rail — which spans every column —
+   started half a label to the left of the dot it was supposed to start
+   on. Out of flow, the column is the dot, so the rail runs from one dot
+   to the other by construction, and the two labels align with the
+   headline and the note instead of hanging off the edge of the slide. */
+.v1b .cap { grid-row: 2; align-self: center; justify-self: center; z-index: 2; position: relative; }
+.v1b .cap i {
+  display: block; width: 13px; height: 13px; border-radius: 999px;
+  background: var(--ae-cool-gray-400); border: 3px solid var(--fg-paper);
+}
+.v1b .cap span {
+  position: absolute; top: calc(100% + 5px); white-space: nowrap;
+  font-family: var(--ae-font-mono);
+  font-size: var(--ae-fs-caption); line-height: 1.2; color: var(--fg-faint);
+}
+.v1b .cap--l span { left: 0; }
+.v1b .cap--r span { right: 0; }
+.v1b .bt {
+  grid-row: 1; text-align: center; padding: 0 var(--ae-space-3) var(--ae-space-6);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: clamp(25px, 4vh, 48px); line-height: 1.12; color: var(--fg-ink);
+  /* German breaks all three of these onto two lines and left the second
+     with "PR" alone on the last one. Balanced, it breaks by measure. */
+  text-wrap: balance;
+}
+/* the three marks, each a different FORM */
+.v1b .mk { grid-row: 2; justify-self: center; align-self: center; z-index: 3; }
+.v1b .mk--ring {
+  width: 22px; height: 22px; border-radius: 999px;
+  background: var(--fg-card); border: 4px solid var(--ae-cool-gray-400);
+}
+/* The second reader is a MACHINE: mid-grey, square, soft. Set against
+   the ink bar to its right — a person, near-black, tall, across the
+   line — the difference between who reads and who decides is legible
+   before a word is read, and it survives greyscale on form and value
+   together rather than on hue. */
+.v1b .mk--read {
+  width: clamp(28px, 3.2vh, 36px); height: clamp(28px, 3.2vh, 36px);
+  border-radius: var(--ae-radius-sm);
+  background: var(--ae-cool-gray-400);
+}
+.v1b .mk--gate {
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(30px, 3.4vh, 38px); height: var(--bh);
+  border-radius: 10px; background: var(--fg-ink); color: #fff;
+  font-size: var(--ae-fs-h4); line-height: 1; box-shadow: var(--fg-d2);
+}
+.v1b .bd2 {
+  grid-row: 3; text-align: center; padding: var(--ae-space-7) var(--ae-space-4) 0;
+  margin: 0 auto; max-width: 30ch;
+  font-size: var(--ae-fs-lead); line-height: 1.4; color: var(--fg-body);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE RAIL AND ITS FINE PRINT
+   The block stays, demoted from three headed cards to marginalia:
+   a hairline rule, the label pushed into the left margin the way a
+   footnote marker is, and the three claims set as run-in headings
+   in one band. Every word survives; what it loses is the
+   right to look like a second subject.
+
+   The demotion is worth 30% more height to the diagram, which is
+   spent on the step names and the bar rather than on air.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .fine {
+  display: grid; grid-template-columns: minmax(0, 13ch) minmax(0, 1fr);
+  column-gap: var(--ae-space-5);
+  margin-top: var(--ae-space-5); padding-top: var(--ae-space-3);
+  border-top: 1px solid var(--fg-hair);
+}
+.v2 .fine .lbl { margin: 0; }
+.v2 .fine .row {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--ae-space-5);
+}
+.v2 .fine p {
+  margin: 0; font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  color: var(--fg-body);
+}
+.v2 .fine p b { font-weight: 700; color: var(--fg-ink); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — ONE BRANCH
+   The block does not sit beside the diagram; it becomes part of
+   it. All three claims are about the same object — the branch this
+   run happens on — so the branch is drawn: a hairline enclosure
+   around the whole pipeline, labelled on its edge with the claim
+   that names it.
+
+   The other two claims are placed where they act rather than in
+   reading order. The second reader hangs off the rail in the gap
+   between Build and Review, which is the only channel on the slide
+   wide enough for a connector to pass between two document cards —
+   the same trick slide 7 uses with its column 4. "Findings are
+   input, not orders" hangs under gate 3, because the person at
+   that gate is who weighs them; the connector is the claim.
+
+   The second reader is a MACHINE and is drawn like one: grey fill,
+   soft edge, no number. Set it against the ink bar two columns to
+   its right and the slide's whole argument about who decides is
+   visible without reading a word.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .pipe { --gh: clamp(44px, 5.8vh, 68px); --sfs: clamp(21px, 3.1vh, 38px); }
+.v3 .lead--b { min-height: var(--ae-space-4); }
+/* Folding costs height: this is the only variation that adds a tier
+   below the documents, and on a 610px stage it measured 92.1% against
+   the 92% ceiling. The step name keeps its size and the tightening comes
+   out of the gap under it. */
+.v3 .st { padding-bottom: var(--ae-space-2); }
+
+/* The enclosure is labelled on its LOWER edge, not its upper one. On the
+   upper edge the chip landed between the loop band and the step names —
+   two things it had to clear at once, in two languages. On the lower
+   edge it sits directly above its own sentence, so the branch's name and
+   the branch's description are one block, and the top of the drawing
+   stays clean. */
+.bound {
+  grid-row: 2 / 6; grid-column: 1 / -1; z-index: 0;
+  /* The pipe sets align-items: start, so an empty box collapses to zero
+     height and the enclosure was drawn as a single line across the top
+     of the slide. It has to opt back in. */
+  align-self: stretch;
+  position: relative;
+  /* The bottom bleed is a step deeper than the top one because the label
+     chip is centred ON that edge: at an equal bleed the chip's cap
+     clipped the last document card by 3px and its baseline touched the
+     sentence below it. Both were measured, not eyeballed. */
+  margin: calc(-1 * var(--ae-space-2)) calc(-1 * var(--ae-space-4)) calc(-1 * var(--ae-space-5));
+  border: 1.5px solid var(--ae-cool-gray-300);
+  border-radius: var(--ae-radius-lg);
+}
+.v3 .bd { margin-bottom: var(--ae-space-5); }
+.v3 .st { padding-top: var(--ae-space-2); }
+.bound span {
+  position: absolute; bottom: 0;
+  left: calc(var(--ae-space-4) - var(--ae-space-3));
+  transform: translateY(50%);
+  padding: 0 var(--ae-space-3);
+  background: var(--fg-paper);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 700; color: var(--fg-ink);
+  white-space: nowrap;
+}
+/* the connector from the rail down past the documents, in the gap
+   column — two segments, so the first starts exactly on the rail */
+.v3 .lead--rA { grid-row: 3; grid-column: 6; align-self: end; height: calc(var(--gh) / 2); }
+.v3 .lead--rB { grid-row: 4 / 7; grid-column: 6; align-self: stretch; }
+.v3 .lead--g3 { grid-row: 5 / 7; grid-column: 8; align-self: stretch; }
+.v3 .drop { grid-row: 6; height: var(--ae-space-5); }
+
+.v3 .an { grid-row: 7; }
+/* Block, not flex. As a flex row the title could not wrap below its own
+   min-content width, so it ran straight through the annotation to its
+   right. The machine glyph is inline instead. */
+.v3 .an .t {
+  display: block;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h5); line-height: 1.15; color: var(--fg-ink);
+  text-wrap: balance;
+}
+.v3 .an p {
+  margin: 4px 0 0; font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); color: var(--fg-body);
+}
+/* the machine glyph, the same grey square the second reader is drawn
+   as on the rail — so the annotation and the object are one thing */
+.v3 .an .mach {
+  display: inline-block; vertical-align: baseline;
+  width: 13px; height: 13px; border-radius: 3px; margin-right: 7px;
+  background: var(--ae-cool-gray-400);
+}
+/* The three annotations are placed by what they annotate, not by reading
+   order: the branch's own sentence under the enclosure's label, the
+   second reader under the connector it hangs from, the findings under
+   gate 3 — because the person at that gate is who weighs them. The
+   branch block is capped at 46ch, which is also what opens the gap
+   between it and its neighbour; the columns supply no gutter. */
+.v3 .an--branch { grid-column: 1 / 4; max-width: 46ch; padding-top: var(--ae-space-4); }
+.v3 .an--read   { grid-column: 4 / 7; padding-right: var(--ae-space-4); }
+/* The left inset is not cosmetic. The reader's connector comes down the
+   gap column and lands within a few pixels of where this block starts,
+   so without it one dotted line appeared to point at two annotations at
+   once. Now it touches the end of the block it belongs to and is a
+   clear 38px from the start of the one it does not. */
+.v3 .an--find   { grid-column: 7 / -1; padding-left: var(--ae-space-5); }
+
+.v3 .reader {
+  grid-row: 5; grid-column: 6; justify-self: center; align-self: center; z-index: 3;
+  width: clamp(26px, 3vh, 34px); height: clamp(26px, 3vh, 34px);
+  border-radius: var(--ae-radius-sm);
+  background: var(--ae-cool-gray-400);
+}
+
+/* ══════════════ narrow fallback ══════════════ */
+@media (max-width: 1000px) {
+  .pipe { grid-template-columns: 1fr; row-gap: var(--ae-space-3); padding-inline: 0; }
+  .pipe > * { grid-row: auto !important; grid-column: 1 !important; }
+  .rail, .lead, .bound, .v3 .drop, .v3 .reader { display: none; }
+  .bd { margin: 0; }
+  .st, .gl, .doc { text-align: left; justify-self: start; }
+  .v2 .fine, .v2 .fine .row { grid-template-columns: 1fr; row-gap: var(--ae-space-3); }
+  .v1b .brun { grid-template-columns: 1fr; row-gap: var(--ae-space-3); }
+  .v1b .brun > * { grid-row: auto !important; }
+  .v1b .brail { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Rail alone</button>
+        <button type="button" data-p="v1b">1b · its companion</button>
+        <button type="button" data-p="v2">2 · Fine print</button>
+        <button type="button" data-p="v3">3 · One branch</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/28-sdd-process.js. Four strings
+   are new, and only variation 1b uses three of them:
+     loop   — 'Plan' / 'Build' / 'Review', the deck's own step names,
+              identical in both languages the way slide 7 keeps them;
+     bLede  — the companion slide's lede;
+     bCaps  — 'from main' / 'back to main', the two ends of the branch.
+   Nothing was cut. */
+const C = {
+  en: {
+    kicker: 'Spec-Driven Development',
+    h1: 'The full process',
+    lede: 'Still Plan, Build, Review. Now every step leaves an artifact, and the gates are written down instead of remembered.',
+    loop: ['Plan', 'Build', 'Review'],
+    steps: [
+      { name: 'Spec',   body: 'What it should do.',      doc: 'spec.md',            kind: 'writes' },
+      { name: 'Plan',   body: 'How it will be built.',   doc: 'plan.md · tasks.md', kind: 'writes' },
+      { name: 'Build',  body: 'One task, one commit.',   doc: 'tasks.md',           kind: 'ticks off' },
+      { name: 'Review', body: 'Evidence per criterion.', doc: 'verification.md',    kind: 'writes' },
+    ],
+    gates: [
+      { n: '1', desc: 'Approve the spec' },
+      { n: '2', desc: 'Approve the plan' },
+      { n: '3', desc: 'Accept the evidence' },
+    ],
+    shipLabel: 'And it ships like this',
+    ship: [
+      { t: 'One spec, one branch, one PR', d: 'The branch is a review boundary, not parallelism. One at a time, cut from main, short-lived.' },
+      { t: 'A different model reviews the PR', d: 'Not the family that wrote the code. Automatic on open, or summoned by comment.' },
+      { t: 'Findings are input, not orders', d: 'Adopt what stands up, decline the rest with a reason on the PR. Two rounds, then a person decides.' },
+    ],
+    bLede: 'Everything above happens on one branch. This is what happens to the branch.',
+    bCaps: ['from main', 'back to main'],
+    note: 'The artifacts commit next to the code, in the same branch — <b>so the diff carries the reasoning and the change together.</b>',
+  },
+  de: {
+    kicker: 'Spec-Driven Development',
+    h1: 'Der vollständige Prozess',
+    lede: 'Immer noch Plan, Build, Review. Nur hinterlässt jetzt jeder Schritt ein Artefakt, und die Gates stehen geschrieben statt im Gedächtnis.',
+    loop: ['Plan', 'Build', 'Review'],
+    steps: [
+      { name: 'Spec',   body: 'Was es tun soll.',        doc: 'spec.md',            kind: 'schreibt' },
+      { name: 'Plan',   body: 'Wie es gebaut wird.',     doc: 'plan.md · tasks.md', kind: 'schreibt' },
+      { name: 'Build',  body: 'Ein Task, ein Commit.',   doc: 'tasks.md',           kind: 'hakt ab' },
+      { name: 'Review', body: 'Belege je Kriterium.',    doc: 'verification.md',    kind: 'schreibt' },
+    ],
+    gates: [
+      { n: '1', desc: 'Spec freigeben' },
+      { n: '2', desc: 'Plan freigeben' },
+      { n: '3', desc: 'Belege abnehmen' },
+    ],
+    shipLabel: 'Und so geht es raus',
+    ship: [
+      { t: 'Eine Spec, ein Branch, ein PR', d: 'Der Branch ist eine Review-Grenze, keine Parallelität. Einer nach dem anderen, von main, kurzlebig.' },
+      { t: 'Ein anderes Modell reviewt den PR', d: 'Nicht die Familie, die den Code geschrieben hat. Automatisch beim Öffnen oder per Kommentar gerufen.' },
+      { t: 'Befunde sind Input, keine Befehle', d: 'Übernehmen, was standhält, den Rest mit Begründung im PR ablehnen. Zwei Runden, dann entscheidet ein Mensch.' },
+    ],
+    bLede: 'Alles oben passiert auf einem Branch. Das hier passiert mit dem Branch.',
+    bCaps: ['von main', 'zurück in main'],
+    note: 'Die Artefakte werden neben dem Code committet, im selben Branch — <b>so trägt der Diff die Begründung und die Änderung zusammen.</b>',
+  },
+};
+
+const SUB = {
+  v1:  'Variation 1 — the rail alone: the ship block leaves, the diagram takes the frame',
+  v1b: 'Variation 1b — where the ship block goes: the branch, drawn, as its own slide',
+  v2:  'Variation 2 — the diagram grows, the ship block stays as fine print',
+  v3:  'Variation 3 — one branch: the ship block folded into the drawing it describes',
+};
+
+/* Steps in columns 1/3/5/7, gates in 2/4/8. Spec and Plan share the Plan
+   hue because they are both the loop's Plan step — the lede's claim,
+   drawn. */
+const STEP_COLS = [1, 3, 5, 7];
+const GATE_COLS = [2, 4, 8];
+const HUE = ['s-plan', 's-plan', 's-build', 's-review'];
+/* The loop band's three spans: Plan owns Spec + gate 1 + Plan + gate 2,
+   Build owns its own column, Review owns Review + gate 3. Column 6 is
+   left uncovered on purpose — it is the gap between two phases. */
+const BAND = [
+  { c: '1 / 5', h: 's-plan' },
+  { c: '5 / 6', h: 's-build' },
+  { c: '7 / -1', h: 's-review' },
+];
+
+/* ── the pipeline, identical in every variation ── */
+function pipe(t, extra) {
+  let h = '<div class="pipe">';
+  h += extra && extra.bound
+    ? '<div class="bound fg-in" style="--fg-at:3"><span>' + t.ship[0].t + '</span></div>' : '';
+  h += t.loop.map(function (name, i) {
+    return '<div class="bd ' + BAND[i].h + ' fg-in" style="grid-column:' + BAND[i].c + '; --fg-at:2">'
+      + '<i></i><span>' + name + '</span><i></i></div>';
+  }).join('');
+  h += '<i class="rail" aria-hidden="true"></i>';
+  h += t.steps.map(function (s, i) {
+    const c = 'grid-column:' + STEP_COLS[i] + ';';
+    return '<div class="st ' + HUE[i] + ' fg-in" style="' + c + ' --fg-at:' + (4 + i) + '">'
+        + '<h3>' + s.name + '</h3><p>' + s.body + '</p></div>'
+      + '<i class="nd ' + HUE[i] + '" aria-hidden="true" style="' + c
+        + ' animation: fg-appear 300ms var(--ae-ease) both;'
+        + ' animation-delay: calc(60ms + ' + (4 + i) + ' * var(--fg-beat))"></i>'
+      + '<i class="lead lead--a fg-in" aria-hidden="true" style="' + c + ' --fg-at:' + (5 + i) + '"></i>'
+      + '<i class="lead lead--b fg-in" aria-hidden="true" style="' + c + ' --fg-at:' + (5 + i) + '"></i>'
+      + '<span class="doc fg-in" style="' + c + ' --fg-at:' + (5 + i) + '">'
+        + '<span class="kind">' + s.kind + '</span>'
+        + '<span class="file">' + s.doc + '</span></span>';
+  }).join('');
+  h += t.gates.map(function (g, i) {
+    const c = 'grid-column:' + GATE_COLS[i] + ';';
+    return '<div class="gate fg-in" style="' + c + ' --fg-at:' + (8 + i) + '">' + g.n + '</div>'
+      + '<div class="gl fg-in" style="' + c + ' --fg-at:' + (8 + i) + '">' + g.desc + '</div>';
+  }).join('');
+  if (extra && extra.fold) {
+    h += '<i class="lead lead--rA fg-in" aria-hidden="true" style="--fg-at:11"></i>'
+      +  '<i class="lead lead--rB fg-in" aria-hidden="true" style="--fg-at:11"></i>'
+      +  '<i class="reader fg-in" aria-hidden="true" style="--fg-at:11"></i>'
+      +  '<i class="lead lead--g3 fg-in" aria-hidden="true" style="--fg-at:11"></i>'
+      +  '<i class="drop" aria-hidden="true"></i>'
+      +  '<div class="an an--branch fg-in" style="--fg-at:11"><p>' + t.ship[0].d + '</p></div>'
+      +  '<div class="an an--read fg-in" style="--fg-at:11">'
+        + '<span class="t"><i class="mach"></i>' + t.ship[1].t + '</span>'
+        + '<p>' + t.ship[1].d + '</p></div>'
+      +  '<div class="an an--find fg-in" style="--fg-at:11">'
+        + '<span class="t">' + t.ship[2].t + '</span>'
+        + '<p>' + t.ship[2].d + '</p></div>';
+  }
+  return h + '</div>';
+}
+
+/* ── V1 ── */
+function V1(t) { return pipe(t, null); }
+
+/* ── V2 ── */
+function V2(t) {
+  return pipe(t, null)
+    + '<div class="fine fg-in" style="--fg-at:11">'
+      + '<p class="fg-label lbl">' + t.shipLabel + '</p>'
+      + '<div class="row">'
+        + t.ship.map(function (s) {
+            return '<p><b>' + s.t + '</b> — ' + s.d + '</p>';
+          }).join('')
+      + '</div>'
+    + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) { return pipe(t, { bound: true, fold: true }); }
+
+/* ── V1b, the companion slide ── */
+const MARK = ['mk--ring', 'mk--read', 'mk--gate'];
+function V1B(t) {
+  let h = '<div class="brun">';
+  h += '<i class="brail" aria-hidden="true"></i>';
+  h += '<div class="cap cap--l fg-in" style="grid-column:1; --fg-at:3"><i></i><span>' + t.bCaps[0] + '</span></div>';
+  h += '<div class="cap cap--r fg-in" style="grid-column:5; --fg-at:8"><i></i><span>' + t.bCaps[1] + '</span></div>';
+  h += t.ship.map(function (s, i) {
+    const c = 'grid-column:' + (i + 2) + ';';
+    return '<div class="bt fg-in" style="' + c + ' --fg-at:' + (4 + i) + '">' + s.t + '</div>'
+      + '<i class="mk ' + MARK[i] + ' fg-in" aria-hidden="true" style="' + c + ' --fg-at:' + (4 + i) + '"></i>'
+      + '<p class="bd2 fg-in" style="' + c + ' --fg-at:' + (5 + i) + '">' + s.d + '</p>';
+  }).join('');
+  return h + '</div>';
+}
+
+const BODY = { v1: V1, v1b: V1B, v2: V2, v3: V3 };
+const HEAD = {
+  v1:  function (t) { return { k: t.kicker, h: t.h1, l: t.lede }; },
+  v2:  function (t) { return { k: t.kicker, h: t.h1, l: t.lede }; },
+  v3:  function (t) { return { k: t.kicker, h: t.h1, l: t.lede }; },
+  v1b: function (t) { return { k: t.kicker, h: t.shipLabel, l: t.bLede }; },
+};
+
+function render(v, t) {
+  const hd = HEAD[v](t);
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<p class="kicker fg-in" style="--fg-at:1">' + hd.k + '</p>'
+      + '<h1 class="fg-in" style="--fg-at:1">' + hd.h + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + hd.l + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:12"><span>' + t.note + '</span></p></div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => {
+  const map = { '1': 'v1', '2': 'v1b', '3': 'v2', '4': 'v3' };
+  if (map[e.key]) { proto = map[e.key]; mount(); } });
+mount();
+</script>
+</body>
+</html>

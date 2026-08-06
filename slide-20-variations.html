@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 20 — What a pass may claim, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   Slide 20 — "Three rules for what a pass may claim".
+   DESIGN.md calls this a set of three rules, verdict "light": the shape
+   is right and the drawing is missing. So none of the three variations
+   re-shapes the idea. They differ in WHAT CARRIES THE SCAR.
+
+   THE FACT THE SLIDE DOES NOT CURRENTLY STATE. Each of these three rules
+   was written from a false pass that actually shipped — that is recorded
+   in the repo's own CLAUDE.md and it is the whole reason the rules are
+   worth three panels rather than three bullets. One added line says so
+   (t.scar), and every variation draws the rule and the failure it came
+   from in the same object.
+
+   COLOUR. Plum is the chapter and stays on the FRAME: the spine in V1,
+   the numbered nodes in V3, the marginal bar on the scar line. It is
+   never on body text. The content carries exactly two state hues, the
+   two the deck's verdict vocabulary needs here:
+
+       pass          green   filled chip     checkmark
+       not verified  ochre   hollow, dashed  open circle
+
+   Clay is deliberately absent. These rules do not turn a pass into
+   "wrong"; they turn it into "not verified", and the deck insists that
+   is a precise statement about evidence rather than a failure. Ochre
+   exists so PENDING stops looking like failure, so spending clay here
+   would undo the argument the slide is making.
+
+   NEIGHBOURS. Slide 19 is the criteria table and slide 21 is the test
+   that cannot fail. So this slide states the rules and never re-runs
+   their examples: no rate-limit criteria, no test source. The only
+   quoted material is the three hedges, which are the rule.
+   ══════════════════════════════════════════════════════════════ */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-3); }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2);
+  color: var(--fg-ink);
+}
+/* 74ch rather than the kit's 62ch: at 62 the lede runs to three lines in
+   both languages and the head eats the band the drawing needs. Two lines
+   is the whole difference between 96% fill and 90%. */
+.proto .fg-lede { margin: 0; flex: 1 1 46ch; max-width: 74ch; }
+
+/* The head runs the lede and the scar line side by side, so the fact
+   that costs one sentence costs no vertical band of its own. */
+.headrow {
+  display: flex; align-items: flex-start; flex-wrap: wrap;
+  gap: var(--ae-space-3) var(--ae-space-7);
+  margin-bottom: var(--ae-space-3);
+}
+/* Plum on the bar, ink on the words: the chapter is allowed the frame
+   and never the body text. */
+.scar {
+  flex: 1 1 22ch; max-width: 34ch; margin: 0;
+  padding-left: var(--ae-space-4);
+  border-left: 3px solid var(--fg-review);
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small);
+  font-weight: 600; color: var(--fg-ink);
+}
+
+/* ══════════════ THE VERDICT VOCABULARY ══════════════
+   One scoped triple per verdict, so a chip states its verdict once and
+   every mark inside it recolours. Three cues, not one: hue, glyph, and
+   filled-vs-dashed. Desaturate and the distinction is still there. */
+.v-pass { --vd: var(--fg-build); --vd-d: var(--fg-build-d); --vd-tint: var(--fg-build-tint); }
+.v-wait { --vd: var(--fg-wait);  --vd-d: var(--fg-wait-d);  --vd-tint: var(--fg-wait-tint); }
+.proto i { font-style: normal; }
+
+.vd {
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  position: relative;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption); line-height: 1;
+  font-weight: 700; padding: 6px 13px; border-radius: 100px;
+}
+/* The open circle has to READ as open. At 1.1em U+25E6 renders as a dot
+   the size of a list bullet and the hollow-vs-filled cue — the half of
+   the distinction that survives greyscale — is gone. */
+.vd .g { font-size: 1.45em; line-height: 1; }
+.vd--pass { background: var(--fg-build-tint); color: var(--fg-build-d); border: 1.5px solid transparent; }
+.vd--wait { background: transparent; color: var(--fg-wait-d); border: 1.5px dashed var(--fg-wait); }
+/* The strike is INK, not clay: a pass is overturned by a person reading
+   the row, and the human is the one thing in this deck that is not
+   coloured. It is also the cue that survives greyscale — the chip keeps
+   its green, and the bar across it says the green was not earned. */
+.vd--was::after {
+  content: ''; position: absolute; left: 5px; right: 5px; top: 50%;
+  height: 2px; margin-top: -1px; border-radius: 1px; background: var(--fg-ink);
+}
+/* The pass that survived. A solid ring and a shadow, so "earned" is a
+   form difference and not a second green. */
+.vd--earned { border-color: var(--fg-build); box-shadow: var(--fg-d1); }
+
+.pair { display: inline-grid; justify-items: center; row-gap: 3px; }
+.pair .arw { color: var(--ae-cool-gray-400); font-size: 15px; line-height: 1; }
+.pair--row { display: inline-flex; align-items: center; gap: var(--ae-space-2); }
+
+.rule-t {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  letter-spacing: -0.022em; color: var(--fg-ink);
+}
+.rule-d { margin: var(--ae-space-2) 0 0; color: var(--fg-body); }
+
+/* THE TAKEAWAY IS OCHRE, NOT MINT. .fg-note is mint deck-wide, but on
+   this slide mint means "pass", and the sentence inside the block argues
+   that "not verified" is worth more than "pass". A mint block would be
+   spending the pass colour on the not-verified argument. Slide 19 makes
+   the same change for the same reason, so the chapter stays consistent.
+   One rule, one line to revert. */
+.proto .fg-note { background: var(--fg-wait-tint); color: var(--fg-wait-d); }
+.proto .fg-note::before { color: var(--fg-wait); }
+.proto .fg-note b.v-pass { color: var(--fg-build-d); }
+.proto .fg-note b.v-wait { color: var(--fg-wait-d); }
+.proto .fg-note .g { font-size: 1.3em; line-height: 1; }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE OVERTURN
+   Three bands on a plum spine, each one a verdict being taken back:
+   the chip the record carried (green, struck through in ink) above the
+   chip it had earned (ochre, hollow, dashed). The repetition is the
+   point — read down the right-hand column and the slide is a sheet of
+   three corrections, which is literally what the three rules are.
+
+   The verdict pair stacks rather than sitting side by side, so the
+   column stays ~150px wide in both languages and the prose keeps the
+   width it needs. German "Nicht geprüft" is the string that sets it.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .bands { position: relative; }
+.v1 .bd {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  column-gap: var(--ae-space-5);
+  align-items: center;
+  padding: var(--ae-space-4) 0;
+  border-bottom: 1px solid var(--fg-hair);
+}
+.v1 .bd:last-child { border-bottom: 0; }
+/* The spine is drawn as two half-segments per band rather than as one
+   absolutely positioned rail. A single rail spanning the block ran on
+   past the first and last disc and read as a stray connector; these
+   terminate exactly at the first and last disc centre, because the
+   discs are centred in their own band by align-items and each segment
+   is measured from that band's 50%. It also means the rule draws in
+   with the band it belongs to instead of on a separate delay. */
+.v1 .bd::before, .v1 .bd::after {
+  content: ''; position: absolute; left: 17px; width: 2px;
+  background: var(--fg-review-light); border-radius: 1px;
+}
+.v1 .bd::before { top: 50%; bottom: 0; }
+.v1 .bd::after  { top: 0; bottom: 50%; }
+.v1 .bd:first-child::after { content: none; }
+.v1 .bd:last-child::before { content: none; }
+.v1 .n {
+  display: flex; align-items: center; justify-content: center; flex: none;
+  position: relative; z-index: 1;
+  width: 36px; height: 36px;
+  border-radius: 999px;
+  background: var(--fg-card); border: 2px solid var(--fg-review);
+  color: var(--fg-review-d);
+  font-family: var(--ae-font-head); font-weight: 700; font-size: var(--ae-fs-h5);
+  font-variant-numeric: tabular-nums;
+}
+.v1 .txt { grid-column: 2; }
+.v1 .rule-t { font-size: var(--ae-fs-h3); line-height: 1.16; }
+.v1 .rule-d { font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); }
+.v1 .vcol { grid-column: 3; justify-self: end; }
+.v1 .paircap {
+  display: block; text-align: right; margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  color: var(--fg-faint);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THREE SPECIMENS
+   The three rules are not three statements of the same kind — they
+   catch three differently shaped failures, and each shape is drawable.
+   So each column carries its own small diagram and the columns look
+   nothing like each other, which is the whole argument for spending
+   the space: a conjunction with one half evidenced, a verdict with an
+   empty evidence cell under it, a fork with one branch driven.
+
+   All geometry is CSS borders. A stretched SVG viewBox turns a rounded
+   corner into an ellipse, and the fork in specimen 3 is nothing but
+   rounded corners.
+   ══════════════════════════════════════════════════════════════ */
+/* Three explicit rows — plate, title, prose — so the prose starts at the
+   same height in all three columns. Rule 1's title runs to two lines in
+   both languages and the other two do not; without shared rows the three
+   bodies started at three different heights and the row read as ragged. */
+.v2 .cols {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto auto auto;
+  column-gap: var(--ae-space-6); align-items: start;
+}
+.v2 .plate {
+  grid-row: 1;
+  --dh: clamp(130px, 21.5vh, 212px);
+  height: var(--dh);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  margin-bottom: var(--ae-space-4);
+  border-radius: var(--ae-radius-md);
+  background: var(--fg-card); border: 1px solid var(--fg-hair);
+  box-shadow: var(--fg-d1);
+}
+.v2 .rule-t { grid-row: 2; font-size: var(--ae-fs-h5); line-height: 1.22; }
+.v2 .rule-d { grid-row: 3; font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); }
+/* The ordinal sits in the plate's corner, not inline in the heading. As
+   an inline badge it had to be set at 0.72em to sit inside the title,
+   which rendered at 11.5px — under the deck's 14px floor. In the corner
+   it can carry its own caption size, and the heading is left as one
+   clean text block that aligns across the three columns. */
+.v2 .plate { position: relative; }
+.v2 .num {
+  position: absolute; top: var(--ae-space-3); left: var(--ae-space-3);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.75em; height: 1.75em;
+  border-radius: 999px; background: var(--fg-review-tint); color: var(--fg-review-d);
+  font-family: var(--ae-font); font-weight: 700;
+  font-size: var(--ae-fs-caption); line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── specimen 1: a criterion with two halves, one of them evidenced ── */
+.v2 .sp1 { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.v2 .halves { display: flex; align-items: center; gap: var(--ae-space-3); }
+.v2 .half {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: clamp(58px, 6vw, 82px); height: clamp(34px, 4.4vh, 46px);
+  border-radius: var(--ae-radius-sm);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 700; line-height: 1;
+}
+.v2 .half .g { font-size: 1.15em; }
+.v2 .half--x { background: var(--fg-build-tint); border: 1.5px solid var(--fg-build); color: var(--fg-build-d); }
+.v2 .half--y { background: transparent; border: 1.5px dashed var(--fg-wait); color: var(--fg-wait-d); }
+.v2 .conj {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 600; color: var(--fg-muted);
+}
+/* The brace says the two halves are ONE row, which is why marking the
+   row a pass on the strength of the left half reads as complete. */
+.v2 .brace {
+  width: clamp(150px, 16vw, 210px); height: 11px; margin-top: 7px;
+  border: 1.5px solid var(--ae-cool-gray-300); border-top: 0;
+  border-radius: 0 0 9px 9px;
+}
+.v2 .stem { width: 0; height: 9px; border-left: 1.5px solid var(--ae-cool-gray-300); }
+
+/* ── specimen 2: a verdict with nothing under it ── */
+.v2 .sp2 { display: flex; flex-direction: column; align-items: center; }
+.v2 .drop { width: 0; height: 12px; border-left: 2px dotted var(--ae-cool-gray-400); }
+.v2 .cell {
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(140px, 15vw, 200px); height: clamp(30px, 3.8vh, 40px);
+  border-radius: var(--ae-radius-sm);
+  border: 1.5px dashed var(--fg-wait); background: var(--fg-wait-tint);
+  color: var(--fg-wait-d); font-size: var(--ae-fs-caption); font-weight: 700; line-height: 1;
+}
+/* The label sits ABOVE the cell, where a field label goes. Under it the
+   pair read as a caption on a box rather than as a named cell that is
+   empty, which is the whole specimen. */
+.v2 .celllab {
+  margin-bottom: 4px; align-self: flex-start;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: 1; color: var(--fg-faint);
+}
+.v2 .sp2 .field { display: flex; flex-direction: column; }
+
+/* ── specimen 3: a fork with one branch driven ──
+   Two corners built from borders. An element carrying only its top and
+   left borders with the top-left corner rounded draws a branch going
+   up and away; bottom and left with the bottom-left corner rounded
+   draws the mirror. Nothing here can distort at any width. */
+.v2 .sp3 { position: relative; width: clamp(170px, 18vw, 232px); height: clamp(66px, 8.4vh, 92px); }
+.v2 .sp3 .trunk {
+  position: absolute; left: 0; top: 50%; width: 26%; height: 0; margin-top: -1px;
+  border-top: 2px solid var(--ae-cool-gray-400);
+}
+.v2 .sp3 .arm { position: absolute; left: 26%; width: 30%; }
+.v2 .sp3 .arm--up {
+  top: 22%; bottom: 50%;
+  border-left: 2px solid var(--ae-cool-gray-400);
+  border-top: 2px solid var(--ae-cool-gray-400);
+  border-radius: 10px 0 0 0;
+}
+.v2 .sp3 .arm--down {
+  top: 50%; bottom: 22%;
+  border-left: 2px dashed var(--fg-wait);
+  border-bottom: 2px dashed var(--fg-wait);
+  border-radius: 0 0 0 10px;
+}
+.v2 .sp3 .tip {
+  position: absolute; left: 56%; display: flex; align-items: center; gap: 6px;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 600; line-height: 1; white-space: nowrap;
+}
+.v2 .sp3 .tip .g { font-size: 1.2em; font-weight: 700; }
+.v2 .sp3 .tip--up { top: 22%; transform: translateY(-50%); color: var(--fg-build-d); }
+.v2 .sp3 .tip--down { bottom: 22%; transform: translateY(50%); color: var(--fg-wait-d); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE GAUNTLET
+   One claimed pass, three rules it has to survive. The lede says the
+   verification will get written whatever happens and that what makes
+   it mean anything is rules the agent cannot talk itself out of — so
+   the drawing is a single claim entering at the left and the same word
+   leaving at the right, having become a different thing.
+
+   Each rule hangs off the rail with the verdict it produces when it
+   bites, which is where the scar lives here: the chip on the panel is
+   what that rule turns the claimed pass into.
+
+   The rules are hollow plum rings, not ink bars. Ink is reserved for a
+   human deciding; a rule is an instrument, and the chapter hue is what
+   it belongs to. The only ink mark on this slide is the strike across
+   an overturned pass.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .gaunt {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--ae-space-5); align-items: start;
+}
+.v3 .end {
+  display: inline-flex; align-items: center; gap: var(--ae-space-3);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  color: var(--fg-muted);
+}
+.v3 .enter { grid-row: 1; grid-column: 1; justify-self: start; margin-bottom: var(--ae-space-3); }
+.v3 .exit  { grid-row: 5; grid-column: 3; justify-self: end;   margin-top: var(--ae-space-3); }
+/* The exit chip is the far end of the same line, so the line arrives at
+   it. Same stroke and same grey as the rail, and a border triangle for
+   the head — a text arrow at a different weight reads as a stray glyph,
+   which is the defect this deck has already shipped once. */
+.v3 .exit .tail {
+  flex: none; width: clamp(20px, 3vw, 46px); height: 3px;
+  background: var(--ae-cool-gray-300);
+}
+.v3 .exit .head {
+  flex: none; width: 0; height: 0;
+  border-left: 11px solid var(--ae-cool-gray-300);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+/* Gap 0 on the row, then margins only where they belong: the tail and
+   its head are ONE line and must not be separated by the flex gap. */
+.v3 .exit { gap: 0; }
+.v3 .exit .vd { margin-left: var(--ae-space-3); }
+.v3 .exit .cap { margin-left: var(--ae-space-3); }
+.v3 .rail {
+  grid-row: 2; grid-column: 1 / -1; align-self: center;
+  height: 3px; border-radius: 2px; background: var(--ae-cool-gray-300);
+  transform-origin: left center;
+  animation: v3-rail 780ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 3 * var(--fg-beat));
+}
+@keyframes v3-rail { from { transform: scaleX(0); } }
+.v3 .node {
+  grid-row: 2; justify-self: center; align-self: center; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(34px, 4.6vh, 46px); height: clamp(34px, 4.6vh, 46px);
+  border-radius: 999px;
+  background: var(--fg-card); border: 3px solid var(--fg-review);
+  color: var(--fg-review-d);
+  font-family: var(--ae-font-head); font-weight: 700; font-size: var(--ae-fs-h5);
+  font-variant-numeric: tabular-nums;
+}
+/* The drop lives in its own row rather than as a margin on the panel:
+   a margin would end the connector short of the thing it connects to. */
+.v3 .lead {
+  grid-row: 3; justify-self: center; width: 0; height: var(--ae-space-4);
+  border-left: 2px dotted var(--ae-cool-gray-400);
+}
+.v3 .pn {
+  grid-row: 4; align-self: stretch;
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card); border: 1px solid var(--fg-hair);
+  box-shadow: var(--fg-d1);
+  padding: var(--ae-space-3) var(--ae-space-5) var(--ae-space-4);
+}
+/* Centred, so the dotted lead from the rule's node lands ON the chip.
+   Left-aligned it read as a label on the panel — "this rule is not
+   verified" — rather than as what the rule turns the claimed pass into. */
+.v3 .pn .vdrow { display: flex; justify-content: center; margin-bottom: var(--ae-space-2); }
+/* Two lines reserved: rule 1's title wraps in both languages and the
+   other two do not, so without a floor the three bodies start at three
+   different heights inside three cards standing side by side. */
+.v3 .rule-t { font-size: var(--ae-fs-h5); line-height: 1.22; min-height: 2.44em; }
+.v3 .rule-d { font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); }
+
+@media print {
+  .v3 .rail { animation: none !important; }
+}
+
+@media (max-width: 1000px) {
+  .v2 .cols { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v3 .gaunt { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v3 .rail, .v3 .lead, .v3 .node { display: none; }
+  .v3 .pn, .v3 .enter, .v3 .exit { grid-column: 1; grid-row: auto; justify-self: stretch; }
+  .v1 .bd { grid-template-columns: auto minmax(0, 1fr); row-gap: var(--ae-space-3); }
+  .v1 .vcol { grid-column: 2; justify-self: start; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Overturn</button>
+        <button type="button" data-p="v2">2 · Specimens</button>
+        <button type="button" data-p="v3">3 · Gauntlet</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Title, lede, the three rules and the note are verbatim from
+   presentation-v2/sections/20-review-evidence.js.
+
+   New strings, in both languages:
+     scar     the fact the slide did not state: each rule came from a
+              false pass that shipped. It is what makes the drawing
+              mean anything.
+     vPass / vWait   the deck's own verdict words, taken from slide 19.
+     paircap  the caption over V1's verdict column.
+     enter / exit    V3's two ends of the rail.
+     the specimen labels: X, Y, "and", "Evidence", "tested", "untested".
+
+   No example is borrowed from slide 19 or 21. */
+const C = {
+  en: {
+    h1: 'Three rules for what a pass may claim',
+    lede: 'An agent asked to produce a verification will produce one. Whether it says anything depends on rules it cannot talk itself out of.',
+    scar: 'Each of the three was written from a false pass that shipped.',
+    vPass: 'Pass',
+    vWait: 'Not verified',
+    paircap: 'Recorded as → worth',
+    rules: [
+      {
+        n: '1',
+        t: 'A criterion with two halves needs evidence for both',
+        d: 'If the criterion says "an X and a Y each …", a row that evidences only X is not a pass. This is the most common false pass, because the row reads as complete.',
+      },
+      {
+        n: '2',
+        t: 'A hedged row is not a pass',
+        d: '"Covered by code review." "Correct by construction." "No live test was performed." These are precise statements about the absence of evidence. They are not verdicts.',
+      },
+      {
+        n: '3',
+        t: 'An untested branch is not verified',
+        d: 'However convincing the tested branch looks, and however carefully the code was read. The error path is where the defects are, and it is the path nobody drives.',
+      },
+    ],
+    lab: {
+      x: 'X', y: 'Y', and: 'and',
+      evidence: 'Evidence', empty: 'nothing',
+      tested: 'tested', untested: 'not driven',
+    },
+    enter: 'a pass, as written',
+    exit: 'a pass that means something',
+    note: 'A record that says <b class="v-wait"><span class="g">◦</span> not verified</b> truthfully is worth more than one that says <b class="v-pass"><span class="g">✓</span> pass</b> convincingly. The first tells you where to look; the second tells you nothing and feels better.',
+  },
+  de: {
+    h1: 'Drei Regeln dafür, was ein Pass behaupten darf',
+    lede: 'Ein Agent, der eine Verifikation erstellen soll, erstellt eine. Ob sie etwas aussagt, hängt an Regeln, um die er sich nicht herumreden kann.',
+    scar: 'Jede der drei stammt aus einem falschen Pass, der ausgeliefert wurde.',
+    vPass: 'Bestanden',
+    vWait: 'Nicht geprüft',
+    paircap: 'Protokolliert als → wert',
+    rules: [
+      {
+        n: '1',
+        t: 'Ein zweiteiliges Kriterium braucht Belege für beide Teile',
+        d: 'Heißt das Kriterium „ein X und ein Y jeweils …", ist eine Zeile mit Beleg nur für X kein Pass. Das ist der häufigste falsche Pass, weil die Zeile vollständig aussieht.',
+      },
+      {
+        n: '2',
+        t: 'Eine relativierte Zeile ist kein Pass',
+        d: '„Durch Code-Review abgedeckt." „Konstruktionsbedingt korrekt." „Kein Live-Test durchgeführt." Das sind präzise Aussagen über fehlende Belege. Urteile sind es nicht.',
+      },
+      {
+        n: '3',
+        t: 'Ein ungetesteter Zweig ist nicht geprüft',
+        d: 'Egal wie überzeugend der getestete Zweig aussieht und wie sorgfältig der Code gelesen wurde. Im Fehlerpfad sitzen die Defekte, und er ist der Pfad, den niemand fährt.',
+      },
+    ],
+    lab: {
+      x: 'X', y: 'Y', and: 'und',
+      evidence: 'Beleg', empty: 'nichts',
+      tested: 'getestet', untested: 'nicht gefahren',
+    },
+    enter: 'ein Pass, wie geschrieben',
+    exit: 'ein Pass, der etwas bedeutet',
+    note: 'Ein Protokoll, das wahrheitsgemäß <b class="v-wait"><span class="g">◦</span> nicht geprüft</b> sagt, ist mehr wert als eines, das überzeugend <b class="v-pass"><span class="g">✓</span> bestanden</b> sagt. Das erste sagt, wo man nachsehen muss; das zweite sagt nichts und fühlt sich besser an.',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the overturn: three verdicts taken back, green struck in ink, ochre earned',
+  v2: 'Variation 2 — three specimens: each rule drawn as the shape of the false pass it catches',
+  v3: 'Variation 3 — the gauntlet: one claimed pass, three rules it has to survive',
+};
+
+/* ── the two chips ── */
+function chipPass(t, mod) {
+  return '<span class="vd vd--pass v-pass' + (mod || '') + '">'
+    + '<span class="g">✓</span>' + t.vPass + '</span>';
+}
+function chipWait(t) {
+  return '<span class="vd vd--wait v-wait"><span class="g">◦</span>' + t.vWait + '</span>';
+}
+/* The scar, as one object: what the record carried, and what it had
+   earned. A ROW, not a stack. Stacked, the pair measured 89.6px against
+   70.7px of text, so the verdict column — not the prose — was setting
+   every band's height, and the block ran 3 percentage points over the
+   fill ceiling for reasons that had nothing to do with the content. The
+   row also matches the caption above it, which is already an arrow. */
+function pairRow(t) {
+  return '<span class="pair pair--row">' + chipPass(t, ' vd--was')
+    + '<span class="arw">→</span>' + chipWait(t) + '</span>';
+}
+
+/* ══════════ V1 ══════════ */
+function V1(t) {
+  return '<span class="paircap fg-in" style="--fg-at:3">' + t.paircap + '</span>'
+  + '<div class="bands">'
+    + t.rules.map(function (r, i) {
+        return '<div class="bd fg-in" style="--fg-at:' + (4 + i) + '">'
+          + '<span class="n">' + r.n + '</span>'
+          + '<div class="txt">'
+            + '<h3 class="rule-t">' + r.t + '</h3>'
+            + '<p class="rule-d">' + r.d + '</p>'
+          + '</div>'
+          + '<span class="vcol">' + pairRow(t) + '</span>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+/* ══════════ V2 ══════════ */
+function specimen(t, i) {
+  if (i === 0) {
+    return '<div class="sp1">'
+      + '<div class="halves">'
+        + '<span class="half half--x"><span class="g">✓</span>' + t.lab.x + '</span>'
+        + '<span class="conj">' + t.lab.and + '</span>'
+        + '<span class="half half--y"><span class="g">◦</span>' + t.lab.y + '</span>'
+      + '</div>'
+      + '<i class="brace" aria-hidden="true"></i>'
+      + '<i class="stem" aria-hidden="true"></i>'
+      + chipPass(t, ' vd--was')
+    + '</div>';
+  }
+  if (i === 1) {
+    return '<div class="sp2">'
+      + chipPass(t, ' vd--was')
+      + '<i class="drop" aria-hidden="true"></i>'
+      + '<span class="field">'
+        + '<span class="celllab">' + t.lab.evidence + '</span>'
+        + '<span class="cell">' + t.lab.empty + '</span>'
+      + '</span>'
+    + '</div>';
+  }
+  return '<div class="sp3">'
+    + '<i class="trunk" aria-hidden="true"></i>'
+    + '<i class="arm arm--up" aria-hidden="true"></i>'
+    + '<i class="arm arm--down" aria-hidden="true"></i>'
+    + '<span class="tip tip--up v-pass"><span class="g">✓</span>' + t.lab.tested + '</span>'
+    + '<span class="tip tip--down v-wait"><span class="g">◦</span>' + t.lab.untested + '</span>'
+  + '</div>';
+}
+function V2(t) {
+  return '<div class="cols">'
+    + t.rules.map(function (r, i) {
+        const c = 'grid-column:' + (i + 1) + '; --fg-at:' + (3 + i) + ';';
+        return '<div class="plate fg-in" style="' + c + '">'
+            + '<span class="num">' + r.n + '</span>' + specimen(t, i)
+          + '</div>'
+          + '<h3 class="rule-t fg-in" style="' + c + '">' + r.t + '</h3>'
+          + '<p class="rule-d fg-in" style="' + c + '">' + r.d + '</p>';
+      }).join('')
+  + '</div>';
+}
+
+/* ══════════ V3 ══════════ */
+function V3(t) {
+  return '<div class="gaunt">'
+    + '<span class="end enter fg-in" style="--fg-at:3">' + chipPass(t) + '<span>' + t.enter + '</span></span>'
+    + '<i class="rail" aria-hidden="true"></i>'
+    + t.rules.map(function (r, i) {
+        return '<span class="node fg-in" style="grid-column:' + (i + 1) + '; --fg-at:' + (4 + i) + '">' + r.n + '</span>'
+          + '<i class="lead fg-in" aria-hidden="true" style="grid-column:' + (i + 1) + '; --fg-at:' + (5 + i) + '"></i>'
+          + '<div class="pn fg-in" style="grid-column:' + (i + 1) + '; --fg-at:' + (5 + i) + '">'
+            + '<span class="vdrow">' + chipWait(t) + '</span>'
+            + '<h3 class="rule-t">' + r.t + '</h3>'
+            + '<p class="rule-d">' + r.d + '</p>'
+          + '</div>';
+      }).join('')
+    + '<span class="end exit fg-in" style="--fg-at:9">'
+      + '<i class="tail" aria-hidden="true"></i><i class="head" aria-hidden="true"></i>'
+      + chipPass(t, ' vd--earned') + '<span class="cap">' + t.exit + '</span></span>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+
+function render(v, t) {
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<div class="headrow">'
+        + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+        + '<p class="scar fg-in" style="--fg-at:2">' + t.scar + '</p>'
+      + '</div>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:10"><span>' + t.note + '</span></p></div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

@@ -14,24 +14,20 @@ import '../sections/12-plan-traps.js';
 import '../sections/13-build.js';
 import '../sections/14-build-memory.js';
 import '../sections/15-build-skills.js';
-import '../sections/16-build-trust.js';
-import '../sections/17-build-drift.js';
-import '../sections/18-review.js';
-import '../sections/19-review-against.js';
-import '../sections/20-review-evidence.js';
-import '../sections/21-review-tautology.js';
-import '../sections/22-review-independent.js';
-import '../sections/23-review-diff.js';
-import '../sections/24-setup-kit.js';
-import '../sections/25-setup-context.js';
-import '../sections/26-dial.js';
-import '../sections/27-monday.js';
-import '../sections/28-sdd-process.js';
-import '../sections/29-sdd-spec.js';
-import '../sections/30-sdd-plan.js';
-import '../sections/31-sdd-tasks.js';
-import '../sections/32-sdd-verification.js';
-import '../sections/33-close.js';
+import '../sections/16-build-drift.js';
+import '../sections/17-review.js';
+import '../sections/18-review-against.js';
+import '../sections/19-review-evidence.js';
+import '../sections/20-review-tautology.js';
+import '../sections/21-review-independent.js';
+import '../sections/22-review-diff.js';
+import '../sections/23-setup-kit.js';
+import '../sections/24-setup-context.js';
+import '../sections/25-dial.js';
+import '../sections/26-monday.js';
+import '../sections/27-sdd-process.js';
+import '../sections/28-sdd-artifacts.js';
+import '../sections/29-close.js';
 
 import { getLang, setLang, onLangChange, pick } from './i18n.js';
 
@@ -51,24 +47,20 @@ const sections = [
   { tag: 's13-build',              title: { en: 'Build',                               de: 'Build' } },
   { tag: 's14-build-memory',       title: { en: 'Build · One Memory File',             de: 'Build · Eine Memory-Datei' } },
   { tag: 's15-build-skills',       title: { en: 'Build · Skills and MCP',              de: 'Build · Skills und MCP' } },
-  { tag: 's16-build-trust',        title: { en: 'Build · Trust Boundaries',            de: 'Build · Vertrauensgrenzen' } },
-  { tag: 's17-build-drift',        title: { en: 'Build · Drift',                       de: 'Build · Abweichung' } },
-  { tag: 's18-review',             title: { en: 'Review',                              de: 'Review' } },
-  { tag: 's19-review-against',     title: { en: 'Review · Against the Plan',           de: 'Review · Gegen den Plan' } },
-  { tag: 's20-review-evidence',    title: { en: 'Review · What a Pass May Claim',      de: 'Review · Was ein Pass behaupten darf' } },
-  { tag: 's21-review-tautology',   title: { en: 'Review · The Test That Cannot Fail',  de: 'Review · Der Test, der nicht scheitern kann' } },
-  { tag: 's22-review-independent', title: { en: 'Review · Who Reviews',                de: 'Review · Wer reviewt' } },
-  { tag: 's23-review-diff',        title: { en: 'Review · Read Every Diff',            de: 'Review · Jeden Diff lesen' } },
-  { tag: 's24-setup-kit',          title: { en: 'Setup · What You Give It',            de: 'Setup · Was du ihm gibst' } },
-  { tag: 's25-setup-context',      title: { en: 'Setup · What It Costs',               de: 'Setup · Was es kostet' } },
-  { tag: 's26-dial',               title: { en: 'How Much Of This',                    de: 'Wie viel davon' } },
-  { tag: 's27-monday',             title: { en: 'The Smallest Version',                de: 'Die kleinste Fassung' } },
-  { tag: 's28-sdd-process',        title: { en: 'SDD · The Full Process',              de: 'SDD · Der vollständige Prozess' } },
-  { tag: 's29-sdd-spec',           title: { en: 'SDD · spec.md',                       de: 'SDD · spec.md' } },
-  { tag: 's30-sdd-plan',           title: { en: 'SDD · plan.md',                       de: 'SDD · plan.md' } },
-  { tag: 's31-sdd-tasks',          title: { en: 'SDD · tasks.md',                      de: 'SDD · tasks.md' } },
-  { tag: 's32-sdd-verification',   title: { en: 'SDD · verification.md',               de: 'SDD · verification.md' } },
-  { tag: 's33-close',              title: { en: 'Thank You',                           de: 'Danke' } },
+  { tag: 's16-build-drift',        title: { en: 'Build · Drift',                       de: 'Build · Abweichung' } },
+  { tag: 's17-review',             title: { en: 'Review',                              de: 'Review' } },
+  { tag: 's18-review-against',     title: { en: 'Review · Against the Plan',           de: 'Review · Gegen den Plan' } },
+  { tag: 's19-review-evidence',    title: { en: 'Review · What a Pass May Claim',      de: 'Review · Was ein Pass behaupten darf' } },
+  { tag: 's20-review-tautology',   title: { en: 'Review · The Test That Cannot Fail',  de: 'Review · Der Test, der nicht scheitern kann' } },
+  { tag: 's21-review-independent', title: { en: 'Review · Who Reviews',                de: 'Review · Wer reviewt' } },
+  { tag: 's22-review-diff',        title: { en: 'Review · Read Every Diff',            de: 'Review · Jeden Diff lesen' } },
+  { tag: 's23-setup-kit',          title: { en: 'Setup · What You Give It',            de: 'Setup · Was du ihm gibst' } },
+  { tag: 's24-setup-context',      title: { en: 'Setup · What It Costs',               de: 'Setup · Was es kostet' } },
+  { tag: 's25-dial',               title: { en: 'How Much Of This',                    de: 'Wie viel davon' } },
+  { tag: 's26-monday',             title: { en: 'The Smallest Version',                de: 'Die kleinste Fassung' } },
+  { tag: 's27-sdd-process',        title: { en: 'SDD · The Full Process',              de: 'SDD · Der vollständige Prozess' } },
+  { tag: 's28-sdd-artifacts',      title: { en: 'SDD · The Four Artifacts',            de: 'SDD · Die vier Artefakte' } },
+  { tag: 's29-close',              title: { en: 'Thank You',                           de: 'Danke' } },
 ];
 
 const CHAPTERS = [
@@ -76,17 +68,17 @@ const CHAPTERS = [
   { label: { en: 'The Loop', de: 'Der Loop' }, index: 4,  key: 'l'  },
   { label: { en: 'Plan',     de: 'Plan' },     index: 7,  key: 'p'  },
   { label: { en: 'Build',    de: 'Build' },    index: 12, key: 'b'  },
-  { label: { en: 'Review',   de: 'Review' },   index: 17, key: 'r'  },
+  { label: { en: 'Review',   de: 'Review' },   index: 16, key: 'r'  },
   /* Setup sits after the loop rather than before it: the set of things the
      agent is given reads as the underside of Plan, Build and Review, and an
      audience that has just walked all three knows where the seams are. */
-  { label: { en: 'Setup',    de: 'Setup' },    index: 23, key: 'u'  },
-  { label: { en: 'Practice', de: 'Praxis' },   index: 25, key: 'x'  },
-  { label: { en: 'SDD',      de: 'SDD' },      index: 27, key: 's'  },
+  { label: { en: 'Setup',    de: 'Setup' },    index: 22, key: 'u'  },
+  { label: { en: 'Practice', de: 'Praxis' },   index: 24, key: 'x'  },
+  { label: { en: 'SDD',      de: 'SDD' },      index: 26, key: 's'  },
   /* The close is its own stop rather than the tail of SDD: it is where
      the links live, and it is the one slide a viewer wants to reach
      directly from anywhere in the deck. */
-  { label: { en: 'End',      de: 'Ende' },     index: 32, key: 'e'  },
+  { label: { en: 'End',      de: 'Ende' },     index: 28, key: 'e'  },
 ];
 
 /* The chapter a slide belongs to: the last one that starts at or before it.

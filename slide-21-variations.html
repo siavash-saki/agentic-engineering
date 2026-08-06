@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 21 — The test that cannot fail, three variations</title>
+
+<!-- The real deck stylesheets, so these are judged in the actual design
+     language: same fonts, tokens, elevations, motion, and the new palette.
+     Nothing here is wired into the deck. -->
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   TIER C. THE EXHIBIT IS THE HERO AND NOTHING REPLACES IT.
+
+   Slide 2 is the deck's other exhibit slide. Three diagram variations were
+   built for it and all three were rejected, because on an exhibit slide the
+   code IS the content and a picture drawn beside it competes rather than
+   serves. So no variation here swaps the test for an illustration. Two
+   things are redrawn instead:
+
+   1. ATTACHMENT. Today "what is wrong with it" sits in a column beside the
+      test and the reader has to work out which sentence is about which
+      line. In V1 and V2 each sentence is physically joined to the line it
+      is about; in V3 the two halves of the tautology are marked where they
+      stand, inside the listing.
+
+   2. THE CHAIN. "What it got past" is a SEQUENCE — a thing that travelled
+      through four stages and was waved through at every one — and it is
+      currently four bullets. A bulleted list destroys the exact property
+      that makes it damning: that it kept going. All three variations draw
+      it as a run with nodes on a line.
+
+   THE FOUR STAGES ARE NOT FOUR PEERS. Three are machines and the fourth is
+   a person, and the deck already has forms for both: a machine step is a
+   hollow ring ON the line, a human decision is a filled ink bar ACROSS it
+   (slide 7). Drawn that way, the slide says the sharper thing — the human
+   stop was there, and it stamped the test through too.
+
+   COLOUR. Review chapter, so plum is the chapter hue and it stays on the
+   frame: the labels, and nothing else. Two state hues in the content, which
+   is the whole budget:
+
+     GREEN, with a "✓" — the verdict each stage recorded.
+     OCHRE, with a "◦" — claimed but not evidenced, which is what those four
+       passes actually establish. It also marks the two halves of the
+       tautology inside the listing: that expression is the claim with no
+       evidence under it.
+
+   CLAY IS DELIBERATELY ABSENT, and today's slide spends it twice — a clay
+   wash on the marked expression and a clay "✓" on every chain bullet. Both
+   are wrong under the new vocabulary. A clay "✓" is a verdict glyph in the
+   failure hue, which says two contradictory things at once; and the test is
+   not the deck's "✕ wrong" case, it is the deck's "◦ not verified" case,
+   which is precisely why this slide is where ochre is most earned. Spending
+   clay as well would put three state hues in one slide's content.
+
+   GREYSCALE. Every distinction has a form cue: "✓" vs "◦", hollow ring vs
+   filled bar, solid rail vs dotted leader, and the two tie-boxes are boxes.
+   Desaturated, all of it still reads.
+   ══════════════════════════════════════════════════════════════ */
+.proto .head { flex: none; }
+/* "1 0 auto", not "1": the body must grow into spare space — that is what
+   centres the exhibit — but it must never SHRINK below its content, or a
+   long German string gets squeezed and painted through the takeaway.
+   "safe center" covers the other half: when the content does exceed the
+   frame, centring falls back to flex-start so the top stays reachable. */
+.proto .body { flex: 1 0 auto; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-5); }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0 0 var(--ae-space-5); max-width: 68ch; }
+
+/* A label is metadata about the frame, not body text, so it is the one
+   place the chapter hue is allowed to live. */
+.lbl { color: var(--fg-review); margin: 0 0 var(--ae-space-3); }
+
+/* ── THE EXHIBIT ────────────────────────────────────────────────
+   Near-black, because this is a listing and the deck sets file source and
+   terminals on a near-black panel. On that ground the accent has to switch
+   to its light variant: --fg-wait at #8A6410 measures 2.0:1 there, while
+   --fg-wait-light measures 8.2:1.
+
+   THE PANEL'S TYPE IS CAPPED BY WIDTH, NOT ONLY BY HEIGHT. Every type token
+   in this deck is vh-derived and .fg-wrap is capped at 1240px, so on a tall
+   projector the mono face grows while the column it sits in does not, and
+   the longest authored line (50 characters) soft-wraps — which stops the
+   exhibit looking like a file. Hence min(): the vh token, a vw term, and an
+   absolute ceiling for when .fg-wrap is pinned at its maximum. The deck's
+   14px floor outranks all three. */
+.src {
+  margin: 0;
+  font-family: var(--ae-font-mono);
+  color: #E6EDE8;
+  font-size: var(--ex-fs);
+  line-height: 1.68;
+}
+/* One span per authored line with a hanging indent: the listing's line
+   breaks are the author's, a soft wrap is the layout's, and if one ever
+   does wrap it must hang under its own line rather than impersonate a
+   line somebody wrote. */
+.src .ln { display: block; padding-left: 1.6em; text-indent: -1.6em; }
+/* The comment is neutral grey, not the deck's usual --fg-green-light. On
+   this slide green is a verdict, and a green comment would be the pass hue
+   spent on syntax. #B6C1B2 measures 9.0:1 on #16211C. */
+.src .cm { color: var(--ae-cool-gray-300); }
+
+/* THE TAUTOLOGY, MARKED. Both occurrences get the SAME box, because their
+   being the same expression is the entire defect — an identical shape twice
+   says it before any prose does, and survives greyscale, where the hue does
+   not. Ochre: this is the claim with no evidence under it. */
+.tie {
+  color: #fff; font-weight: 600;
+  border: 1.5px solid var(--fg-wait-light);
+  background: rgba(212, 179, 97, .18);
+  border-radius: 4px;
+  padding: 1px 4px;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+
+/* ── THE CHAIN'S CAST ───────────────────────────────────────────
+   A machine stage is a hollow ring; the human is a filled ink bar. Both
+   carry the "✓" they recorded, so the colour never travels without its
+   glyph — and on the ink bar the glyph switches to the light green, which
+   is the only value that clears contrast on that ground. */
+.node { display: flex; align-items: center; justify-content: center; flex: none; }
+.node--m {
+  width: 38px; height: 38px; border-radius: 999px;
+  background: var(--fg-card); border: 2.5px solid var(--ae-cool-gray-300);
+}
+.node--m .tick { color: var(--fg-green); }
+.node--h {
+  width: 34px; height: 56px; border-radius: 9px;
+  background: var(--fg-ink); box-shadow: var(--fg-d2);
+}
+.node--h .tick { color: var(--fg-green-light); }
+.tick { font-size: 19px; font-weight: 700; line-height: 1; }
+
+/* The verdict at the end of the run. A PILL, not a node: it is not a fifth
+   stage, it is what the four of them actually established. Dashed edge and
+   a "◦" so the distinction is not carried by ochre alone. */
+.verdict {
+  display: inline-flex; align-items: baseline; gap: 8px; flex: none;
+  padding: 6px 14px; border-radius: 999px;
+  border: 1.5px dashed var(--fg-wait);
+  background: var(--fg-wait-tint);
+  color: var(--fg-wait-d);
+  font-family: var(--ae-font); font-weight: 600;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  white-space: nowrap;
+}
+.verdict .vg { font-size: 1.35em; line-height: 1; font-weight: 700; }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE MARGIN
+   The listing on the left, the two halves of the diagnosis in the
+   margin on the right, each wired to the line it is about. Below
+   both, the chain as one horizontal run.
+
+   THE ROWS ARE THE ATTACHMENT. Block, chip, wire and annotation are
+   four items in ONE grid row, so every connector lands on its own
+   annotation by construction — not by a percentage that drifts the
+   moment the German wraps to an extra line. The panel is a single
+   grid item spanning all three rows behind them, so the exhibit
+   still reads as one continuous listing rather than three cards.
+   Ported from slide 9's V1, which solved the same problem.
+   ══════════════════════════════════════════════════════════════ */
+.v1 { --ex-fs: max(14px, min(calc(var(--ae-fs-small) * 0.98), 1.24vw, 18px)); }
+.v1 .grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) clamp(32px, 4.2vw, 68px) minmax(0, 0.92fr);
+  align-items: stretch;
+}
+.v1 .lbl-a { grid-column: 1; grid-row: 1; }
+.v1 .lbl-b { grid-column: 3; grid-row: 1; }
+.v1 .panel {
+  grid-column: 1; grid-row: 2 / span 3;
+  background: #16211C;
+  border-radius: var(--ae-radius-lg);
+  box-shadow: var(--fg-d2);
+}
+/* The blocks sit in the same cells as the panel and later in the DOM, so
+   they paint on top of it, and their padding is the panel's padding.
+
+   CENTRED, NOT STRETCHED. A row is as tall as the taller of its two
+   occupants, and rows 3 and 4 are set by the ANNOTATION, not by the one
+   line of code beside it. Left stretched, the code line sits at the top of
+   its row while the chip sits in the middle, and the wire then points well
+   below the line it names. Centring both ends fixes it at any wrap. */
+.v1 .blk {
+  grid-column: 1; position: relative; z-index: 1;
+  display: flex; align-items: center;
+  padding: var(--ae-space-4) var(--ae-space-6);
+}
+.v1 .blk--1 { padding-top: var(--ae-space-5); }
+.v1 .blk--3 { padding-bottom: var(--ae-space-5); }
+.v1 .blk .src { flex: 1; min-width: 0; }
+
+/* The chip hangs half over the panel's edge — it is ON the exhibit, not
+   next to it. Negative margin rather than absolute positioning, so it
+   cannot drift out of its row. The paper halo is what makes one ink disc
+   legible against BOTH grounds it straddles: near-black panel on its left,
+   paper on its right. */
+.v1 .att {
+  grid-column: 2; align-self: center;
+  display: flex; align-items: center; margin-left: -15px;
+}
+.v1 .chip {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 27px; height: 27px; border-radius: 999px;
+  background: var(--fg-ink); color: #fff;
+  box-shadow: 0 0 0 3px var(--fg-paper);
+  font-family: var(--ae-font); font-size: 14px; font-weight: 700;
+  line-height: 1; font-variant-numeric: tabular-nums;
+}
+.v1 .att .wire { flex: 1; height: 0; border-top: 2px dotted var(--ae-cool-gray-400); margin-left: 4px; }
+/* The vertical padding is what separates one annotation from the next:
+   the rows are packed to zero gap — they have to be, or the panel behind
+   them would show paper stripes — so without it the two run together. */
+.v1 .ann {
+  grid-column: 3; align-self: center;
+  padding: var(--ae-space-4) 0 var(--ae-space-4) var(--ae-space-3);
+  margin: 0;
+  font-size: var(--ae-fs-small); line-height: 1.42; color: var(--fg-body);
+}
+
+.v1 .chainband { margin-top: var(--ae-space-6); }
+.v1 .chain {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  align-items: start;
+}
+/* The rail spans from the left edge of column 1, so it enters the frame
+   before the first stage: nothing started it and nothing stopped it. */
+.v1 .rail {
+  grid-row: 1; grid-column: 1 / 5; align-self: center;
+  height: 3px; border-radius: 2px; background: var(--fg-hair);
+  transform-origin: left center;
+  animation: v1-rail 800ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 8 * var(--fg-beat));
+}
+@keyframes v1-rail { from { transform: scaleX(0); } }
+/* THE NODE IS THE GRID ITEM ITSELF, not a wrapper around it. Wrapped, the
+   wrapper inherited the grid's "align-items: start" and the 38px ring hung
+   at the top of a row the 56px bar defines — so the rail, which is centred
+   in that row, crossed every ring 9px below its middle. */
+.v1 .chain .node { grid-row: 1; align-self: center; justify-self: center; z-index: 1; }
+.v1 .cap {
+  grid-row: 2; margin: var(--ae-space-3) var(--ae-space-3) 0;
+  text-align: center;
+  font-size: var(--ae-fs-small); line-height: 1.35; color: var(--fg-ink);
+}
+.v1 .term {
+  grid-row: 1; grid-column: 5; align-self: center;
+  display: flex; align-items: center;
+}
+.v1 .term .dot {
+  flex: none; width: clamp(20px, 2.6vw, 44px); height: 0;
+  border-top: 2px dotted var(--ae-cool-gray-400);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE DESCENT
+   The chain becomes the frame's right-hand spine and runs top to
+   bottom: four stages, each stamped, and the run keeps going after
+   every one of them. Reading down is the same motion as watching a
+   pipeline go green, which is what the slide is about.
+
+   The listing and the diagnosis stay together on the left, one under
+   the other, so the exhibit is read once and completely before the
+   route it took is read at all. This is the variation with no wires:
+   it buys a taller, less interrupted exhibit and pays for it by
+   leaving the reader to map the diagnosis onto the listing.
+   ══════════════════════════════════════════════════════════════ */
+.v2 { --ex-fs: max(14px, min(calc(var(--ae-fs-small) * 1.0), 1.18vw, 19px)); }
+.v2 .cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  column-gap: var(--ae-space-7);
+  align-items: start;
+}
+.v2 .panel {
+  background: #16211C;
+  border-radius: var(--ae-radius-lg);
+  box-shadow: var(--fg-d2);
+  padding: var(--ae-space-5) var(--ae-space-6);
+}
+.v2 .reveal { margin-top: var(--ae-space-5); }
+.v2 .reveal p {
+  margin: 0;
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body);
+}
+
+.v2 .vchain {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--ae-space-4);
+}
+/* The rail spans the four stage rows only. Because each node is centred in
+   its own row, the rail already overshoots above the first and below the
+   last by half a row — which is what makes it a run that was joined and
+   left, rather than a bracket around four items. */
+.v2 .vrail {
+  grid-column: 1; grid-row: 1 / 5; justify-self: center;
+  width: 3px; border-radius: 2px; background: var(--fg-hair);
+  transform-origin: center top;
+  animation: v2-rail 800ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 8 * var(--fg-beat));
+}
+@keyframes v2-rail { from { transform: scaleY(0); } }
+.v2 .vchain .node { grid-column: 1; align-self: center; justify-self: center; z-index: 1; }
+/* Across a vertical rail the human's bar turns: it is still a bar lying
+   ACROSS the line, which is the form's whole meaning. */
+.v2 .vchain .node--h { width: 56px; height: 34px; }
+/* THE CAPTION'S PADDING IS WHAT MAKES THE RAIL A RAIL. At space-4 the rows
+   were barely taller than the 38px rings, the rail showed as four slivers,
+   and the chain read as a stack of discs rather than a run through them.
+   The line between two nodes has to be longer than the nodes are wide. */
+.v2 .vcap {
+  grid-column: 2; align-self: center; margin: 0;
+  padding: var(--ae-space-6) 0;
+  font-size: var(--ae-fs-small); line-height: 1.35; color: var(--fg-ink);
+}
+/* The leader is a FIXED drop under the last stage and the pill hangs on its
+   end, one row lower. Stretched across the terminal row instead, it ran the
+   row's full height and stopped level with nothing — a dotted line that
+   dangled past the verdict rather than arriving at it. */
+.v2 .vlead {
+  grid-column: 1; grid-row: 5; align-self: start; justify-self: center;
+  width: 0; height: var(--ae-space-6);
+  border-left: 2px dotted var(--ae-cool-gray-400);
+}
+.v2 .vterm {
+  grid-column: 1 / -1; grid-row: 6; justify-self: start;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE SIGNED-OFF SHEET
+   One object, not three. The test, the four sign-offs it collected
+   and the verdict nobody recorded are the three bands of a single
+   document — which is what it was: a file that four stages put a
+   mark on and passed along.
+
+   This is the variation that spends the most frame on the exhibit
+   and the least on commentary, which is what a Tier C slide is for.
+   It attaches at EXPRESSION level rather than line level: the two
+   halves of the comparison are boxed where they stand, and the
+   reader sees the defect before reading a word about it.
+
+   The sign-off strip is the chain, drawn as the apparatus of a form
+   rather than as a diagram beside one — four boxes on a rule, in
+   order, the last of them filled ink because a person signed it.
+   ══════════════════════════════════════════════════════════════ */
+/* THIS SLIDE IS SIZED AGAINST THE REAL STAGE, NOT THE HARNESS. The harness
+   subtracts only its header; the deck subtracts a header AND a nav bar, so
+   the stage it lands in is ~113px shorter than the viewport and every fill
+   figure measured here reads about 8 points low. V3 is the tall variation,
+   so it is trimmed to sit at ~91% of the SHORTER box rather than 91% of
+   this one — the listing keeps the largest type of the three, and the
+   paddings around it pay for it. */
+.v3 { --ex-fs: max(15px, min(calc(var(--ae-fs-small) * 1.06), 1.62vw, 22px)); }
+.v3 .sheet {
+  border-radius: var(--ae-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--fg-hair);
+  background: var(--fg-card);
+  box-shadow: var(--fg-d2);
+}
+.v3 .pane { background: #16211C; padding: var(--ae-space-4) var(--ae-space-7); }
+/* The apparatus below the listing is set a step tighter than the listing
+   itself — the pane is the hero and the sign-off strip is its footer. It is
+   also the 12px that keeps German inside 92% frame fill on a 1920x1035
+   projector, where the ochre band runs to three lines. */
+.v3 .strip { padding: var(--ae-space-4) var(--ae-space-7); }
+.v3 .stamps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  margin-top: var(--ae-space-3);
+}
+/* The rule runs behind all four boxes and out past both ends. Each box has
+   its own opaque ground, so the rule shows only in the gaps — the joins —
+   without a single absolute position. */
+.v3 .joinrule {
+  grid-row: 1; grid-column: 1 / -1; align-self: center;
+  height: 2px; background: var(--fg-hair);
+  transform-origin: left center;
+  animation: v1-rail 800ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 7 * var(--fg-beat));
+}
+.v3 .stamp {
+  grid-row: 1; justify-self: center; z-index: 1;
+  display: inline-flex; align-items: baseline; gap: 7px;
+  padding: 6px 13px; border-radius: 7px;
+  border: 1.6px solid var(--fg-green);
+  background: var(--fg-card);
+  color: var(--fg-green-d);
+  font-family: var(--ae-font); font-weight: 600;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  white-space: nowrap;
+}
+.v3 .stamp .tick { font-size: 1.15em; color: var(--fg-green); }
+/* The fourth sign-off is a person's, so it is filled ink — the deck's one
+   hard black stop, spent here on the fact that the human stop was present
+   and let it through as well. */
+.v3 .stamp--h {
+  border-color: var(--fg-ink); background: var(--fg-ink); color: #fff;
+  box-shadow: var(--fg-d1);
+}
+.v3 .stamp--h .tick { color: var(--fg-green-light); }
+.v3 .who {
+  grid-row: 2; margin: var(--ae-space-2) var(--ae-space-2) 0;
+  text-align: center;
+  font-size: var(--ae-fs-caption); line-height: 1.35; color: var(--fg-ink);
+}
+/* The band the four sign-offs should have produced. Ochre tint, because
+   the block belongs to that one state; the prose inside it stays body
+   colour, so the hue rides the verdict pill and not the paragraph. */
+/* Padding trimmed a step from the strip above it: this band is the last
+   thing on the sheet and German runs its paragraph to three lines, which
+   at space-5 pushed the takeaway 4px off the bottom of the frame. */
+.v3 .band {
+  border-top: 1px solid var(--fg-hair);
+  background: var(--fg-wait-tint);
+  padding: var(--ae-space-3) var(--ae-space-7);
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--ae-space-5); align-items: start;
+}
+.v3 .band .verdict { margin-top: 2px; }
+.v3 .band .lbl { color: var(--fg-wait-d); }
+.v3 .band p {
+  margin: 0;
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body);
+}
+
+/* ══════════════ narrow ══════════════
+   THE BREAKPOINT IS SET BY THE LISTING, NOT BY A ROUND NUMBER. Below about
+   1100px of viewport width the longest authored line — 50 mono characters —
+   no longer fits a half-width column at the deck's 14px floor, and the
+   floor outranks the fit. So the two-column shapes stack there, where a
+   full-width exhibit still holds every line unwrapped.
+
+   THE EXHIBIT SURVIVES THE STACK. Only the wires go; each annotation keeps
+   its numbered chip, so the mapping onto the listing is not lost with them.
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .v1 .grid { grid-template-columns: 1fr; }
+  .v1 .lbl-a { grid-column: 1; grid-row: 1; }
+  .v1 .panel { grid-column: 1; grid-row: 2 / span 3; }
+  .v1 .blk { grid-column: 1; }
+  /* The blocks are pinned to rows 2-4 by inline style and the panel still
+     spans them; everything else auto-places after row 4, in DOM order.
+     Hence the !important — it is overriding an inline grid-row. */
+  .v1 .att, .v1 .ann { grid-column: 1; grid-row: auto !important; }
+  .v1 .lbl-b { grid-column: 1; grid-row: 5; margin-top: var(--ae-space-5); }
+  .v1 .att { margin-left: 0; align-self: end; margin-top: var(--ae-space-4); }
+  .v1 .att .wire { display: none; }
+  .v1 .ann { align-self: start; padding: var(--ae-space-2) 0 0; }
+  /* THE CHAIN KEEPS ITS FOUR COLUMNS AND ITS RAIL. An earlier version
+     restated the template as two columns, which did nothing: every node
+     carries an inline grid-column, so columns 3 and 4 were simply recreated
+     implicitly and the only thing the rule achieved was deleting the rail —
+     leaving four rings and no run, which is the shape this redraw exists to
+     replace. Only the verdict moves: it drops to its own row, and column 5
+     collapses to zero once nothing occupies it. */
+  .v1 .term .dot { display: none; }
+  .v1 .term { grid-row: 3; grid-column: 1 / -1; justify-content: center; margin-top: var(--ae-space-5); }
+
+  .v2 .cols { grid-template-columns: 1fr; row-gap: var(--ae-space-6); }
+  /* The sign-off strip keeps all four columns for the same reason the chain
+     does: the stamps carry inline grid-columns, so restating the template as
+     two would leave columns 3 and 4 as IMPLICIT auto tracks — sized to their
+     widest caption, which is how one stage ended up three times the width of
+     its neighbour. Four equal tracks and the join rule stay. */
+  .v3 .band { grid-template-columns: 1fr; row-gap: var(--ae-space-3); }
+  /* A grid item stretches by default, and an inline-flex pill is no
+     exception: unpinned, the verdict ran the full width of the band and
+     stopped looking like a stamp. */
+  .v3 .band .verdict { justify-self: start; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Margin</button>
+        <button type="button" data-p="v2">2 · Descent</button>
+        <button type="button" data-p="v3">3 · Signed-off sheet</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/21-review-tautology.js, with the
+   listing re-expressed as its three blocks — the same six lines, split where
+   the blank lines already split them, so an annotation can be attached to one
+   of them.
+
+   THREE CHANGES TO THE STRINGS, all declared:
+
+   1. "reveal" is also carried split in two, as "notes", one per line of the
+      listing it is about. Its middle sentence opens "The second one —",
+      which refers back to "both sides of the comparison" in the sentence
+      before it; standing alone above the measurement it annotates, that
+      reference has nothing to point at, so it reads "The second measurement
+      —". One word, and only in the split copy. The whole paragraph is
+      unchanged and is what V3 shows.
+   2. "passWord" — "pass" / "bestanden" — the word on a sign-off stamp.
+   3. "verdictWord" — "not verified" / "nicht geprueft" — the deck's own
+      third verdict, already in the note on slide 20. It labels the pill at
+      the end of the chain.
+
+   Nothing is deleted. The lede, the listing, the reveal, the four chain
+   items and the note are the slide's own words. */
+const C = {
+  en: {
+    h1: 'The test that cannot fail',
+    lede: 'A regression test, written by an agent, for a bug that had reached production once already. It ran green in every pipeline for weeks.',
+    codeLabel: 'The test',
+    blocks: [
+      ['// the overlay must be gone after the toggle',
+       "await page.click('[data-testid=\"overlay-toggle\"]')"],
+      ['const hidden = await countPixels(page)'],
+      ['expect(hidden.red).toBeLessThan(hidden.red + 60)'],
+    ],
+    revealLabel: 'What is wrong with it',
+    reveal: 'Both sides of the comparison come from the same measurement. The second one — the overlay while visible — was never taken. The assertion is true for every possible value, including the ones the bug produces.',
+    notes: [
+      'The second measurement — the overlay while visible — was never taken.',
+      'Both sides of the comparison come from the same measurement. The assertion is true for every possible value, including the ones the bug produces.',
+    ],
+    chainLabel: 'What it got past',
+    chain: [
+      'The model that wrote it',
+      'A green pipeline, every run',
+      'The model that reviewed it',
+      'A human who saw a passing suite',
+    ],
+    passWord: 'pass',
+    verdictWord: 'not verified',
+    note: 'A green test proves that the test ran. <b>It does not prove that it could have failed.</b> The only way to know is to break the code on purpose and watch the test go red first.',
+  },
+  de: {
+    h1: 'Der Test, der nicht scheitern kann',
+    lede: 'Ein Regressionstest, geschrieben von einem Agenten, für einen Fehler, der es schon einmal in Produktion geschafft hatte. Er lief wochenlang in jeder Pipeline grün.',
+    codeLabel: 'Der Test',
+    blocks: [
+      ['// das Overlay muss nach dem Umschalten weg sein',
+       "await page.click('[data-testid=\"overlay-toggle\"]')"],
+      ['const hidden = await countPixels(page)'],
+      ['expect(hidden.red).toBeLessThan(hidden.red + 60)'],
+    ],
+    revealLabel: 'Was daran falsch ist',
+    reveal: 'Beide Seiten des Vergleichs stammen aus derselben Messung. Die zweite — das Overlay im sichtbaren Zustand — wurde nie erhoben. Die Zusicherung ist für jeden möglichen Wert wahr, auch für die, die der Fehler erzeugt.',
+    notes: [
+      'Die zweite Messung — das Overlay im sichtbaren Zustand — wurde nie erhoben.',
+      'Beide Seiten des Vergleichs stammen aus derselben Messung. Die Zusicherung ist für jeden möglichen Wert wahr, auch für die, die der Fehler erzeugt.',
+    ],
+    chainLabel: 'Woran er vorbeikam',
+    chain: [
+      'Am Modell, das ihn geschrieben hat',
+      'An einer grünen Pipeline, in jedem Lauf',
+      'Am Modell, das ihn reviewt hat',
+      'An einem Menschen, der eine bestandene Suite sah',
+    ],
+    passWord: 'bestanden',
+    verdictWord: 'nicht geprüft',
+    note: 'Ein grüner Test beweist, dass der Test gelaufen ist. <b>Er beweist nicht, dass er hätte scheitern können.</b> Sicherheit gibt es nur, indem man den Code absichtlich kaputt macht und den Test zuerst rot werden sieht.',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the margin: each half of the diagnosis wired to the line it is about, the chain as one run below',
+  v2: 'Variation 2 — the descent: the chain as the right-hand spine, read top to bottom',
+  v3: 'Variation 3 — the signed-off sheet: one document, its four sign-offs and the verdict nobody recorded',
+};
+
+/* The stage that is a person, not a machine. Index into t.chain. */
+const HUMAN = 3;
+
+/* One span per authored line. The comment takes the neutral grey; the
+   assertion gets both halves of the comparison boxed, and they are boxed
+   IDENTICALLY because being the same expression is the defect. The
+   replacement is keyed off "toBeLessThan" so it can only ever fire on the
+   assertion line. */
+function renderLine(l) {
+  if (!l) return '<span class="ln">&nbsp;</span>';
+  if (l.slice(0, 2) === '//') return '<span class="ln cm">' + l + '</span>';
+  if (l.indexOf('toBeLessThan') > -1) {
+    return '<span class="ln">'
+      + l.split('hidden.red').join('<span class="tie">hidden.red</span>')
+      + '</span>';
+  }
+  return '<span class="ln">' + l + '</span>';
+}
+function lines(b) { return b.map(renderLine).join(''); }
+
+/* The node carries its own grid placement and its own entrance, because it
+   IS the grid item — see the alignment note in the V1 block. */
+function nodeFor(i, style, at) {
+  const isH = i === HUMAN;
+  return '<span class="node ' + (isH ? 'node--h' : 'node--m') + ' fg-in" style="'
+    + style + ' --fg-at:' + at + '"><span class="tick">✓</span></span>';
+}
+function verdictPill(t) {
+  return '<span class="verdict"><span class="vg">◦</span>' + t.verdictWord + '</span>';
+}
+
+/* ── V1 ── */
+function V1(t) {
+  let h = '<div class="grid">'
+    + '<p class="fg-label lbl lbl-a fg-in" style="--fg-at:3">' + t.codeLabel + '</p>'
+    + '<p class="fg-label lbl lbl-b fg-in" style="--fg-at:3">' + t.revealLabel + '</p>'
+    + '<div class="panel fg-in" style="--fg-at:3"></div>';
+  t.blocks.forEach(function (b, i) {
+    const row = 'grid-row:' + (2 + i) + ';';
+    h += '<div class="blk blk--' + (i + 1) + ' fg-in" style="' + row + ' --fg-at:' + (4 + i) + '">'
+       +   '<p class="src">' + lines(b) + '</p>'
+       + '</div>';
+    if (i === 0) return;   /* the click has no annotation of its own */
+    h += '<div class="att fg-in" aria-hidden="true" style="' + row + ' --fg-at:' + (5 + i) + '">'
+       +   '<span class="chip">' + i + '</span><i class="wire"></i>'
+       + '</div>'
+       + '<p class="ann fg-in" style="' + row + ' --fg-at:' + (5 + i) + '">' + t.notes[i - 1] + '</p>';
+  });
+  h += '</div>';
+
+  let chain = '<div class="chainband">'
+    + '<p class="fg-label lbl fg-in" style="--fg-at:8">' + t.chainLabel + '</p>'
+    + '<div class="chain"><i class="rail" aria-hidden="true"></i>';
+  t.chain.forEach(function (c, i) {
+    const col = 'grid-column:' + (i + 1) + ';';
+    const at = 9 + Math.floor(i / 2);
+    chain += nodeFor(i, col, at)
+          +  '<p class="cap fg-in" style="' + col + ' --fg-at:' + at + '">' + c + '</p>';
+  });
+  chain += '<div class="term fg-in" style="--fg-at:11">'
+        +    '<i class="dot" aria-hidden="true"></i>' + verdictPill(t)
+        +  '</div>'
+        + '</div></div>';
+
+  return h + chain;
+}
+
+/* ── V2 ── */
+function V2(t) {
+  let left = '<div class="col">'
+    + '<p class="fg-label lbl fg-in" style="--fg-at:3">' + t.codeLabel + '</p>'
+    + '<div class="panel fg-in" style="--fg-at:3"><p class="src">';
+  t.blocks.forEach(function (b, i) {
+    left += lines(b) + (i < t.blocks.length - 1 ? '<span class="ln">&nbsp;</span>' : '');
+  });
+  left += '</p></div>'
+    + '<div class="reveal">'
+    +   '<p class="fg-label lbl fg-in" style="--fg-at:6">' + t.revealLabel + '</p>'
+    +   '<p class="fg-in" style="--fg-at:6">' + t.reveal + '</p>'
+    + '</div></div>';
+
+  let right = '<div class="col">'
+    + '<p class="fg-label lbl fg-in" style="--fg-at:7">' + t.chainLabel + '</p>'
+    + '<div class="vchain"><i class="vrail" aria-hidden="true"></i>';
+  t.chain.forEach(function (c, i) {
+    const row = 'grid-row:' + (i + 1) + ';';
+    const at = 8 + Math.floor(i / 2);
+    right += nodeFor(i, row, at)
+          +  '<p class="vcap fg-in" style="' + row + ' --fg-at:' + at + '">' + c + '</p>';
+  });
+  right += '<i class="vlead fg-in" aria-hidden="true" style="--fg-at:11"></i>'
+        +  '<p class="vterm fg-in" style="--fg-at:11">' + verdictPill(t) + '</p>'
+        + '</div></div>';
+
+  return '<div class="cols">' + left + right + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  let pane = '<div class="pane"><p class="src">';
+  t.blocks.forEach(function (b, i) {
+    pane += lines(b) + (i < t.blocks.length - 1 ? '<span class="ln">&nbsp;</span>' : '');
+  });
+  pane += '</p></div>';
+
+  let strip = '<div class="strip">'
+    + '<p class="fg-label lbl fg-in" style="--fg-at:6">' + t.chainLabel + '</p>'
+    + '<div class="stamps"><i class="joinrule" aria-hidden="true"></i>';
+  t.chain.forEach(function (c, i) {
+    const col = 'grid-column:' + (i + 1) + ';';
+    const at = 7 + Math.floor(i / 2);
+    strip += '<span class="stamp ' + (i === HUMAN ? 'stamp--h' : '') + ' fg-in" style="' + col + ' grid-row:1; --fg-at:' + at + '">'
+          +    '<span class="tick">✓</span>' + t.passWord
+          +  '</span>'
+          +  '<p class="who fg-in" style="' + col + ' --fg-at:' + at + '">' + c + '</p>';
+  });
+  strip += '</div></div>';
+
+  const band = '<div class="band fg-in" style="--fg-at:10">'
+    + verdictPill(t)
+    + '<div>'
+    +   '<p class="fg-label lbl">' + t.revealLabel + '</p>'
+    +   '<p>' + t.reveal + '</p>'
+    + '</div></div>';
+
+  return '<p class="fg-label lbl fg-in" style="--fg-at:3">' + t.codeLabel + '</p>'
+    + '<div class="sheet fg-in" style="--fg-at:3">' + pane + strip + band + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+
+function render(v, t) {
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot"><p class="fg-note fg-in" style="--fg-at:12"><span>' + t.note + '</span></p></div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

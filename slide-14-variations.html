@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 14 — One memory file, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   Slide 14 is a CONVERGENCE — four tools, one file — and it currently
+   renders as a two-column table of tool and path. A table lists peers
+   side by side, which is the one relation this idea does not have: the
+   point is that four separate lookups arrive at the SAME BYTES.
+
+   COLOUR. Two marks only, plus greys.
+     · INK is the file. It is the human's artifact, the thing you wrote,
+       and per pass 4 the human's mark is the hard black stop. Every file
+       object here carries a 1.5px ink edge and the middle elevation.
+     · GREEN is the Build chapter hue and it is spent on exactly one
+       thing: the command. The symlink is the mechanism that makes the
+       convergence literal rather than metaphorical.
+     · GREY is the machine's plumbing — every lane, stem, collector and
+       arrowhead the tools travel along, and every path string except the
+       one name they share.
+
+   The shared name is inked inside the grey path strings, so "AGENTS.md"
+   is visibly the same token in four different lookups before any line is
+   followed. That distinction is weight plus lightness, not hue, so it
+   survives the Greyscale button.
+
+   An ALIAS is dashed. Claude Code does not read a second file, it reads
+   the same file under a second name, and dashed-vs-solid says so without
+   colour. Same rule as the failing path on slide 6.
+
+   THE DATE STAMP STAYS. Tool mappings are dated claims (CLAUDE.md), and
+   this one will be wrong within months, so the footer carries the month
+   it was checked in all three variations.
+   ══════════════════════════════════════════════════════════════ */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h1); line-height: var(--ae-lh-h1); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 68ch; }
+.proto .fg-foot { margin-top: var(--ae-space-4); }
+
+/* ── the command: the one green thing on the slide ── */
+.cmd {
+  display: inline-flex; align-items: baseline; gap: var(--ae-space-3);
+  background: var(--fg-mint); border-radius: var(--ae-radius);
+  padding: var(--ae-space-3) var(--ae-space-4);
+}
+.cmd .lbl { color: var(--fg-green-d); }
+.cmd code {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-small);
+  line-height: 1.2; color: var(--fg-green-d); font-weight: 500;
+}
+
+/* ── the file: ink edge, middle elevation, nothing else on the slide
+      gets either. Its bar names it; its body is what belongs in it. ── */
+.file {
+  background: var(--fg-card);
+  border: 1.5px solid var(--fg-ink);
+  border-radius: var(--ae-radius-lg);
+  box-shadow: var(--fg-d2);
+  overflow: hidden;
+}
+.file__bar {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--ae-space-4); flex-wrap: wrap;
+  padding: var(--ae-space-4) var(--ae-space-5);
+  border-bottom: 1.5px solid var(--fg-ink);
+}
+.file__name {
+  font-family: var(--ae-font-mono); font-weight: 600;
+  font-size: var(--ae-fs-h3); line-height: 1.2; color: var(--fg-ink);
+}
+.file__body { padding: var(--ae-space-4) var(--ae-space-5); }
+
+/* ── one thing that belongs in the file ── */
+.hold h3 {
+  margin: 0 0 2px;
+  font-size: var(--ae-fs-h5); line-height: 1.22; color: var(--fg-ink);
+}
+.hold p {
+  margin: 0;
+  font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body);
+}
+
+/* ── path strings are plumbing: grey mono, with the one shared name
+      inked so the repetition reads before the lines are followed.
+      The size is capped as well as clamped. The type scale is tied to
+      viewport HEIGHT and the frame is capped at 1240px, so on a 1080p
+      stage a mono row grows 20% while the box it sits in does not —
+      which is how a nowrap path ends up under the arrow beside it. ── */
+.path {
+  font-family: var(--ae-font-mono);
+  font-size: min(calc(var(--ae-fs-small) * 0.94), 16px);
+  line-height: 1.35; color: var(--fg-faint);
+}
+.path b { color: var(--fg-ink); font-weight: 600; }
+
+/* ── grey geometry. Not the hairline value: a hairline is a separator,
+      and these are lines the eye is meant to travel along.
+      The trunk fades rather than rises: it is positioned with a
+      translate of its own, and fg-rise would fight that transform and
+      land the arrowhead off the line for the length of the entrance. ── */
+.trunk { display: flex; align-items: center; animation: fg-appear 340ms var(--ae-ease) both; }
+.trunk .bar { flex: none; height: 3px; background: var(--ae-cool-gray-300); }
+@keyframes grow-y { from { transform: scaleY(0); } }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE MANIFOLD
+   Four lanes on the left, each ending on a shared collector, and
+   one merged trunk arriving at the file standing on the right.
+   Read left to right it is literally the lede: four lookups, one
+   file. The file's body is what belongs in it, so "where it is"
+   and "what is in it" are one object rather than two panels.
+
+   The collector spans lane 1's centre to lane 4's centre, both
+   derived from the fixed lane height rather than eyeballed, and
+   the trunk is positioned against the LANES box, not the column,
+   so the label and the command below can never drag it off the
+   line it is supposed to leave from.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .board {
+  --gap: clamp(44px, 4.2vw, 68px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--gap);
+  align-items: center;
+}
+.v1 .left { display: flex; flex-direction: column; gap: var(--ae-space-4); }
+/* Five columns, not three: the shared name gets a column of its own so
+   the four AGENTS.md sit in a vertical stack and the prefix and suffix
+   fall away either side. That column IS the drawing's claim — the lines
+   only confirm what the alignment already says. */
+.v1 .lanes {
+  position: relative;
+  --laneh: clamp(52px, 7.6vh, 88px);
+  display: grid;
+  grid-template-columns: max-content auto max-content minmax(0, 1fr);
+  grid-auto-rows: var(--laneh);
+  align-items: center;
+  column-gap: var(--ae-space-3);
+}
+.v1 .lane { display: contents; }
+.v1 .who {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h5); line-height: 1.2; color: var(--fg-ink);
+  white-space: nowrap; margin-right: var(--ae-space-3);
+}
+.v1 .pre  { text-align: right; white-space: nowrap; }
+.v1 .name { white-space: nowrap; }
+/* The stub leaves each lane where that lane's text ENDS and runs to the
+   shared collector, so its length is the row's own — which is what a
+   manifold looks like. Parked in a fixed column instead, every line
+   started at the same x and the four of them read as a detached bracket
+   rather than as four lanes joining. */
+.v1 .tail { display: flex; align-items: center; }
+.v1 .post { flex: none; white-space: nowrap; font-size: min(var(--ae-fs-caption), 15px); }
+.v1 .stub {
+  flex: 1; min-width: clamp(22px, 2.6vw, 44px);
+  margin-left: var(--ae-space-3);
+  height: 2px; background: var(--ae-cool-gray-300);
+}
+.v1 .collector {
+  position: absolute; right: 0;
+  top: calc(var(--laneh) / 2); bottom: calc(var(--laneh) / 2);
+  width: 0; border-left: 2px solid var(--ae-cool-gray-300);
+  transform-origin: top center;
+  animation: grow-y 620ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 7 * var(--fg-beat));
+}
+.v1 .trunk {
+  position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+  animation-delay: calc(60ms + 8 * var(--fg-beat));
+}
+/* The trunk is exactly the column gap wide, so the arrowhead lands ON
+   the file's edge. Derived from --gap rather than picked, because a
+   picked width leaves a stray head floating short of the box the moment
+   the viewport changes. */
+.v1 .trunk .bar { width: calc(var(--gap) - 12px); }
+.v1 .trunk .head {
+  flex: none; width: 0; height: 0;
+  border-left: 12px solid var(--ae-cool-gray-300);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+.v1 .file { width: clamp(300px, 30vw, 400px); }
+.v1 .file__body { padding-top: var(--ae-space-2); padding-bottom: var(--ae-space-2); }
+.v1 .hold { padding: var(--ae-space-5) 0; border-bottom: 1px solid var(--fg-hair); }
+.v1 .hold:last-child { border-bottom: 0; }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE NAMEPLATE
+   No traffic at all. One slab, and four name plates clipped to
+   its top edge — the convergence stated as identity rather than
+   as flow: these are not four files being kept in sync, this is
+   one file wearing four names.
+
+   A plate is a lookup, so it is grey and hairline-edged. The slab
+   is the file, so it is ink. Claude Code's plate and stem are
+   DASHED, because CLAUDE.md is not a second file — it is the same
+   bytes under a second name, and the command underneath is what
+   makes that true. Dashed against solid is the greyscale-safe
+   half of that distinction.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .plates {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--ae-space-5); align-items: stretch;
+}
+.v2 .pw { display: flex; flex-direction: column; align-items: center; }
+/* Top-aligned, not centred. Two of the four plates carry a second path
+   line, and centring pushed their tool names up out of line with the
+   other two — four names on a row that do not share a baseline read as
+   a mistake before they read as anything else. */
+.v2 .plate {
+  flex: 1; width: 100%;
+  display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+  gap: 4px; text-align: center;
+  padding: var(--ae-space-5) var(--ae-space-3);
+  border: 1.5px solid var(--ae-cool-gray-300);
+  border-radius: var(--ae-radius);
+  background: var(--fg-card);
+}
+.v2 .plate--alias { border-style: dashed; }
+.v2 .who {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.15; color: var(--fg-ink);
+}
+.v2 .path { text-align: center; overflow-wrap: anywhere; }
+/* Capped at 15px, floored by the caption clamp at 14px: the deck's type
+   floor is 14px and caption * 0.99 dips under it on a short viewport. */
+.v2 .path--also { font-size: min(var(--ae-fs-caption), 15px); }
+.v2 .stem {
+  width: 0; height: clamp(26px, 4vh, 48px);
+  border-left: 2px solid var(--ae-cool-gray-300);
+  transform-origin: top center;
+  animation: grow-y 460ms var(--ae-ease) both;
+}
+.v2 .stem--alias { border-left-style: dashed; }
+.v2 .lbl { margin: 0 0 var(--ae-space-3); }
+.v2 .file__body { padding: var(--ae-space-6) var(--ae-space-5); }
+.v2 .holds {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--ae-space-6);
+}
+/* The slab is the full width of the frame, so its contents can take the
+   body scale rather than the small one a narrow card would force. */
+.v2 .hold h3 { font-size: var(--ae-fs-h4); line-height: var(--ae-lh-h4); margin-bottom: 3px; }
+.v2 .hold p { font-size: var(--ae-fs-body); line-height: var(--ae-lh-body); }
+.v2 .cmdrow { margin-top: var(--ae-space-5); }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE EXHIBIT
+   The file drawn as itself: real source, with the four things
+   that belong in it as its actual sections. That makes the slide
+   Tier C and gives the frame to the half of the content the table
+   layout starved — what goes IN the file — while the tool mapping
+   drops to marginalia, which is what a dated lookup table is.
+
+   The convergence is still drawn, just small: four ticks onto one
+   collector, one arrow back onto the panel. Same device as V1,
+   subordinate rather than hero.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .board {
+  --gap: clamp(48px, 4.8vw, 78px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: center;
+}
+/* Real file source, so the code face is correct throughout — including
+   the prose, because prose inside a markdown file is still that file's
+   source (slide kit, .fg-source). It is the hero here, so it is set a
+   step up from the deck's small size rather than down. */
+.v3 .src {
+  font-family: var(--ae-font-mono);
+  font-size: min(calc(var(--ae-fs-small) * 1.06), 18px);
+  line-height: 1.75;
+  padding: var(--ae-space-5);
+}
+.v3 .sec + .sec { margin-top: var(--ae-space-4); }
+.v3 .sec .h { display: block; color: var(--fg-ink); font-weight: 600; }
+.v3 .sec .h i { font-style: normal; color: var(--fg-faint); }
+.v3 .sec .t { display: block; color: var(--fg-body); }
+/* The label is indented by the stub column so it sits over the rows it
+   names, not over the connectors. */
+.v3 .margin { --stub: clamp(24px, 2.6vw, 44px); }
+/* Direct child only. The command chip's label carries .lbl too, and an
+   unscoped rule indented that instead of aligning the heading. */
+.v3 .margin > .lbl { margin: 0 0 0 calc(var(--stub) + var(--ae-space-3)); }
+.v3 .rows {
+  position: relative;
+  --rowh: clamp(56px, 8vh, 92px);
+  display: grid;
+  grid-template-columns: var(--stub) minmax(0, 1fr);
+  grid-auto-rows: var(--rowh);
+  align-items: center;
+  column-gap: var(--ae-space-3);
+  margin: var(--ae-space-2) 0;
+}
+.v3 .row { display: contents; }
+.v3 .stub { height: 2px; background: var(--ae-cool-gray-300); }
+.v3 .who {
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h5); line-height: 1.2; color: var(--fg-ink);
+}
+.v3 .path { overflow-wrap: anywhere; }
+.v3 .collector {
+  position: absolute; left: 0;
+  top: calc(var(--rowh) / 2); bottom: calc(var(--rowh) / 2);
+  width: 0; border-left: 2px solid var(--ae-cool-gray-300);
+  transform-origin: top center;
+  animation: grow-y 620ms var(--ae-ease) both;
+  animation-delay: calc(60ms + 7 * var(--fg-beat));
+}
+.v3 .trunk {
+  position: absolute; right: 100%; top: 50%; transform: translateY(-50%);
+  animation-delay: calc(60ms + 9 * var(--fg-beat));
+}
+/* Same rule as V1: the trunk is the column gap minus the arrowhead, so
+   the head lands ON the panel's edge at every viewport instead of
+   floating short of it. */
+.v3 .trunk .bar { width: calc(var(--gap) - 12px); }
+.v3 .trunk .head {
+  flex: none; width: 0; height: 0;
+  border-right: 12px solid var(--ae-cool-gray-300);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+/* Stacked, not inline: the margin column is ~450px and the label plus
+   the command do not share a line there — inline, both halves wrapped
+   mid-phrase and the chip read as a broken paragraph. */
+.v3 .cmd {
+  margin-top: var(--ae-space-3);
+  flex-direction: column; align-items: flex-start; gap: var(--ae-space-1);
+}
+.v3 .cmd code { white-space: nowrap; }
+
+/* ══════════════ NARROW ══════════════
+   The deck stacks below 900px rather than shrinking the drawing;
+   the connectors are the first thing to go, because a lane that
+   no longer runs anywhere is worse than no lane. */
+@media (max-width: 980px) {
+  .v1 .board, .v3 .board { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v1 .trunk, .v3 .trunk, .v1 .collector, .v3 .collector,
+  .v1 .stub, .v3 .stub { display: none; }
+  .v1 .lanes { grid-template-columns: max-content minmax(0, 1fr); }
+  .v3 .rows { grid-template-columns: minmax(0, 1fr); }
+  .v1 .file { width: auto; }
+  .v2 .plates, .v2 .holds { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--ae-space-4); }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Manifold</button>
+        <button type="button" data-p="v2">2 · Nameplate</button>
+        <button type="button" data-p="v3">3 · Exhibit</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/14-build-memory.js. NO NEW PROSE
+   in either language: the tool map is only decomposed, so the shared name
+   can be drawn once as the file instead of set four times as a cell.
+   "pre" and "post" are the characters that sat either side of AGENTS.md in
+   the original cell, unchanged; "opens" is the name that tool actually
+   opens, which is the whole content of the CLAUDE.md row. */
+const C = {
+  en: {
+    h1: 'One memory file, read by every tool',
+    lede: 'Each tool looks for its own file. Keeping four of them in sync is a job nobody does, so keep one file and point the others at it.',
+    cmdLabel: 'In the repository root',
+    cmd: 'ln -s AGENTS.md CLAUDE.md',
+    holdsLabel: 'What belongs in it',
+    holds: [
+      { t: 'The stack, and why', d: 'What is agreed, so it is not re-litigated every session.' },
+      { t: 'Conventions', d: 'How commits are written, where tests live, what the build command is.' },
+      { t: 'What is out of scope', d: 'Explicitly, with the reason. An agent will propose a deferred idea every time otherwise.' },
+      { t: 'How you work', d: 'The loop itself: plan first, one commit per step, who reviews.' },
+    ],
+    mapLabel: 'Where each tool looks for it',
+    file: 'AGENTS.md',
+    map: [
+      { tool: 'Claude Code', pre: 'CLAUDE.md → ', post: '', opens: 'CLAUDE.md', alias: true,  also: '' },
+      { tool: 'Codex',       pre: '', post: '',              opens: 'AGENTS.md', alias: false, also: '' },
+      { tool: 'Copilot',     pre: '', post: ' · .github/copilot-instructions.md', opens: 'AGENTS.md', alias: false, also: '· .github/copilot-instructions.md' },
+      { tool: 'Cursor',      pre: '', post: ' · .cursor/rules/',                  opens: 'AGENTS.md', alias: false, also: '· .cursor/rules/' },
+    ],
+    foot: 'Tool paths verified July 2026 — re-check before relying on them.',
+  },
+  de: {
+    h1: 'Eine Memory-Datei, gelesen von jedem Tool',
+    lede: 'Jedes Tool sucht seine eigene Datei. Vier davon synchron zu halten ist eine Aufgabe, die niemand erledigt — also eine Datei pflegen und die anderen darauf zeigen lassen.',
+    cmdLabel: 'Im Repository-Root',
+    cmd: 'ln -s AGENTS.md CLAUDE.md',
+    holdsLabel: 'Was hineingehört',
+    holds: [
+      { t: 'Der Stack, und warum', d: 'Was entschieden ist, damit es nicht jede Session neu verhandelt wird.' },
+      { t: 'Konventionen', d: 'Wie Commits geschrieben werden, wo Tests liegen, wie gebaut wird.' },
+      { t: 'Was nicht dazugehört', d: 'Ausdrücklich, mit Begründung. Sonst schlägt ein Agent jede zurückgestellte Idee erneut vor.' },
+      { t: 'Wie gearbeitet wird', d: 'Der Loop selbst: erst planen, ein Commit pro Schritt, wer reviewt.' },
+    ],
+    mapLabel: 'Wo jedes Tool danach sucht',
+    file: 'AGENTS.md',
+    map: [
+      { tool: 'Claude Code', pre: 'CLAUDE.md → ', post: '', opens: 'CLAUDE.md', alias: true,  also: '' },
+      { tool: 'Codex',       pre: '', post: '',              opens: 'AGENTS.md', alias: false, also: '' },
+      { tool: 'Copilot',     pre: '', post: ' · .github/copilot-instructions.md', opens: 'AGENTS.md', alias: false, also: '· .github/copilot-instructions.md' },
+      { tool: 'Cursor',      pre: '', post: ' · .cursor/rules/',                  opens: 'AGENTS.md', alias: false, also: '· .cursor/rules/' },
+    ],
+    foot: 'Tool-Pfade geprüft Juli 2026 — vor Gebrauch erneut prüfen.',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the manifold: four lanes converge on one trunk and arrive at the file',
+  v2: 'Variation 2 — the nameplate: one slab, four names clipped to its edge, one of them an alias',
+  v3: 'Variation 3 — the exhibit: the file as real source, the tool map as marginalia',
+};
+
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+/* The original cell, rebuilt with the one shared name inked. */
+function pathHTML(m, name) {
+  return esc(m.pre) + '<b>' + esc(name) + '</b>' + esc(m.post);
+}
+function cmdHTML(t) {
+  return '<span class="cmd"><span class="fg-label lbl">' + t.cmdLabel + '</span>'
+    + '<code>' + esc(t.cmd) + '</code></span>';
+}
+function holdHTML(h) {
+  return '<div class="hold"><h3>' + h.t + '</h3><p>' + h.d + '</p></div>';
+}
+
+/* ── V1 ── */
+function V1(t) {
+  return '<div class="board">'
+    + '<div class="left">'
+      + '<p class="fg-label fg-in" style="--fg-at:3">' + t.mapLabel + '</p>'
+      + '<div class="lanes">'
+        + t.map.map(function (m, i) {
+            const a = ' style="--fg-at:' + (4 + i) + '"';
+            return '<div class="lane">'
+              + '<span class="who fg-in"' + a + '>' + m.tool + '</span>'
+              + '<span class="path pre fg-in"' + a + '>' + esc(m.pre) + '</span>'
+              + '<span class="path name fg-in"' + a + '><b>' + esc(t.file) + '</b></span>'
+              + '<span class="tail fg-in"' + a + '>'
+                + '<span class="path post">' + esc(m.post) + '</span>'
+                + '<i class="stub"></i>'
+              + '</span>'
+            + '</div>';
+          }).join('')
+        + '<i class="collector"></i>'
+        + '<span class="trunk"><i class="bar"></i><i class="head"></i></span>'
+      + '</div>'
+      + '<div class="fg-in" style="--fg-at:9">' + cmdHTML(t) + '</div>'
+    + '</div>'
+    + '<div class="file fg-in" style="--fg-at:3">'
+      + '<div class="file__bar">'
+        + '<span class="file__name">' + esc(t.file) + '</span>'
+        + '<span class="fg-label">' + t.holdsLabel + '</span>'
+      + '</div>'
+      + '<div class="file__body">' + t.holds.map(holdHTML).join('') + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V2 ── */
+function V2(t) {
+  return '<div class="slabboard">'
+    + '<p class="fg-label lbl fg-in" style="--fg-at:3">' + t.mapLabel + '</p>'
+    + '<div class="plates">'
+      + t.map.map(function (m, i) {
+          const a = ' style="--fg-at:' + (4 + i) + '"';
+          return '<div class="pw">'
+            + '<div class="plate' + (m.alias ? ' plate--alias' : '') + ' fg-in"' + a + '>'
+              + '<span class="who">' + m.tool + '</span>'
+              + '<span class="path"><b>' + esc(m.opens) + '</b></span>'
+              + (m.also ? '<span class="path path--also">' + esc(m.also) + '</span>' : '')
+            + '</div>'
+            + '<i class="stem' + (m.alias ? ' stem--alias' : '') + '"'
+              + ' style="animation-delay: calc(60ms + ' + (5 + i) + ' * var(--fg-beat))"></i>'
+          + '</div>';
+        }).join('')
+    + '</div>'
+    + '<div class="slabwrap">'
+      + '<div class="file fg-in" style="--fg-at:3">'
+        + '<div class="file__bar">'
+          + '<span class="file__name">' + esc(t.file) + '</span>'
+          + '<span class="fg-label">' + t.holdsLabel + '</span>'
+        + '</div>'
+        + '<div class="file__body"><div class="holds">'
+          + t.holds.map(function (h, i) {
+              return '<div class="fg-in" style="--fg-at:' + (6 + i) + '">' + holdHTML(h) + '</div>';
+            }).join('')
+        + '</div></div>'
+      + '</div>'
+    + '</div>'
+    + '<div class="cmdrow fg-in" style="--fg-at:10">' + cmdHTML(t) + '</div>'
+  + '</div>';
+}
+
+/* ── V3 ── */
+function V3(t) {
+  return '<div class="board">'
+    + '<div class="file fg-in" style="--fg-at:3">'
+      + '<div class="file__bar">'
+        + '<span class="file__name">' + esc(t.file) + '</span>'
+        + '<span class="fg-label">' + t.holdsLabel + '</span>'
+      + '</div>'
+      + '<div class="src">'
+        + t.holds.map(function (h, i) {
+            return '<div class="sec fg-in" style="--fg-at:' + (4 + i) + '">'
+              + '<span class="h"><i>## </i>' + h.t + '</span>'
+              + '<span class="t">' + h.d + '</span>'
+            + '</div>';
+          }).join('')
+      + '</div>'
+    + '</div>'
+    + '<div class="margin">'
+      + '<p class="fg-label lbl fg-in" style="--fg-at:4">' + t.mapLabel + '</p>'
+      + '<div class="rows">'
+        + t.map.map(function (m, i) {
+            const a = ' style="--fg-at:' + (5 + i) + '"';
+            return '<div class="row">'
+              + '<i class="stub fg-in"' + a + '></i>'
+              + '<div class="fg-in"' + a + '>'
+                + '<span class="who">' + m.tool + '</span>'
+                + '<span class="path" style="display:block">' + pathHTML(m, t.file) + '</span>'
+              + '</div>'
+            + '</div>';
+          }).join('')
+        + '<i class="collector"></i>'
+        + '<span class="trunk"><i class="head"></i><i class="bar"></i></span>'
+      + '</div>'
+      + '<div class="fg-in" style="--fg-at:10">' + cmdHTML(t) + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+
+function render(v, t) {
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot">'
+      + '<div class="fg-foot fg-in" style="--fg-at:11"><span>' + t.foot + '</span></div>'
+    + '</div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

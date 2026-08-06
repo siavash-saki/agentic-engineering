@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 18 — Review, six variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-6) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   The Review opener — the third of the three chapter openers, and the
+   last of the tier change. Today it carries 130 words in two cards, a
+   lede and a note: a content slide wearing a title, exactly as Plan and
+   Build were before their openers landed.
+
+   THIS IS WHERE PLUM OWNS THE SLIDE. Plum appears nowhere else in the
+   deck yet; slides 19-23 will spend it on single nodes. Here it is the
+   chapter's own colour and it may be loud, so the deck ends up with
+   three coloured landmarks — blue, green, plum — in a 33-slide run that
+   currently has none.
+
+   All three variations carry the LOCATOR, copied device-for-device from
+   slide 8 with the hue and the lit index changed. The three openers have
+   to read as siblings, and the locator is the piece that makes the set
+   legible as a set.
+
+   THE SHAPE QUESTION THIS SLIDE ASKS. Plan is four moves in order, so
+   its opener is a run. Review is not a run. It is a PAIR SPLIT BY WHO
+   ANSWERS: two questions with different yardsticks and different
+   answerers, and the whole point of the slide is that answering one of
+   them feels like answering both. V1 draws it as a run anyway, for
+   sibling-hood with slide 8. V2 draws the pair. V3 draws the failure
+   that the pair exists to name.
+
+   TWO FORM CUES CARRY THE ANSWERER EVERYWHERE, so the split never rests
+   on hue: the human is a FILLED INK disc, the second model is a HOLLOW
+   PLUM ring. Filled-dark against outlined survives greyscale, a
+   projector with the contrast down, and a viewer who cannot separate
+   plum from ink.
+
+   (No backticks anywhere in these comments: this block gets ported into
+   a JS template literal, where one backtick ends the string.) */
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+/* The drawing keeps its natural height instead of being shrunk to fit.
+   Without this a body that is one line too tall does not overflow — the
+   flex item shrinks and the grid rows inside it spill past their own
+   box, so scrollHeight still equals clientHeight and the overflow check
+   passes on a slide that is visibly broken. That happened here: V3 in
+   German was 21px over and measured clean. */
+.proto .body > * { flex: none; }
+.proto .foot { flex: none; margin-top: var(--ae-space-4); }
+
+.kicker {
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption);
+  font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--fg-review); margin: 0 0 var(--ae-space-2);
+}
+.chapter-h1 {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-display); line-height: 1; letter-spacing: -0.035em;
+  color: var(--fg-review-d);
+}
+.proto .fg-lede { margin: var(--ae-space-3) 0 0; max-width: 62ch; }
+
+/* ── the locator: the loop, with this step lit ──
+   Same geometry as slides 8 and 13; only the hue and the lit index change. */
+.loc { display: flex; align-items: center; gap: var(--ae-space-2); }
+.loc .dot {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  font-weight: 600; color: var(--ae-text-disabled);
+}
+.loc .dot::before {
+  content: ''; width: 10px; height: 10px; border-radius: 999px;
+  background: var(--ae-cool-gray-200);
+}
+.loc .dot.on { color: var(--fg-review-d); font-weight: 700; }
+.loc .dot.on::before { background: var(--fg-review); box-shadow: 0 0 0 4px var(--fg-review-tint); }
+.loc .sep { width: 18px; height: 2px; background: var(--fg-hair); }
+
+/* ── the answerer, told by form and not by hue ──
+   Filled ink disc  = a person. Ink is the human everywhere in this deck.
+   Hollow plum ring = a model. The machine is coloured and soft; a hollow
+   ring is the deck's existing mark for a machine step. */
+.who {
+  display: block;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 600;
+}
+.who::before {
+  content: ''; display: inline-block; vertical-align: middle;
+  width: 13px; height: 13px; border-radius: 999px;
+  margin-right: 8px; position: relative; top: -1px;
+}
+.who--you { color: var(--fg-ink); }
+.who--you::before { background: var(--fg-ink); }
+.who--bot { color: var(--fg-review-d); }
+.who--bot::before { border: 3px solid var(--fg-review); background: transparent; }
+
+/* The yardstick. A left rule in the answerer's own colour, so "measured
+   against X" is attached to a side of the split rather than floating. */
+.meas {
+  margin: 0; padding-left: var(--ae-space-3);
+  border-left: 2px solid var(--ae-cool-gray-300);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 600; color: var(--fg-muted);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   REVISION — what V1, V2 and V3 got wrong
+   All three were rejected. Two specific things came back, and both
+   are rules now rather than preferences:
+
+   1. NO "verification.md" ON THIS SLIDE, and no document object as
+      a terminal. V1 ended its run in "writes verification.md" —
+      that is the rejected element. A chapter opener must not name
+      a file the chapter has not explained yet, and the same note
+      was made on slide 13's opener, so it is a principle and not a
+      one-off. V4, V5 and V6 name no artifact at all.
+
+   2. THE TAKEAWAY IS A WARNING, SO IT IS CLAY, NOT MINT. The note
+      is the sharpest sentence on the slide and it describes a
+      failure — most people answer one question badly and the other
+      not at all. ".fg-note" is mint and reserved for takeaways;
+      the clay strip is this deck's failure device and already
+      ships on slide 8 as ".wrong". V4, V5 and V6 all carry it, and
+      in V6 it is the centre of the composition.
+
+   WHAT THE THREE OPENERS ACTUALLY SHARE. Slide 8 landed with a
+   run; the same run was rejected on 13 and on 18. So the openers
+   rhyme through the KICKER, the CHAPTER WORD AT DISPLAY SIZE, the
+   LOCATOR and the HUE — not through a shared drawing. V4-V6 keep
+   that head verbatim from slide 8 and each draws the pair its own
+   way.
+
+   AND THE PAIR IS STILL NOT A RUN. The two questions have
+   different answerers, which is a categorical split, not a step;
+   the slide's own note says the failure is doing NEITHER, not
+   doing them out of order. V4 binds them into one set, V5 encloses
+   them as the definition of the step, V6 pries them apart and puts
+   what people actually do in the gap.
+   ══════════════════════════════════════════════════════════════ */
+
+/* The warning strip. Identical device to slide 8's ".wrong", which
+   is landed and approved: clay AND dashed AND a leading cross, so
+   it still reads as the wrong one with the hue stripped out. */
+.warn {
+  display: flex; align-items: baseline; gap: var(--ae-space-3);
+  margin: 0;
+  padding: var(--ae-space-4) var(--ae-space-5);
+  border-radius: var(--ae-radius-md);
+  background: var(--fg-fail-tint); border: 1px dashed var(--fg-fail);
+  font-size: var(--ae-fs-small); line-height: 1.42; color: var(--fg-fail-d);
+}
+.warn::before { content: '\2715'; flex: none; font-weight: 700; }
+.warn b { font-weight: 700; }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE RUN
+   The plum translation of the shape that landed on slide 8 and was
+   translated once already to green on slide 13: kicker, the chapter
+   word at display size, the locator on the right, no lede; then the
+   chapter's moves as hued discs on a rail, ending in a 13px x 18px
+   arrowhead into the file the chapter writes.
+
+   THE LEDE IS GONE for the same reason it went on slide 8: each
+   column already states its yardstick and its answerer under the
+   disc, so the lede said "different evidence, different people
+   answering" a second time and the slide read as a wall again.
+
+   TWO COLUMNS, NOT FOUR, so the devices are drawn one size up. The
+   rail is cool-gray-300 — the CONNECTOR value — not cool-gray-200,
+   which is this deck's hairline and reads as a separator rather than
+   as a line the eye travels along. Rail, tail and head are one
+   continuous stroke into the document.
+
+   The discs are align-self: center, not start. Row 1 is as tall as
+   the FILE box, which is taller than a disc, so a start-aligned disc
+   sits above the rail and the line visibly misses the circles it is
+   supposed to thread.
+
+   WHAT THIS VARIATION ASSERTS AND THE CONTENT MAY NOT SUPPORT: a rail
+   between two discs says these happen in order. The chapter does run
+   in that order (19-20 answer the first question, 21-23 the second),
+   but the slide's own claim is that they are a PAIR. V2 and V3 draw
+   the pair instead.
+   ══════════════════════════════════════════════════════════════ */
+.v1 .run {
+  display: grid;
+  padding-right: var(--ae-space-3);
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+  grid-template-rows: auto auto auto auto;
+  align-items: start; column-gap: var(--ae-space-6);
+}
+.v1 .rail {
+  grid-row: 1; grid-column: 1 / 3; align-self: center;
+  height: 3px; border-radius: 2px 0 0 2px; background: var(--ae-cool-gray-300);
+  transform-origin: left center;
+  animation: s18-rail 760ms var(--ae-ease) both; animation-delay: calc(60ms + 3 * var(--fg-beat));
+}
+@keyframes s18-rail { from { transform: scaleX(0); } }
+/* "display: contents" lets each move place its four parts into the four
+   shared rows, so questions, yardsticks and prose align across columns. */
+.v1 .mv { display: contents; }
+.v1 .mv > * { text-align: center; }
+.v1 .mv__n {
+  grid-row: 1;   /* explicit: with display:contents the discs auto-place
+                    into the first free row, which is not row 1. */
+  align-self: center;
+  width: clamp(54px, 7.2vh, 84px); height: clamp(54px, 7.2vh, 84px);
+  margin: 0 auto; border-radius: 999px;
+  background: var(--fg-review); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h2); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--fg-d2); position: relative; z-index: 1;
+}
+.v1 .mv__q {
+  grid-row: 2; display: block; margin-top: var(--ae-space-5);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-review-d);
+}
+.v1 .mv__m {
+  grid-row: 3; margin-top: var(--ae-space-4);
+  display: flex; flex-direction: column; align-items: center; gap: var(--ae-space-2);
+}
+.v1 .mv__m .meas { border-left: 0; padding-left: 0; }
+.v1 .mv__d {
+  grid-row: 4; margin: var(--ae-space-4) auto 0; max-width: 36ch;
+  font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body);
+}
+/* The tail bridges the column gap so the rail and its head are one
+   continuous line rather than two marks with air between them. */
+.v1 .out {
+  grid-row: 1; grid-column: 3; align-self: center;
+  display: flex; align-items: center;
+  margin-left: calc(-1 * var(--ae-space-6));
+}
+.v1 .out .tail {
+  flex: none; width: clamp(16px, 2.2vw, 38px); height: 3px;
+  background: var(--ae-cool-gray-300);
+}
+.v1 .out .head {
+  flex: none; width: 0; height: 0;
+  border-left: 13px solid var(--ae-cool-gray-300);
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  margin-right: var(--ae-space-4);
+}
+/* Ink, not plum: the file is the thing a person signs off. */
+.v1 .doc {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: var(--ae-space-4) var(--ae-space-5); border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1.5px solid var(--fg-ink); box-shadow: var(--fg-d1);
+}
+.v1 .doc .kind { font-size: var(--ae-fs-caption); line-height: 1.2; color: var(--fg-muted); }
+.v1 .doc .file {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-small);
+  line-height: 1.2; font-weight: 600; color: var(--fg-ink);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — THE SPLIT
+   Review is not a sequence, it is a pair, and the axis it is split
+   on is WHO ANSWERS. So the answerer is promoted to the top of each
+   half and drawn: a filled ink disc for the person, a hollow plum
+   ring for the model that was not there. The divider between them is
+   the slide's actual argument — these two get conflated, and the
+   rest of the chapter keeps them apart.
+
+   The two halves are NOT peers in colour, deliberately. Ink is the
+   human and plum is the machine's half of this step; that is the same
+   rule the whole deck runs on, applied here as the split itself.
+
+   THE FAILURE SPANS BOTH HALVES, because that is what the note says:
+   running the tests answers neither question. A strip under one half
+   would be a claim about one question; it has to cross the divider.
+   ══════════════════════════════════════════════════════════════ */
+/* ONE GRID, FIVE SHARED ROWS, and the lanes are display: contents so
+   their parts land in those rows. Two independent flex columns looked
+   identical at 1280 and came apart at 1024: the German question on the
+   left wraps to two lines while the right stays on one, so every row
+   under it — yardstick, answerer, prose — sat at a different height in
+   the two halves. A pair that is the point of the slide cannot have
+   its two halves drift. */
+.v2 .split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto auto auto;
+  column-gap: var(--ae-space-6); row-gap: var(--ae-space-4);
+  align-items: start;
+}
+.v2 .setlbl { grid-column: 1 / -1; grid-row: 1; margin: 0; }
+.v2 .divide {
+  grid-row: 2 / 6; grid-column: 2; align-self: stretch;
+  width: 1px; background: var(--fg-hair);
+}
+.v2 .lane { display: contents; }
+.v2 .lane--you > * { grid-column: 1; }
+.v2 .lane--bot > * { grid-column: 3; }
+.v2 .lane .top {
+  grid-row: 2; display: flex; align-items: center; gap: var(--ae-space-4);
+  padding-top: var(--ae-space-5);
+}
+.v2 .lane--you .top { border-top: 3px solid var(--fg-ink); }
+.v2 .lane--bot .top { border-top: 3px solid var(--fg-review); }
+.v2 .mark {
+  flex: none;
+  width: clamp(44px, 5.6vh, 68px); height: clamp(44px, 5.6vh, 68px);
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h2); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.v2 .lane--you .mark { background: var(--fg-ink); color: #fff; box-shadow: var(--fg-d2); }
+.v2 .lane--bot .mark {
+  border: 4px solid var(--fg-review); color: var(--fg-review-d); background: var(--fg-card);
+}
+.v2 .lane .who { font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); }
+/* The question one step below the chapter word and one step above
+   everything else. Two of them, one per half, is the whole slide —
+   which is what a Tier A opener is supposed to look like. */
+.v2 .lane .q {
+  grid-row: 3; margin: 0;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.05; letter-spacing: -0.028em;
+  color: var(--fg-ink);
+}
+.v2 .lane .meas { grid-row: 4; }
+.v2 .lane--you .meas { border-left-color: var(--fg-ink); }
+.v2 .lane--bot .meas { border-left-color: var(--fg-review); }
+.v2 .lane .d {
+  grid-row: 5; margin: 0; max-width: 34ch;
+  font-size: var(--ae-fs-lead); line-height: 1.42; color: var(--fg-body);
+}
+/* Clay AND dashed AND a cross: three carriers, so the failure still
+   reads with the hue stripped out. */
+.v2 .miss {
+  grid-row: 6; grid-column: 1 / -1;
+  margin-top: var(--ae-space-5);
+  display: flex; align-items: baseline; gap: var(--ae-space-3);
+  padding: var(--ae-space-4) var(--ae-space-5);
+  border-radius: var(--ae-radius);
+  background: var(--fg-fail-tint); border: 1px dashed var(--fg-fail);
+  font-size: var(--ae-fs-small); line-height: 1.42; color: var(--fg-fail-d);
+}
+.v2 .miss::before { content: '\2715'; flex: none; font-weight: 700; }
+.v2 .miss b { font-weight: 700; }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE MISS
+   The sharpest line on this slide is not either question, it is what
+   happens instead of both: run the tests, call it review. So the
+   failure is the drawing. One shot leaves the test run, travels
+   between the two questions, and ends in a cross having touched
+   neither — which is exactly the sentence the note spends 24 words
+   on, and the only thing here an audience can still state an hour
+   later.
+
+   The two questions keep their full text and their answerer marks;
+   they are the targets, so they are drawn as targets rather than as
+   a card row. The lede is KEPT in this variation — unlike V1 and V2
+   the drawing here is about the failure, so the pair still wants
+   naming in words.
+
+   Clay, dashed, and a cross at the end: the shot reads as a miss with
+   every hue stripped out.
+   ══════════════════════════════════════════════════════════════ */
+/* FOUR ROWS, and the test-run box shares row 2 with the line rather
+   than spanning the whole drawing. Spanning rows 1-3 and centring
+   looked right and measured wrong: the box centred on the whole
+   block while the line sat at the top of its row, so the shot left
+   the box 38px above its middle in EN and 46px in DE, and read as a
+   rule between two cards rather than as something leaving the box.
+   Sharing one row makes both centre on the same axis. */
+.v3 .aim {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--ae-space-6); row-gap: var(--ae-space-3);
+}
+.v3 .src {
+  grid-column: 1; grid-row: 2; align-self: center;
+  max-width: 20ch; text-align: center;
+  padding: var(--ae-space-4) var(--ae-space-5); border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1px solid var(--fg-hair); box-shadow: var(--fg-d1);
+}
+.v3 .src b {
+  display: block; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.15; color: var(--fg-ink);
+}
+.v3 .src span {
+  display: block; margin-top: 3px;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); color: var(--fg-muted);
+}
+.v3 .qc {
+  grid-column: 2;
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--ae-space-4); align-items: start;
+  padding: var(--ae-space-3) var(--ae-space-5);
+  border-radius: var(--ae-radius-lg);
+  background: var(--fg-card); border: 1.5px solid var(--fg-review); box-shadow: var(--fg-d1);
+}
+.v3 .qc--1 { grid-row: 1; }
+.v3 .qc--2 { grid-row: 4; }
+.v3 .mark {
+  flex: none; align-self: start;
+  width: clamp(36px, 4.4vh, 54px); height: clamp(36px, 4.4vh, 54px);
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h3); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.v3 .qc--1 .mark { background: var(--fg-ink); color: #fff; }
+.v3 .qc--2 .mark { border: 4px solid var(--fg-review); color: var(--fg-review-d); background: var(--fg-card); }
+.v3 .qc .q {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h2); line-height: 1.1; color: var(--fg-ink);
+}
+.v3 .qc .m {
+  display: flex; flex-wrap: wrap; gap: var(--ae-space-2) var(--ae-space-5);
+  margin-top: var(--ae-space-2);
+}
+.v3 .qc--1 .meas { border-left-color: var(--fg-ink); }
+.v3 .qc--2 .meas { border-left-color: var(--fg-review); }
+.v3 .qc .d {
+  margin: var(--ae-space-2) 0 0; max-width: 76ch;
+  font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body);
+}
+/* The shot. The negative margin bridges the column gap so the line
+   leaves the test-run box rather than starting in mid-air next to it. */
+.v3 .line {
+  grid-column: 2; grid-row: 2; align-self: center;
+  margin-left: calc(-1 * var(--ae-space-6));
+  display: flex; align-items: center; gap: var(--ae-space-3);
+}
+.v3 .line i {
+  flex: 1; height: 0; border-top: 2px dashed var(--fg-fail);
+  transform-origin: left center;
+  animation: s18-shot 700ms var(--ae-ease) both; animation-delay: calc(60ms + 5 * var(--fg-beat));
+}
+.v3 .line .x {
+  flex: none; font-family: var(--ae-font); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1; color: var(--fg-fail-d);
+}
+@keyframes s18-shot { from { transform: scaleX(0); } }
+.v3 .missp {
+  grid-column: 2; grid-row: 3; margin: 0; max-width: 74ch;
+  font-size: var(--ae-fs-small); line-height: 1.42; color: var(--fg-fail-d);
+}
+.v3 .missp b { font-weight: 700; }
+
+/* ══════════════════════════════════════════════════════════════
+   V4 — THE SET
+   The pair, bound. Two rows stacked, and a plum bracket down the
+   left that spans both of them and carries the label "Two
+   questions". A bracket is the one annotation that says ONE THING
+   WITH TWO MEMBERS — where a divider says "these are apart" and a
+   rail says "these are in order", both of which are claims this
+   slide does not make. It is also why the rows are stacked rather
+   than columned: two columns are peers standing beside each other,
+   two bracketed rows are a set with two entries, and the note's
+   failure is failing the SET.
+
+   THE QUESTIONS ARE THE BIGGEST THING UNDER THE CHAPTER WORD, one
+   step down at h1. That is the Tier A move: an opener whose body
+   is two sentences a room can read in three seconds, with the
+   reasoning sitting under them for the reader clicking through
+   alone.
+
+   Answerer by form, not hue: filled ink disc for the person,
+   hollow plum ring for the model that was not there.
+   ══════════════════════════════════════════════════════════════ */
+.v4 .set {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  column-gap: var(--ae-space-5);
+  row-gap: var(--ae-space-6);
+  align-items: start;
+}
+/* Column 1 / -1, not 2 / -1: the label belongs to the bracket, so it
+   starts on the bracket's own left edge and on the chapter word's. At
+   the mark column it sat 40px in from both and read as a slip. */
+.v4 .setlbl {
+  grid-column: 1 / -1; grid-row: 1; margin: 0;
+  color: var(--fg-review-d); text-transform: uppercase; letter-spacing: 0.08em;
+}
+/* Three borders and no right edge: a bracket, not a box. Stretched
+   across both rows, so it is the thing that makes them one set. */
+.v4 .brace {
+  grid-column: 1; grid-row: 2 / 4; align-self: stretch;
+  width: clamp(14px, 1.4vw, 22px);
+  border: 3px solid var(--fg-review); border-right: 0;
+  border-radius: 9px 0 0 9px;
+}
+/* display: contents, so the mark and the text land in the shared
+   grid rows rather than inside a box of their own — the two rows
+   then keep one left edge whatever the German does to line counts. */
+.v4 .row { display: contents; }
+.v4 .mark {
+  grid-column: 2; align-self: start;
+  width: clamp(40px, 5vh, 62px); height: clamp(40px, 5vh, 62px);
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h3); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.v4 .row--you .mark { background: var(--fg-ink); color: #fff; box-shadow: var(--fg-d2); }
+.v4 .row--bot .mark {
+  border: 4px solid var(--fg-review); color: var(--fg-review-d); background: var(--fg-card);
+}
+.v4 .txt { grid-column: 3; }
+.v4 .txt .q {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.04; letter-spacing: -0.028em;
+  color: var(--fg-ink);
+}
+.v4 .txt .m {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--ae-space-2) var(--ae-space-5);
+  margin-top: var(--ae-space-3);
+}
+.v4 .row--you .meas { border-left-color: var(--fg-ink); }
+.v4 .row--bot .meas { border-left-color: var(--fg-review); }
+.v4 .txt .d {
+  margin: var(--ae-space-3) 0 0; max-width: 82ch;
+  font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V5 — THE FIELD
+   Plum owns the slide, as a ground rather than as a stroke. The
+   pair sits INSIDE a labelled plum enclosure — the cast's boundary
+   object, an area with a named edge — and the warning sits
+   OUTSIDE it. That placement is the argument: the two questions
+   are what this step is, and running the tests is not inside the
+   definition. Nothing else on the slide has to say so.
+
+   THE ANSWERER IS THE HEADER OF EACH HALF, at panel scale, and it
+   is the deck's filled-vs-hollow rule enlarged: half one wears a
+   solid ink bar with white type, half two wears a white bar with a
+   plum rule under it and a hollow ring. Two dark bars would have
+   been indistinguishable in greyscale — ink and plum are one point
+   apart on the lightness band — so the second bar is unfilled
+   instead of differently coloured.
+   ══════════════════════════════════════════════════════════════ */
+.v5 .field {
+  position: relative;
+  background: var(--fg-review-tint);
+  border: 1.5px solid var(--fg-review);
+  border-radius: var(--ae-radius-lg);
+  padding: var(--ae-space-7) var(--ae-space-6) var(--ae-space-6);
+}
+/* The named edge. A solid plum chip straddling the border, which is
+   what makes the enclosure read as a definition rather than as a
+   decorative tint panel. */
+.v5 .fieldlbl {
+  position: absolute; top: 0; left: var(--ae-space-6);
+  transform: translateY(-50%); margin: 0;
+  padding: 5px var(--ae-space-4); border-radius: 999px;
+  background: var(--fg-review); color: #fff;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+/* space-6, not space-5: the plum has to be a visible band around and
+   between the two halves, or the enclosure reads as a 1px frame and
+   the chapter hue is a stroke again rather than a ground. */
+.v5 .pair {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ae-space-6);
+}
+.v5 .half {
+  background: var(--fg-card); border-radius: var(--ae-radius);
+  box-shadow: var(--fg-d1); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.v5 .hd {
+  display: flex; align-items: center; gap: var(--ae-space-3);
+  padding: var(--ae-space-3) var(--ae-space-4);
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 700;
+}
+/* Both headers carry the same 2px bottom edge — ink's is invisible
+   against its own fill. Without it the outlined half's rule pushed
+   its question 2px below its neighbour's, which on a pair whose
+   whole point is symmetry read as a misalignment. */
+.v5 .half--you .hd { background: var(--fg-ink); color: #fff; border-bottom: 2px solid var(--fg-ink); }
+.v5 .half--bot .hd {
+  background: var(--fg-card); color: var(--fg-review-d);
+  border-bottom: 2px solid var(--fg-review);
+}
+.v5 .hd .dot {
+  flex: none; width: 26px; height: 26px; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-caption); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.v5 .half--you .hd .dot { background: #fff; color: var(--fg-ink); }
+.v5 .half--bot .hd .dot { border: 2.5px solid var(--fg-review); color: var(--fg-review-d); }
+.v5 .bd { padding: var(--ae-space-5) var(--ae-space-5) var(--ae-space-6); }
+/* h1, one step under the chapter word. At h2 the enclosure was 270px
+   tall in a 790px stage — 61% fill, which is an opener with a hole in
+   it. The questions are the thing that has to be readable from the
+   back of the room, so they are what grew. */
+/* Two lines' worth of box whether the question fills them or not.
+   One question wraps and the other does not, so without a floor the
+   yardstick and the prose sat 49px apart across the two halves — on
+   a pair whose entire claim is symmetry, that reads as a mistake
+   rather than as two lengths of sentence. */
+.v5 .bd .q {
+  margin: 0 0 var(--ae-space-4); min-height: 2.06em;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.03; letter-spacing: -0.028em;
+  color: var(--fg-ink);
+}
+.v5 .half--you .meas { border-left-color: var(--fg-ink); }
+.v5 .half--bot .meas { border-left-color: var(--fg-review); }
+.v5 .bd .d {
+  margin: var(--ae-space-3) 0 0;
+  font-size: var(--ae-fs-small); line-height: 1.45; color: var(--fg-body);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   V6 — THE GAP
+   The pair, pried apart, with what people actually do sitting in
+   the space between them and touching neither. Each question hangs
+   off a SOLID full-width rule — ink for the one you answer, plum
+   for the one a second model answers — and the clay sentence
+   floats between them: narrower than both, attached to neither,
+   dashed on all four sides. Solid-and-attached versus
+   dashed-and-floating is the whole reading, and it survives
+   greyscale because neither cue is a colour.
+
+   This is the variation the note's own wording asks for. The
+   failure is not answering the two in the wrong order, it is
+   landing between them; put the sentence at the foot of the slide
+   and it is a caption, put it here and it is the drawing.
+
+   IT WAS THREE COLUMNS FIRST — question, sentence, question —
+   which is the more literal reading of "between" and measured 59%
+   frame fill in EN and 60% in DE, an opener with a hole in it.
+   Vertical is what the content is tall enough to fill, and the
+   sentence still sits in the space the pair was pulled apart to
+   make.
+   ══════════════════════════════════════════════════════════════ */
+.v6 .gap { display: flex; flex-direction: column; gap: var(--ae-space-6); }
+.v6 .col {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--ae-space-5);
+  align-items: start;
+  padding-top: var(--ae-space-4);
+  border-top: 3px solid var(--fg-hair);
+}
+.v6 .col--you { border-top-color: var(--fg-ink); }
+.v6 .col--bot { border-top-color: var(--fg-review); }
+.v6 .mark {
+  grid-row: 1;
+  flex: none;
+  width: clamp(40px, 5vh, 62px); height: clamp(40px, 5vh, 62px);
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ae-font-head); font-size: var(--ae-fs-h3); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.v6 .col--you .mark { background: var(--fg-ink); color: #fff; box-shadow: var(--fg-d2); }
+.v6 .col--bot .mark {
+  border: 4px solid var(--fg-review); color: var(--fg-review-d); background: var(--fg-card);
+}
+.v6 .col .txt { grid-column: 2; }
+.v6 .col .q {
+  margin: 0;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h1); line-height: 1.03; letter-spacing: -0.028em;
+  color: var(--fg-ink);
+}
+.v6 .col .m {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--ae-space-2) var(--ae-space-5);
+  margin-top: var(--ae-space-3);
+}
+.v6 .col--you .meas { border-left-color: var(--fg-ink); }
+.v6 .col--bot .meas { border-left-color: var(--fg-review); }
+.v6 .col .d {
+  margin: var(--ae-space-3) 0 0; max-width: 82ch;
+  font-size: var(--ae-fs-body); line-height: 1.42; color: var(--fg-body);
+}
+/* Narrower than the rules it sits between, centred, and set one step
+   up from caption size: it is the composition's centre here, not a
+   footnote under it. The inset is what says "touches neither" — a
+   full-width strip would read as a divider between two halves, which
+   is the opposite claim. */
+.v6 .wedge {
+  align-self: center; width: 100%; max-width: 74ch;
+  margin: var(--ae-space-2) 0;
+  padding: var(--ae-space-5);
+  font-size: var(--ae-fs-body); line-height: 1.45;
+}
+
+/* Print shows resting states. These two are the only devices here with
+   keyframes the slide kit does not already guard. */
+@media print {
+  .v1 .rail, .v3 .line i { animation: none !important; }
+}
+
+/* ══════════════ narrow fallbacks ══════════════ */
+@media (max-width: 900px) {
+  .v1 .run { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v1 .rail, .v1 .out .tail, .v1 .out .head { display: none; }
+  .v2 .split { grid-template-columns: 1fr; grid-template-rows: none; row-gap: var(--ae-space-5); }
+  .v2 .divide { display: none; }
+  /* The lane becomes a real box again, so its children stop being grid
+     items and their row/column assignments no longer apply. */
+  .v2 .lane { display: flex; flex-direction: column; gap: var(--ae-space-3); grid-column: 1; }
+  .v2 .miss { grid-column: 1; grid-row: auto; margin-top: 0; }
+  .v3 .aim { grid-template-columns: 1fr; }
+  .v3 .src, .v3 .qc, .v3 .line, .v3 .missp { grid-column: 1; grid-row: auto; }
+  .v3 .line { margin-left: 0; }
+  /* The bracket is a two-row device; with one column per row it would
+     span the wrong thing, so it goes and the rows keep the marks. */
+  .v4 .set { grid-template-columns: auto minmax(0, 1fr); row-gap: var(--ae-space-5); }
+  .v4 .brace { display: none; }
+  .v4 .setlbl { grid-column: 1 / -1; }
+  .v4 .mark { grid-column: 1; }
+  .v4 .txt { grid-column: 2; }
+  /* Stacked, the two halves are one above the other and each question
+     gets the full width, so h1 buys nothing and costs 240px — 117% of
+     the stage. Down a step, and the two-line floor goes with it. */
+  .v5 .pair { grid-template-columns: 1fr; gap: var(--ae-space-4); }
+  .v5 .bd .q { font-size: var(--ae-fs-h2); line-height: 1.1; min-height: 0; }
+  .v5 .field { padding: var(--ae-space-6) var(--ae-space-4) var(--ae-space-4); }
+  .v5 .bd { padding: var(--ae-space-4) var(--ae-space-4) var(--ae-space-4); }
+  .v6 .col { grid-template-columns: 1fr; row-gap: var(--ae-space-3); }
+  .v6 .mark { grid-row: auto; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Run</button>
+        <button type="button" data-p="v2">2 · Split</button>
+        <button type="button" data-p="v3">3 · Miss</button>
+        <button type="button" data-p="v4">4 · Set</button>
+        <button type="button" data-p="v5">5 · Field</button>
+        <button type="button" data-p="v6">6 · Gap</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Verbatim from presentation-v2/sections/18-review.js. New strings are only:
+   the locator labels (the deck's own three step names), the file this
+   chapter writes — used by the rejected V1 only — a label for the pair
+   taken from the lede's own first two words, and the test-run node in V3,
+   which is the note's own clause "then run the tests" turned into an
+   object on the drawing.
+
+   V4, V5 and V6 ADD NOTHING. They use the slide's own two questions, its
+   two yardsticks, its two answerers, its note and the setLabel, so there
+   is no new wording to translate and nothing named that the chapter has
+   not earned yet. docKind, docName and the V3 strings are kept only so
+   tabs 1-3 still render for comparison. */
+const C = {
+  en: {
+    kicker: 'Step 3 of 3',
+    h1: 'Review',
+    lede: 'Two questions. They have different answers, different evidence, and different people answering them.',
+    loop: ['Plan', 'Build', 'Review'],
+    setLabel: 'Two questions',
+    qs: [
+      { n: '1', who: 'you',
+        q: 'Did we build what we agreed?',
+        meas: 'Measured against the plan',
+        by: 'Answered by you',
+        d: 'Walk the acceptance criteria one at a time. Each row needs evidence, not an opinion. This is the question the plan exists to make answerable.' },
+      { n: '2', who: 'bot',
+        q: 'Is the code any good?',
+        meas: 'Measured against the craft',
+        by: 'Answered by a model that was not there',
+        d: 'Structure, edge cases, error handling, the test that cannot fail. This one cannot be answered by the model that wrote the code, and often not by you either.' },
+    ],
+    docKind: 'writes', docName: 'verification.md',
+    note: 'Most people answer the second question badly and the first one not at all — then run the tests and call it review. <b>"It runs" answers neither.</b>',
+    shot: { t: 'Run the tests', s: 'Green, every time' },
+    missLead: 'Most people answer the second question badly and the first one not at all — then run the tests and call it review.',
+    missClaim: '"It runs" answers neither.',
+  },
+  de: {
+    kicker: 'Schritt 3 von 3',
+    h1: 'Review',
+    lede: 'Zwei Fragen. Sie haben unterschiedliche Antworten, unterschiedliche Belege und unterschiedliche Beantworter.',
+    loop: ['Plan', 'Build', 'Review'],
+    setLabel: 'Zwei Fragen',
+    qs: [
+      { n: '1', who: 'you',
+        q: 'Wurde geliefert, was vereinbart war?',
+        meas: 'Gemessen am Plan',
+        by: 'Beantwortet von dir',
+        d: 'Die Akzeptanzkriterien einzeln durchgehen. Jede Zeile braucht einen Beleg, keine Einschätzung. Für diese Frage existiert der Plan.' },
+      { n: '2', who: 'bot',
+        q: 'Taugt der Code etwas?',
+        meas: 'Gemessen am Handwerk',
+        by: 'Beantwortet von einem Modell, das nicht dabei war',
+        d: 'Struktur, Randfälle, Fehlerbehandlung, der Test, der nicht scheitern kann. Diese Frage kann das Modell, das den Code geschrieben hat, nicht beantworten — und oft du auch nicht.' },
+    ],
+    docKind: 'schreibt', docName: 'verification.md',
+    note: 'Die meisten beantworten die zweite Frage schlecht und die erste gar nicht — dann laufen die Tests, und das heißt dann Review. <b>„Es läuft" beantwortet keine von beiden.</b>',
+    shot: { t: 'Die Tests laufen lassen', s: 'Grün, jedes Mal' },
+    missLead: 'Die meisten beantworten die zweite Frage schlecht und die erste gar nicht — dann laufen die Tests, und das heißt dann Review.',
+    missClaim: '„Es läuft" beantwortet keine von beiden.',
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the run: slides 8 and 13, translated to plum  ·  REJECTED',
+  v2: 'Variation 2 — the split: a pair, drawn on the axis it is actually split on — who answers  ·  REJECTED',
+  v3: 'Variation 3 — the miss: the failure as the drawing, one shot that answers neither  ·  REJECTED',
+  v4: 'Variation 4 — the set: a bracket binds two stacked questions into one thing you either do or fail',
+  v5: 'Variation 5 — the field: plum encloses what review is, and the warning sits outside the boundary',
+  v6: 'Variation 6 — the gap: the pair pried apart, with what people actually do floating between them',
+};
+
+function loc(t) {
+  return '<div class="loc">' + t.loop.map(function (s, i) {
+    return (i ? '<i class="sep"></i>' : '') + '<span class="dot' + (i === 2 ? ' on' : '') + '">' + s + '</span>';
+  }).join('') + '</div>';
+}
+function docHTML(t) {
+  return '<span class="doc"><span class="kind">' + t.docKind + '</span><span class="file">' + t.docName + '</span></span>';
+}
+function whoHTML(q) {
+  return '<span class="who who--' + q.who + '">' + q.by + '</span>';
+}
+
+/* ── V1 · the run ── */
+function V1(t) {
+  return '<div class="run">'
+    + '<i class="rail" aria-hidden="true"></i>'
+    + t.qs.map(function (q, i) {
+        const c = 'grid-column:' + (i + 1) + ';';
+        const at = 4 + i * 2;
+        return '<div class="mv">'
+          + '<span class="mv__n fg-in" style="' + c + ' --fg-at:' + at + '">' + q.n + '</span>'
+          + '<span class="mv__q fg-in" style="' + c + ' --fg-at:' + at + '">' + q.q + '</span>'
+          + '<div class="mv__m fg-in" style="' + c + ' --fg-at:' + (at + 1) + '">'
+            + '<p class="meas">' + q.meas + '</p>' + whoHTML(q)
+          + '</div>'
+          + '<p class="mv__d fg-in" style="' + c + ' --fg-at:' + (at + 1) + '">' + q.d + '</p>'
+        + '</div>';
+      }).join('')
+    + '<div class="out fg-in" style="--fg-at:8">'
+      + '<i class="tail"></i><i class="head"></i>' + docHTML(t)
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V2 · the split ── */
+function V2(t) {
+  /* The lane is display: contents, so each part carries its own --fg-at
+     rather than inheriting one from a box that no longer generates one. */
+  const lane = function (q, i) {
+    const a = 3 + i * 2;
+    return '<div class="lane lane--' + (q.who === 'you' ? 'you' : 'bot') + '">'
+      + '<div class="top fg-in" style="--fg-at:' + a + '"><span class="mark">' + q.n + '</span>' + whoHTML(q) + '</div>'
+      + '<p class="q fg-in" style="--fg-at:' + a + '">' + q.q + '</p>'
+      + '<p class="meas fg-in" style="--fg-at:' + (a + 1) + '">' + q.meas + '</p>'
+      + '<p class="d fg-in" style="--fg-at:' + (a + 1) + '">' + q.d + '</p>'
+    + '</div>';
+  };
+  return '<div class="split">'
+    + '<p class="fg-label setlbl fg-in" style="--fg-at:3">' + t.setLabel + '</p>'
+    + lane(t.qs[0], 0)
+    + '<i class="divide fg-in" aria-hidden="true" style="--fg-at:4"></i>'
+    + lane(t.qs[1], 1)
+    + '<p class="miss fg-in" style="--fg-at:7"><span>' + t.note + '</span></p>'
+  + '</div>';
+}
+
+/* ── V3 · the miss ── */
+function V3(t) {
+  const card = function (q, i) {
+    return '<div class="qc qc--' + q.n + ' fg-in" style="--fg-at:' + (3 + i * 3) + '">'
+      + '<span class="mark">' + q.n + '</span>'
+      + '<div>'
+        + '<p class="q">' + q.q + '</p>'
+        + '<div class="m"><p class="meas">' + q.meas + '</p>' + whoHTML(q) + '</div>'
+        + '<p class="d">' + q.d + '</p>'
+      + '</div>'
+    + '</div>';
+  };
+  return '<div class="aim">'
+    + card(t.qs[0], 0)
+    + '<div class="src fg-in" style="--fg-at:4"><b>' + t.shot.t + '</b><span>' + t.shot.s + '</span></div>'
+    + '<div class="line"><i></i><span class="x fg-in" style="--fg-at:7">✕</span></div>'
+    + '<p class="missp fg-in" style="--fg-at:7">' + t.missLead + ' <b>' + t.missClaim + '</b></p>'
+    + card(t.qs[1], 1)
+  + '</div>';
+}
+
+/* ── V4 · the set ──
+   The bracket spans rows 2 and 3, so each row states its own grid-row
+   inline: the parts are placed by the shared grid, not by a box of
+   their own, which is what keeps one left edge in both languages. */
+function V4(t) {
+  return '<div class="set">'
+    + '<p class="fg-label setlbl fg-in" style="--fg-at:3">' + t.setLabel + '</p>'
+    + '<i class="brace fg-in" aria-hidden="true" style="--fg-at:3"></i>'
+    + t.qs.map(function (q, i) {
+        const r = 'grid-row:' + (2 + i) + ';';
+        const a = 4 + i * 2;
+        return '<div class="row row--' + q.who + '">'
+          + '<span class="mark fg-in" style="' + r + ' --fg-at:' + a + '">' + q.n + '</span>'
+          + '<div class="txt fg-in" style="' + r + ' --fg-at:' + a + '">'
+            + '<p class="q">' + q.q + '</p>'
+            + '<div class="m"><p class="meas">' + q.meas + '</p>' + whoHTML(q) + '</div>'
+            + '<p class="d">' + q.d + '</p>'
+          + '</div>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+/* ── V5 · the field ──
+   The answerer is the header of each half, so it is not repeated as a
+   line underneath: one statement of who, at the largest size it gets
+   anywhere in the set. */
+function V5(t) {
+  return '<div class="field fg-in" style="--fg-at:3">'
+    + '<p class="fieldlbl">' + t.setLabel + '</p>'
+    + '<div class="pair">'
+    + t.qs.map(function (q, i) {
+        return '<div class="half half--' + q.who + ' fg-in" style="--fg-at:' + (4 + i * 2) + '">'
+          + '<div class="hd"><span class="dot">' + q.n + '</span><span>' + q.by + '</span></div>'
+          + '<div class="bd">'
+            + '<p class="q">' + q.q + '</p>'
+            + '<p class="meas">' + q.meas + '</p>'
+            + '<p class="d">' + q.d + '</p>'
+          + '</div>'
+        + '</div>';
+      }).join('')
+    + '</div>'
+  + '</div>';
+}
+
+/* ── V6 · the gap ── */
+function V6(t) {
+  const col = function (q, i) {
+    return '<div class="col col--' + q.who + ' fg-in" style="--fg-at:' + (3 + i * 3) + '">'
+      + '<span class="mark">' + q.n + '</span>'
+      + '<div class="txt">'
+        + '<p class="q">' + q.q + '</p>'
+        + '<div class="m"><p class="meas">' + q.meas + '</p>' + whoHTML(q) + '</div>'
+        + '<p class="d">' + q.d + '</p>'
+      + '</div>'
+    + '</div>';
+  };
+  return '<div class="gap">'
+    + col(t.qs[0], 0)
+    + '<p class="warn wedge fg-in" style="--fg-at:5"><span>' + t.note + '</span></p>'
+    + col(t.qs[1], 1)
+  + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6 };
+/* Where the closing sentence goes, and in which treatment.
+   "note" is the mint takeaway strip — kept on V1 only, as the record of
+   what was rejected. "warn" is the clay strip: the sentence is a warning,
+   not a takeaway, and clay is this deck's failure device. V2, V3 and V6
+   draw it as an object inside the body, so a second copy in the foot
+   would be the wall this tier change removes. */
+const FOOT = { v1: 'note', v2: false, v3: false, v4: 'warn', v5: 'warn', v6: false };
+/* Only V3 keeps the lede. Every other variation states the yardstick and
+   the answerer next to each question, which is what the lede says; and
+   the approved head on slide 8 carries no lede at all. */
+const NO_LEDE = { v1: true, v2: true, v3: false, v4: true, v5: true, v6: true };
+
+function render(v, t) {
+  const head =
+    '<div class="fg-wrap head">'
+      + '<div style="display:flex; align-items:flex-end; justify-content:space-between; gap:var(--ae-space-6); flex-wrap:wrap">'
+        + '<div>'
+          + '<p class="kicker fg-in" style="--fg-at:1">' + t.kicker + '</p>'
+          + '<h1 class="chapter-h1 fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+        + '</div>'
+        + '<div class="fg-in" style="--fg-at:2">' + loc(t) + '</div>'
+      + '</div>'
+      + (NO_LEDE[v] ? '' : '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>')
+    + '</div>';
+  const foot = FOOT[v]
+    ? '<div class="fg-wrap foot">'
+      + (FOOT[v] === 'warn'
+          ? '<p class="warn fg-in" style="--fg-at:9"><span>' + t.note + '</span></p>'
+          : '<p class="fg-note fg-in" style="--fg-at:10"><span>' + t.note + '</span></p>')
+      + '</div>'
+    : '';
+  return ''
+  + '<section class="proto ' + v + '">'
+    + head
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + foot
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v4';   /* the new set opens first; 1-3 are the rejected ones */
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3','4','5','6'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>

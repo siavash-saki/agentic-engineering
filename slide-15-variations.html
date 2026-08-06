@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 15 — Skills and MCP, three variations</title>
+
+<link rel="stylesheet" href="presentation-v2/assets/fonts.css">
+<link rel="stylesheet" href="presentation-v2/assets/tokens.css">
+<link rel="stylesheet" href="presentation-v2/assets/base.css">
+<link rel="stylesheet" href="presentation-v2/core/styles.css">
+<link rel="stylesheet" href="presentation-v2/assets/theme-field-guide.css">
+<link rel="stylesheet" href="presentation-v2/core/slide-kit.css">
+
+<style>
+/* ══════════════ HARNESS ══════════════ */
+.hb { justify-self: start; display: flex; align-items: center; gap: 10px; }
+#header .header-right { display: flex; align-items: center; gap: 10px; }
+#btn-replay, #btn-grey { font-size: 12.5px; padding: 5px 12px; min-height: 0; }
+/* space-5 vertically, not space-6. The live section already pads at
+   space-5 because this slide carries roughly three times the text of the
+   drawn slides, and the deck's stage is 110px shorter than a bare
+   viewport (55px header + 55px nav) — so the 14px is the difference
+   between three variations that land and three that only fit the
+   harness. Horizontal padding is the shared gutter, unchanged. */
+#stage > .proto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: var(--ae-space-5) var(--ae-gutter);
+  background: var(--fg-paper); overflow: auto;
+}
+body.grey #stage { filter: saturate(0); }
+
+/* ══════════════ SHARED ══════════════
+   Slide 15 is a PARALLEL PAIR, and the current slide renders it as two
+   identical cards — which is exactly what a parallel pair is not. The
+   two are siblings, but they are not symmetric:
+
+     a SKILL is a procedure you own, a file sitting in your own repo;
+     an MCP SERVER is somebody else's code, running inside your session,
+     handing back text nobody on your team wrote.
+
+   So every variation here does the same two things. It draws the pair as
+   a pair, and it makes ONE HALF CARRY A MARK THE OTHER DOES NOT. The
+   mark is clay, and it always travels with a form cue — a dashed line, a
+   dashed edge, or a trailing wire that only one of the two objects has —
+   because all five hues collapse to one grey when the projector is tired.
+
+   WHAT IT DELIBERATELY DOES NOT DO: draw the boundary. Slide 16 ("Tool
+   output is data, not instructions") is the full treatment — the merged
+   context, the injected issue title, the four rules. Slide 15 only
+   REGISTERS that the second half has a boundary problem and hands it
+   over. Nothing here draws an enclosure, names prompt injection, or
+   states a rule; that is 16's frame and it should stay 16's.
+
+   Colour: Build chapter, so green — spent exactly where the deck already
+   spends it (the subtitle, the takeaway, the file paths). Clay is the
+   only other hue, and it is spent once, on the asymmetry. Ink is the
+   objects you own. Grey is the plumbing. Two hues in the content, which
+   is the ceiling. */
+
+.proto .head { flex: none; }
+.proto .body { flex: 1; display: flex; flex-direction: column; justify-content: safe center; min-height: 0; }
+.proto .foot { flex: none; margin-top: var(--ae-space-4); }
+
+/* THE 1080p TRAP, and why the measure is wider here.
+   The type scale is viewport-height-based but .fg-wrap is capped at a
+   fixed 1240px, so on the deck's stated target screen (1920x1080) the
+   type grows ~35% while the column does not — every paragraph gains
+   lines exactly where the stage has least room to spare. Measured: this
+   slide went from 89% of the real stage at 1440x900 to 98.6% at
+   1920x1080, which is an overflow, not a tight fit.
+   Widening the wrap is the fix that costs no prose. It is applied to
+   head, body and foot together so every edge still aligns, and the lede
+   keeps its own 72ch cap so the reading measure does not change with it.
+   Below 1440px viewport width the cap never binds and this is a no-op. */
+.proto .fg-wrap { max-width: 1460px; }
+
+.proto h1 {
+  margin: 0 0 var(--ae-space-2);
+  font-size: var(--ae-fs-h2); line-height: var(--ae-lh-h2); color: var(--fg-ink);
+}
+.proto .fg-lede { margin: 0; max-width: 72ch; }
+
+/* ── the pair's typography, identical for both halves ── */
+.nm {
+  margin: 0; font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h3); line-height: 1.1; color: var(--fg-ink);
+}
+.sub {
+  margin: 3px 0 0; font-size: var(--ae-fs-small); line-height: var(--ae-lh-small);
+  font-weight: 600; color: var(--fg-build-d);
+}
+.dsc { margin: 0; font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-body); }
+
+/* ── cast: the document object, the same device slide 7 uses for PLAN.md.
+      Ink edge = an artifact that is yours and is a file. ── */
+.doc {
+  display: inline-flex; flex-direction: column; align-items: flex-start; gap: 1px;
+  padding: var(--ae-space-3) var(--ae-space-4);
+  border-radius: var(--ae-radius);
+  background: var(--fg-card); border: 1.5px solid var(--fg-ink);
+  box-shadow: var(--fg-d1);
+}
+.doc .kind { font-size: var(--ae-fs-caption); line-height: 1.25; color: var(--fg-muted); }
+.doc .file {
+  font-family: var(--ae-font-mono); font-size: var(--ae-fs-small);
+  line-height: 1.3; font-weight: 600; color: var(--fg-ink);
+}
+
+/* ── rails and arrowheads, in CSS borders.
+      A stretched viewBox turns an arrowhead into a smear; a border
+      triangle cannot distort at any width. ── */
+.tail { flex: 1; height: 3px; background: var(--ae-cool-gray-300); }
+.tail--dash { height: 0; border-top: 2.5px dashed var(--fg-fail); background: none; }
+.hd-r {
+  flex: none; width: 0; height: 0;
+  border-left: 12px solid var(--ae-cool-gray-300);
+  border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+}
+.hd-r--clay { border-left-color: var(--fg-fail); }
+.hd-l {
+  flex: none; width: 0; height: 0;
+  border-right: 12px solid var(--fg-fail);
+  border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+}
+
+/* ── the asymmetry, stated. Clay AND a dashed edge AND a tag word: three
+      carriers, so desaturating loses none of it. It sits where the mint
+      takeaway usually sits, which is the point — this slide's parting
+      line is a caution, not a reassurance. ── */
+.warn {
+  display: flex; gap: var(--ae-space-4); align-items: baseline;
+  padding: var(--ae-space-3) var(--ae-space-5);
+  border-radius: var(--ae-radius-md);
+  background: var(--fg-fail-tint); border: 1.5px dashed var(--fg-fail);
+}
+.warn .tag {
+  flex: none; font-family: var(--ae-font);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--fg-fail-d);
+}
+.warn p { margin: 0; font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-fail-d); }
+.warn .nx { color: var(--fg-muted); }   /* 5.9:1 on the clay tint */
+
+.proto .fg-foot { margin-top: var(--ae-space-3); }
+
+/* ══════════════════════════════════════════════════════════════
+   V1 — THE REACH
+   One hub, two arms, and the arms are not the same length.
+
+   A skill arrives from a file that is already here: one solid arrow,
+   inward, from an ink-edged document. A server is a ROUND TRIP — out
+   to systems that are not yours, and back again on a dashed clay
+   return. The pair reads as near and far before a word is read, and
+   near/far is the whole content of the slide.
+
+   The drawing band and the prose row share ONE grid template with an
+   explicit centre width, so each column of prose sits under its own
+   arm by construction rather than by a percentage that drifts the
+   moment German wraps differently.
+   ══════════════════════════════════════════════════════════════ */
+.v1 { --hubw: clamp(126px, 13.5vw, 208px); }
+.v1 .band, .v1 .cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--hubw) minmax(0, 1fr);
+  column-gap: var(--ae-space-5);
+}
+.v1 .band { align-items: center; margin-bottom: var(--ae-space-6); }
+
+.v1 .arm-l { display: flex; align-items: center; }
+.v1 .hub {
+  text-align: center;
+  padding: var(--ae-space-4) var(--ae-space-3);
+  border-radius: var(--ae-radius-md);
+  border: 2px solid var(--ae-cool-gray-300);
+  background: var(--fg-card);
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h5); line-height: 1.15; color: var(--fg-ink);
+}
+.v1 .arm-r {
+  display: grid; grid-template-columns: minmax(54px, 1fr) auto;
+  align-items: center; column-gap: var(--ae-space-3);
+}
+.v1 .lanes { display: flex; flex-direction: column; gap: 14px; }
+.v1 .ln { display: flex; align-items: center; }
+/* The return leg says what it is, or the drawing alone is ambiguous —
+   something comes back, and the eye cannot tell what. Clay, right up
+   against the dashes it belongs to. */
+.v1 .back {
+  /* Right-aligned under the dashes it belongs to, held off the chips
+     beside it: at flush-right the clearance was 10px and the caption
+     read as a fifth chip. */
+  margin: 3px 0 0; padding-right: var(--ae-space-3); text-align: right;
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); color: var(--fg-fail-d);
+}
+.v1 .cap { margin: 0 0 6px; }
+.v1 .chips { display: grid; grid-template-columns: auto auto; gap: 6px; }
+.v1 .chip {
+  padding: 3px 10px; border-radius: 999px;
+  border: 1px solid var(--ae-cool-gray-300); background: var(--ae-cool-gray-100);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.v1 .pr { display: flex; flex-direction: column; gap: var(--ae-space-3); }
+.v1 .pr .fg-map { margin-top: auto; }
+
+/* .fg-map's ground is --fg-paper, which is correct inside a white card
+   (slide 14) and invisible when the well sits directly ON the paper, as
+   it does here. Inverted rather than recoloured: the well keeps the
+   kit's padding and row rhythm and takes the deck's other existing
+   surface. No new value. */
+.v1 .fg-map, .v2 .fg-map { background: var(--fg-card); border: 1px solid var(--fg-hair); }
+
+/* ══════════════════════════════════════════════════════════════
+   V2 — TWO LANES, SYMPTOM FIRST
+   The sharpest sentences on this slide are the two tests, and they
+   are buried at the bottom of a card. Here they are the entry point,
+   because they are how a reader actually meets these two: you notice
+   yourself typing the same thing twice, or copying out of another
+   window. Each lane then resolves — this is what it is, this is
+   where it lives.
+
+   The asymmetry is STRUCTURAL rather than decorative: lane two has a
+   third beat that lane one does not have, hanging off it on a dotted
+   lead. One lane is simply longer, which reads in greyscale, in
+   print, and from the back of the room.
+   ══════════════════════════════════════════════════════════════ */
+.v2 .lanes { display: grid; row-gap: var(--ae-space-7); }
+/* The last column has to hold ".claude/skills/<name>/SKILL.md" beside
+   its tool name. At 0.95fr it could not, and .fg-rows__r's minmax(0,1fr)
+   key column obligingly collapsed to zero width and let the path print
+   straight through "Claude Code". Sized from the longest path, not from
+   an even split. */
+.v2 .lane {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 0.85fr) auto minmax(0, 1.2fr) auto minmax(0, 1.35fr);
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  padding-top: var(--ae-space-6);
+  border-top: 1px solid var(--fg-hair);
+}
+.v2 .c1 { grid-row: 1; grid-column: 1; }
+.v2 .c3 { grid-row: 1; grid-column: 3; }
+.v2 .c5 { grid-row: 1; grid-column: 5; }
+.v2 .arw { grid-row: 1; display: flex; align-items: center; padding: 0 var(--ae-space-3); }
+.v2 .arw--a { grid-column: 2; }
+.v2 .arw--b { grid-column: 4; }
+.v2 .arw .tail { flex: none; width: clamp(14px, 1.9vw, 34px); }
+
+.v2 .sym {
+  margin: 6px 0 0;
+  font-family: var(--ae-font-head); font-weight: 700;
+  font-size: var(--ae-fs-h4); line-height: 1.22; color: var(--fg-ink);
+}
+.v2 .hd2 { display: flex; align-items: baseline; gap: var(--ae-space-3); flex-wrap: wrap; }
+.v2 .hd2 .sub { margin: 0; }
+.v2 .c3 .dsc { margin-top: var(--ae-space-2); }
+.v2 .c5 .fg-label { margin-bottom: 6px; }
+
+/* the third beat, hanging off lane two */
+.v2 .lead {
+  grid-row: 2; grid-column: 3; justify-self: start;
+  margin-left: 26px; width: 0; height: var(--ae-space-4);
+  border-left: 2px dotted var(--fg-fail);
+}
+.v2 .warn { grid-row: 3; grid-column: 3 / 6; }
+
+/* ══════════════════════════════════════════════════════════════
+   V3 — THE LEDGER
+   The lightest of the three, and the one that keeps every word in
+   place. Four questions asked of both mechanisms, on one spine, so
+   they can be read across instead of read twice.
+
+   The head row plants the difference as OBJECTS before any prose:
+   the skill is a closed file; the server is a file with a wire
+   leaving it. The absence of a wire is the form cue, and it is the
+   whole argument in one mark.
+
+   The last row is the payoff and the only row the two do not answer
+   the same way. That is where clay is spent, once.
+   ══════════════════════════════════════════════════════════════ */
+.v3 .led {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--ae-space-6);
+}
+/* The ledger is the tallest variation and German is what decides whether
+   it lands: the deck's stage is 110px shorter than a bare viewport (55px
+   header + 55px nav), so a prototype that fits the harness by 30px does
+   not fit the deck at all. Nothing here is deleted to make room — the
+   height comes back out of leading, the object, and the head row, in
+   pieces small enough that none of them is visible on its own.
+   The row's own top padding already separates it from the head, so the
+   head carries no bottom padding of its own. */
+.v3 .hd { padding-bottom: 0; }
+.v3 .objrow { display: flex; align-items: center; margin-bottom: var(--ae-space-2); }
+/* h4 rather than h3: in the ledger the object beside the name carries
+   the weight, so the name does not have to. */
+.v3 .nm { font-size: var(--ae-fs-h4); }
+.v3 .dsc, .v3 .own { line-height: 1.38; }
+/* Long enough to read as a wire. At 40px it was three dashes and an
+   arrowhead, which reads as punctuation rather than as a connection. */
+.v3 .objrow .tail { max-width: 66px; margin-left: var(--ae-space-3); }
+/* The ledger is the tallest of the three and German is what decides
+   whether it fits, so the object rides one notch smaller here. */
+.v3 .doc { padding: var(--ae-space-2) var(--ae-space-3); }
+.v3 .off {
+  flex: 1; margin: 0 0 0 var(--ae-space-3);
+  font-size: var(--ae-fs-caption); line-height: var(--ae-lh-caption); color: var(--fg-muted);
+}
+.v3 .rl {
+  grid-column: 1;
+  font-family: var(--ae-font); font-size: var(--ae-fs-caption);
+  line-height: var(--ae-lh-caption); font-weight: 600; letter-spacing: 0.02em;
+  color: var(--fg-muted);
+  padding: var(--ae-space-2) 0 var(--ae-space-3); border-top: 1px solid var(--fg-hair);
+}
+/* space-2 above, space-3 below: the ledger is the tallest variation and
+   German decides whether it lands, so the row rhythm is asymmetric by
+   the smallest amount that still separates rows. */
+.v3 .cell { padding: var(--ae-space-2) 0 var(--ae-space-3); border-top: 1px solid var(--fg-hair); }
+.v3 .cell .fg-rows__r { padding: 1px 0; border-bottom: 0; }
+.v3 .own { margin: 0; font-size: var(--ae-fs-small); line-height: var(--ae-lh-small); color: var(--fg-ink); }
+.v3 .own--other {
+  padding: var(--ae-space-3) var(--ae-space-4);
+  border-radius: var(--ae-radius); background: var(--fg-fail-tint);
+  border: 1.5px dashed var(--fg-fail); color: var(--fg-fail-d);
+}
+.v3 .own--other .nx { color: var(--fg-muted); }   /* 5.9:1 on the clay tint */
+
+/* ══════════════════════════════════════════════════════════════
+   SHORT STAGE — the 720p floor
+   Below ~780px of viewport the type scale is pinned at its pixel
+   floors and stops shrinking, while the stage keeps shrinking. The
+   landed slides 5, 6 and 7 measure exactly 100% of a 610px stage
+   there — no slack at all — so this is the deck's floor, not this
+   slide's. These three rules buy back the ~15px that puts the
+   densest variation inside it, out of padding and leading only.
+   ══════════════════════════════════════════════════════════════ */
+@media (max-height: 780px) {
+  #stage > .proto { padding-top: var(--ae-space-3); padding-bottom: var(--ae-space-3); }
+  .proto .fg-lede { line-height: 1.38; }
+  .proto .foot { margin-top: var(--ae-space-3); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NARROW — the deck is a 16:9 stage, but the harness is a browser
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 1000px) {
+  .v1 .band, .v1 .cols { grid-template-columns: 1fr; row-gap: var(--ae-space-5); }
+  .v1 .band .arm-l .tail, .v1 .band .arm-l .hd-r, .v1 .lanes { display: none; }
+  .v2 .lane { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
+  .v2 .c1, .v2 .c3, .v2 .c5 { grid-column: 1; grid-row: auto; }
+  .v2 .arw, .v2 .lead { display: none; }
+  .v2 .warn { grid-column: 1; grid-row: auto; }
+  .v3 .led { grid-template-columns: 1fr; }
+  .v3 .rl { border-top: 0; padding-bottom: 0; }
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-inner" style="padding: 0 20px;">
+    <div class="hb">
+      <div class="lang-toggle" id="tabs" role="group" aria-label="Variation">
+        <button type="button" data-p="v1">1 · Reach</button>
+        <button type="button" data-p="v2">2 · Two lanes</button>
+        <button type="button" data-p="v3">3 · Ledger</button>
+      </div>
+    </div>
+    <span class="page-title" id="subtitle"></span>
+    <span class="header-right">
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-grey" type="button">Greyscale</button>
+      <button class="ae-btn ae-btn--secondary ae-btn--small" id="btn-replay" type="button">↻ Replay</button>
+      <div class="lang-toggle" id="langs" role="group" aria-label="Language">
+        <button type="button" data-l="en">EN</button>
+        <button type="button" data-l="de">DE</button>
+      </div>
+    </span>
+  </div>
+</header>
+
+<main id="stage"></main>
+
+<script>
+/* Title, lede, both subtitles, both descriptions, both tests, both tool
+   mappings and the dated footer are VERBATIM from
+   presentation-v2/sections/15-build-skills.js.
+
+   New strings, and why each exists:
+     hub / ownCap / otherCap / systems  — labels the drawing needs, all of
+       them naming things the MCP description already lists in prose.
+     rows / mapLabel                    — the ledger's four questions.
+     own (per half)                     — who wrote it. This is the
+       asymmetry, and today's slide never says it.
+     warnTag / warn / warnNext          — the asymmetry as one line, plus
+       an explicit hand-off so slide 16 keeps its job.
+
+   Note: the tool path is written &lt;name&gt; here. In the live section it is
+   a bare <name>, which innerHTML parses as an element — the angle
+   brackets are eaten and the path renders as ".claude/skills//SKILL.md".
+   Worth fixing in the section either way. */
+const C = {
+  en: {
+    h1: 'Procedures it can load, systems it can reach',
+    lede: 'Two mechanisms, one purpose: stop re-explaining the same thing in every session, and stop copy-pasting from other systems into the prompt.',
+    testLabel: 'The test',
+    mapLabel: 'Where each tool looks',
+    hub: 'Your session',
+    ownCap: 'In your repo',
+    otherCap: 'Systems you do not own',
+    otherCode: 'Somebody else’s code, in your session',
+    backCap: 'what comes back is not yours',
+    systems: ['Issue tracker', 'Database', 'Docs', 'Design tool'],
+    rows: ['What it is', 'When you reach for it', 'Where it lives', 'Whose code is it'],
+    warnTag: 'Not symmetric',
+    warn: 'A skill is your file, in your repo. A server is somebody else’s code running inside your session, and what it hands back is text nobody on your team wrote.',
+    warnNext: 'The next slide is about exactly that.',
+    foot: 'Tool paths verified July 2026 — re-check before relying on them.',
+    pair: [
+      {
+        k: 'skill',
+        t: 'Skills',
+        sub: 'A procedure, on demand',
+        obj: 'SKILL.md',
+        d: 'Anything you have now explained twice — the release steps, the review checklist, how a new endpoint gets wired up — belongs in a file the model loads when it is relevant, not in a chat you are about to close.',
+        test: 'You have typed it twice. Write it down the second time.',
+        own: 'Yours. You wrote it, it sits in your repo, and it changes when you change it.',
+        map: [
+          ['Claude Code', '.claude/skills/&lt;name&gt;/SKILL.md'],
+          ['Codex', '.agents/skills/'],
+          ['Cursor', '.cursor/skills/'],
+        ],
+      },
+      {
+        k: 'mcp',
+        t: 'MCP',
+        sub: 'A system, connected',
+        obj: '.mcp.json',
+        d: 'Servers let the agent reach the issue tracker, the database, the docs, the design tool. The agent stops guessing at things it could look up, and you stop pasting.',
+        test: 'You are copying from another window into the prompt.',
+        own: 'Somebody else’s code, running inside your session — and what it hands back is text nobody on your team wrote.',
+        map: [
+          ['Claude Code', '.mcp.json'],
+          ['Codex', '.codex/config.toml'],
+          ['Cursor', '.cursor/mcp.json'],
+        ],
+      },
+    ],
+  },
+  de: {
+    h1: 'Abläufe zum Laden, Systeme zum Erreichen',
+    lede: 'Zwei Mechanismen, ein Zweck: nicht in jeder Session dasselbe erneut erklären, und nicht aus anderen Systemen in den Prompt kopieren.',
+    testLabel: 'Die Probe',
+    mapLabel: 'Wo jedes Tool sucht',
+    hub: 'Deine Session',
+    ownCap: 'In deinem Repo',
+    otherCap: 'Systeme, die dir nicht gehören',
+    otherCode: 'Fremder Code, in deiner Session',
+    backCap: 'was zurückkommt, gehört dir nicht',
+    systems: ['Issue-Tracker', 'Datenbank', 'Doku', 'Design-Tool'],
+    rows: ['Was es ist', 'Wann du danach greifst', 'Wo es liegt', 'Wessen Code ist es'],
+    warnTag: 'Nicht symmetrisch',
+    warn: 'Ein Skill ist deine Datei, in deinem Repo. Ein Server ist fremder Code, der in deiner Session läuft, und was er zurückgibt, ist Text, den niemand aus deinem Team geschrieben hat.',
+    warnNext: 'Genau darum geht es auf der nächsten Folie.',
+    foot: 'Tool-Pfade geprüft Juli 2026 — vor Gebrauch erneut prüfen.',
+    pair: [
+      {
+        k: 'skill',
+        t: 'Skills',
+        sub: 'Ein Ablauf, bei Bedarf',
+        obj: 'SKILL.md',
+        d: 'Alles, was zum zweiten Mal erklärt wurde — die Release-Schritte, die Review-Checkliste, wie ein neuer Endpunkt angeschlossen wird — gehört in eine Datei, die das Modell bei Bedarf lädt, und nicht in einen Chat, den du gleich schließt.',
+        test: 'Du hast es zweimal getippt. Beim zweiten Mal aufschreiben.',
+        own: 'Deiner. Du hast ihn geschrieben, er liegt in deinem Repo, und er ändert sich, wenn du ihn änderst.',
+        map: [
+          ['Claude Code', '.claude/skills/&lt;name&gt;/SKILL.md'],
+          ['Codex', '.agents/skills/'],
+          ['Cursor', '.cursor/skills/'],
+        ],
+      },
+      {
+        k: 'mcp',
+        t: 'MCP',
+        sub: 'Ein System, angebunden',
+        obj: '.mcp.json',
+        d: 'Server geben dem Agenten Zugriff auf Issue-Tracker, Datenbank, Doku, Design-Tool. Der Agent rät nicht mehr bei Dingen, die er nachschlagen könnte, und du kopierst nicht mehr.',
+        test: 'Du kopierst aus einem anderen Fenster in den Prompt.',
+        own: 'Fremder Code, der in deiner Session läuft — und was er zurückgibt, ist Text, den niemand aus deinem Team geschrieben hat.',
+        map: [
+          ['Claude Code', '.mcp.json'],
+          ['Codex', '.codex/config.toml'],
+          ['Cursor', '.cursor/mcp.json'],
+        ],
+      },
+    ],
+  },
+};
+
+const SUB = {
+  v1: 'Variation 1 — the reach: one hub, two arms, and only one of them is a round trip',
+  v2: 'Variation 2 — two lanes: the symptom you notice first, then the mechanism, then where it lives',
+  v3: 'Variation 3 — the ledger: four questions on one spine, and one row they answer differently',
+};
+
+function mapWell(c, cls) {
+  return '<div class="' + (cls || 'fg-map') + '"><dl class="fg-rows">'
+    + c.map.map(function (r) {
+        return '<div class="fg-rows__r"><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>';
+      }).join('')
+    + '</dl></div>';
+}
+
+/* ── V1 ───────────────────────────────────────────────────────── */
+function V1(t) {
+  const s = t.pair[0], m = t.pair[1];
+  return ''
+  + '<div class="band">'
+    + '<div class="arm-l fg-in" style="--fg-at:3">'
+      + '<span class="doc"><span class="kind">' + t.ownCap + '</span>'
+      + '<span class="file">' + s.obj + '</span></span>'
+      + '<i class="tail"></i><i class="hd-r"></i>'
+    + '</div>'
+    + '<div class="hub fg-in" style="--fg-at:3">' + t.hub + '</div>'
+    + '<div class="arm-r">'
+      + '<div class="lanes fg-in" style="--fg-at:4">'
+        + '<div class="ln"><i class="tail"></i><i class="hd-r"></i></div>'
+        + '<div class="ln"><i class="hd-l"></i><i class="tail tail--dash"></i></div>'
+        + '<p class="back">' + t.backCap + '</p>'
+      + '</div>'
+      + '<div class="sys fg-in" style="--fg-at:4">'
+        + '<p class="fg-label cap">' + t.otherCap + '</p>'
+        + '<div class="chips">'
+          + t.systems.map(function (x) { return '<span class="chip">' + x + '</span>'; }).join('')
+        + '</div>'
+      + '</div>'
+    + '</div>'
+  + '</div>'
+  + '<div class="cols">'
+    + t.pair.map(function (c, i) {
+        return '<div class="pr fg-in" style="grid-column:' + (i ? 3 : 1) + '; --fg-at:' + (5 + i * 2) + '">'
+          + '<div><h3 class="nm">' + c.t + '</h3><p class="sub">' + c.sub + '</p></div>'
+          + '<p class="dsc">' + c.d + '</p>'
+          + '<p class="fg-takeaway"><span>' + c.test + '</span></p>'
+          + mapWell(c)
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+/* ── V2 ───────────────────────────────────────────────────────── */
+function V2(t) {
+  return '<div class="lanes">'
+    + t.pair.map(function (c, i) {
+        const at = 3 + i * 3;
+        return '<div class="lane">'
+          + '<div class="c1 fg-in" style="--fg-at:' + at + '">'
+            + '<p class="fg-label">' + t.testLabel + '</p>'
+            + '<p class="sym">' + c.test + '</p>'
+          + '</div>'
+          + '<div class="arw arw--a fg-in" style="--fg-at:' + (at + 1) + '"><i class="tail"></i><i class="hd-r"></i></div>'
+          + '<div class="c3 fg-in" style="--fg-at:' + (at + 1) + '">'
+            + '<div class="hd2"><h3 class="nm">' + c.t + '</h3><p class="sub">' + c.sub + '</p></div>'
+            + '<p class="dsc">' + c.d + '</p>'
+          + '</div>'
+          + '<div class="arw arw--b fg-in" style="--fg-at:' + (at + 2) + '"><i class="tail"></i><i class="hd-r"></i></div>'
+          + '<div class="c5 fg-in" style="--fg-at:' + (at + 2) + '">'
+            + '<p class="fg-label">' + t.mapLabel + '</p>'
+            + mapWell(c)
+          + '</div>'
+          + (c.k === 'mcp'
+              ? '<i class="lead fg-in" style="--fg-at:9"></i>'
+                + '<div class="warn fg-in" style="--fg-at:9">'
+                  + '<span class="tag">' + t.warnTag + '</span>'
+                  + '<p>' + t.warn + ' <span class="nx">' + t.warnNext + '</span></p>'
+                + '</div>'
+              : '')
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+
+/* ── V3 ───────────────────────────────────────────────────────── */
+function V3(t) {
+  let out = '<div class="led">';
+
+  /* Head row: the two objects. The skill is a closed file; the server is
+     a file with a wire leaving it. The wire's presence is the form cue. */
+  t.pair.forEach(function (c, i) {
+    out += '<div class="hd fg-in" style="grid-column:' + (i + 2) + '; --fg-at:' + (3 + i) + '">'
+      /* Both halves put a file in your repo. Only one of them is a
+         pointer at code you did not write, and that file has a wire. */
+      + '<div class="objrow">'
+        + '<span class="doc"><span class="kind">' + t.ownCap + '</span>'
+        + '<span class="file">' + c.obj + '</span></span>'
+        + (i ? '<i class="tail tail--dash"></i><i class="hd-r hd-r--clay"></i>'
+             + '<p class="off">' + t.otherCode + '</p>' : '')
+      + '</div>'
+      + '<h3 class="nm">' + c.t + '</h3><p class="sub">' + c.sub + '</p>'
+    + '</div>';
+  });
+
+  const bodies = [
+    function (c) { return '<p class="dsc">' + c.d + '</p>'; },
+    function (c) { return '<p class="fg-takeaway"><span>' + c.test + '</span></p>'; },
+    function (c) { return mapWell(c, 'wl'); },
+    function (c, i) {
+      return '<p class="own' + (i ? ' own--other' : '') + '">' + c.own
+        + (i ? ' <span class="nx">' + t.warnNext + '</span>' : '') + '</p>';
+    },
+  ];
+
+  t.rows.forEach(function (label, r) {
+    out += '<div class="rl fg-in" style="grid-row:' + (r + 2) + '; --fg-at:' + (5 + r) + '">' + label + '</div>';
+    t.pair.forEach(function (c, i) {
+      out += '<div class="cell fg-in" style="grid-row:' + (r + 2) + '; grid-column:' + (i + 2) + '; --fg-at:' + (5 + r) + '">'
+        + bodies[r](c, i) + '</div>';
+    });
+  });
+
+  return out + '</div>';
+}
+
+const BODY = { v1: V1, v2: V2, v3: V3 };
+/* V1 carries the asymmetry in its foot; V2 hangs it off lane two and V3
+   makes it the last row, so only V1 renders the strip down there. */
+const FOOT_WARN = { v1: true, v2: false, v3: false };
+
+function render(v, t) {
+  const warn = FOOT_WARN[v]
+    ? '<div class="warn fg-in" style="--fg-at:9">'
+        + '<span class="tag">' + t.warnTag + '</span>'
+        + '<p>' + t.warn + ' <span class="nx">' + t.warnNext + '</span></p>'
+      + '</div>'
+    : '';
+  return ''
+  + '<section class="proto ' + v + '">'
+    + '<div class="fg-wrap head">'
+      + '<h1 class="fg-in" style="--fg-at:1">' + t.h1 + '</h1>'
+      + '<p class="fg-lede fg-in" style="--fg-at:2">' + t.lede + '</p>'
+    + '</div>'
+    + '<div class="fg-wrap body">' + BODY[v](t) + '</div>'
+    + '<div class="fg-wrap foot">'
+      + warn
+      + '<div class="fg-foot fg-in" style="--fg-at:10"><span>' + t.foot + '</span></div>'
+    + '</div>'
+  + '</section>';
+}
+
+let lang = 'en', proto = 'v1';
+const stage = document.getElementById('stage');
+function mount() {
+  document.getElementById('subtitle').textContent = SUB[proto];
+  stage.innerHTML = render(proto, C[lang]);
+  const sync = (sel, key, val) => document.querySelectorAll(sel + ' button')
+    .forEach(b => b.classList.toggle('active', b.dataset[key] === String(val)));
+  sync('#tabs', 'p', proto); sync('#langs', 'l', lang);
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; proto = b.dataset.p; mount(); });
+document.getElementById('langs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; lang = b.dataset.l; mount(); });
+document.getElementById('btn-replay').addEventListener('click', mount);
+document.getElementById('btn-grey').addEventListener('click', () => document.body.classList.toggle('grey'));
+document.addEventListener('keydown', e => { if (['1','2','3'].includes(e.key)) { proto = 'v' + e.key; mount(); } });
+mount();
+</script>
+</body>
+</html>
