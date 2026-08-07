@@ -8,26 +8,16 @@
    closes on it: three hued discs on a rail with the grey return arc
    under them, exactly as slide 5 built it, at full scale. What is new
    is that the tagline is no longer a sentence set beside the picture —
-   its four clauses ARE the picture's labels. Three of them sit under
-   the three steps; the fourth, "Agree it.", is an ink gate standing
-   across the rail between Plan and Build. So the last frame on screen
-   is the loop with the human's decision drawn into it, and the
-   resources drop to a band along the bottom, where a takeaway belongs.
+   its three clauses ARE the picture's labels, one under each step. So
+   the last frame on screen is the loop itself, and the resources drop
+   to a band along the bottom, where a takeaway belongs.
 
    THE GEOMETRY IS DERIVED, NOT EYEBALLED. Three equal columns put the
    disc centres at 16.66 / 50 / 83.33 percent, so the rail spans first
-   centre to last centre and the gate sits at 33.33 percent — exactly
-   halfway between disc 1 and disc 2 — by arithmetic rather than by a
-   number that drifts the moment the German wraps differently. The arc
-   is CSS borders and never SVG: a stretched viewBox turns a rounded
-   corner into an ellipse and an arrowhead into a smear.
-
-   --gh IS CAPPED so the gate's label always clears the step-name row.
-   At 8.2vh the label's line box ran 5px into the names' row at
-   1920x1080 — no glyphs touched, because the label sits in a column
-   gap, but a quantity that only just misses is a quantity that will hit
-   the first time a string changes. 7.2vh clears by 5-13px from 1024 to
-   1920.
+   centre to last centre by arithmetic rather than by a number that
+   drifts the moment the German wraps differently. The arc is CSS
+   borders and never SVG: a stretched viewBox turns a rounded corner
+   into an ellipse and an arrowhead into a smear.
 
    ── THREE PALETTE CORRECTIONS ───────────────────────────────────────
 
@@ -40,13 +30,6 @@
    rail and the arc are cool gray 300, the machine's plumbing; the
    repository markers are grey squares, because files in a directory are
    not a human decision; the URL and "Questions?" are ink.
-
-   INK IS THE HUMAN, and this is the slide where that can be said
-   loudest, because the deck's whole claim is that the human stays the
-   final gate. Here it is said structurally rather than in a sentence:
-   a solid ink bar across the rail, a different shape from the step, a
-   different colour, a different relationship to the line — the widest
-   contrast the palette has, and it survives greyscale on form alone.
 
    AN "AS OF" STAMP IS NEW, in both languages. The slide asserts a URL
    and a claim about what is inside a repository, both of which have a
@@ -90,15 +73,14 @@ import { getLang } from '../core/i18n.js';
 
 const TAG = 's29-close';
 
-/* The tagline is carried as its four clauses rather than as one
-   sentence, because the drawing hangs them on itself: three under the
-   steps, one on the gate. Same words, same order, no rewording. */
+/* The tagline is carried as its three clauses rather than as one
+   sentence, because the drawing hangs them on itself: one under each
+   step. Same words, same order, no rewording. */
 const CONTENT = {
   en: {
     thanks: 'Thank you',
     loop: ['Plan', 'Build', 'Review'],
     clauses: ['Write the plan down.', 'Build in small steps.', 'Have something else read the diff.'],
-    gate: 'Agree it.',
     who: 'Dr. Siavash Saki',
     linksLabel: 'Everything from this talk',
     linkTitle: 'The deck and the adoption kit',
@@ -117,7 +99,6 @@ const CONTENT = {
     thanks: 'Danke',
     loop: ['Plan', 'Build', 'Review'],
     clauses: ['Plan aufschreiben.', 'In kleinen Schritten bauen.', 'Den Diff von etwas anderem lesen lassen.'],
-    gate: 'Freigeben.',
     who: 'Dr. Siavash Saki',
     linksLabel: 'Alles aus diesem Vortrag',
     linkTitle: 'Die Folien und das Adoption-Kit',
@@ -156,7 +137,6 @@ class Section29 extends HTMLElement {
           /* Every quantity in the drawing is vh-derived, so the
              proportions hold from a laptop to a hall. */
           --dd: clamp(74px, 10.6vh, 126px);   /* disc diameter */
-          --gh: clamp(50px, 7.2vh, 88px);     /* gate bar height */
           --arc: clamp(30px, 5vh, 60px);      /* the return */
         }
         ${TAG} .head { flex: none; }
@@ -231,28 +211,6 @@ class Section29 extends HTMLElement {
           font-size: calc(var(--ae-fs-lead) * 1.05); line-height: 1.3; color: var(--fg-ink);
         }
 
-        /* A gate is solid ink ACROSS the line — a different shape from
-           the step, a different colour, a different relationship to the
-           rail, and the widest contrast the palette has. It is the
-           deck's most important act, and the fourth clause of the
-           tagline is its caption. */
-        ${TAG} .gate {
-          position: absolute; left: 33.333%; top: 0; z-index: 2;
-          transform: translateX(-50%);
-          display: flex; flex-direction: column; align-items: center;
-        }
-        ${TAG} .gate .bar {
-          margin-top: calc(var(--dd) / 2 - var(--gh) / 2);
-          width: clamp(32px, 4.4vh, 52px); height: var(--gh);
-          border-radius: 11px; background: var(--fg-ink);
-          box-shadow: var(--fg-d2);
-        }
-        ${TAG} .gate .lab {
-          margin-top: var(--ae-space-2); white-space: nowrap;
-          font-family: var(--ae-font-head); font-weight: 700;
-          font-size: var(--ae-fs-h4); line-height: 1.2; color: var(--fg-ink);
-        }
-
         /* The return, in CSS borders. Unlabelled and grey, as on slide 5:
            it says the three come round again without restating it. */
         ${TAG} .arc {
@@ -261,7 +219,7 @@ class Section29 extends HTMLElement {
           border: 1.5px solid var(--ae-cool-gray-300); border-top: 0;
           border-radius: 0 0 16px 16px;
           animation: fg-rise 620ms var(--ae-ease) both;
-          animation-delay: calc(60ms + 8 * var(--fg-beat));
+          animation-delay: calc(60ms + 7 * var(--fg-beat));
         }
         ${TAG} .arc::before {
           content: ''; position: absolute; left: -5.5px; top: -1px;
@@ -333,7 +291,7 @@ class Section29 extends HTMLElement {
 
         @media (max-width: 900px) {
           ${TAG} .run { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
-          ${TAG} .rail, ${TAG} .arc, ${TAG} .gate { display: none; }
+          ${TAG} .rail, ${TAG} .arc { display: none; }
           ${TAG} .spine { padding-bottom: 0; }
           ${TAG} .band { grid-template-columns: 1fr; row-gap: var(--ae-space-4); }
         }
@@ -355,28 +313,24 @@ class Section29 extends HTMLElement {
                 <p>${t.clauses[i]}</p>
               </div>
             `).join('')}
-            <div class="gate fg-in" style="--fg-at: 7">
-              <i class="bar" aria-hidden="true"></i>
-              <span class="lab">${t.gate}</span>
-            </div>
           </div>
           <i class="arc" aria-hidden="true"></i>
         </div>
       </div>
       <div class="fg-wrap foot">
         <div class="band">
-          <div class="fg-in" style="--fg-at: 9">
+          <div class="fg-in" style="--fg-at: 8">
             <p class="fg-label lbl">${t.linksLabel}</p>
             <a class="url" href="${t.href}" target="_blank" rel="noreferrer noopener">${urlText(t.url)}</a>
             <p class="cap">${t.linkTitle}</p>
           </div>
-          <div class="fg-in" style="--fg-at: 9">
+          <div class="fg-in" style="--fg-at: 8">
             <p class="fg-label lbl">${t.takeLabel}</p>
             <ul class="take">${t.take.map(x => `<li><span>${x}</span></li>`).join('')}</ul>
           </div>
-          <p class="q fg-in" style="--fg-at: 10">${t.questions}</p>
+          <p class="q fg-in" style="--fg-at: 9">${t.questions}</p>
         </div>
-        <p class="stamp fg-in" style="--fg-at: 10">${t.stamp}</p>
+        <p class="stamp fg-in" style="--fg-at: 9">${t.stamp}</p>
       </div>
     `;
   }
